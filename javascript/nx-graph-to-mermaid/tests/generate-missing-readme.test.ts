@@ -13,12 +13,11 @@ describe('generate executor - missing README', () => {
     fs.writeFileSync(tmpProjectPath, JSON.stringify({ targets: {} }));
   });
 
-    afterAll(() => {
-        safeUnlink(tmpProjectPath);
-    });
+  afterAll(() => {
+    safeUnlink(tmpProjectPath);
+  });
 
-
-    it('fails when injectInto file does not exist but project.json exists', async () => {
+  it('fails when injectInto file does not exist but project.json exists', async () => {
 
     const result = await runExecutor(
       {

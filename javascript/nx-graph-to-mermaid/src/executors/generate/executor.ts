@@ -5,9 +5,12 @@ import { buildMermaid } from '../../core/buildMermaid';
 interface Options {
     projectJsonPath: string;
     injectInto?: string;
-    check?: boolean;
+    check?: boolean;          // keep for now
     outputPath?: string;
+    mode?: 'generate' | 'check';
+    existingPath?: string;
 }
+
 
 export default async function runExecutor(
     options: Options,
@@ -19,6 +22,8 @@ export default async function runExecutor(
         console.error(`project.json not found at: ${options.projectJsonPath}`);
         return { success: false };
     }
+
+    const mode = options.mode ?? 'generate';
 
     // Preserve existing injectInto validation (do not remove yet)
     if (options.injectInto && !fs.existsSync(options.injectInto)) {
