@@ -45,7 +45,7 @@ describe('generate executor - positive flow', () => {
 
         expect(fileContent).toBe(
             'graph TD\n\n' +
-            '  build["build<br/>Compile source"]\n'
+            '  build["build<br/>Compile source"]\n\n'
         );
     });
 });
