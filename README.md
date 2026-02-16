@@ -24,8 +24,8 @@ Our tools are intentionally opinionated in both design and workflow. The core ph
 
 > **CI must never modify or generate code — checked-in code is the source of truth — CI only validates.**
 
-All mechanical generation steps  
-(such as updating Markdown tables of contents or generating build graph diagrams)
+All mechanical generation steps  (such as updating Markdown tables 
+of contents or generating build graph diagrams)
 are intended to be performed explicitly by developers as part of their normal workflow.
 
 Continuous Integration should be responsible for:
@@ -34,23 +34,22 @@ Continuous Integration should be responsible for:
 - Detecting drift between committed files and generated output
 - Failing deterministically when inconsistencies are found
 
-Continuous Integration is *not* responsible for mutating the repository.
+Continuous Integration should  *not* responsible for mutating the repository.
+If CI were allowed to mutate files, debugging would require reasoning about generation logic itself —
+a more complex and less transparent process.
 
-This ensures:
+So, we prioritize workflows that enforce:
 
 - Deterministic builds
 - Explicit developer intent
 - Fully materialized, reviewable artifacts
-- Simplified debugging in “works for me” scenarios
 
 When discrepancies occur between environments, it becomes possible to:
 
-1. Diff the actual workspace contents
-2. Rule out differences in source or configuration
-3. Avoid debugging hidden generation logic performed during CI
+- Diff the actual workspace contents
+- Rule out differences in source code or config files
+- Avoid debugging hidden generation logic performed during CI
 
-If CI were allowed to mutate files, debugging would require reasoning about generation logic itself —
-a more complex and less transparent process.
 
 Individual tools in this repository implement this philosophy through clearly separated
 **update** and **check** modes.

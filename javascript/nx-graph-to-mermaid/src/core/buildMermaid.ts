@@ -12,15 +12,53 @@ export function buildMermaid(project: NxProjectJson): string {
         throw new Error('Invalid project.json structure');
     }
 
-    const targets = project.targets ?? {};
+    if (
+        !('targets' in project) ||
+        typeof project.targets !== 'object' ||
+        project.targets === null ||
+        Array.isArray(project.targets)
+    ) {
+        throw new Error('project.json must contain a "targets" object');
+    }
+
+    const targets = project.targets as Record<string, NxTarget>;
+
+    // --------------------------------
+    // Strict Structural Validation
+    // --------------------------------
+
+    for (const [name, value] of Object.entries(targets)) {
+        if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+            throw new Error(`Target "${name}" must be an object`);
+        }
+
+        if (value.dependsOn !== undefined) {
+            if (!Array.isArray(value.dependsOn)) {
+                throw new Error(`dependsOn for "${name}" must be an array`);
+            }
+
+            for (const dep of value.dependsOn) {
+                if (typeof dep !== 'string') {
+                    throw new Error(`dependsOn for "${name}" must contain only strings`);
+                }
+            }
+        }
+
+        if (
+            value.description !== undefined &&
+            typeof value.description !== 'string'
+        ) {
+            throw new Error(`description for "${name}" must be a string`);
+        }
+    }
 
     const sortedTargetNames = Object.keys(targets).sort((a, b) =>
         a.localeCompare(b)
     );
 
-    // -------------------------
-    // SANITIZE + COLLISION CHECK
-    // -------------------------
+    // --------------------------------
+    // Sanitization + Collision Check
+    // --------------------------------
 
     const nodeIdMap = new Map<string, string>();
     const usedIds = new Set<string>();
@@ -41,9 +79,9 @@ export function buildMermaid(project: NxProjectJson): string {
     lines.push('graph TD');
     lines.push('');
 
-    // -------------------------
-    // Render nodes
-    // -------------------------
+    // --------------------------------
+    // Render Nodes
+    // --------------------------------
 
     for (const targetName of sortedTargetNames) {
         const target = targets[targetName];
@@ -61,9 +99,9 @@ export function buildMermaid(project: NxProjectJson): string {
 
     lines.push('');
 
-    // -------------------------
-    // Render edges
-    // -------------------------
+    // --------------------------------
+    // Render Edges
+    // --------------------------------
 
     for (const targetName of sortedTargetNames) {
         const target = targets[targetName];
@@ -84,14 +122,14 @@ export function buildMermaid(project: NxProjectJson): string {
     return lines.join('\n') + '\n';
 }
 
-// -------------------------
-// Sanitization Logic
-// -------------------------
+// --------------------------------
+// Node ID Sanitization
+// --------------------------------
 
 function sanitizeNodeId(name: string): string {
     let result = name
-        .replace(/[^a-zA-Z0-9_]+/g, '_') // replace invalid chars
-        .replace(/_+/g, '_');            // collapse multiple underscores
+        .replace(/[^a-zA-Z0-9_]+/g, '_')
+        .replace(/_+/g, '_');
 
     if (/^[0-9]/.test(result)) {
         result = `_${result}`;
@@ -104,9 +142,9 @@ function sanitizeNodeId(name: string): string {
     return result;
 }
 
-// -------------------------
-// HTML Escape for Labels
-// -------------------------
+// --------------------------------
+// HTML Escape
+// --------------------------------
 
 function escapeHtml(input: string): string {
     return input
