@@ -8,6 +8,30 @@ interface NxProjectJson {
 }
 
 export function buildMermaid(project: NxProjectJson): string {
+
+    const targets = validateProjectStructure(project);
+    const sortedTargetNames = Object.keys(targets).sort((a, b) => a.localeCompare(b));
+    const nodeIdMap = prepareNodeIds(sortedTargetNames);
+    const lines: string[] = [];
+
+    lines.push('graph TD');
+    lines.push('');
+
+    renderNodes(lines, sortedTargetNames, targets, nodeIdMap);
+    lines.push('');
+    renderEdges(lines, sortedTargetNames, targets, nodeIdMap);
+
+    return lines.join('\n') + '\n';
+}
+
+// --------------------------------------------------
+// Validation
+// --------------------------------------------------
+
+function validateProjectStructure(
+    project: NxProjectJson
+): Record<string, NxTarget> {
+
     if (!project || typeof project !== 'object') {
         throw new Error('Invalid project.json structure');
     }
@@ -23,10 +47,6 @@ export function buildMermaid(project: NxProjectJson): string {
 
     const targets = project.targets as Record<string, NxTarget>;
 
-    // --------------------------------
-    // Strict Structural Validation
-    // --------------------------------
-
     for (const [name, value] of Object.entries(targets)) {
         if (typeof value !== 'object' || value === null || Array.isArray(value)) {
             throw new Error(`Target "${name}" must be an object`);
@@ -36,7 +56,6 @@ export function buildMermaid(project: NxProjectJson): string {
             if (!Array.isArray(value.dependsOn)) {
                 throw new Error(`dependsOn for "${name}" must be an array`);
             }
-
             for (const dep of value.dependsOn) {
                 if (typeof dep !== 'string') {
                     throw new Error(`dependsOn for "${name}" must contain only strings`);
@@ -52,81 +71,90 @@ export function buildMermaid(project: NxProjectJson): string {
         }
     }
 
-    const sortedTargetNames = Object.keys(targets).sort((a, b) =>
-        a.localeCompare(b)
-    );
+    return targets;
+}
 
-    // --------------------------------
-    // Sanitization + Collision Check
-    // --------------------------------
+// --------------------------------------------------
+// Node ID Preparation
+// --------------------------------------------------
+
+function prepareNodeIds(
+    sortedTargetNames: string[]
+): Map<string, string> {
 
     const nodeIdMap = new Map<string, string>();
     const usedIds = new Set<string>();
 
-    for (const targetName of sortedTargetNames) {
-        const sanitized = sanitizeNodeId(targetName);
+    for (const name of sortedTargetNames) {
+
+        const sanitized = sanitizeNodeId(name);
 
         if (usedIds.has(sanitized)) {
             throw new Error(`Sanitized node id collision detected: ${sanitized}`);
         }
 
         usedIds.add(sanitized);
-        nodeIdMap.set(targetName, sanitized);
+        nodeIdMap.set(name, sanitized);
     }
 
-    const lines: string[] = [];
+    return nodeIdMap;
+}
 
-    lines.push('graph TD');
-    lines.push('');
+// --------------------------------------------------
+// Rendering
+// --------------------------------------------------
 
-    // --------------------------------
-    // Render Nodes
-    // --------------------------------
+function renderNodes(
+    lines: string[],
+    names: string[],
+    targets: Record<string, NxTarget>,
+    nodeIdMap: Map<string, string>
+): void {
 
-    for (const targetName of sortedTargetNames) {
-        const target = targets[targetName];
-        const description = target.description;
-        const nodeId = nodeIdMap.get(targetName)!;
+    for (const name of names) {
+
+        const nodeId = nodeIdMap.get(name)!;
+        const description = targets[name].description;
 
         if (description) {
             lines.push(
-                `  ${nodeId}["${targetName}<br/>${escapeHtml(description)}"]`
+                `  ${nodeId}["${name}<br/>${escapeHtml(description)}"]`
             );
         } else {
             lines.push(`  ${nodeId}`);
         }
     }
+}
 
-    lines.push('');
+function renderEdges(
+    lines: string[],
+    names: string[],
+    targets: Record<string, NxTarget>,
+    nodeIdMap: Map<string, string>
+): void {
 
-    // --------------------------------
-    // Render Edges
-    // --------------------------------
+    for (const name of names) {
 
-    for (const targetName of sortedTargetNames) {
-        const target = targets[targetName];
-        const deps = (target.dependsOn ?? []).slice().sort((a, b) =>
-            a.localeCompare(b)
-        );
+        const deps = (targets[name].dependsOn ?? [])
+            .slice()
+            .sort((a, b) => a.localeCompare(b));
 
         for (const dep of deps) {
             if (targets[dep]) {
-                const fromId = nodeIdMap.get(targetName)!;
+                const fromId = nodeIdMap.get(name)!;
                 const toId = nodeIdMap.get(dep)!;
-
                 lines.push(`  ${fromId} --> ${toId}`);
             }
         }
     }
-
-    return lines.join('\n') + '\n';
 }
 
-// --------------------------------
-// Node ID Sanitization
-// --------------------------------
+// --------------------------------------------------
+// Utilities
+// --------------------------------------------------
 
 function sanitizeNodeId(name: string): string {
+
     let result = name
         .replace(/[^a-zA-Z0-9_]+/g, '_')
         .replace(/_+/g, '_');
@@ -141,10 +169,6 @@ function sanitizeNodeId(name: string): string {
 
     return result;
 }
-
-// --------------------------------
-// HTML Escape
-// --------------------------------
 
 function escapeHtml(input: string): string {
     return input

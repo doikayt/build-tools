@@ -17,81 +17,108 @@ export default async function runExecutor(
     try {
         options = normalizeOptions(rawOptions);
     } catch (error) {
-        console.error((error as Error).message);
-        return { success: false };
+        return fail((error as Error).message);
     }
 
-    if (!fs.existsSync(options.projectJsonPath)) {
-        console.error(`project.json not found at: ${options.projectJsonPath}`);
+    const projectJson = loadProjectJson(options.projectJsonPath);
+    if (!projectJson) {
         return { success: false };
     }
-
-    const projectJsonRaw = fs.readFileSync(options.projectJsonPath, 'utf-8');
-    const projectJson = JSON.parse(projectJsonRaw);
 
     const mermaid = buildMermaid(projectJson as any);
 
-    // ----------------------
-    // GENERATE MODE
-    // ----------------------
-    if (options.mode === 'generate') {
+    switch (options.mode) {
+        case 'generate':
+            return handleGenerate(options, mermaid);
 
-        fs.writeFileSync(options.generatedMermaidPath!, mermaid, 'utf-8');
+        case 'check':
+            return handleCheck(options, mermaid);
+
+        case 'inject':
+            return handleInject(options, mermaid);
+
+        default:
+            return fail(`Unsupported mode: ${options.mode}`);
+    }
+}
+
+// --------------------------------------------------
+// Mode Handlers
+// --------------------------------------------------
+
+function handleGenerate(
+    options: NormalizedOptions,
+    mermaid: string
+): { success: boolean } {
+
+    fs.writeFileSync(options.generatedMermaidPath!, mermaid, 'utf-8');
+    return { success: true };
+}
+
+function handleCheck(
+    options: NormalizedOptions,
+    mermaid: string
+): { success: boolean } {
+
+    if (!fs.existsSync(options.generatedMermaidPath!)) {
+        return fail(`Generated file not found at: ${options.generatedMermaidPath}`);
+    }
+
+    const existingContent = fs.readFileSync(options.generatedMermaidPath!, 'utf-8');
+
+    if (existingContent !== mermaid) {
+        return fail('Mermaid output drift detected.');
+    }
+
+    return { success: true };
+}
+
+function handleInject(
+    options: NormalizedOptions,
+    mermaid: string
+): { success: boolean } {
+
+    if (!fs.existsSync(options.generatedMermaidPath!)) {
+        return fail(`Generated file not found at: ${options.generatedMermaidPath}`);
+    }
+
+    if (!fs.existsSync(options.markdownPath!)) {
+        return fail(`Markdown file not found at: ${options.markdownPath}`);
+    }
+
+    try {
+        const generatedContent = fs.readFileSync(options.generatedMermaidPath!, 'utf-8');
+        const markdownContent = fs.readFileSync(options.markdownPath!, 'utf-8');
+
+        const updated = injectBetweenMarkers(markdownContent, generatedContent);
+
+        fs.writeFileSync(options.markdownPath!, updated, 'utf-8');
+
         return { success: true };
+
+    } catch (error) {
+        return fail((error as Error).message);
+    }
+}
+
+// --------------------------------------------------
+// Utilities
+// --------------------------------------------------
+
+function loadProjectJson(path: string): unknown | null {
+
+    if (!fs.existsSync(path)) {
+        fail(`project.json not found at: ${path}`);
+        return null;
     }
 
-    // ----------------------
-    // CHECK MODE
-    // ----------------------
-    if (options.mode === 'check') {
-
-        if (!fs.existsSync(options.generatedMermaidPath!)) {
-            console.error(`Generated file not found at: ${options.generatedMermaidPath}`);
-            return { success: false };
-        }
-
-        const existingContent = fs.readFileSync(options.generatedMermaidPath!, 'utf-8');
-
-        if (existingContent !== mermaid) {
-            console.error('Mermaid output drift detected.');
-            return { success: false };
-        }
-
-        return { success: true };
+    try {
+        const raw = fs.readFileSync(path, 'utf-8');
+        return JSON.parse(raw);
+    } catch {
+        fail('Failed to read or parse project.json');
+        return null;
     }
-
-    // ----------------------
-    // INJECT MODE
-    // ----------------------
-    if (options.mode === 'inject') {
-
-        if (!fs.existsSync(options.generatedMermaidPath!)) {
-            console.error(`Generated file not found at: ${options.generatedMermaidPath}`);
-            return { success: false };
-        }
-
-        if (!fs.existsSync(options.markdownPath!)) {
-            console.error(`Markdown file not found at: ${options.markdownPath}`);
-            return { success: false };
-        }
-
-        try {
-            const generatedContent = fs.readFileSync(options.generatedMermaidPath!, 'utf-8');
-            const markdownContent = fs.readFileSync(options.markdownPath!, 'utf-8');
-
-            const updated = injectBetweenMarkers(markdownContent, generatedContent);
-
-            fs.writeFileSync(options.markdownPath!, updated, 'utf-8');
-
-            return { success: true };
-
-        } catch (error) {
-            console.error((error as Error).message);
-            return { success: false };
-        }
-    }
-
-    return { success: false };
 }
 
 function injectBetweenMarkers(markdown: string, content: string): string {
@@ -109,4 +136,9 @@ function injectBetweenMarkers(markdown: string, content: string): string {
     const after = markdown.substring(endIndex);
 
     return `${before}\n${content}\n${after}`;
+}
+
+function fail(message: string): { success: false } {
+    console.error(message);
+    return { success: false };
 }
