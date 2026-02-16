@@ -75,14 +75,20 @@ export default async function runExecutor(
             return { success: false };
         }
 
-        const generatedContent = fs.readFileSync(options.generatedMermaidPath!, 'utf-8');
-        const markdownContent = fs.readFileSync(options.markdownPath!, 'utf-8');
+        try {
+            const generatedContent = fs.readFileSync(options.generatedMermaidPath!, 'utf-8');
+            const markdownContent = fs.readFileSync(options.markdownPath!, 'utf-8');
 
-        const updated = injectBetweenMarkers(markdownContent, generatedContent);
+            const updated = injectBetweenMarkers(markdownContent, generatedContent);
 
-        fs.writeFileSync(options.markdownPath!, updated, 'utf-8');
+            fs.writeFileSync(options.markdownPath!, updated, 'utf-8');
 
-        return { success: true };
+            return { success: true };
+
+        } catch (error) {
+            console.error((error as Error).message);
+            return { success: false };
+        }
     }
 
     return { success: false };

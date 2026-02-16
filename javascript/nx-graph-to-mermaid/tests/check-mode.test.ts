@@ -1,4 +1,3 @@
-
 import fs from 'fs';
 import path from 'path';
 import runExecutor from '../src/executors/generate/executor';
@@ -9,6 +8,8 @@ describe('check mode behavior', () => {
     const tmpDir = __dirname;
     const projectPath = path.join(tmpDir, 'tmp-project.json');
     const generatedPath = path.join(tmpDir, 'tmp-generated.md');
+
+    let consoleSpy: jest.SpyInstance;
 
     beforeEach(() => {
         fs.writeFileSync(
@@ -21,11 +22,14 @@ describe('check mode behavior', () => {
                 }
             })
         );
+
+        consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     });
 
     afterEach(() => {
         safeUnlink(projectPath);
         safeUnlink(generatedPath);
+        consoleSpy.mockRestore();
     });
 
     // -----------------------------------------
@@ -43,6 +47,9 @@ describe('check mode behavior', () => {
         );
 
         expect(result.success).toBe(false);
+        expect(consoleSpy).toHaveBeenCalledWith(
+            `Generated file not found at: ${generatedPath}`
+        );
     });
 
     // -----------------------------------------
@@ -50,7 +57,6 @@ describe('check mode behavior', () => {
     // -----------------------------------------
     test('fails if drift detected', async () => {
 
-        // Write incorrect content
         fs.writeFileSync(generatedPath, 'WRONG CONTENT', 'utf-8');
 
         const result = await runExecutor(
@@ -63,6 +69,9 @@ describe('check mode behavior', () => {
         );
 
         expect(result.success).toBe(false);
+        expect(consoleSpy).toHaveBeenCalledWith(
+            'Mermaid output drift detected.'
+        );
     });
 
     // -----------------------------------------
@@ -70,7 +79,6 @@ describe('check mode behavior', () => {
     // -----------------------------------------
     test('succeeds if no drift', async () => {
 
-        // First generate correct output
         await runExecutor(
             {
                 projectJsonPath: projectPath,
@@ -80,7 +88,6 @@ describe('check mode behavior', () => {
             {} as any
         );
 
-        // Now check
         const result = await runExecutor(
             {
                 projectJsonPath: projectPath,
@@ -91,9 +98,7 @@ describe('check mode behavior', () => {
         );
 
         expect(result.success).toBe(true);
+        expect(consoleSpy).not.toHaveBeenCalled();
     });
 
 });
-
-
-
