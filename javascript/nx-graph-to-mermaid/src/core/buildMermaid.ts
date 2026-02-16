@@ -7,6 +7,7 @@ interface NxProjectJson {
     targets?: Record<string, NxTarget>;
 }
 
+
 export function buildMermaid(project: NxProjectJson): string {
     if (!project || typeof project !== 'object') {
         throw new Error('Invalid project.json structure');

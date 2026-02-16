@@ -4,12 +4,7 @@ describe('buildMermaid()', () => {
 
     test('renders empty targets', () => {
         const output = buildMermaid({ targets: {} });
-
-        expect(output).toBe(
-            `graph TD
-
-`
-        );
+        expect(output).toBe('graph TD\n\n\n');
     });
 
     test('renders single target without description', () => {
@@ -18,7 +13,6 @@ describe('buildMermaid()', () => {
                 build: {}
             }
         });
-
         expect(output).toBe(
             `graph TD
 
@@ -36,7 +30,6 @@ describe('buildMermaid()', () => {
                 }
             }
         });
-
         expect(output).toBe(
             `graph TD
 
@@ -53,7 +46,6 @@ describe('buildMermaid()', () => {
                 alpha: {}
             }
         });
-
         expect(output).toBe(
             `graph TD
 
@@ -73,7 +65,6 @@ describe('buildMermaid()', () => {
                 lint: {}
             }
         });
-
         expect(output).toBe(
             `graph TD
 
@@ -95,7 +86,6 @@ describe('buildMermaid()', () => {
                 zeta: {}
             }
         });
-
         expect(output).toBe(
             `graph TD
 
@@ -117,7 +107,6 @@ describe('buildMermaid()', () => {
                 }
             }
         });
-
         expect(output).toBe(
             `graph TD
 
@@ -135,7 +124,6 @@ describe('buildMermaid()', () => {
                 }
             }
         });
-
         expect(output).toBe(
             `graph TD
 
