@@ -1,5 +1,7 @@
 import { ExecutorContext } from '@nx/devkit';
 import fs from 'node:fs';
+import { buildMermaid } from '../../core/buildMermaid';
+
 
 interface Options {
   projectJsonPath: string;
