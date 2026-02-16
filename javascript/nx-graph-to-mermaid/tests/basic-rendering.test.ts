@@ -99,22 +99,20 @@ describe('buildMermaid()', () => {
         );
     });
 
-    test('ignores dependencies that do not exist in targets', () => {
-        const output = buildMermaid({
-            targets: {
-                build: {
-                    dependsOn: ['missing']
+
+    test('throws if dependency does not exist in targets', () => {
+        expect(() =>
+            buildMermaid({
+                targets: {
+                    build: {
+                        dependsOn: ['missing']
+                    }
                 }
-            }
-        });
-        expect(output).toBe(
-            `graph TD
-
-  build
-
-`
-        );
+            })
+        ).toThrow('Target "build" depends on missing target "missing"');
     });
+
+
 
     test('escapes HTML characters in description', () => {
         const output = buildMermaid({

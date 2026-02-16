@@ -140,11 +140,16 @@ function renderEdges(
             .sort((a, b) => a.localeCompare(b));
 
         for (const dep of deps) {
-            if (targets[dep]) {
-                const fromId = nodeIdMap.get(name)!;
-                const toId = nodeIdMap.get(dep)!;
-                lines.push(`  ${fromId} --> ${toId}`);
+
+            if (!targets[dep]) {
+                throw new Error(
+                    `Target "${name}" depends on missing target "${dep}"`
+                );
             }
+
+            const fromId = nodeIdMap.get(name)!;
+            const toId = nodeIdMap.get(dep)!;
+            lines.push(`  ${fromId} --> ${toId}`);
         }
     }
 }

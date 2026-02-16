@@ -6,6 +6,10 @@
 deterministic [Mermaid](https://www.mermaid.ai/) task flow diagrams from an NX `project.json` file —
 with optional Markdown injection and CI drift detection support.
 
+It operates purely on the specified project.json and renders intra-project target 
+dependencies only. It does not resolve cross-project or workspace-level graph relationships.
+
+
 ---
 
 ## Overview
