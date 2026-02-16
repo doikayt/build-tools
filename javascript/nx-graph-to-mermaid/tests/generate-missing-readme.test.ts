@@ -1,5 +1,6 @@
-import fs from 'node:fs';
-import path from 'node:path';
+// Import test globals explicitly to avoid depending on ambient type resolution
+import fs from 'fs';
+import path from 'path';
 import runExecutor from '../src/executors/generate/executor';
 
 describe('generate executor - missing README', () => {

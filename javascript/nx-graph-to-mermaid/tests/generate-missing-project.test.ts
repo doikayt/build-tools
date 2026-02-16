@@ -1,3 +1,4 @@
+// Import test globals explicitly to avoid depending on ambient type resolution
 import runExecutor from '../src/executors/generate/executor';
 
 describe('generate executor - missing project.json', () => {

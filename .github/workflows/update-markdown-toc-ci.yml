@@ -1,0 +1,39 @@
+name: CI - update-markdown-toc
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'javascript/update-markdown-toc/**'
+  pull_request:
+    paths:
+      - 'javascript/update-markdown-toc/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: javascript/update-markdown-toc
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: javascript/update-markdown-toc/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm test
+
