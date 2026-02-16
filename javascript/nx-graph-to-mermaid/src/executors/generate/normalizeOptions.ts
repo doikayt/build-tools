@@ -1,19 +1,17 @@
-export type Mode = 'generate' | 'check';
+export type Mode = 'generate' | 'check' | 'inject';
 
 export interface RawOptions {
     projectJsonPath: string;
-    injectInto?: string;
-    check?: boolean;       // legacy
-    outputPath?: string;
     mode?: Mode;
-    existingPath?: string;
+    generatedMermaidPath?: string;
+    markdownPath?: string;
 }
 
 export interface NormalizedOptions {
     projectJsonPath: string;
     mode: Mode;
-    outputPath?: string;
-    existingPath?: string;
+    generatedMermaidPath?: string;
+    markdownPath?: string;
 }
 
 export function normalizeOptions(raw: RawOptions): NormalizedOptions {
@@ -21,48 +19,66 @@ export function normalizeOptions(raw: RawOptions): NormalizedOptions {
         throw new Error('projectJsonPath is required');
     }
 
-    // Resolve mode (legacy fallback)
-    const mode: Mode =
-        raw.mode ??
-        (raw.check ? 'check' : 'generate');
+    const mode: Mode = raw.mode ?? 'generate';
 
     // -------------------------
-    // GENERATE MODE CONTRACT
+    // GENERATE MODE
     // -------------------------
     if (mode === 'generate') {
 
-        if (!raw.outputPath) {
-            throw new Error('outputPath is required in generate mode');
+        if (!raw.generatedMermaidPath) {
+            throw new Error('generatedMermaidPath is required in generate mode');
         }
 
-        if (raw.existingPath) {
-            throw new Error('existingPath is invalid in generate mode');
+        if (raw.markdownPath) {
+            throw new Error('markdownPath is invalid in generate mode');
         }
 
         return {
             projectJsonPath: raw.projectJsonPath,
             mode,
-            outputPath: raw.outputPath
+            generatedMermaidPath: raw.generatedMermaidPath
         };
     }
 
     // -------------------------
-    // CHECK MODE CONTRACT
+    // CHECK MODE
     // -------------------------
     if (mode === 'check') {
 
-        if (!raw.existingPath) {
-            throw new Error('existingPath is required in check mode');
+        if (!raw.generatedMermaidPath) {
+            throw new Error('generatedMermaidPath is required in check mode');
         }
 
-        if (raw.outputPath) {
-            throw new Error('outputPath is invalid in check mode');
+        if (raw.markdownPath) {
+            throw new Error('markdownPath is invalid in check mode');
         }
 
         return {
             projectJsonPath: raw.projectJsonPath,
             mode,
-            existingPath: raw.existingPath
+            generatedMermaidPath: raw.generatedMermaidPath
+        };
+    }
+
+    // -------------------------
+    // INJECT MODE
+    // -------------------------
+    if (mode === 'inject') {
+
+        if (!raw.generatedMermaidPath) {
+            throw new Error('generatedMermaidPath is required in inject mode');
+        }
+
+        if (!raw.markdownPath) {
+            throw new Error('markdownPath is required in inject mode');
+        }
+
+        return {
+            projectJsonPath: raw.projectJsonPath,
+            mode,
+            generatedMermaidPath: raw.generatedMermaidPath,
+            markdownPath: raw.markdownPath
         };
     }
 

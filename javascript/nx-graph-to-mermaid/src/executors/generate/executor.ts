@@ -26,30 +26,31 @@ export default async function runExecutor(
         return { success: false };
     }
 
-    let projectJsonRaw: string;
-    let projectJson: unknown;
-
-    try {
-        projectJsonRaw = fs.readFileSync(options.projectJsonPath, 'utf-8');
-        projectJson = JSON.parse(projectJsonRaw);
-    } catch {
-        console.error('Failed to read or parse project.json');
-        return { success: false };
-    }
+    const projectJsonRaw = fs.readFileSync(options.projectJsonPath, 'utf-8');
+    const projectJson = JSON.parse(projectJsonRaw);
 
     const mermaid = buildMermaid(projectJson as any);
+
+    // ----------------------
+    // GENERATE MODE
+    // ----------------------
+    if (options.mode === 'generate') {
+
+        fs.writeFileSync(options.generatedMermaidPath!, mermaid, 'utf-8');
+        return { success: true };
+    }
 
     // ----------------------
     // CHECK MODE
     // ----------------------
     if (options.mode === 'check') {
 
-        if (!fs.existsSync(options.existingPath!)) {
-            console.error(`Existing file not found at: ${options.existingPath}`);
+        if (!fs.existsSync(options.generatedMermaidPath!)) {
+            console.error(`Generated file not found at: ${options.generatedMermaidPath}`);
             return { success: false };
         }
 
-        const existingContent = fs.readFileSync(options.existingPath!, 'utf-8');
+        const existingContent = fs.readFileSync(options.generatedMermaidPath!, 'utf-8');
 
         if (existingContent !== mermaid) {
             console.error('Mermaid output drift detected.');
@@ -60,14 +61,46 @@ export default async function runExecutor(
     }
 
     // ----------------------
-    // GENERATE MODE
+    // INJECT MODE
     // ----------------------
-    try {
-        fs.writeFileSync(options.outputPath!, mermaid, 'utf-8');
-    } catch {
-        console.error(`Failed to write output to: ${options.outputPath}`);
-        return { success: false };
+    if (options.mode === 'inject') {
+
+        if (!fs.existsSync(options.generatedMermaidPath!)) {
+            console.error(`Generated file not found at: ${options.generatedMermaidPath}`);
+            return { success: false };
+        }
+
+        if (!fs.existsSync(options.markdownPath!)) {
+            console.error(`Markdown file not found at: ${options.markdownPath}`);
+            return { success: false };
+        }
+
+        const generatedContent = fs.readFileSync(options.generatedMermaidPath!, 'utf-8');
+        const markdownContent = fs.readFileSync(options.markdownPath!, 'utf-8');
+
+        const updated = injectBetweenMarkers(markdownContent, generatedContent);
+
+        fs.writeFileSync(options.markdownPath!, updated, 'utf-8');
+
+        return { success: true };
     }
 
-    return { success: true };
+    return { success: false };
+}
+
+function injectBetweenMarkers(markdown: string, content: string): string {
+    const start = '<!-- NX_GRAPH:START -->';
+    const end = '<!-- NX_GRAPH:END -->';
+
+    const startIndex = markdown.indexOf(start);
+    const endIndex = markdown.indexOf(end);
+
+    if (startIndex === -1 || endIndex === -1 || endIndex <= startIndex) {
+        throw new Error('NX_GRAPH markers not found or invalid');
+    }
+
+    const before = markdown.substring(0, startIndex + start.length);
+    const after = markdown.substring(endIndex);
+
+    return `${before}\n${content}\n${after}`;
 }
