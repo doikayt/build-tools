@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "Generate Mermaid Task Graph",
+  "type": "object",
+  "properties": {
+    "projectJsonPath": {
+      "type": "string"
+    },
+    "injectInto": {
+      "type": "string"
+    },
+    "check": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": ["projectJsonPath"]
+}

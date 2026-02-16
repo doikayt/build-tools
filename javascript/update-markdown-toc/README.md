@@ -247,6 +247,25 @@ Updated: docs/guide.md
 Up-to-date: docs/api.md
 ```
 
+## Design Goals and Philosophy
+
+This tool was designed in accordance with the top-level
+[Build Philosophy](../../README.md#build-philosophy) of this repository.
+
+> **CI must never modify or generate code — checked-in code is the source of truth — CI only validates.**
+
+Accordingly, `update-markdown-toc` intentionally separates:
+
+- **update mode** (writes files)
+- **check mode** (validates and exits non-zero if stale)
+
+The intended workflow is:
+
+1. Developers run the update command locally.
+2. Generated TOC content is reviewed and committed.
+3. CI runs in `--check` mode to ensure no drift exists.
+
+
 ## Guidelines For Project Contributors
 
 Contributors to the project should consult [this document](GUIDELINES-FOR-PROJECT-CONTRIBUTORS.md)
