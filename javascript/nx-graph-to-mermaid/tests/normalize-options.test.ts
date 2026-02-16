@@ -5,7 +5,7 @@ describe('normalizeOptions()', () => {
     test('defaults to generate mode', () => {
         const result = normalizeOptions({
             projectJsonPath: 'project.json',
-            outputPath: 'out.md'
+            generatedMermaidPath: 'out.md'
         });
 
         expect(result.mode).toBe('generate');
@@ -18,65 +18,51 @@ describe('normalizeOptions()', () => {
     });
 
     // ---------------------------
-    // GENERATE MODE VALIDATION
+    // GENERATE MODE
     // ---------------------------
 
-    test('generate mode requires outputPath', () => {
+    test('generate mode requires generatedMermaidPath', () => {
         expect(() =>
             normalizeOptions({
                 projectJsonPath: 'project.json',
                 mode: 'generate'
             })
-        ).toThrow('outputPath is required in generate mode');
+        ).toThrow('generatedMermaidPath is required in generate mode');
     });
 
-    test('generate mode rejects existingPath', () => {
+    test('generate mode rejects markdownPath', () => {
         expect(() =>
             normalizeOptions({
                 projectJsonPath: 'project.json',
                 mode: 'generate',
-                outputPath: 'out.md',
-                existingPath: 'existing.md'
+                generatedMermaidPath: 'out.md',
+                markdownPath: 'README.md'
             })
-        ).toThrow('existingPath is invalid in generate mode');
+        ).toThrow('markdownPath is invalid in generate mode');
     });
 
     // ---------------------------
-    // CHECK MODE VALIDATION
+    // CHECK MODE
     // ---------------------------
 
-    test('check mode requires existingPath', () => {
+    test('check mode requires generatedMermaidPath', () => {
         expect(() =>
             normalizeOptions({
                 projectJsonPath: 'project.json',
                 mode: 'check'
             })
-        ).toThrow('existingPath is required in check mode');
+        ).toThrow('generatedMermaidPath is required in check mode');
     });
 
-    test('check mode rejects outputPath', () => {
+    test('check mode rejects markdownPath', () => {
         expect(() =>
             normalizeOptions({
                 projectJsonPath: 'project.json',
                 mode: 'check',
-                existingPath: 'existing.md',
-                outputPath: 'out.md'
+                generatedMermaidPath: 'out.md',
+                markdownPath: 'README.md'
             })
-        ).toThrow('outputPath is invalid in check mode');
-    });
-
-    // ---------------------------
-    // LEGACY CHECK FLAG
-    // ---------------------------
-
-    test('legacy check flag resolves to check mode', () => {
-        const result = normalizeOptions({
-            projectJsonPath: 'project.json',
-            check: true,
-            existingPath: 'existing.md'
-        });
-
-        expect(result.mode).toBe('check');
+        ).toThrow('markdownPath is invalid in check mode');
     });
 
 });

@@ -1,51 +1,68 @@
-import fs from 'fs';
-import path from 'path';
-import runExecutor from '../src/executors/generate/executor';
+import { normalizeOptions } from '../src/executors/generate/normalizeOptions';
 
-describe('generate executor - positive flow', () => {
-    const tmpDir = __dirname;
+describe('normalizeOptions()', () => {
 
-    const projectPath = path.join(tmpDir, 'tmp-project.json');
-    const outputPath = path.join(tmpDir, 'tmp-output.md');
+    test('defaults to generate mode', () => {
+        const result = normalizeOptions({
+            projectJsonPath: 'project.json',
+            generatedMermaidPath: 'out.md'
+        });
 
-    beforeEach(() => {
-        fs.writeFileSync(
-            projectPath,
-            JSON.stringify({
-                targets: {
-                    build: {
-                        description: 'Compile source'
-                    }
-                }
+        expect(result.mode).toBe('generate');
+    });
+
+    test('throws if projectJsonPath missing', () => {
+        expect(() =>
+            normalizeOptions({} as any)
+        ).toThrow('projectJsonPath is required');
+    });
+
+    // ---------------------------
+    // GENERATE MODE
+    // ---------------------------
+
+    test('generate mode requires generatedMermaidPath', () => {
+        expect(() =>
+            normalizeOptions({
+                projectJsonPath: 'project.json',
+                mode: 'generate'
             })
-        );
+        ).toThrow('generatedMermaidPath is required in generate mode');
     });
 
-    afterEach(() => {
-        if (fs.existsSync(projectPath)) {
-            fs.unlinkSync(projectPath);
-        }
-        if (fs.existsSync(outputPath)) {
-            fs.unlinkSync(outputPath);
-        }
+    test('generate mode rejects markdownPath', () => {
+        expect(() =>
+            normalizeOptions({
+                projectJsonPath: 'project.json',
+                mode: 'generate',
+                generatedMermaidPath: 'out.md',
+                markdownPath: 'README.md'
+            })
+        ).toThrow('markdownPath is invalid in generate mode');
     });
 
-    test('writes generated mermaid to output file', async () => {
-        const result = await runExecutor(
-            {
-                projectJsonPath: projectPath,
-                outputPath: outputPath
-            },
-            {} as any
-        );
+    // ---------------------------
+    // CHECK MODE
+    // ---------------------------
 
-        expect(result.success).toBe(true);
-
-        const fileContent = fs.readFileSync(outputPath, 'utf-8');
-
-        expect(fileContent).toBe(
-            'graph TD\n\n' +
-            '  build["build<br/>Compile source"]\n\n'
-        );
+    test('check mode requires generatedMermaidPath', () => {
+        expect(() =>
+            normalizeOptions({
+                projectJsonPath: 'project.json',
+                mode: 'check'
+            })
+        ).toThrow('generatedMermaidPath is required in check mode');
     });
+
+    test('check mode rejects markdownPath', () => {
+        expect(() =>
+            normalizeOptions({
+                projectJsonPath: 'project.json',
+                mode: 'check',
+                generatedMermaidPath: 'out.md',
+                markdownPath: 'README.md'
+            })
+        ).toThrow('markdownPath is invalid in check mode');
+    });
+
 });

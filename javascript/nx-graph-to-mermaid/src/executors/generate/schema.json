@@ -1,21 +1,17 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "title": "Mermaid Task Graph Executor",
+  "title": "Generate Mermaid Task Graph",
   "type": "object",
   "properties": {
     "projectJsonPath": {
       "type": "string"
     },
-    "mode": {
-      "type": "string",
-      "enum": ["generate", "check", "inject"],
-      "default": "generate"
-    },
-    "generatedMermaidPath": {
+    "injectInto": {
       "type": "string"
     },
-    "markdownPath": {
-      "type": "string"
+    "check": {
+      "type": "boolean",
+      "default": false
     }
   },
   "required": ["projectJsonPath"]
