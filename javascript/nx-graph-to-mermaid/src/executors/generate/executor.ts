@@ -5,12 +5,11 @@ import { buildMermaid } from '../../core/buildMermaid';
 interface Options {
     projectJsonPath: string;
     injectInto?: string;
-    check?: boolean;          // keep for now
+    check?: boolean; // legacy, kept for compatibility
     outputPath?: string;
     mode?: 'generate' | 'check';
     existingPath?: string;
 }
-
 
 export default async function runExecutor(
     options: Options,
@@ -23,13 +22,13 @@ export default async function runExecutor(
         return { success: false };
     }
 
-    const mode = options.mode ?? 'generate';
-
-    // Preserve existing injectInto validation (do not remove yet)
+    // Preserve existing injectInto validation
     if (options.injectInto && !fs.existsSync(options.injectInto)) {
         console.error(`Markdown file not found at: ${options.injectInto}`);
         return { success: false };
     }
+
+    const mode = options.mode ?? 'generate';
 
     // Read and parse project.json
     let projectJsonRaw: string;
@@ -43,10 +42,38 @@ export default async function runExecutor(
         return { success: false };
     }
 
-    // Generate Mermaid
     const mermaid = buildMermaid(projectJson as any);
 
-    // Write output if requested
+    // ----------------------
+    // CHECK MODE
+    // ----------------------
+
+    if (mode === 'check') {
+
+        if (!options.existingPath) {
+            console.error('existingPath is required in check mode');
+            return { success: false };
+        }
+
+        if (!fs.existsSync(options.existingPath)) {
+            console.error(`Existing file not found at: ${options.existingPath}`);
+            return { success: false };
+        }
+
+        const existingContent = fs.readFileSync(options.existingPath, 'utf-8');
+
+        if (existingContent !== mermaid) {
+            console.error('Mermaid output drift detected.');
+            return { success: false };
+        }
+
+        return { success: true };
+    }
+
+    // ----------------------
+    // GENERATE MODE (default)
+    // ----------------------
+
     if (options.outputPath) {
         try {
             fs.writeFileSync(options.outputPath, mermaid, 'utf-8');
