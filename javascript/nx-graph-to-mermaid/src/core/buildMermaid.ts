@@ -21,8 +21,14 @@ export function buildMermaid(project: NxProjectJson): string {
     lines.push('');
     renderEdges(lines, sortedTargetNames, targets, nodeIdMap);
 
-    return lines.join('\n') + '\n';
+    const body = lines.join('\n');
+
+    return `\`\`\`mermaid
+${body}
+\`\`\``;
 }
+
+
 
 // --------------------------------------------------
 // Validation

@@ -44,7 +44,8 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "prepack": "npm run test",
+    "copy-schemas": "mkdir -p dist/executors/generate && cp src/executors/generate/schema.json dist/executors/generate/schema.json",
+    "prepack": "npm run test && npm run copy-schemas",
     "pack": "npm pack"
   },
   "devDependencies": {

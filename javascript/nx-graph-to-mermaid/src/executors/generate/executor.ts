@@ -1,6 +1,4 @@
 import fs from 'node:fs';
-
-export { default as schema } from './schema.json';              // Need schema to hook in to plugin ecosystem
 import { buildMermaid } from '../../core/buildMermaid';
 import {
     normalizeOptions,
@@ -8,8 +6,7 @@ import {
     NormalizedOptions
 } from './normalizeOptions';
 
-
-export default async function runExecutor(
+async function runExecutor(
     rawOptions: RawOptions
 ): Promise<{ success: boolean }> {
 
@@ -39,19 +36,22 @@ export default async function runExecutor(
     switch (options.mode) {
         case 'generate':
             return handleGenerate(options, mermaid);
+
         case 'check':
             return handleCheck(options, mermaid);
+
         case 'inject':
             return handleInject(options, mermaid);
+
         case 'update':
             return handleUpdate(options, mermaid);
+
         default: {
             const _exhaustive: never = options.mode;
             return fail(`Unsupported mode: ${_exhaustive}`);
         }
     }
 }
-
 
 function handleGenerate(
     options: NormalizedOptions,
@@ -87,6 +87,7 @@ function handleInject(
     if (!fs.existsSync(options.generatedMermaidPath!)) {
         return fail(`Generated file not found at: ${options.generatedMermaidPath}`);
     }
+
     if (!fs.existsSync(options.markdownPath!)) {
         return fail(`Markdown file not found at: ${options.markdownPath}`);
     }
@@ -148,6 +149,7 @@ function loadProjectJson(path: string): unknown | null {
 }
 
 function injectBetweenMarkers(markdown: string, content: string): string {
+
     const start = '<!-- NX_GRAPH:START -->';
     const end = '<!-- NX_GRAPH:END -->';
 
@@ -168,3 +170,5 @@ function fail(message: string): { success: false } {
     console.error(message);
     return { success: false };
 }
+
+export = runExecutor;

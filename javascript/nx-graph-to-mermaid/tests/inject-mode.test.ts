@@ -1,5 +1,5 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import fs from 'fs';
+import path from 'path';
 import runExecutor from '../src/executors/generate/executor';
 import { safeUnlink } from './utils/fs';
 
@@ -55,7 +55,7 @@ describe('inject mode behavior', () => {
 
     test('fails if markdown file missing', async () => {
 
-        fs.writeFileSync(generatedPath, 'graph TD\n\n', 'utf-8');
+        fs.writeFileSync(generatedPath, `${'```mermaid'}\ngraph TD\n\n${'```'}`, 'utf-8');
 
         const result = await runExecutor(
             {
@@ -74,7 +74,7 @@ describe('inject mode behavior', () => {
 
     test('fails if NX_GRAPH markers missing', async () => {
 
-        fs.writeFileSync(generatedPath, 'graph TD\n\n', 'utf-8');
+        fs.writeFileSync(generatedPath, `${'```mermaid'}\ngraph TD\n\n${'```'}`, 'utf-8');
         fs.writeFileSync(markdownPath, 'NO MARKERS HERE', 'utf-8');
 
         const result = await runExecutor(
@@ -94,7 +94,7 @@ describe('inject mode behavior', () => {
 
     test('replaces only content between markers', async () => {
 
-        const generatedContent = 'graph TD\n\n  build\n';
+        const generatedContent = `${'```mermaid'}\ngraph TD\n\n  build\n\n${'```'}`;
         fs.writeFileSync(generatedPath, generatedContent, 'utf-8');
 
         fs.writeFileSync(
@@ -135,7 +135,7 @@ Footer
     // Note: in inject mode we don't really need content of project.json file because mark up already generated.
     test('inject mode is idempotent', async () => {
 
-        const generatedContent = 'graph TD\n\n  build\n';
+        const generatedContent = `${'```mermaid'}\ngraph TD\n\n  build\n\n${'```'}`;
         fs.writeFileSync(generatedPath, generatedContent, 'utf-8');
 
         fs.writeFileSync(
@@ -178,6 +178,7 @@ Footer
 
         expect(first).toBe(second);
     });
+
 
 
 });

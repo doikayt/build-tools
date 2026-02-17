@@ -4,7 +4,14 @@ describe('buildMermaid()', () => {
 
     test('renders empty targets', () => {
         const output = buildMermaid({ targets: {} });
-        expect(output).toBe('graph TD\n\n\n');
+
+        expect(output).toBe(
+            `${'```mermaid'}
+graph TD
+
+
+${'```'}`
+        );
     });
 
     test('renders single target without description', () => {
@@ -13,12 +20,14 @@ describe('buildMermaid()', () => {
                 build: {}
             }
         });
+
         expect(output).toBe(
-            `graph TD
+            `${'```mermaid'}
+graph TD
 
   build
 
-`
+${'```'}`
         );
     });
 
@@ -30,12 +39,14 @@ describe('buildMermaid()', () => {
                 }
             }
         });
+
         expect(output).toBe(
-            `graph TD
+            `${'```mermaid'}
+graph TD
 
   build["build<br/>Compile source"]
 
-`
+${'```'}`
         );
     });
 
@@ -46,13 +57,15 @@ describe('buildMermaid()', () => {
                 alpha: {}
             }
         });
+
         expect(output).toBe(
-            `graph TD
+            `${'```mermaid'}
+graph TD
 
   alpha
   zeta
 
-`
+${'```'}`
         );
     });
 
@@ -65,14 +78,16 @@ describe('buildMermaid()', () => {
                 lint: {}
             }
         });
+
         expect(output).toBe(
-            `graph TD
+            `${'```mermaid'}
+graph TD
 
   build
   lint
 
   build --> lint
-`
+${'```'}`
         );
     });
 
@@ -86,8 +101,10 @@ describe('buildMermaid()', () => {
                 zeta: {}
             }
         });
+
         expect(output).toBe(
-            `graph TD
+            `${'```mermaid'}
+graph TD
 
   alpha
   build
@@ -95,10 +112,9 @@ describe('buildMermaid()', () => {
 
   build --> alpha
   build --> zeta
-`
+${'```'}`
         );
     });
-
 
     test('throws if dependency does not exist in targets', () => {
         expect(() =>
@@ -112,8 +128,6 @@ describe('buildMermaid()', () => {
         ).toThrow('Target "build" depends on missing target "missing"');
     });
 
-
-
     test('escapes HTML characters in description', () => {
         const output = buildMermaid({
             targets: {
@@ -122,12 +136,14 @@ describe('buildMermaid()', () => {
                 }
             }
         });
+
         expect(output).toBe(
-            `graph TD
+            `${'```mermaid'}
+graph TD
 
   build["build<br/>Compile &lt;src&gt; &amp; &quot;dist&quot;"]
 
-`
+${'```'}`
         );
     });
 
@@ -144,7 +160,6 @@ describe('buildMermaid()', () => {
 
         expect(first).toBe(second);
     });
-
 });
 
 test('renders cyclic dependencies', () => {
@@ -156,14 +171,15 @@ test('renders cyclic dependencies', () => {
     });
 
     expect(output).toBe(
-        `graph TD
+        `${'```mermaid'}
+graph TD
 
   a
   b
 
   a --> b
   b --> a
-`
+${'```'}`
     );
 });
 
@@ -175,10 +191,11 @@ test('sanitizes target names starting with number', () => {
     });
 
     expect(output).toBe(
-        `graph TD
+        `${'```mermaid'}
+graph TD
 
   _123_build
 
-`
+${'```'}`
     );
 });

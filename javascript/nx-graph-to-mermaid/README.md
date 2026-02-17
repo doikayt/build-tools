@@ -25,12 +25,12 @@
 
 > Deterministically generates Mermaid task flow diagrams from NX `project.json` config files.
 
-`nx-graph-to-mermaid` is an [Nx](https://nx.dev/) plugin that generates
+`nx-graph-to-mermaid` is an [NX](https://nx.dev/) plugin that generates
 deterministic [Mermaid](https://www.mermaid.ai/) task flow diagrams from an NX `project.json` file —
 with optional Markdown injection and CI drift detection support.
 
 It operates purely on the specified `project.json` and renders intra-project target dependencies only. It does not resolve cross-project or workspace-level graph relationships.
-So, basically: no [monorepo](https://en.wikipedia.org/wiki/Monorepo) support... yet... but contributions welcome!
+So, basically: no [monorepo](https://en.wikipedia.org/wiki/Monorepo) support... yet. (but contributions welcome!)
 
 
 
@@ -153,14 +153,20 @@ This mode:
 - Requires a path to the generated Mermaid document and the target Markdown file.
 - Replaces content between the fixed markers:
 
-<!-- NX_GRAPH:START -->
-<!-- NX_GRAPH:END -->
+
+&nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp; &lt;!-- NX_GRAPH:START --&gt;<br>
+&nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp; &lt;!-- NX_GRAPH:END --&gt;
+
+
+
 
 This mode performs no graph generation and strictly handles deterministic injection.
 
 Run:
 
+```bash
 npx nx run my-project:inject:task-graph
+```
 
 ---
 
@@ -189,7 +195,9 @@ This mode:
 
 Run:
 
+```bash
 npx nx run my-project:update:task-graph
+```
 
 ---
 
