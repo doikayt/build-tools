@@ -42,8 +42,7 @@ describe('check mode behavior', () => {
                 projectJsonPath: projectPath,
                 mode: 'check',
                 generatedMermaidPath: generatedPath
-            },
-            {} as any
+            }
         );
 
         expect(result.success).toBe(false);
@@ -64,8 +63,7 @@ describe('check mode behavior', () => {
                 projectJsonPath: projectPath,
                 mode: 'check',
                 generatedMermaidPath: generatedPath
-            },
-            {} as any
+            }
         );
 
         expect(result.success).toBe(false);
@@ -84,8 +82,7 @@ describe('check mode behavior', () => {
                 projectJsonPath: projectPath,
                 mode: 'generate',
                 generatedMermaidPath: generatedPath
-            },
-            {} as any
+            }
         );
 
         const result = await runExecutor(
@@ -93,8 +90,7 @@ describe('check mode behavior', () => {
                 projectJsonPath: projectPath,
                 mode: 'check',
                 generatedMermaidPath: generatedPath
-            },
-            {} as any
+            }
         );
 
         expect(result.success).toBe(true);

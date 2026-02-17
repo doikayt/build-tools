@@ -8,8 +8,7 @@ describe('generate executor - missing project.json', () => {
               projectJsonPath: 'non-existent-project.json',
               generatedMermaidPath: 'out.md',
               mode: 'generate'
-          },
-          {} as any
+          }
       );
 
       expect(result.success).toBe(false);

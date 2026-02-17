@@ -44,8 +44,7 @@ describe('inject mode behavior', () => {
                 mode: 'inject',
                 generatedMermaidPath: generatedPath,
                 markdownPath
-            },
-            {} as any
+            }
         );
 
         expect(result.success).toBe(false);
@@ -64,8 +63,7 @@ describe('inject mode behavior', () => {
                 mode: 'inject',
                 generatedMermaidPath: generatedPath,
                 markdownPath
-            },
-            {} as any
+            }
         );
 
         expect(result.success).toBe(false);
@@ -85,8 +83,7 @@ describe('inject mode behavior', () => {
                 mode: 'inject',
                 generatedMermaidPath: generatedPath,
                 markdownPath
-            },
-            {} as any
+            }
         );
 
         expect(result.success).toBe(false);
@@ -120,8 +117,7 @@ Footer
                 mode: 'inject',
                 generatedMermaidPath: generatedPath,
                 markdownPath
-            },
-            {} as any
+            }
         );
 
         expect(result.success).toBe(true);
@@ -163,8 +159,7 @@ Footer
                 mode: 'inject',
                 generatedMermaidPath: generatedPath,
                 markdownPath
-            },
-            {} as any
+            }
         );
 
         const first = fs.readFileSync(markdownPath, 'utf-8');
@@ -176,8 +171,7 @@ Footer
                 mode: 'inject',
                 generatedMermaidPath: generatedPath,
                 markdownPath
-            },
-            {} as any
+            }
         );
 
         const second = fs.readFileSync(markdownPath, 'utf-8');
@@ -187,4 +181,3 @@ Footer
 
 
 });
-

@@ -13,7 +13,7 @@ So far, we have:
   Table of Contents (TOC) in Markdown files.
 
 - an [NX](https://nx.dev/) [plugin](javascript/nx-graph-to-mermaid/README.md) that generates
-  a deterministic [Mermaid](https://www.mermaid.ai/) task flow diagram from an NX `project.json` file —
+  a deterministic Mermaid task flow diagram from an NX `project.json` file —
   with optional CI drift detection and Markdown injection support.
 
 ---

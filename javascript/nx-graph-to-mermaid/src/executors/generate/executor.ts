@@ -1,4 +1,3 @@
-import { ExecutorContext } from '@nx/devkit';
 import fs from 'node:fs';
 import { buildMermaid } from '../../core/buildMermaid';
 import {
@@ -8,8 +7,7 @@ import {
 } from './normalizeOptions';
 
 export default async function runExecutor(
-    rawOptions: RawOptions,
-    context: ExecutorContext
+    rawOptions: RawOptions
 ): Promise<{ success: boolean }> {
 
     let options: NormalizedOptions;
@@ -30,21 +28,18 @@ export default async function runExecutor(
     switch (options.mode) {
         case 'generate':
             return handleGenerate(options, mermaid);
-
         case 'check':
             return handleCheck(options, mermaid);
-
         case 'inject':
             return handleInject(options, mermaid);
-
-        default:
-            return fail(`Unsupported mode: ${options.mode}`);
+        case 'update':
+            return handleUpdate(options, mermaid);
+        default: {
+            const _exhaustive: never = options.mode;
+            return fail(`Unsupported mode: ${_exhaustive}`);
+        }
     }
 }
-
-// --------------------------------------------------
-// Mode Handlers
-// --------------------------------------------------
 
 function handleGenerate(
     options: NormalizedOptions,
@@ -65,7 +60,6 @@ function handleCheck(
     }
 
     const existingContent = fs.readFileSync(options.generatedMermaidPath!, 'utf-8');
-
     if (existingContent !== mermaid) {
         return fail('Mermaid output drift detected.');
     }
@@ -81,7 +75,6 @@ function handleInject(
     if (!fs.existsSync(options.generatedMermaidPath!)) {
         return fail(`Generated file not found at: ${options.generatedMermaidPath}`);
     }
-
     if (!fs.existsSync(options.markdownPath!)) {
         return fail(`Markdown file not found at: ${options.markdownPath}`);
     }
@@ -89,7 +82,6 @@ function handleInject(
     try {
         const generatedContent = fs.readFileSync(options.generatedMermaidPath!, 'utf-8');
         const markdownContent = fs.readFileSync(options.markdownPath!, 'utf-8');
-
         const updated = injectBetweenMarkers(markdownContent, generatedContent);
 
         fs.writeFileSync(options.markdownPath!, updated, 'utf-8');
@@ -101,9 +93,31 @@ function handleInject(
     }
 }
 
-// --------------------------------------------------
-// Utilities
-// --------------------------------------------------
+function handleUpdate(
+    options: NormalizedOptions,
+    mermaid: string
+): { success: boolean } {
+
+    if (!fs.existsSync(options.markdownPath!)) {
+        return fail(`Markdown file not found at: ${options.markdownPath}`);
+    }
+
+    try {
+        if (options.generatedMermaidPath) {
+            fs.writeFileSync(options.generatedMermaidPath, mermaid, 'utf-8');
+        }
+
+        const markdownContent = fs.readFileSync(options.markdownPath!, 'utf-8');
+        const updated = injectBetweenMarkers(markdownContent, mermaid);
+
+        fs.writeFileSync(options.markdownPath!, updated, 'utf-8');
+
+        return { success: true };
+
+    } catch (error) {
+        return fail((error as Error).message);
+    }
+}
 
 function loadProjectJson(path: string): unknown | null {
 
