@@ -34,9 +34,6 @@ describe('inject mode behavior', () => {
         consoleSpy.mockRestore();
     });
 
-    // -----------------------------------------
-    // A — Generated file missing → fail
-    // -----------------------------------------
     test('fails if generated file missing', async () => {
 
         fs.writeFileSync(markdownPath, 'README', 'utf-8');
@@ -57,9 +54,6 @@ describe('inject mode behavior', () => {
         );
     });
 
-    // -----------------------------------------
-    // B — Markdown file missing → fail
-    // -----------------------------------------
     test('fails if markdown file missing', async () => {
 
         fs.writeFileSync(generatedPath, 'graph TD\n\n', 'utf-8');
@@ -80,9 +74,6 @@ describe('inject mode behavior', () => {
         );
     });
 
-    // -----------------------------------------
-    // C — Markers missing → fail
-    // -----------------------------------------
     test('fails if NX_GRAPH markers missing', async () => {
 
         fs.writeFileSync(generatedPath, 'graph TD\n\n', 'utf-8');
@@ -104,9 +95,6 @@ describe('inject mode behavior', () => {
         );
     });
 
-    // -----------------------------------------
-    // D — Proper injection between markers
-    // -----------------------------------------
     test('replaces only content between markers', async () => {
 
         const generatedContent = 'graph TD\n\n  build\n';
@@ -145,6 +133,58 @@ Footer
         expect(updated).toContain('Footer');
         expect(updated).not.toContain('OLD CONTENT');
     });
+
+
+
+    // Note: in inject mode we don't really need content of project.json file because mark up already generated.
+    test('inject mode is idempotent', async () => {
+
+        const generatedContent = 'graph TD\n\n  build\n';
+        fs.writeFileSync(generatedPath, generatedContent, 'utf-8');
+
+        fs.writeFileSync(
+            markdownPath,
+            `
+# Title
+
+<!-- NX_GRAPH:START -->
+OLD CONTENT
+<!-- NX_GRAPH:END -->
+
+Footer
+`,
+            'utf-8'
+        );
+
+        // First injection
+        await runExecutor(
+            {
+                projectJsonPath: projectPath,
+                mode: 'inject',
+                generatedMermaidPath: generatedPath,
+                markdownPath
+            },
+            {} as any
+        );
+
+        const first = fs.readFileSync(markdownPath, 'utf-8');
+
+        // Second injection
+        await runExecutor(
+            {
+                projectJsonPath: projectPath,
+                mode: 'inject',
+                generatedMermaidPath: generatedPath,
+                markdownPath
+            },
+            {} as any
+        );
+
+        const second = fs.readFileSync(markdownPath, 'utf-8');
+
+        expect(first).toBe(second);
+    });
+
 
 });
 

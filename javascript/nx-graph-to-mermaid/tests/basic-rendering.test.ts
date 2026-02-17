@@ -146,3 +146,39 @@ describe('buildMermaid()', () => {
     });
 
 });
+
+test('renders cyclic dependencies', () => {
+    const output = buildMermaid({
+        targets: {
+            a: { dependsOn: ['b'] },
+            b: { dependsOn: ['a'] }
+        }
+    });
+
+    expect(output).toBe(
+        `graph TD
+
+  a
+  b
+
+  a --> b
+  b --> a
+`
+    );
+});
+
+test('sanitizes target names starting with number', () => {
+    const output = buildMermaid({
+        targets: {
+            '123-build': {}
+        }
+    });
+
+    expect(output).toBe(
+        `graph TD
+
+  _123_build
+
+`
+    );
+});

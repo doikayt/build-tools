@@ -6,17 +6,20 @@
 deterministic [Mermaid](https://www.mermaid.ai/) task flow diagrams from an NX `project.json` file —
 with optional Markdown injection and CI drift detection support.
 
-It operates purely on the specified project.json and renders intra-project target 
-dependencies only. It does not resolve cross-project or workspace-level graph relationships.
+It operates purely on the specified `project.json` and renders intra-project target dependencies only. It does not resolve cross-project or workspace-level graph relationships.
+So, basically: no [monorepo](https://en.wikipedia.org/wiki/Monorepo) support... yet... but contributions welcome!
+
 
 
 ---
 
 ## Overview
 
-The plugin operates in three primary modes:
+The plugin operates in four primary modes:
 
-### 1. `@datalackey/nx-graph-to-mermaid:generate`
+---
+
+### 1. @datalackey/nx-graph-to-mermaid:generate
 
 Generates a deterministic Mermaid diagram from a specified `project.json`.
 
@@ -25,12 +28,12 @@ Generates a deterministic Mermaid diagram from a specified `project.json`.
 - Reads optional `description` metadata
 - Outputs Mermaid markup to a file
 
-This mode **only generates** the diagram.  
+This mode only generates the diagram.  
 It does not modify any Markdown files.
 
 ---
 
-### 2. `@datalackey/nx-graph-to-mermaid:inject`
+### 2. @datalackey/nx-graph-to-mermaid:inject
 
 Injects a previously generated Mermaid document into a Markdown file.
 
@@ -46,12 +49,12 @@ The Mermaid block replaces the content between the fixed markers:
 <!-- NX_GRAPH:END -->
 ```
 
-This mode performs **no graph generation**.  
+This mode performs no graph generation.  
 It strictly handles deterministic injection.
 
 ---
 
-### 3. `@datalackey/nx-graph-to-mermaid:check`
+### 3. @datalackey/nx-graph-to-mermaid:check
 
 Validates that an existing Mermaid diagram matches what would currently be generated from `project.json`.
 
@@ -65,6 +68,21 @@ This is intended for CI enforcement.
 
 ---
 
+### 4. @datalackey/nx-graph-to-mermaid:update
+
+Regenerates the Mermaid diagram from `project.json` and injects it directly into a Markdown file in a single step.
+
+This mode:
+
+- Reads `project.json`
+- Generates fresh Mermaid output
+- Injects it between NX_GRAPH markers in the target Markdown file
+- Optionally writes the generated artifact to disk (if `generatedMermaidPath` is provided)
+
+This is the recommended mode for local development workflows where documentation should stay in sync with the build definition.
+
+---
+
 ## Philosophy
 
 Your `project.json` already defines the execution graph of your build.
@@ -72,15 +90,17 @@ Your `project.json` already defines the execution graph of your build.
 By extending targets with a `description` field:
 
 ```json
-"release": {
-  "dependsOn": ["package"],
-  "description": "Full release pipeline"
+{
+  "release": {
+    "dependsOn": ["package"],
+    "description": "Full release pipeline"
+  }
 }
 ```
 
 You embed documentation directly into the build definition.
 
-`nx-graph-to-mermaid` compiles that metadata into a Mermaid diagram suitable for Markdown rendering on GitHub.
+`nx-graph-to-mermaid` compiles that metadata into a deterministic Mermaid diagram suitable for Markdown rendering on GitHub.
 
 ---
 
@@ -98,12 +118,12 @@ Add a `description` field to any target:
 
 ```json
 {
-  "targets": {
-    "build": {
-      "dependsOn": ["lint", "test"],
-      "description": "Runs lint and test"
+    "targets": {
+        "build": {
+            "dependsOn": ["lint", "test"],
+            "description": "Runs lint and test"
+        }
     }
-  }
 }
 ```
 
@@ -120,18 +140,21 @@ Nx ignores unknown fields, so this is safe.
 Add a target:
 
 ```json
-"generate:task-graph": {
-  "executor": "@datalackey/nx-graph-to-mermaid:generate",
-  "options": {
-    "projectJsonPath": "project.json",
-    "outputPath": "docs/task-graph.md"
+{
+  "generate:task-graph": {
+    "executor": "@datalackey/nx-graph-to-mermaid:generate",
+    "options": {
+      "projectJsonPath": "project.json",
+      "generatedMermaidPath": "docs/task-graph.md"
+    }
   }
 }
 ```
 
 Run:
 
-```bash
+
+```
 npx nx run my-project:generate:task-graph
 ```
 
@@ -144,18 +167,21 @@ This writes a deterministic Mermaid diagram to the specified file.
 Add a target:
 
 ```json
-"inject:task-graph": {
-  "executor": "@datalackey/nx-graph-to-mermaid:inject",
-  "options": {
-    "generatedPath": "docs/task-graph.md",
-    "markdownPath": "README.md"
+{
+  "inject:task-graph": {
+    "executor": "@datalackey/nx-graph-to-mermaid:inject",
+    "options": {
+      "projectJsonPath": "project.json",
+      "generatedMermaidPath": "docs/task-graph.md",
+      "markdownPath": "README.md"
+    }
   }
 }
 ```
 
 Run:
 
-```bash
+```
 npx nx run my-project:inject:task-graph
 ```
 
@@ -172,23 +198,56 @@ No other content is modified.
 
 ---
 
-## Check Mode (CI Drift Detection)
+## Update Mode (Generate + Inject)
 
 Add a target:
 
 ```json
-"check:task-graph": {
-  "executor": "@datalackey/nx-graph-to-mermaid:check",
-  "options": {
-    "projectJsonPath": "project.json",
-    "existingPath": "docs/task-graph.md"
+{
+  "update:task-graph": {
+    "executor": "@datalackey/nx-graph-to-mermaid:update",
+    "options": {
+      "projectJsonPath": "project.json",
+      "markdownPath": "README.md",
+      "generatedMermaidPath": "docs/task-graph.md"
+    }
   }
 }
 ```
 
 Run:
 
-```bash
+npx nx run my-project:update:task-graph
+
+This will:
+
+- Regenerate the Mermaid diagram
+- Update the artifact file
+- Inject the same content into the Markdown file
+
+This keeps documentation and artifacts synchronized in a single step.
+
+---
+
+## Check Mode (CI Drift Detection)
+
+Add a target:
+
+```json
+{
+  "check:task-graph": {
+    "executor": "@datalackey/nx-graph-to-mermaid:check",
+    "options": {
+      "projectJsonPath": "project.json",
+      "generatedMermaidPath": "docs/task-graph.md"
+    }
+  }
+}
+```
+
+Run:
+
+```
 npx nx run my-project:check:task-graph
 ```
 
@@ -219,12 +278,12 @@ Identical input → identical output.
 ## Behavior Rules
 
 - Only intra-project target dependencies are rendered
+- Missing dependencies cause failure
 - Targets without descriptions render as single-line labels
 - Unknown fields are ignored
 - Cycles are rendered but not resolved
 - No parsing of `nx graph`
 - No HTML scraping
-- No shell scripting
 
 The tool operates purely on `project.json`.
 
@@ -254,29 +313,11 @@ Generated output:
 ```mermaid
 graph TD
 
-  package["package<br/>Runs npm pack"]
-  release["release<br/>Full release pipeline"]
+package["package<br/>Runs npm pack"]
+release["release<br/>Full release pipeline"]
 
-  release --> package
+release --> package
 ```
-
----
-
-## Testing
-
-All tests are written in JavaScript using Jest.
-
-No shell scripts are used.
-
-Test coverage includes:
-
-- Deterministic output ordering
-- Description handling
-- Dependency edge generation
-- Injection between markers
-- Drift detection logic
-
-Tests rely on fixture files and exact string comparisons.
 
 ---
 
