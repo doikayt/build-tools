@@ -1,18 +1,26 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "title": "Generate Mermaid Task Graph",
+  "title": "NX Graph to Mermaid Executor",
   "type": "object",
   "properties": {
     "projectJsonPath": {
-      "type": "string"
+      "type": "string",
+      "description": "Path to project.json"
     },
-    "injectInto": {
-      "type": "string"
+    "mode": {
+      "type": "string",
+      "enum": ["generate", "check", "inject", "update"],
+      "default": "generate"
     },
-    "check": {
-      "type": "boolean",
-      "default": false
+    "generatedMermaidPath": {
+      "type": "string",
+      "description": "Path to write or read generated Mermaid file"
+    },
+    "markdownPath": {
+      "type": "string",
+      "description": "Markdown file for injection"
     }
   },
-  "required": ["projectJsonPath"]
+  "required": ["projectJsonPath"],
+  "additionalProperties": false
 }

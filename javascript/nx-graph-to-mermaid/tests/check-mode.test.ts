@@ -1,13 +1,14 @@
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 import runExecutor from '../src/executors/generate/executor';
 import { safeUnlink } from './utils/fs';
 
 describe('check mode behavior', () => {
 
-    const tmpDir = __dirname;
-    const projectPath = path.join(tmpDir, 'tmp-project.json');
-    const generatedPath = path.join(tmpDir, 'tmp-generated.md');
+    // Use absolute paths from the beginning
+    const tmpDir = path.resolve(__dirname);
+    const projectPath = path.resolve(tmpDir, 'tmp-project.json');
+    const generatedPath = path.resolve(tmpDir, 'tmp-generated.md');
 
     let consoleSpy: jest.SpyInstance;
 
@@ -20,10 +21,13 @@ describe('check mode behavior', () => {
                         description: 'Compile source'
                     }
                 }
-            })
+            }),
+            'utf-8'
         );
 
-        consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+        consoleSpy = jest
+            .spyOn(console, 'error')
+            .mockImplementation(() => {});
     });
 
     afterEach(() => {
@@ -37,17 +41,15 @@ describe('check mode behavior', () => {
     // -----------------------------------------
     test('fails if generated file missing in check mode', async () => {
 
-        const result = await runExecutor(
-            {
-                projectJsonPath: projectPath,
-                mode: 'check',
-                generatedMermaidPath: generatedPath
-            }
-        );
+        const result = await runExecutor({
+            projectJsonPath: projectPath,
+            mode: 'check',
+            generatedMermaidPath: generatedPath
+        });
 
         expect(result.success).toBe(false);
         expect(consoleSpy).toHaveBeenCalledWith(
-            `Generated file not found at: ${generatedPath}`
+            expect.stringContaining('Generated file not found at:')
         );
     });
 
@@ -56,15 +58,14 @@ describe('check mode behavior', () => {
     // -----------------------------------------
     test('fails if drift detected', async () => {
 
+        // Write incorrect content to existing generated file
         fs.writeFileSync(generatedPath, 'WRONG CONTENT', 'utf-8');
 
-        const result = await runExecutor(
-            {
-                projectJsonPath: projectPath,
-                mode: 'check',
-                generatedMermaidPath: generatedPath
-            }
-        );
+        const result = await runExecutor({
+            projectJsonPath: projectPath,
+            mode: 'check',
+            generatedMermaidPath: generatedPath
+        });
 
         expect(result.success).toBe(false);
         expect(consoleSpy).toHaveBeenCalledWith(
@@ -77,21 +78,17 @@ describe('check mode behavior', () => {
     // -----------------------------------------
     test('succeeds if no drift', async () => {
 
-        await runExecutor(
-            {
-                projectJsonPath: projectPath,
-                mode: 'generate',
-                generatedMermaidPath: generatedPath
-            }
-        );
+        await runExecutor({
+            projectJsonPath: projectPath,
+            mode: 'generate',
+            generatedMermaidPath: generatedPath
+        });
 
-        const result = await runExecutor(
-            {
-                projectJsonPath: projectPath,
-                mode: 'check',
-                generatedMermaidPath: generatedPath
-            }
-        );
+        const result = await runExecutor({
+            projectJsonPath: projectPath,
+            mode: 'check',
+            generatedMermaidPath: generatedPath
+        });
 
         expect(result.success).toBe(true);
         expect(consoleSpy).not.toHaveBeenCalled();

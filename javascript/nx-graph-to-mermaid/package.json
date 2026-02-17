@@ -1,13 +1,54 @@
 {
-  "name": "@datalackey/nx-mermaid-task-graph",
-  "version": "0.0.1",
-  "private": true,
+  "name": "@datalackey/nx-graph-to-mermaid",
+  "executors": "./executors.json",
+  "version": "0.0.5",
+  "private": false,
+  "description": "Auto-generates a Mermaid task flow diagram from an NX `project.json` file — with optional CI drift detection and Markdown injection support.",
   "main": "dist/index.js",
+  "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/datalackey/build-tools.git",
+    "directory": "javascript/nx-graph-to-mermaid"
+  },
+  "bugs": {
+    "url": "https://github.com/datalackey/build-tools/issues"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "executors.json",
+    "generators.json",
+    "package.json"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/nx-graph-to-mermaid",
+  "keywords": [
+    "nx",
+    "javascript",
+    "node",
+    "typescript",
+    "mermaid",
+    "graph",
+    "task-graph",
+    "build",
+    "automation",
+    "documentation",
+    "ci"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "prepack": "npm run test",
+    "pack": "npm pack"
   },
   "devDependencies": {
+    "@datalackey/update-markdown-toc": "^1.0.4",
     "@types/jest": "^29.5.0",
     "@types/node": "^18.16.0",
     "jest": "^29.7.0",

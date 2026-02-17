@@ -20,36 +20,30 @@ So far, we have:
 
 ## Build Philosophy
 
-Our tools are intentionally opinionated in both design and workflow. The core philosophy is:
+This repository follows a deterministic build and validation model.
 
-> **CI must never modify or generate code — checked-in code is the source of truth — CI only validates.**
+Core principles:
 
-All mechanical generation steps  (such as updating Markdown tables 
-of contents or generating build graph diagrams)
-are intended to be performed explicitly by developers as part of their normal workflow.
+- Checked-in source code is the source of truth.
+- CI validates, tests, and publishes.
+- CI does not generate code, does not modify existing logic and does not change any non-version related configuration 
+  (note: CI *will* bump version numbers as described in Release Exception section below).
+- Builds must be reproducible locally.
 
-Continuous Integration should be responsible for:
+### Release Exception (Version Management)
 
-- Verifying that generated artifacts are up to date
-- Detecting drift between committed files and generated output
-- Failing deterministically when inconsistencies are found
+There is one controlled exception to the “CI does not modify the repository” rule:
 
-Continuous Integration should  *not* responsible for mutating the repository.
-If CI were allowed to mutate files, debugging would require reasoning about generation logic itself —
-a more complex and less transparent process.
+Version bumps and changelog updates are managed using Changesets.
 
-So, we prioritize workflows that enforce:
+Depending on the release workflow configuration, CI may:
 
-- Deterministic builds
-- Explicit developer intent
-- Fully materialized, reviewable artifacts
+- Generate a version PR containing version bumps and changelog updates, or
+- Publish packages after a developer has already committed version changes.
 
-When discrepancies occur between environments, it becomes possible to:
+In either case:
 
-- Diff the actual workspace contents
-- Rule out differences in source code or config files
-- Avoid debugging hidden generation logic performed during CI
+- CI never modifies functional source code.
+- Only version metadata and changelogs may be updated automatically.
+- Release changes are explicit, reviewable, and traceable in Git history.
 
-
-Individual tools in this repository implement this philosophy through clearly separated
-**update** and **check** modes.

@@ -1,10 +1,13 @@
 import fs from 'node:fs';
+
+export { default as schema } from './schema.json';              // Need schema to hook in to plugin ecosystem
 import { buildMermaid } from '../../core/buildMermaid';
 import {
     normalizeOptions,
     RawOptions,
     NormalizedOptions
 } from './normalizeOptions';
+
 
 export default async function runExecutor(
     rawOptions: RawOptions
@@ -18,6 +21,14 @@ export default async function runExecutor(
         return fail((error as Error).message);
     }
 
+    // CHECK MODE: validate generated file existence BEFORE loading project.json
+    if (options.mode === 'check') {
+        if (!fs.existsSync(options.generatedMermaidPath!)) {
+            return fail(`Generated file not found at: ${options.generatedMermaidPath}`);
+        }
+    }
+
+    // Now load project.json (needed for all modes after existence check)
     const projectJson = loadProjectJson(options.projectJsonPath);
     if (!projectJson) {
         return { success: false };
@@ -40,6 +51,7 @@ export default async function runExecutor(
         }
     }
 }
+
 
 function handleGenerate(
     options: NormalizedOptions,
