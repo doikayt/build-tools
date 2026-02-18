@@ -7,7 +7,9 @@ import {
 } from './normalizeOptions';
 
 
-
+/**
+ * Main entry point for our NX plugin.
+ */
 async function runExecutor(
     rawOptions: RawOptions
 ): Promise<{ success: boolean }> {

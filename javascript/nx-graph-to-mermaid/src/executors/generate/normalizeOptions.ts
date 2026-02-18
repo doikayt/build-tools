@@ -1,3 +1,6 @@
+
+import fs from 'node:fs';
+
 export type Mode = 'generate' | 'check' | 'inject' | 'update';
 
 export interface RawOptions {
@@ -14,6 +17,67 @@ export interface NormalizedOptions {
     markdownPath?: string;
 }
 
+export type ExecutionContext =
+    | { success: true; options: NormalizedOptions; project?: unknown }
+    | { success: false };
+
+
+/**
+ * Verifies that all options that are needed for the specified run mode are present (via call to normalizeOptions),
+ * then for file paths, makes sure the files exist where they are required. Finally, loads project.json if needed
+ * (which it is not in the case of inject mode -- where we are simply injecting a pre-generated mermaid graph
+ * into our markdown file.)
+ */
+export function resolveExecutionContext(
+    rawOptions: RawOptions
+): ExecutionContext {
+
+    let options: NormalizedOptions;
+
+    try {
+        options = normalizeOptions(rawOptions);
+    } catch (error) {
+        console.error((error as Error).message);
+        return { success: false };
+    }
+
+    // INJECT mode: no project loading
+    if (options.mode === 'inject') {
+
+        if (!fs.existsSync(options.generatedMermaidPath!)) {
+            console.error(`Generated file not found at: ${options.generatedMermaidPath}`);
+            return { success: false };
+        }
+
+        if (!fs.existsSync(options.markdownPath!)) {
+            console.error(`Markdown file not found at: ${options.markdownPath}`);
+            return { success: false };
+        }
+
+        return { success: true, options };
+    }
+
+    // CHECK mode: generated file must exist before rebuild
+    if (options.mode === 'check') {
+        if (!fs.existsSync(options.generatedMermaidPath!)) {
+            console.error(`Generated file not found at: ${options.generatedMermaidPath}`);
+            return { success: false };
+        }
+    }
+
+    // GENERATE, CHECK, UPDATE require project.json
+    const project = loadProjectJson(options.projectJsonPath);
+    if (!project) {
+        return { success: false };
+    }
+
+    return { success: true, options, project };
+}
+
+/**
+ * Verifies that user has specified all options needed for the desired run mode.
+ * No file existence checks at this point.
+ */
 export function normalizeOptions(raw: RawOptions): NormalizedOptions {
     if (!raw.projectJsonPath) {
         throw new Error('projectJsonPath is required');
@@ -91,58 +155,6 @@ export function normalizeOptions(raw: RawOptions): NormalizedOptions {
     }
 }
 
-// New: resolveExecutionContext moved here so normalizeOptions and execution resolution live together.
-import fs from 'node:fs';
-
-export type ExecutionContext =
-    | { success: true; options: NormalizedOptions; project?: unknown }
-    | { success: false };
-
-export function resolveExecutionContext(
-    rawOptions: RawOptions
-): ExecutionContext {
-
-    let options: NormalizedOptions;
-
-    try {
-        options = normalizeOptions(rawOptions);
-    } catch (error) {
-        console.error((error as Error).message);
-        return { success: false };
-    }
-
-    // INJECT mode: no project loading
-    if (options.mode === 'inject') {
-
-        if (!fs.existsSync(options.generatedMermaidPath!)) {
-            console.error(`Generated file not found at: ${options.generatedMermaidPath}`);
-            return { success: false };
-        }
-
-        if (!fs.existsSync(options.markdownPath!)) {
-            console.error(`Markdown file not found at: ${options.markdownPath}`);
-            return { success: false };
-        }
-
-        return { success: true, options };
-    }
-
-    // CHECK mode: generated file must exist before rebuild
-    if (options.mode === 'check') {
-        if (!fs.existsSync(options.generatedMermaidPath!)) {
-            console.error(`Generated file not found at: ${options.generatedMermaidPath}`);
-            return { success: false };
-        }
-    }
-
-    // GENERATE, CHECK, UPDATE require project.json
-    const project = loadProjectJson(options.projectJsonPath);
-    if (!project) {
-        return { success: false };
-    }
-
-    return { success: true, options, project };
-}
 
 function loadProjectJson(path: string): unknown | null {
     if (!fs.existsSync(path)) {
