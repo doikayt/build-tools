@@ -1,14 +1,13 @@
 {
   "name": "build-tools",
   "private": true,
-  "dependencies": {
-    "@datalackey/update-markdown-toc": "1.0.4",
-    "@datalackey/nx-graph-to-mermaid": "1.0.4"
-  },
-  "devDependencies": {},
+  "workspaces": [
+    "*"
+  ],
   "scripts": {
     "test": "npm -ws test",
     "build": "npm -ws run build --if-present"
   }
 }
+
 

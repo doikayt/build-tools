@@ -4,6 +4,7 @@
   "description": "Auto-generate Table of Contents for a Markdown file (or files, recursively from a top level folder)",
   "license": "MIT",
   "type": "module",
+  "private": false,
   "scripts": {
     "test": "bash scripts/run-all-tests.sh"
   },
