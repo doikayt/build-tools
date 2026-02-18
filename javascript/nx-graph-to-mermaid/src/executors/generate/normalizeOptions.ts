@@ -86,8 +86,75 @@ export function normalizeOptions(raw: RawOptions): NormalizedOptions {
         }
 
         default: {
-            const _exhaustive: never = mode;
-            throw new Error(`Unsupported mode: ${_exhaustive}`);
+            throw new Error(`Unsupported mode: ${(mode as never)}`);
         }
+    }
+}
+
+// New: resolveExecutionContext moved here so normalizeOptions and execution resolution live together.
+import fs from 'node:fs';
+
+export type ExecutionContext =
+    | { success: true; options: NormalizedOptions; project?: unknown }
+    | { success: false };
+
+export function resolveExecutionContext(
+    rawOptions: RawOptions
+): ExecutionContext {
+
+    let options: NormalizedOptions;
+
+    try {
+        options = normalizeOptions(rawOptions);
+    } catch (error) {
+        console.error((error as Error).message);
+        return { success: false };
+    }
+
+    // INJECT mode: no project loading
+    if (options.mode === 'inject') {
+
+        if (!fs.existsSync(options.generatedMermaidPath!)) {
+            console.error(`Generated file not found at: ${options.generatedMermaidPath}`);
+            return { success: false };
+        }
+
+        if (!fs.existsSync(options.markdownPath!)) {
+            console.error(`Markdown file not found at: ${options.markdownPath}`);
+            return { success: false };
+        }
+
+        return { success: true, options };
+    }
+
+    // CHECK mode: generated file must exist before rebuild
+    if (options.mode === 'check') {
+        if (!fs.existsSync(options.generatedMermaidPath!)) {
+            console.error(`Generated file not found at: ${options.generatedMermaidPath}`);
+            return { success: false };
+        }
+    }
+
+    // GENERATE, CHECK, UPDATE require project.json
+    const project = loadProjectJson(options.projectJsonPath);
+    if (!project) {
+        return { success: false };
+    }
+
+    return { success: true, options, project };
+}
+
+function loadProjectJson(path: string): unknown | null {
+    if (!fs.existsSync(path)) {
+        console.error(`project.json not found at: ${path}`);
+        return null;
+    }
+
+    try {
+        const raw = fs.readFileSync(path, 'utf-8');
+        return JSON.parse(raw);
+    } catch {
+        console.error('Failed to read or parse project.json');
+        return null;
     }
 }
