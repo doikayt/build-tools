@@ -6,6 +6,9 @@ import {
     NormalizedOptions
 } from './normalizeOptions';
 
+type PreflightResult =
+    | { success: true; project?: unknown }
+    | { success: false };
 
 async function runExecutor(
     rawOptions: RawOptions
@@ -19,42 +22,28 @@ async function runExecutor(
         return fail((error as Error).message);
     }
 
+    const pre = preflight(options);
+    if (!pre.success) {
+        return { success: false };
+    }
+
     switch (options.mode) {
 
         case 'inject':
             return handleInject(options);
 
         case 'check': {
-            if (!fs.existsSync(options.generatedMermaidPath!)) {
-                return fail(`Generated file not found at: ${options.generatedMermaidPath}`);
-            }
-
-            const projectJson = loadProjectJson(options.projectJsonPath);
-            if (!projectJson) {
-                return { success: false };
-            }
-
-            const mermaid = buildMermaid(projectJson as any);
+            const mermaid = buildMermaid(pre.project as any);
             return handleCheck(options, mermaid);
         }
 
         case 'generate': {
-            const projectJson = loadProjectJson(options.projectJsonPath);
-            if (!projectJson) {
-                return { success: false };
-            }
-
-            const mermaid = buildMermaid(projectJson as any);
+            const mermaid = buildMermaid(pre.project as any);
             return handleGenerate(options, mermaid);
         }
 
         case 'update': {
-            const projectJson = loadProjectJson(options.projectJsonPath);
-            if (!projectJson) {
-                return { success: false };
-            }
-
-            const mermaid = buildMermaid(projectJson as any);
+            const mermaid = buildMermaid(pre.project as any);
             return handleUpdate(options, mermaid);
         }
 
@@ -65,6 +54,37 @@ async function runExecutor(
     }
 }
 
+function preflight(options: NormalizedOptions): PreflightResult {
+
+    // INJECT mode: only validate files required for injection
+    if (options.mode === 'inject') {
+
+        if (!fs.existsSync(options.generatedMermaidPath!)) {
+            return fail(`Generated file not found at: ${options.generatedMermaidPath}`);
+        }
+
+        if (!fs.existsSync(options.markdownPath!)) {
+            return fail(`Markdown file not found at: ${options.markdownPath}`);
+        }
+
+        return { success: true };
+    }
+
+    // CHECK mode: ensure generated file exists before rebuilding
+    if (options.mode === 'check') {
+        if (!fs.existsSync(options.generatedMermaidPath!)) {
+            return fail(`Generated file not found at: ${options.generatedMermaidPath}`);
+        }
+    }
+
+    // GENERATE, CHECK, UPDATE require project.json
+    const project = loadProjectJson(options.projectJsonPath);
+    if (!project) {
+        return { success: false };
+    }
+
+    return { success: true, project };
+}
 
 function handleGenerate(
     options: NormalizedOptions,
@@ -80,11 +100,8 @@ function handleCheck(
     mermaid: string
 ): { success: boolean } {
 
-    if (!fs.existsSync(options.generatedMermaidPath!)) {
-        return fail(`Generated file not found at: ${options.generatedMermaidPath}`);
-    }
-
     const existingContent = fs.readFileSync(options.generatedMermaidPath!, 'utf-8');
+
     if (existingContent !== mermaid) {
         return fail('Mermaid output drift detected.');
     }
@@ -95,14 +112,6 @@ function handleCheck(
 function handleInject(
     options: NormalizedOptions
 ): { success: boolean } {
-
-    if (!fs.existsSync(options.generatedMermaidPath!)) {
-        return fail(`Generated file not found at: ${options.generatedMermaidPath}`);
-    }
-
-    if (!fs.existsSync(options.markdownPath!)) {
-        return fail(`Markdown file not found at: ${options.markdownPath}`);
-    }
 
     try {
         const generatedContent = fs.readFileSync(options.generatedMermaidPath!, 'utf-8');
@@ -122,10 +131,6 @@ function handleUpdate(
     options: NormalizedOptions,
     mermaid: string
 ): { success: boolean } {
-
-    if (!fs.existsSync(options.markdownPath!)) {
-        return fail(`Markdown file not found at: ${options.markdownPath}`);
-    }
 
     try {
         if (options.generatedMermaidPath) {
