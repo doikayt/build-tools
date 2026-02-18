@@ -4,6 +4,9 @@
   "description": "Combined documentation automation: update-markdown-toc + nx-graph-to-mermaid",
   "license": "MIT",
   "type": "module",
+  "scripts": {
+    "test": "echo \"autogen-markdown-doc: no tests yet\""
+  },
   "bin": {
     "autogen-markdown-doc": "./bin/autogen-markdown-doc.js"
   },
