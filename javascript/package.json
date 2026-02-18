@@ -7,7 +7,8 @@
   "scripts": {
     "test": "npm -ws test",
     "build": "npm -ws run build --if-present"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.8"
   }
 }
-
-
