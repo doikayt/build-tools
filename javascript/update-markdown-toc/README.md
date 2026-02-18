@@ -131,20 +131,17 @@ explicitly. Unlike normal operation, --check does not default to README.md.
 ## TOC Markers
 
 The tool operates only on files containing **both** start and end markers,
-as *almost* shown below.  Don't use these markers exactly as written. Use brackets ('<' and '>'), and not
-squiggley braces   (i.e., not '{' and '}').  The reason for this documentation 
-oddity is that, if we used brackets,
-then when we run our tool against this code base we would end up getting an unwanted table of contents below !
+as shown below:  
 
 
-```md
-{!-- TOC:START --}
-{!-- TOC:END --}
-```
+&nbsp;&nbsp;&nbsp;   &lt;!-- TOC:START --&gt;<br/>
+&nbsp;&nbsp;&nbsp;   &lt;!-- TOC:END --&gt;
+
+
 
 Any existing content between the region start and end markers is lost. The new content will be the generated TOC that
 reflects the section headers marked with '#'s in the Markdown document.
- 
+
 Content outside the markers is preserved verbatim.
 If either marker is missing, the tool prints an error message and exits with a non-zero status code.
 
@@ -156,7 +153,7 @@ If either marker is missing, the tool prints an error message and exits with a n
 ### As Part of code/test/debug Work Flow  
 
 To ensure that your code is built afresh, passes tests, and that your documentation TOCs are up to date, you could 
-use invoke the tool in something akin to the package.json below. 
+invoke the tool via something akin to the package.json below. 
 Before commit and push, you would type:  'npm run build' 
 
 
@@ -214,8 +211,7 @@ the tool operates in strict mode.
 In this mode, any of the following conditions cause an immediate error and a non-zero exit code:
 
 - file does not exist, or cannot be read (e.g. due to permissions).
-- file does not contain both TOC delimiters ({!-- TOC:START --} and {!-- TOC:END --}). 
-  (See [TOC markers](#toc-markers) section about how we describe markers in this guide.)
+- file does not contain both TOC delimiters (&lt;!-- TOC:START --&gt;  and &nbsp; &lt;!-- TOC:END --&gt;).
 - file is stale (i.e. the existing TOC differs from the generated TOC). 
 - file contains TOC delimiters but no Markdown headings are found from which a TOC can be generated.
 
@@ -252,12 +248,9 @@ Up-to-date: docs/api.md
 This tool was designed in accordance with the top-level
 [Build Philosophy](../../README.md#build-philosophy) of this repository.
 
-> **CI must never modify or generate code — checked-in code is the source of truth — CI only validates.**
 
-Accordingly, `update-markdown-toc` intentionally separates:
-
-- **update mode** (writes files)
-- **check mode** (validates and exits non-zero if stale)
+- **update mode** (writes files: this should be run locally by developers, and should never run in CI)
+- **check mode** (validates and exits non-zero if stale:  mainly intended to be run in CI -- optional for local use) 
 
 The intended workflow is:
 

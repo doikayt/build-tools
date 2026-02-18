@@ -6,6 +6,7 @@ import {
     NormalizedOptions
 } from './normalizeOptions';
 
+
 async function runExecutor(
     rawOptions: RawOptions
 ): Promise<{ success: boolean }> {
@@ -18,33 +19,44 @@ async function runExecutor(
         return fail((error as Error).message);
     }
 
-    // CHECK MODE: validate generated file existence BEFORE loading project.json
-    if (options.mode === 'check') {
-        if (!fs.existsSync(options.generatedMermaidPath!)) {
-            return fail(`Generated file not found at: ${options.generatedMermaidPath}`);
-        }
-    }
-
-    // Now load project.json (needed for all modes after existence check)
-    const projectJson = loadProjectJson(options.projectJsonPath);
-    if (!projectJson) {
-        return { success: false };
-    }
-
-    const mermaid = buildMermaid(projectJson as any);
-
     switch (options.mode) {
-        case 'generate':
-            return handleGenerate(options, mermaid);
-
-        case 'check':
-            return handleCheck(options, mermaid);
 
         case 'inject':
-            return handleInject(options, mermaid);
+            return handleInject(options);
 
-        case 'update':
+        case 'check': {
+            if (!fs.existsSync(options.generatedMermaidPath!)) {
+                return fail(`Generated file not found at: ${options.generatedMermaidPath}`);
+            }
+
+            const projectJson = loadProjectJson(options.projectJsonPath);
+            if (!projectJson) {
+                return { success: false };
+            }
+
+            const mermaid = buildMermaid(projectJson as any);
+            return handleCheck(options, mermaid);
+        }
+
+        case 'generate': {
+            const projectJson = loadProjectJson(options.projectJsonPath);
+            if (!projectJson) {
+                return { success: false };
+            }
+
+            const mermaid = buildMermaid(projectJson as any);
+            return handleGenerate(options, mermaid);
+        }
+
+        case 'update': {
+            const projectJson = loadProjectJson(options.projectJsonPath);
+            if (!projectJson) {
+                return { success: false };
+            }
+
+            const mermaid = buildMermaid(projectJson as any);
             return handleUpdate(options, mermaid);
+        }
 
         default: {
             const _exhaustive: never = options.mode;
@@ -52,6 +64,7 @@ async function runExecutor(
         }
     }
 }
+
 
 function handleGenerate(
     options: NormalizedOptions,
@@ -80,8 +93,7 @@ function handleCheck(
 }
 
 function handleInject(
-    options: NormalizedOptions,
-    mermaid: string
+    options: NormalizedOptions
 ): { success: boolean } {
 
     if (!fs.existsSync(options.generatedMermaidPath!)) {
