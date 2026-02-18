@@ -1,6 +1,6 @@
 {
   "name": "@datalackey/autogen-markdown-doc",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Combined documentation automation: update-markdown-toc + nx-graph-to-mermaid",
   "license": "MIT",
   "type": "module",
@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/autogen-markdown-doc",
   "dependencies": {
-    "@datalackey/update-markdown-toc": "1.1.0",
-    "@datalackey/nx-graph-to-mermaid": "1.1.0"
+    "@datalackey/update-markdown-toc": "1.1.1",
+    "@datalackey/nx-graph-to-mermaid": "1.1.1"
   }
 }
