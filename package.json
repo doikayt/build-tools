@@ -1,0 +1,13 @@
+{
+  "name": "build-tools",
+  "private": true,
+  "workspaces": [
+    "javascript/*"
+  ],
+  "devDependencies": {},
+  "scripts": {
+    "test": "npm -ws test",
+    "build": "npm -ws run build --if-present"
+  }
+}
+
