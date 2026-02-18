@@ -1,7 +1,7 @@
 {
   "name": "@datalackey/nx-graph-to-mermaid",
   "executors": "./executors.json",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "private": false,
   "description": "Auto-generates a Mermaid task flow diagram from an NX `project.json` file — with optional CI drift detection and Markdown injection support.",
   "main": "dist/index.js",
@@ -43,7 +43,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "jest",
+    "test": "npm run build && jest",
     "copy-schemas": "mkdir -p dist/executors/generate && cp src/executors/generate/schema.json dist/executors/generate/schema.json",
     "prepack": "npm run test && npm run copy-schemas",
     "pack": "npm pack"
