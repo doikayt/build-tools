@@ -369,7 +369,7 @@ RELEASE FLOW
 cd javascript
 
   npx changeset
-  git commit
+  git commit .
   git push
 
   npx changeset version
