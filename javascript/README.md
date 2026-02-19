@@ -3,18 +3,18 @@
 
 ## Overall Repo Structure Model
 
-This repository has three layers: 
+This repository has three layers:
 - The repository root, which contains [CI configuration](../.github/workflows/javascript-ci.yml).
 - The secondary (workspace) level:  which is platform specific (i.e., JVM, Python, JavaScript, etc.)
-and contains release packaging and publishing  configuration appropriate 
-to a given platform.
+  and contains release packaging and publishing  configuration appropriate
+  to a given platform.
 -  The lowest level consists of individually consumable npm packages for plugins and tools.
-(Note: npm packaging/publishing format  applies
-in the case of the Javascript ecosystem -- workspaces 
-we add in the future would package/publish tools in formats 
-suitable for other ecosystems. For example JVM packages 
-would be published using Gradle/Maven style Group/Artifact/Version-based 
-packages.)
+   (Note: npm packaging/publishing format  applies
+   in the case of the Javascript ecosystem -- workspaces
+   we add in the future would package/publish tools in formats
+   suitable for other ecosystems. For example JVM packages
+   would be published using Gradle/Maven style Group/Artifact/Version-based
+   packages.)
 
 
 
@@ -47,21 +47,21 @@ The above referenced JavaScript packages are versioned and published all togethe
 to the [public npm registry](https://www.npmjs.com/package/package)
 We enforce a [semantic versioning](https://semver.org/) policy via
 [Changesets](https://changesets-docs.vercel.app/?utm_source=chatgpt.com)
-rather than relying on manual update and synchronization of version numbers and 
+rather than relying on manual update and synchronization of version numbers and
 changelog entries across packages.
 
 
 ## Sideways Version Bump Policy
 
-In addition to adhering to semantic versioning, this workspace also follows 
-a coordinated release alignment policy, enforced by the use of 'fixed' in 
+In addition to adhering to semantic versioning, this workspace also follows
+a coordinated release alignment policy, enforced by the use of 'fixed' in
 our [Changesets configuration](.changeset/config.json)
 
 The rule is: when any publishable package in this workspace is version bumped
-(patch, minor, or major), all other publishable packages will be bumped to that same exact 
-version number — even if there were no source changes within those packages, 
+(patch, minor, or major), all other publishable packages will be bumped to that same exact
+version number — even if there were no source changes within those packages,
 and even if they have no direct dependency relationship with the changed package.
-The purpose of this policy is to ensure release coherence: ruling out 
+The purpose of this policy is to ensure release coherence: ruling out
 any ambiguity about compatibility between sibling packages.
 
 Maintainers must:
