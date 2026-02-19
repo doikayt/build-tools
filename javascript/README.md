@@ -44,7 +44,8 @@ Packages managed under this workspace:
 ## Publishing as NPM Packages
 
 The above referenced JavaScript packages are versioned and published all together, as a single unit,
-to the [public npm registry](https://www.npmjs.com/package/package)
+to the [public npm registry](https://www.npmjs.com/package/package).
+
 We enforce a [semantic versioning](https://semver.org/) policy via
 [Changesets](https://changesets-docs.vercel.app/?utm_source=chatgpt.com)
 rather than relying on manual update and synchronization of version numbers and
@@ -56,7 +57,6 @@ changelog entries across packages.
 In addition to adhering to semantic versioning, this workspace also follows
 a coordinated release alignment policy, enforced by the use of 'fixed' in
 our [Changesets configuration](.changeset/config.json)
-
 The rule is: when any publishable package in this workspace is version bumped
 (patch, minor, or major), all other publishable packages will be bumped to that same exact
 version number — even if there were no source changes within those packages,
@@ -73,9 +73,9 @@ Maintainers must:
 
 ---
 
-# Locus of Activity
+## Development and Release Engineering Workflows
 
-## Development Locus (Package Level)
+### Day to Day Development (Package Level) Overview 
 
 When working on a specific plugin:
 
@@ -96,7 +96,7 @@ Day-to-day development lives inside the individual package folder.
 
 ---
 
-## Integration Testing Locus (Wrapper Package)
+### Integration Testing Overview (Via Combined All-in-One Plugin)
 
 Cross-package testing lives inside:
 
@@ -105,13 +105,13 @@ javascript/autogen-markdown-doc
 ```
 
 The wrapper package is the integration boundary.  
-It imports and composes the base plugins.
+It imports and composes the base plugins, and adds a little bit of its own functionality.
 
 Cross-package tests belong there — not at workspace root.
 
 ---
 
-## Release Locus (Workspace Level)
+### Packaging and Release Steps Overview 
 
 Release mechanics must run from:
 
@@ -119,13 +119,12 @@ Release mechanics must run from:
 cd javascript
 ```
 
-Because that is where:
+Because that is where we have:
 
 - `package.json` (with `"workspaces"`)
 - `.changeset/`
 - release configuration
 
-live.
 
 Release commands:
 
@@ -136,9 +135,9 @@ Release commands:
 ---
 
 
-# Release Workflow
+## Packaging and Release Workflow Details 
 
-## 1. Ensure a Clean Working Tree
+### 1. Ensure a Clean Working Tree
 
 ```
 git status
@@ -148,7 +147,7 @@ There should be no uncommitted changes.
 
 ---
 
-## 2. Run All Tests
+### 2. Run All Tests
 
 From workspace root:
 
@@ -163,7 +162,7 @@ Do not proceed if any test fails.
 
 ---
 
-## 3. Create a Changeset
+### 3. Create a Changeset
 
 ```
 npx changeset
@@ -171,7 +170,7 @@ npx changeset
 
 You will be prompted to:
 
-- Select affected packages
+- Select affected packages  (use up/down arrow to choose and spacebar to (un)select)
 - Choose semver bump (patch / minor / major)
 - Provide release summary
 
@@ -184,7 +183,7 @@ git commit -m "chore: add changeset"
 
 ---
 
-## 4. Apply Version Bumps
+### 4. Apply Version Bumps
 
 ```
 npx changeset version
@@ -207,7 +206,7 @@ git commit -m "chore: release versions"
 
 ---
 
-## 5. Publish
+### 5. Publish
 
 Ensure authentication:
 
@@ -230,11 +229,123 @@ This:
 
 ---
 
-## 6. Push Tags
+### 6. Push Tags
 
 ```
 git push --follow-tags
 ```
+
+---
+## Handling `changeset status` Errors
+
+When running:
+
+```
+npx changeset status
+```
+
+you may see:
+
+```
+🦋  error Some packages have been changed but no changesets were found.
+🦋  error Run `changeset add` to resolve this error.
+🦋  error If this change doesn't need a release, run `changeset add --empty`.
+```
+
+### What this means
+
+This message is **expected and intentional**.
+
+Changesets has detected that:
+
+- Files affecting publishable packages have changed, and
+- No corresponding `.changeset/*.md` file exists describing release intent.
+
+Changesets refuses to proceed because releases in this repository must always be **explicit and deterministic**.
+
+This safeguard prevents:
+
+- accidental releases
+- ambiguous version bumps
+- silent drift between code and published packages
+
+---
+
+### When you will see this
+
+You will typically encounter this message after:
+
+- modifying code in a publishable package
+- merging a PR without adding a changeset
+- running local experiments that touched package files
+
+---
+
+### How to resolve
+
+You must choose the correct intent.
+
+---
+
+#### Option A — This change SHOULD trigger a release
+
+Create a changeset:
+
+```
+npx changeset
+```
+
+Follow the prompts:
+
+- select affected package(s)
+- choose bump type (patch / minor / major)
+- provide a short summary
+
+Then commit the generated file:
+
+```
+git add .changeset
+git commit -m "chore: add changeset"
+```
+
+After this, `changeset status` will succeed.
+
+---
+
+#### Option B — This change should NOT trigger a release
+
+If the change is non-functional (for example):
+
+- documentation updates
+- CI changes
+- test-only changes
+- repository plumbing
+
+create an **empty changeset**:
+
+```
+npx changeset add --empty
+```
+
+Then commit:
+
+```
+git add .changeset
+git commit -m "chore: add empty changeset"
+```
+
+This explicitly records that no version bump is required.
+
+---
+
+### Maintainer rules
+
+- Never ignore this error.
+- Never manually edit package versions.
+- Every change affecting publishable packages must have a changeset (real or empty).
+- This rule is required for deterministic, auditable releases.
+
+If this error appears in CI, it indicates the PR is missing required release metadata.
 
 ---
 

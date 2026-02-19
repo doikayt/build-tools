@@ -6,7 +6,8 @@
   "type": "module",
   "private": false,
   "scripts": {
-    "test": "bash scripts/run-all-tests.sh"
+    "test": "bash scripts/run-all-tests.sh",
+    "prepack": "npm run test"
   },
   "bin": {
     "update-markdown-toc": "./bin/update-markdown-toc.js"
