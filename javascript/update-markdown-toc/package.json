@@ -1,9 +1,13 @@
 {
   "name": "@datalackey/update-markdown-toc",
-  "version": "1.0.4",
+  "version": "1.1.1",
   "description": "Auto-generate Table of Contents for a Markdown file (or files, recursively from a top level folder)",
   "license": "MIT",
   "type": "module",
+  "private": false,
+  "scripts": {
+    "test": "bash scripts/run-all-tests.sh"
+  },
   "bin": {
     "update-markdown-toc": "./bin/update-markdown-toc.js"
   },

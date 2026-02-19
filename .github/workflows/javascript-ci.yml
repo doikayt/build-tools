@@ -1,13 +1,13 @@
-name: CI - update-markdown-toc
+name: CI - JavaScript/Typescript/Node Projects
 
 on:
   push:
     branches: [ main ]
     paths:
-      - 'javascript/update-markdown-toc/**'
+      - 'javascript/**'
   pull_request:
     paths:
-      - 'javascript/update-markdown-toc/**'
+      - 'javascript/**'
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: javascript/update-markdown-toc
+        working-directory: javascript
 
     steps:
       - name: Checkout repository
@@ -26,14 +26,14 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: javascript/update-markdown-toc/package-lock.json
+          cache-dependency-path: javascript/package-lock.json
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Run Tests (all workspaces)
         run: npm run build
 
-      - name: Test
-        run: npm test
-
+      - name: Check Changesets (PR only)
+        if: github.event_name == 'pull_request'
+        run: npx changeset status

@@ -1,0 +1,14 @@
+{
+  "name": "build-tools",
+  "private": true,
+  "workspaces": [
+    "*"
+  ],
+  "scripts": {
+    "test": "npm -ws test  --if-present",
+    "build": "npm run test"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.8"
+  }
+}
