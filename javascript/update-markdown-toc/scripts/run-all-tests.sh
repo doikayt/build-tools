@@ -37,6 +37,10 @@ echo "→ Running recursive traversal tests"
 bash "$SCRIPTS/recursive-traversal-test.sh" $TEST_TRACE_FLAG
 echo
 
+echo "→ Running recursive node_modules exclusion tests"
+bash "$SCRIPTS/recursive-node-modules.test.sh" $TEST_TRACE_FLAG
+echo
+
 echo "→ Running recursive leniency & continuation tests"
 bash "$SCRIPTS/recursive-leniency-and-continuation.test.sh" $TEST_TRACE_FLAG
 echo
@@ -56,4 +60,3 @@ echo
 echo "========================================"
 echo " ✅ ALL TESTS PASSED"
 echo "========================================"
-

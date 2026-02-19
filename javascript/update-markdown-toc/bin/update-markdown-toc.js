@@ -51,6 +51,9 @@ function collectMarkdownFiles(dir) {
         const full = path.join(dir, entry.name);
 
         if (entry.isDirectory()) {
+            // Exclude node_modules from recursive traversal to avoid processing third-party files
+            if (entry.name === 'node_modules') continue;
+
             results.push(...collectMarkdownFiles(full));
         } else if (entry.isFile() && entry.name.endsWith(".md")) {
             results.push(full);

@@ -5,8 +5,8 @@
     "*"
   ],
   "scripts": {
-    "test": "npm -ws test",
-    "build": "npm -ws run build --if-present"
+    "test": "npm -ws test  --if-present",
+    "build": "npm run test"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8"

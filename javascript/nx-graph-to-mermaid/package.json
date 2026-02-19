@@ -41,10 +41,10 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run copy-schemas",
     "test": "npm run build && jest",
     "copy-schemas": "mkdir -p dist/executors/generate && cp src/executors/generate/schema.json dist/executors/generate/schema.json",
-    "prepack": "npm run test && npm run copy-schemas",
+    "prepack": "npm run test",
     "pack": "npm pack"
   },
   "devDependencies": {

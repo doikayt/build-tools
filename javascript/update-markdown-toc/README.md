@@ -27,6 +27,7 @@
       - [Single-File Processing (Strict Mode)](#single-file-processing-strict-mode)
       - [Recursive Folder Traversal (Lenient Mode)](#recursive-folder-traversal-lenient-mode)
   - [Guidelines For Project Contributors](#guidelines-for-project-contributors)
+  - [Known limitations](#known-limitations)
 <!-- TOC:END -->
 
 ## Introduction
@@ -263,3 +264,9 @@ The intended workflow is:
 
 Contributors to the project should consult [this document](GUIDELINES-FOR-PROJECT-CONTRIBUTORS.md)
 
+
+## Known limitations
+
+- node_modules is excluded from recursive traversal: when using `--recursive` the tool will skip any directory 
+  named `node_modules` and its contents. This prevents accidental processing or modification of third-party files.
+  This exclusion is currently hard-coded and not configurable via command-line flags or configuration files.
