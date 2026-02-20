@@ -1,5 +1,14 @@
 # @datalackey/autogen-markdown-doc
 
+## 1.1.4
+
+### Patch Changes
+
+- 763d8f5: doc updates
+- Updated dependencies [763d8f5]
+  - @datalackey/nx-graph-to-mermaid@1.1.4
+  - @datalackey/update-markdown-toc@1.1.4
+
 ## 1.1.3
 
 ### Patch Changes

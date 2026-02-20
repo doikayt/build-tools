@@ -1,5 +1,11 @@
 # @datalackey/nx-graph-to-mermaid
 
+## 1.1.4
+
+### Patch Changes
+
+- 763d8f5: doc updates
+
 ## 1.1.3
 
 ### Patch Changes
