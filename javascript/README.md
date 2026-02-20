@@ -376,6 +376,8 @@ cd javascript
   git commit
   git push
 
+  npm login                         # Browser-based login for 2FA accounts; CLI login may be used for non-2FA accounts
+  npm whoami                        # Verify you see your username 
   npx changeset publish
   git push --follow-tags
 ```
