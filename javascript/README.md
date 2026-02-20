@@ -1,5 +1,6 @@
 <!-- TOC:START -->
 - [Tooling for JavaScript/TypeScript/Node Projects](#tooling-for-javascripttypescriptnode-projects)
+  - [Overview](#overview)
   - [Overall Repo Structure Model](#overall-repo-structure-model)
   - [Publishing as NPM Packages](#publishing-as-npm-packages)
   - [Sideways Version Bump Policy](#sideways-version-bump-policy)
@@ -29,6 +30,11 @@
 
 
 # Tooling for JavaScript/TypeScript/Node Projects
+
+## Overview
+
+This section will mostly be of interest to project maintainers. It describes the structure, development workflows, 
+and release engineering processes for the JavaScript/TypeScript/Node oriented packages within this repository.
 
 
 ## Overall Repo Structure Model
@@ -105,7 +111,7 @@ Maintainers must:
 
 ## Development and Release Engineering Workflows
 
-### Day to Day Development (Package Level) Overview 
+### Day to Day Development (Package Level) Overview
 
 When working on a specific plugin:
 
@@ -141,7 +147,7 @@ Cross-package tests belong there — not at workspace root.
 
 ---
 
-### Packaging and Release Steps Overview 
+### Packaging and Release Steps Overview
 
 Release mechanics must run from:
 
@@ -165,7 +171,7 @@ Release commands:
 ---
 
 
-## Packaging and Release Workflow Details 
+## Packaging and Release Workflow Details
 
 ### 1. Ensure a Clean Working Tree
 
@@ -183,12 +189,11 @@ From workspace root:
 
 ```
 cd javascript
-npm run test
+npm run build
 ```
 
 This runs tests across all workspaces.
-
-Do not proceed if any test fails.
+STOP if any test fails.
 
 ---
 
@@ -208,7 +213,7 @@ Commit:
 
 ```
 git add .changeset
-git commit -m "chore: add changeset"
+git commit -m "chore: add changeset" .
 ```
 
 ---
@@ -420,5 +425,4 @@ cd javascript
 - `npm publish` must never be run from individual package directories.
 - Internal dependency versions must never be manually adjusted.
 - All releases must originate from committed Changesets.
-- Cross-package tests belong in the wrapper package.
 - Workspace root orchestrates — it does not contain product logic.
