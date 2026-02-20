@@ -4,17 +4,18 @@
   - [Philosophy](#philosophy)
   - [Installation](#installation)
   - [Extending `project.json`](#extending-projectjson)
-  - [Usage](#usage)
-    - [Generate Mode](#generate-mode)
-    - [Inject Mode](#inject-mode)
-    - [Update Mode (Generate + Inject)](#update-mode-generate--inject)
-    - [Check Mode (CI Drift Detection)](#check-mode-ci-drift-detection)
+- [Usage](#usage)
+  - [Generate Mode](#generate-mode)
+  - [Inject Mode](#inject-mode)
+  - [Update Mode (Generate + Inject)](#update-mode-generate--inject)
+  - [Check Mode (CI Drift Detection)](#check-mode-ci-drift-detection)
   - [Determinism](#determinism)
   - [Behavior Rules](#behavior-rules)
   - [Example](#example)
   - [Future Directions](#future-directions)
     - [Decoupling the Graph Engine from Nx](#decoupling-the-graph-engine-from-nx)
     - [Why Consider Decoupling?](#why-consider-decoupling)
+  - [Known Limitations](#known-limitations)
   - [License](#license)
 <!-- TOC:END -->
 
@@ -347,6 +348,12 @@ normalizeOptions
 buildMermaid()
 
 A future CLI would simply call `buildMermaid()` directly.
+
+---
+
+## Known Limitations
+
+- inject mode tests are currently skipped because they perturb npm publishing for @datalackey/nx-graph-to-mermaid
 
 
 ---
