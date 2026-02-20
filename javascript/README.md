@@ -1,3 +1,33 @@
+<!-- TOC:START -->
+- [Tooling for JavaScript/TypeScript/Node Projects](#tooling-for-javascripttypescriptnode-projects)
+  - [Overall Repo Structure Model](#overall-repo-structure-model)
+  - [Publishing as NPM Packages](#publishing-as-npm-packages)
+  - [Sideways Version Bump Policy](#sideways-version-bump-policy)
+  - [Development and Release Engineering Workflows](#development-and-release-engineering-workflows)
+    - [Day to Day Development (Package Level) Overview](#day-to-day-development-package-level-overview)
+    - [Integration Testing Overview (Via Combined All-in-One Plugin)](#integration-testing-overview-via-combined-all-in-one-plugin)
+    - [Packaging and Release Steps Overview](#packaging-and-release-steps-overview)
+  - [Packaging and Release Workflow Details](#packaging-and-release-workflow-details)
+    - [1. Ensure a Clean Working Tree](#1-ensure-a-clean-working-tree)
+    - [2. Run All Tests](#2-run-all-tests)
+    - [3. Create a Changeset](#3-create-a-changeset)
+    - [4. Apply Version Bumps](#4-apply-version-bumps)
+    - [5. Publish](#5-publish)
+    - [6. Push Tags](#6-push-tags)
+  - [Handling `changeset status` Errors](#handling-changeset-status-errors)
+    - [What this means](#what-this-means)
+    - [When you will see this](#when-you-will-see-this)
+    - [How to resolve](#how-to-resolve)
+      - [Option A — This change SHOULD trigger a release](#option-a--this-change-should-trigger-a-release)
+      - [Option B — This change should NOT trigger a release](#option-b--this-change-should-not-trigger-a-release)
+    - [Maintainer rules](#maintainer-rules)
+- [Activity Diagram](#activity-diagram)
+- [Rules](#rules)
+<!-- TOC:END -->
+
+
+
+
 # Tooling for JavaScript/TypeScript/Node Projects
 
 

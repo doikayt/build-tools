@@ -26,6 +26,7 @@
     - [Recursively Traversing a Folder Hierarchy to Process all files vs. Single File Processing](#recursively-traversing-a-folder-hierarchy-to-process-all-files-vs-single-file-processing)
       - [Single-File Processing (Strict Mode)](#single-file-processing-strict-mode)
       - [Recursive Folder Traversal (Lenient Mode)](#recursive-folder-traversal-lenient-mode)
+  - [Design Goals and Philosophy](#design-goals-and-philosophy)
   - [Guidelines For Project Contributors](#guidelines-for-project-contributors)
   - [Known limitations](#known-limitations)
 <!-- TOC:END -->
