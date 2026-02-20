@@ -246,13 +246,13 @@ git commit -m "chore: release versions"
 Ensure authentication:
 
 ```
-npm whoami
+npm whoami      # This should print your npm username. If it doesn't, run your npm auth token likely expired
 ```
 
 Then:
 
 ```
-npx changeset publish
+npx changeset publish       #  Ignore the spurious 5 lines of error output that have to deal with code 403
 ```
 
 This:
@@ -267,7 +267,7 @@ This:
 ### 6. Push Tags
 
 ```
-git push --follow-tags
+git push --follow-tags          # Make sure the remote origin repo has tags for the release commits and version bumps
 ```
 
 ---
