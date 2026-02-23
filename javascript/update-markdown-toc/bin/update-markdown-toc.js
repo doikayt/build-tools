@@ -1,285 +1,57 @@
 #!/usr/bin/env node
 
-import fs from "fs";
-import path from "path";
-import { parseCli } from "./parseCli.js";
-import GithubSlugger from "github-slugger";
+import { parseCli } from "../src/cli/parseCli.js";
+import { runSingleFile, runRecursive } from "../src/index.js";
+import { resolve } from "node:path";
+import { existsSync, statSync } from "node:fs";
 
-/* ============================================================
- * Constants
- * ============================================================ */
+function printHelp() {
+    console.log(`
+update-markdown-toc [options] [file]
 
-const START = "<!-- TOC:START -->";
-const END   = "<!-- TOC:END -->";
-
-/* ============================================================
- * CLI configuration
- * ============================================================ */
-
-const {
-    checkMode,
-    verbose,
-    quiet,
-    debug,
-    recursivePath,
-    targetFile,
-    isRecursive
-} = parseCli();
-
-/* ============================================================
- * Debug helper
- * ============================================================ */
-
-function debugLog(msg) {
-    if (debug) {
-        console.error(`[debug] ${msg}`);
-    }
+Options:
+  -c, --check
+  -r, --recursive <path>
+  -e, --exclude <dir1,dir2,...>
+  -v, --verbose
+  -q, --quiet
+  -d, --debug
+  -h, --help
+`);
 }
 
-/* ============================================================
- * Helpers
- * ============================================================ */
+try {
+    const config = parseCli(process.argv.slice(2));
 
-function detectLineEnding(text) {
-    return text.includes("\r\n") ? "\r\n" : "\n";
-}
-
-
-function collectMarkdownFiles(dir, excludeList) {
-    const results = [];
-
-    const exclusions = Array.isArray(excludeList)
-        ? excludeList
-        : ["node_modules"];
-
-    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-        const full = path.join(dir, entry.name);
-
-        if (entry.isDirectory()) {
-            if (exclusions.includes(entry.name)) {
-                continue;
-            }
-
-            results.push(...collectMarkdownFiles(full, excludeList));
-        } else if (entry.isFile() && entry.name.endsWith(".md")) {
-            results.push(full);
-        }
+    if (config.help) {
+        printHelp();
+        process.exit(0);
     }
 
-    return results;
-}
+    if (config.isRecursive) {
+        const resolved = resolve(process.cwd(), config.recursivePath);
 
-function generateTOC(content) {
-    const lineEnding = detectLineEnding(content);
-
-    const hasStart = content.includes(START);
-    const hasEnd   = content.includes(END);
-
-    if (!hasStart && !hasEnd) {
-        throw new Error("TOC delimiters not found");
-    }
-    if (hasStart && !hasEnd) {
-        throw new Error("TOC start delimiter found without end");
-    }
-    if (!hasStart && hasEnd) {
-        throw new Error("TOC end delimiter found without start");
-    }
-
-    const startIndex = content.indexOf(START);
-    const endIndex   = content.indexOf(END);
-
-    const before = content.slice(0, startIndex);
-    const after  = content.slice(endIndex + END.length);
-
-    // Preserve exactly one line boundary for parsing
-    const contentWithoutTOC =
-        before.replace(/\s*$/, "") +
-        lineEnding +
-        after.replace(/^\s*/, "");
-
-    const lines = contentWithoutTOC.split(lineEnding);
-    const headings = [];
-
-    const slugger = new GithubSlugger();
-
-    for (const line of lines) {
-        const m = /^(#{1,6})\s+(.*)$/.exec(line);
-        if (!m) continue;
-
-        const level = m[1].length;
-        const title = m[2].trim();
-        const anchor = slugger.slug(title);
-
-        headings.push({ level, title, anchor });
-    }
-
-    if (headings.length === 0) {
-        throw new Error("No headings found to generate TOC");
-    }
-
-    const minLevel = Math.min(...headings.map(h => h.level));
-    const tocLines = headings.map(h => {
-        const indent = "  ".repeat(h.level - minLevel);
-        return `${indent}- [${h.title}](#${h.anchor})`;
-    });
-
-    const tocBlock =
-        lineEnding +
-        tocLines.join(lineEnding) +
-        lineEnding;
-
-    return (
-        before +
-        START +
-        tocBlock +
-        END +
-        after
-    );
-}
-
-/* ============================================================
- * File processing
- * ============================================================ */
-
-function processFile(filePath) {
-    debugLog(`processing file: ${filePath}`);
-
-    let content;
-    try {
-        content = fs.readFileSync(filePath, "utf8");
-    } catch {
-        const absolutePath = path.resolve(filePath);
-        throw new Error(`Unable to read markdown file: ${absolutePath}`);
-    }
-
-    let updated;
-    try {
-        updated = generateTOC(content);
-    } catch (err) {
-        if (err.message === "TOC delimiters not found") {
-            if (isRecursive) {
-                debugLog("result: skipped (no markers)");
-                return { status: "skipped" };
-            }
+        if (!existsSync(resolved)) {
+            console.error("ERROR: Recursive path does not exist");
+            process.exit(1);
         }
 
-        const absolutePath = path.resolve(filePath);
-        throw new Error(`${absolutePath}: ${err.message}`);
-    }
-
-    if (updated === content) {
-        debugLog("result: unchanged");
-        return { status: "unchanged" };
-    }
-
-    if (checkMode) {
-        debugLog("result: stale");
-        return { status: "stale" };
-    }
-
-    fs.writeFileSync(filePath, updated, "utf8");
-    debugLog("result: updated");
-    return { status: "updated" };
-}
-
-/* ============================================================
- * Output
- * ============================================================ */
-
-function maybePrintStatus(status, filePath) {
-    debugLog(`printing decision: status=${status}`);
-
-    if (quiet) return;
-
-    if (checkMode) {
-        if (status === "stale") {
-            console.log(`Stale: ${filePath}`);
-            return;
+        if (!statSync(resolved).isDirectory()) {
+            console.error("ERROR: --recursive requires a directory");
+            process.exit(1);
         }
 
-        if (status === "skipped") {
-            if (verbose) {
-                console.log(`Skipped (no markers): ${filePath}`);
-            }
-            return;
-        }
-
-        if (status === "unchanged") {
-            if (verbose) {
-                console.log(`Up-to-date: ${filePath}`);
-            }
-            return;
-        }
-
-        return;
+        process.exit(runRecursive(resolved, config));
     }
 
-    if (verbose) {
-        if (status === "updated") {
-            console.log(`Updated: ${filePath}`);
-        } else if (status === "unchanged") {
-            console.log(`Up-to-date: ${filePath}`);
-        } else if (status === "skipped") {
-            console.log(`Skipped (no markers): ${filePath}`);
-        }
-        return;
-    }
-
-    if (status === "updated") {
-        console.log(`Updated: ${filePath}`);
-    }
-}
-
-/* ============================================================
- * Execution
- * ============================================================ */
-
-let files = [];
-
-if (recursivePath) {
-    const resolved = path.resolve(process.cwd(), recursivePath);
-
-    if (!fs.existsSync(resolved)) {
-        console.error("ERROR: Recursive path does not exist");
-        process.exit(1);
-    }
-    if (!fs.statSync(resolved).isDirectory()) {
-        console.error("ERROR: --recursive requires a directory");
-        process.exit(1);
-    }
-
-    files = collectMarkdownFiles(resolved, excludeList);
-    files.sort();
-} else {
-    const resolved = path.resolve(
+    const resolved = resolve(
         process.cwd(),
-        targetFile || "README.md"
+        config.targetFile || "README.md"
     );
-    files = [resolved];
-}
 
-let staleFound = false;
+    process.exit(runSingleFile(resolved, config));
 
-for (const file of files) {
-    try {
-        const result = processFile(file);
-
-        if (checkMode && result.status === "stale") {
-            staleFound = true;
-            debugLog("staleFound set true");
-        }
-
-        maybePrintStatus(result.status, file);
-    } catch (err) {
-        console.error(`ERROR: ${err.message}`);
-        process.exit(1);
-    }
-}
-
-if (checkMode && staleFound) {
-    debugLog("exiting with status 1 due to stale TOC");
+} catch (err) {
+    console.error(`ERROR: ${err.message}`);
     process.exit(1);
 }
-
-debugLog("exiting with status 0");
-process.exit(0);
