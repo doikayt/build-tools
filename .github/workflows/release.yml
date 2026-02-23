@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'javascript/**'
+  workflow_dispatch:
 
 jobs:
   release:

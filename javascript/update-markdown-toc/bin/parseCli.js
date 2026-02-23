@@ -9,6 +9,7 @@ export function parseCli() {
             options: {
                 check:      { type: "boolean", short: "c" },
                 recursive:  { type: "string",  short: "r" },
+                exclude:    { type: "string",  short: "e" },   // <-- ADD THIS
                 verbose:    { type: "boolean", short: "v" },
                 quiet:      { type: "boolean", short: "q" },
                 debug:      { type: "boolean", short: "d" },
@@ -34,6 +35,13 @@ export function parseCli() {
 
     const recursivePath =
         typeof values.recursive === "string" ? values.recursive : null;
+    const excludeList =
+        typeof values.exclude === "string"
+            ? values.exclude
+                .split(",")
+                .map(s => s.trim())
+                .filter(Boolean)
+            : null;
 
     let targetFile = null;
 
@@ -65,31 +73,33 @@ export function parseCli() {
         process.exit(1);
     }
 
-    return Object.freeze({
-        checkMode,
-        verbose,
-        quiet,
-        debug,
-
-        recursivePath,
+    const config = {
+        checkMode: Boolean(values.check),
+        verbose: Boolean(values.verbose),
+        quiet: Boolean(values.quiet),
+        debug: Boolean(values.debug),
+        recursivePath: values.recursive || null,
         targetFile,
+        excludeList,
+        isRecursive: Boolean(values.recursive)
+    };
 
-        isRecursive: Boolean(recursivePath)
-    });
+    return Object.freeze(config);
 }
 
 function printHelp() {
     console.log(dedent`
     update-markdown-toc [options] [file]
 
-    Options:
+      Options:
       -c, --check     <path-to-file-or-folder>  Do not write files; exit non-zero if TOC is stale
       -r, --recursive <path-to-folder>          Recursively process all .md files under the given folder
+      -e, --exclude   <dir1,dir2,...>           Comma-separated list of directory names to exclude (recursive mode only)
       -v, --verbose                             Print status for every file processed
       -q, --quiet                               Suppress all non-error output
       -d, --debug                               Print debug diagnostics to stderr
       -h, --help                                Show this help message and exit
-      
+          
       When using --check, a target file or a recursive folder must be specified
       explicitly. Unlike normal operation, --check does not default to README.md.
 

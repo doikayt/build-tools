@@ -239,36 +239,53 @@ git add .
 git commit -m "chore: release versions"
 ```
 
----
 
-### 5. Publish
+### 5. Publish (Push + Tags + CI)
 
-Ensure authentication:
+Publishing is performed automatically by GitHub Actions when release
+commits are pushed to `main`.
 
-```
-npm whoami      # This should print your npm username. If it doesn't, run your npm auth token likely expired
-```
+Maintainers should **not** normally run `npx changeset publish` locally.
 
-Then:
+After applying version bumps, perform a single push that includes tags:
 
-```
-npx changeset publish       #  Ignore the spurious 5 lines of error output that have to deal with code 403
-```
+    git push origin main --follow-tags
 
-This:
+This single command:
 
-- Runs package lifecycle scripts (build / prepack)
-- Packs tarballs
-- Publishes to npm
-- Uses dependency-safe order
+-   pushes the release commits
+-   pushes the version tags created by Changesets
+-   triggers the release workflow
+-   results in packages being published to npm
 
----
+The release workflow executed is:
 
-### 6. Push Tags
+    .github/workflows/release.yml
 
-```
-git push --follow-tags          # Make sure the remote origin repo has tags for the release commits and version bumps
-```
+You can monitor publish results 
+[here](https://github.com/datalackey/build-tools/actions/workflows/release.yml).
+
+
+
+The workflow will:
+
+-   install dependencies\
+-   run `npx changeset publish`\
+-   publish packages to npm using the configured `NODE_AUTH_TOKEN`
+
+------------------------------------------------------------------------
+
+### 6. Verify Release
+
+After the workflow completes, confirm:
+
+-   GitHub Actions run succeeded\
+-   Packages appear on npm\
+-   Versions match expected coordinated bump
+
+No additional manual tag push step is required when using the
+`--follow-tags` push above.
+
 
 ---
 ## Handling `changeset status` Errors

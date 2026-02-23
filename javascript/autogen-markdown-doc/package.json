@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "test": "echo \"autogen-markdown-doc: no tests yet\""
+    "test": "jest"
   },
   "bin": {
     "autogen-markdown-doc": "./bin/autogen-markdown-doc.js"
@@ -32,5 +32,8 @@
   "dependencies": {
     "@datalackey/update-markdown-toc": "1.1.5",
     "@datalackey/nx-graph-to-mermaid": "1.1.5"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
