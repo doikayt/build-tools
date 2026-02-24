@@ -35,9 +35,7 @@ So, basically: no monorepo support (but contributions are always welcome!)
 
 ## Overview
 
-The plugin exposes a single executor.
-
-Execution behavior is controlled entirely by `options.mode`.
+The plugin integrates into NX via a custom executor, whose behavior is controlled entirely by `options.mode` (see below).
 
 Supported modes:
 

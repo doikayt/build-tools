@@ -129,4 +129,4 @@ function fail(message: string): { success: false } {
     return { success: false };
 }
 
-export = runExecutor;
+export default runExecutor;
