@@ -99,7 +99,7 @@ NX ignores unknown fields, so this is safe.
 All modes use the same executor:
 
 ```json
-"executor": "@datalackey/nx-graph-to-mermaid"
+"executor": "@datalackey/nx-graph-to-mermaid:run"
 ```
 
 Behavior is controlled exclusively by `options.mode`.
@@ -111,7 +111,7 @@ Behavior is controlled exclusively by `options.mode`.
 ```json
 {
   "task-graph:generate": {
-    "executor": "@datalackey/nx-graph-to-mermaid",
+    "executor": "@datalackey/nx-graph-to-mermaid:run",
     "options": {
       "mode": "generate",
       "projectJsonPath": "project.json",
@@ -134,7 +134,7 @@ npx nx run my-project:task-graph:generate
 ```json
 {
   "task-graph:inject": {
-    "executor": "@datalackey/nx-graph-to-mermaid",
+    "executor": "@datalackey/nx-graph-to-mermaid:run",
     "options": {
       "mode": "inject",
       "projectJsonPath": "project.json",
@@ -165,7 +165,7 @@ Markers required:
 ```json
 {
   "task-graph:update": {
-    "executor": "@datalackey/nx-graph-to-mermaid",
+    "executor": "@datalackey/nx-graph-to-mermaid:run",
     "options": {
       "mode": "update",
       "projectJsonPath": "project.json",
@@ -189,7 +189,7 @@ npx nx run my-project:task-graph:update
 ```json
 {
   "task-graph:check": {
-    "executor": "@datalackey/nx-graph-to-mermaid",
+    "executor": "@datalackey/nx-graph-to-mermaid:run",
     "options": {
       "mode": "check",
       "projectJsonPath": "project.json",
@@ -286,11 +286,6 @@ NX is simply one producer of that structure.
 
 ---
 
-## Known Limitations
-
-- inject mode tests are currently skipped because they perturb npm publishing
-
----
 
 ## License
 

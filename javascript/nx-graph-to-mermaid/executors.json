@@ -1,27 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/nx-plugin",
   "executors": {
-    "generate": {
+    "run": {
       "implementation": "./dist/executors/generate/executor.js",
       "schema": "./dist/executors/generate/schema.json",
-      "description": "Generate Mermaid diagram from project.json"
-    },
-    "check": {
-      "implementation": "./dist/executors/generate/executor.js",
-      "schema": "./dist/executors/generate/schema.json",
-      "description": "Check Mermaid drift"
-    },
-    "inject": {
-      "implementation": "./dist/executors/generate/executor.js",
-      "schema": "./dist/executors/generate/schema.json",
-      "description": "Inject Mermaid into Markdown"
-    },
-    "update": {
-      "implementation": "./dist/executors/generate/executor.js",
-      "schema": "./dist/executors/generate/schema.json",
-      "description": "Generate + inject Mermaid"
+      "description": "NX Graph to Mermaid executor (mode-driven)"
     }
   }
 }
-
-
