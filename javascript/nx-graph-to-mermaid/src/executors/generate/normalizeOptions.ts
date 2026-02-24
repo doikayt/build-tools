@@ -25,8 +25,8 @@ export type ExecutionContext =
 /**
  * Verifies that all options that are needed for the specified run mode are present (via call to normalizeOptions),
  * then for file paths, makes sure the files exist where they are required. Finally, loads project.json if needed
- * (which it is not in the case of inject mode -- where we are simply injecting a pre-generated mermaid graph
- * into our markdown file.)
+ * (which it is not in the case of Inject mode -- where we are simply injecting a pre-generated mermaid graph
+ * into our Markdown file.)
  */
 export function resolveExecutionContext(
     rawOptions: RawOptions

@@ -1,7 +1,7 @@
 <!-- TOC:START -->
 - [nx-graph-to-mermaid](#nx-graph-to-mermaid)
   - [Overview](#overview)
-  - [Philosophy](#philosophy)
+  - [Adding Documentation To NX Configuration](#adding-documentation-to-nx-configuration)
   - [Installation](#installation)
   - [Extending `project.json`](#extending-projectjson)
 - [Usage](#usage)
@@ -13,7 +13,7 @@
   - [Behavior Rules](#behavior-rules)
   - [Example](#example)
   - [Future Directions](#future-directions)
-    - [Decoupling the Graph Engine from Nx](#decoupling-the-graph-engine-from-nx)
+    - [Decoupling the Graph Engine from NX](#decoupling-the-graph-engine-from-nx)
     - [Why Consider Decoupling?](#why-consider-decoupling)
   - [Known Limitations](#known-limitations)
   - [License](#license)
@@ -22,37 +22,35 @@
 
 # nx-graph-to-mermaid
 
-
-
 > Deterministically generates Mermaid task flow diagrams from NX `project.json` config files.
 
 `nx-graph-to-mermaid` is an [NX](https://nx.dev/) plugin that generates
 deterministic [Mermaid](https://www.mermaid.ai/) task flow diagrams from an NX `project.json` file —
 with optional Markdown injection and CI drift detection support.
 
-It operates purely on the specified `project.json` and renders intra-project target dependencies only. It does not resolve cross-project or workspace-level graph relationships.
-So, basically: no [monorepo](https://en.wikipedia.org/wiki/Monorepo) support (but contributions always welcome!)
-
-
+It operates purely on the specified `project.json` and renders intra-project target dependencies only. It does not resolve cross-project or workspace-level graph relationships.  
+So, basically: no monorepo support (but contributions are always welcome!)
 
 ---
 
 ## Overview
 
-The plugin supports four primary targets (modes):
+The plugin exposes a single executor.
 
-- generate — Generates a deterministic Mermaid diagram from a specified `project.json`.
-- inject — Injects a previously generated Mermaid document into a Markdown file between NX_GRAPH markers.
-- check — Validates that an existing Mermaid diagram matches what would be generated from `project.json` (CI drift detection).
-- update — Regenerates the Mermaid diagram and injects it into a Markdown file (generate + inject).
+Execution behavior is controlled entirely by `options.mode`.
+
+Supported modes:
+
+- `generate` — Generate a deterministic Mermaid diagram from a specified `project.json`.
+- `inject` — Inject a previously generated Mermaid document into a Markdown file between NX_GRAPH markers.
+- `check` — Validate that an existing Mermaid diagram matches what would be generated from `project.json`.
+- `update` — Regenerate the Mermaid diagram and inject it into a Markdown file.
 
 ---
 
-## Philosophy
+## Adding Documentation To NX Configuration
 
-Your [project.json](https://nx.dev/docs/reference/project-configuration) already defines the execution graph of your build.
-
-
+Your `project.json` already defines the execution graph of your build.
 
 By extending targets with a `description` field:
 
@@ -65,9 +63,9 @@ By extending targets with a `description` field:
 }
 ```
 
-You embed documentation directly into the build definition.
+your documentation will co-reside with configuration metadata.
 
-`nx-graph-to-mermaid` compiles that metadata into a deterministic Mermaid diagram suitable for Markdown rendering on GitHub.
+`nx-graph-to-mermaid` compiles that metadata into a deterministic Mermaid diagram suitable for Markdown rendering.
 
 ---
 
@@ -85,32 +83,39 @@ Add a `description` field to any target:
 
 ```json
 {
-    "targets": {
-        "build": {
-            "dependsOn": ["lint", "test"],
-            "description": "Runs lint and test"
-        }
+  "targets": {
+    "build": {
+      "dependsOn": ["lint", "test"],
+      "description": "Runs lint and test"
     }
+  }
 }
 ```
 
-Nx ignores unknown fields, so this is safe.
+NX ignores unknown fields, so this is safe.
 
 ---
 
 # Usage
 
+All modes use the same executor:
+
+```json
+"executor": "@datalackey/nx-graph-to-mermaid"
+```
+
+Behavior is controlled exclusively by `options.mode`.
+
 ---
 
 ## Generate Mode
 
-Add a target:
-
 ```json
 {
-  "generate:task-graph": {
-    "executor": "@datalackey/nx-graph-to-mermaid:generate",
+  "task-graph:generate": {
+    "executor": "@datalackey/nx-graph-to-mermaid",
     "options": {
+      "mode": "generate",
       "projectJsonPath": "project.json",
       "generatedMermaidPath": "docs/task-graph.md"
     }
@@ -118,30 +123,22 @@ Add a target:
 }
 ```
 
-This mode:
-
-- Reads target definitions from the specified `project.json`.
-- Reads `dependsOn` relationships.
-- Reads optional `description` metadata on targets.
-- Outputs deterministic Mermaid markup to a file.
-
 Run:
 
-npx nx run my-project:generate:task-graph
-
-This writes a deterministic Mermaid diagram to the specified file.
+```bash
+npx nx run my-project:task-graph:generate
+```
 
 ---
 
 ## Inject Mode
 
-Add a target:
-
 ```json
 {
-  "inject:task-graph": {
-    "executor": "@datalackey/nx-graph-to-mermaid:inject",
+  "task-graph:inject": {
+    "executor": "@datalackey/nx-graph-to-mermaid",
     "options": {
+      "mode": "inject",
       "projectJsonPath": "project.json",
       "generatedMermaidPath": "docs/task-graph.md",
       "markdownPath": "README.md"
@@ -150,38 +147,29 @@ Add a target:
 }
 ```
 
-This mode:
-
-- Injects a previously generated Mermaid document into a Markdown file.
-- Requires a path to the generated Mermaid document and the target Markdown file.
-- Replaces content between the fixed markers:
-
-
-&nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp; &lt;!-- NX_GRAPH:START --&gt;<br>
-&nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp; &lt;!-- NX_GRAPH:END --&gt;
-
-
-
-
-This mode performs no graph generation and strictly handles deterministic injection.
-
 Run:
 
 ```bash
-npx nx run my-project:inject:task-graph
+npx nx run my-project:task-graph:inject
+```
+
+Markers required:
+
+```
+<!-- NX_GRAPH:START -->
+<!-- NX_GRAPH:END -->
 ```
 
 ---
 
 ## Update Mode (Generate + Inject)
 
-Add a target:
-
 ```json
 {
-  "update:task-graph": {
-    "executor": "@datalackey/nx-graph-to-mermaid:update",
+  "task-graph:update": {
+    "executor": "@datalackey/nx-graph-to-mermaid",
     "options": {
+      "mode": "update",
       "projectJsonPath": "project.json",
       "markdownPath": "README.md",
       "generatedMermaidPath": "docs/task-graph.md"
@@ -190,29 +178,22 @@ Add a target:
 }
 ```
 
-This mode:
-
-- Reads `project.json` and generates fresh Mermaid output.
-- Injects the generated Mermaid between NX_GRAPH markers in the target Markdown file.
-- Optionally writes the generated artifact to disk when `generatedMermaidPath` is provided.
-
 Run:
 
 ```bash
-npx nx run my-project:update:task-graph
+npx nx run my-project:task-graph:update
 ```
 
 ---
 
 ## Check Mode (CI Drift Detection)
 
-Add a target:
-
 ```json
 {
-  "check:task-graph": {
-    "executor": "@datalackey/nx-graph-to-mermaid:check",
+  "task-graph:check": {
+    "executor": "@datalackey/nx-graph-to-mermaid",
     "options": {
+      "mode": "check",
       "projectJsonPath": "project.json",
       "generatedMermaidPath": "docs/task-graph.md"
     }
@@ -220,24 +201,13 @@ Add a target:
 }
 ```
 
-This mode:
-
-- Regenerates the diagram in memory and compares it against the committed artifact.
-- Returns `{ success: false }` when drift is detected (intended for CI enforcement).
-
 Run:
 
+```bash
+npx nx run my-project:task-graph:check
 ```
-npx nx run my-project:check:task-graph
-```
 
-If the generated output differs from the committed artifact:
-
-- A failure message is printed
-- The executor returns `{ success: false }`
-- CI exits with a non-zero status
-
-This prevents stale diagrams from being merged.
+Fails CI if drift is detected.
 
 ---
 
@@ -245,9 +215,9 @@ This prevents stale diagrams from being merged.
 
 Output is fully deterministic:
 
-- Targets are sorted alphabetically
-- Dependencies are sorted
-- Whitespace is normalized
+- Targets sorted alphabetically
+- Dependencies sorted
+- Whitespace normalized
 - No timestamps
 - No randomness
 
@@ -262,10 +232,6 @@ Identical input → identical output.
 - Targets without descriptions render as single-line labels
 - Unknown fields are ignored
 - Cycles are rendered but not resolved
-- No parsing of `nx graph`
-- No HTML scraping
-
-The tool operates purely on `project.json`.
 
 ---
 
@@ -299,64 +265,32 @@ release["release<br/>Full release pipeline"]
 release --> package
 ```
 
+---
+
 ## Future Directions
 
-### Decoupling the Graph Engine from Nx
+The rendering engine (`buildMermaid`) is NX-agnostic.
 
-`nx-graph-to-mermaid` is currently implemented as an Nx executor because it integrates cleanly into existing Nx workflows:
+It operates on:
 
-- Targets are already defined in `project.json`
-- `dependsOn` relationships already form a directed task graph
-- CI drift detection fits naturally into Nx task pipelines
-
-However, the core rendering engine (`buildMermaid`) is intentionally Nx-agnostic.
-
-It operates on a simple structure:
-
+```
 {
-targets: {
-[name: string]: {
-dependsOn?: string[]
-description?: string
+  targets: {
+    [name: string]: {
+      dependsOn?: string[]
+      description?: string
+    }
+  }
 }
-}
-}
+```
 
-This structure represents a generic directed task graph.
-Nx is simply one producer of that graph.
-
-### Why Consider Decoupling?
-
-Over time, it may be valuable to separate:
-
-- Graph extraction (Nx-specific)
-- Graph rendering (generic Mermaid output)
-
-This separation would allow:
-
-- A standalone CLI mode:
-  nx-graph-to-mermaid --input build-graph.json --output diagram.md
-- Support for other build systems that can emit task graphs
-- Use outside Nx workspaces
-- Broader documentation tooling use cases
-- Rendering CI pipelines or custom DAG definitions
-
-The current implementation already contains a clean architectural boundary:
-
-Nx Executor
-↓
-normalizeOptions
-↓
-buildMermaid()
-
-A future CLI would simply call `buildMermaid()` directly.
+NX is simply one producer of that structure.
 
 ---
 
 ## Known Limitations
 
-- inject mode tests are currently skipped because they perturb npm publishing for @datalackey/nx-graph-to-mermaid
-
+- inject mode tests are currently skipped because they perturb npm publishing
 
 ---
 
