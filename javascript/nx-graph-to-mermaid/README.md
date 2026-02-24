@@ -31,7 +31,7 @@ deterministic [Mermaid](https://www.mermaid.ai/) task flow diagrams from an NX `
 with optional Markdown injection and CI drift detection support.
 
 It operates purely on the specified `project.json` and renders intra-project target dependencies only. It does not resolve cross-project or workspace-level graph relationships.
-So, basically: no [monorepo](https://en.wikipedia.org/wiki/Monorepo) support... yet. (but contributions welcome!)
+So, basically: no [monorepo](https://en.wikipedia.org/wiki/Monorepo) support (but contributions always welcome!)
 
 
 
@@ -50,7 +50,9 @@ The plugin supports four primary targets (modes):
 
 ## Philosophy
 
-Your `project.json` already defines the execution graph of your build.
+Your [project.json](https://nx.dev/docs/reference/project-configuration) already defines the execution graph of your build.
+
+
 
 By extending targets with a `description` field:
 

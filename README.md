@@ -20,15 +20,13 @@ So far, we have:
 
 ## Build Philosophy
 
-This repository follows a deterministic build and validation model.
-
 Core principles:
 
 - Checked-in source code is the source of truth.
 - CI validates, tests, and publishes.
 - CI does not generate code, does not modify existing logic and does not change any non-version related configuration 
   (note: CI *will* bump version numbers as described in Release Exception section below).
-- Builds must be reproducible locally.
+- Builds must be reproducible locally -- across developer machines and CI.
 
 ### Release Exception (Version Management)
 
