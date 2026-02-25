@@ -1,5 +1,11 @@
 # @datalackey/nx-graph-to-mermaid
 
+## 1.1.6
+
+### Patch Changes
+
+- fdb6663: doc updates. and for nx-graph-to-mermaid we have one executor target: run
+
 ## 1.1.5
 
 ### Patch Changes

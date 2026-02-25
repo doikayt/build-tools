@@ -1,5 +1,14 @@
 # @datalackey/autogen-markdown-doc
 
+## 1.1.6
+
+### Patch Changes
+
+- fdb6663: doc updates. and for nx-graph-to-mermaid we have one executor target: run
+- Updated dependencies [fdb6663]
+  - @datalackey/nx-graph-to-mermaid@1.1.6
+  - @datalackey/update-markdown-toc@1.1.6
+
 ## 1.1.5
 
 ### Patch Changes
