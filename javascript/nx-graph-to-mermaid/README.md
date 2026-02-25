@@ -1,13 +1,5 @@
 
 
-<p align="center">
-  <img
-    src="docs/demo.gif"
-    width="720"
-    alt="nx-graph-to-mermaid demo">
-</p>
-
-
 
 <!-- TOC:START -->
 - [NX-graph-to-mermaid](#nx-graph-to-mermaid)
@@ -36,6 +28,44 @@
 It operates purely on the specified `project.json` and renders intra-project target dependencies only. It does not resolve cross-project or workspace-level graph relationships.
 
 So, basically: no monorepo support (but contributions are always welcome!)
+
+
+
+<p align="center">
+  <img
+    src="docs/demo.gif"
+    width="720"
+    alt="nx-graph-to-mermaid demo">
+</p>
+
+
+In the above quick demo, we use the `nx-graph-to-mermaid` plugin to update this README file:
+
+```aiignore
+  # Sample Project
+
+  ## Task Graph
+
+  <!-- NX_GRAPH:START -->
+  <!-- NX_GRAPH:END -->
+  EOF
+
+```
+
+This image will be generated from the `project.json` file in the root of this repository:
+
+```mermaid
+graph TD
+
+  build["build<br/>Build the project"]
+  task_graph_inject
+  test["test<br/>Run unit tests"]
+
+  build --> test
+```
+
+
+
 
 ---
 
