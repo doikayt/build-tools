@@ -19,6 +19,8 @@
     - [Using npm scripts](#using-npm-scripts)
     - [Using a direct path (advanced)](#using-a-direct-path-advanced)
   - [Options](#options)
+    - [Configurable Exclusion List for Recursive Traversal](#configurable-exclusion-list-for-recursive-traversal)
+      - [Examples:](#examples)
   - [TOC Markers](#toc-markers)
   - [Usage Scenarios](#usage-scenarios)
     - [As Part of code/test/debug Work Flow](#as-part-of-codetestdebug-work-flow)
@@ -28,7 +30,6 @@
       - [Recursive Folder Traversal (Lenient Mode)](#recursive-folder-traversal-lenient-mode)
   - [Design Goals and Philosophy](#design-goals-and-philosophy)
   - [Guidelines For Project Contributors](#guidelines-for-project-contributors)
-  - [Known limitations](#known-limitations)
 <!-- TOC:END -->
 
 ## Introduction

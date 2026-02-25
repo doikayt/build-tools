@@ -13,8 +13,8 @@
     - [2. Run All Tests](#2-run-all-tests)
     - [3. Create a Changeset](#3-create-a-changeset)
     - [4. Apply Version Bumps](#4-apply-version-bumps)
-    - [5. Publish](#5-publish)
-    - [6. Push Tags](#6-push-tags)
+    - [5. Publish (Push + Tags + CI)](#5-publish-push--tags--ci)
+    - [6. Verify Release](#6-verify-release)
   - [Handling `changeset status` Errors](#handling-changeset-status-errors)
     - [What this means](#what-this-means)
     - [When you will see this](#when-you-will-see-this)
@@ -33,24 +33,23 @@
 
 ## Overview
 
-This section will mostly be of interest to project maintainers. It describes the structure, development workflows, 
+This document will mostly be of interest to project maintainers. It describes the structure, development workflows, 
 and release engineering processes for the JavaScript/TypeScript/Node oriented packages within this repository.
 
 
 ## Overall Repo Structure Model
 
 This repository has three layers:
-- The repository root, which contains [CI configuration](../.github/workflows/javascript-ci.yml).
-- The secondary (workspace) level:  which is platform specific (i.e., JVM, Python, JavaScript, etc.)
-  and contains release packaging and publishing  configuration appropriate
-  to a given platform.
--  The lowest level consists of individually consumable npm packages for plugins and tools.
-   (Note: npm packaging/publishing format  applies
-   in the case of the Javascript ecosystem -- workspaces
-   we add in the future would package/publish tools in formats
-   suitable for other ecosystems. For example JVM packages
-   would be published using Gradle/Maven style Group/Artifact/Version-based
-   packages.)
+- The repository root, which contains [CI configuration](../.github/workflows/javascript-ci.yml) and resides one level up from the folder containing this document.
+- The secondary (platform) level where this document lives.  Each folder at this level is specific 
+  to some given platform (e.g.: JVM, Javascript, Python,etc.) and contains 
+  appropriate release packaging and publishing configuration for that platform.
+-  The lowest level consists of individually consumable packages for plugins and tools.
+   (Note: npm packaging/publishing format applies
+   in the case of the JavaScript ecosystem. Second level folders 
+   we add in the future would house package/publish tools in formats
+   suitable for other ecosystems. For example, JVM packages
+   would be published using Gradle/Maven style Group/Artifact/Version-based packages.)
 
 
 
@@ -100,11 +99,13 @@ and even if they have no direct dependency relationship with the changed package
 The purpose of this policy is to ensure release coherence: ruling out
 any ambiguity about compatibility between sibling packages.
 
-Maintainers must:
 
-- Never manually edit version numbers.
-- Never manually adjust internal dependency ranges.
-- Always use Changesets to produce coordinated releases.
+Implications:
+- Maintainers must:
+    - Never manually edit version numbers.
+    - Never manually adjust internal dependency ranges.
+    - Always use Changesets to produce coordinated releases.
+- After successful publishing, all packages in the workspace will be at the same version number.
 
 
 ---
@@ -258,12 +259,8 @@ This single command:
 -   triggers the release workflow
 -   results in packages being published to npm
 
-The release workflow executed is:
-
-    .github/workflows/release.yml
-
-You can monitor publish results 
-[here](https://github.com/datalackey/build-tools/actions/workflows/release.yml).
+The configuration for the release workflow is viewable [here](../.github/workflows/release.yml).
+You can monitor publish results [here](https://github.com/datalackey/build-tools/actions/workflows/release.yml).
 
 
 
@@ -279,8 +276,8 @@ The workflow will:
 
 After the workflow completes, confirm:
 
--   GitHub Actions run succeeded\
--   Packages appear on npm\
+-   GitHub Actions run succeeded
+-   Packages appear on npm
 -   Versions match expected coordinated bump
 
 No additional manual tag push step is required when using the
@@ -306,7 +303,6 @@ you may see:
 
 ### What this means
 
-This message is **expected and intentional**.
 
 Changesets has detected that:
 
@@ -420,18 +416,16 @@ RELEASE FLOW
 ```
 cd javascript
 
+  DEVELOPER                              CI  (https://github.com/datalackey/build-tools/actions)
+  
   npx changeset
   git commit .
   git push
 
   npx changeset version
   git commit
-  git push
-
-  npm login                         # Browser-based login for 2FA accounts; CLI login may be used for non-2FA accounts
-  npm whoami                        # Verify you see your username 
-  npx changeset publish
   git push --follow-tags
+                                         Runs release workflow 
 ```
 
 ---

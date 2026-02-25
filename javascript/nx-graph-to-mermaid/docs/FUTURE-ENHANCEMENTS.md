@@ -9,6 +9,26 @@ Inject mode does not regenerate the diagram. It reads the existing generated Mer
 
 ### Decoupling the Graph Engine from Nx
 
+
+The rendering engine (`buildMermaid`) is NX-agnostic.
+
+It operates on:
+
+```
+{
+  targets: {
+    [name: string]: {
+      dependsOn?: string[]
+      description?: string
+    }
+  }
+}
+```
+
+NX is simply one producer of that structure.
+
+---
+
 `nx-graph-to-mermaid` is currently implemented as an Nx executor because it integrates cleanly into existing Nx workflows:
 
 - Targets are already defined in `project.json`

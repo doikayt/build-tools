@@ -52,6 +52,13 @@ Table of Contents Synchronization
 For every Markdown file containing:
 
 <!-- TOC:START -->
+  - [Vision](#vision)
+  - [Core Philosophy](#core-philosophy)
+  - [MVP Direction (Phase 1)](#mvp-direction-phase-1)
+    - [Single Entry Point](#single-entry-point)
+  - [Targets](#targets)
+    - [build](#build)
+- [Workspace Overview](#workspace-overview)
 <!-- TOC:END -->
 
 Regenerate the TOC deterministically.
