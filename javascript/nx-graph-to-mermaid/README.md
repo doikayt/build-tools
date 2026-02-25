@@ -1,3 +1,14 @@
+
+
+<p align="center">
+  <img
+    src="docs/demo.gif"
+    width="720"
+    alt="nx-graph-to-mermaid demo">
+</p>
+
+
+
 <!-- TOC:START -->
 - [NX-graph-to-mermaid](#nx-graph-to-mermaid)
   - [Overview](#overview)
