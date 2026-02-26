@@ -1,5 +1,11 @@
 # @datalackey/update-markdown-toc
 
+## 1.1.8
+
+### Patch Changes
+
+- 84b1bd3: update docs
+
 ## 1.1.7
 
 ### Patch Changes

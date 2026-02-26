@@ -222,7 +222,7 @@ git commit -m "chore: add changeset" .
 ### 4. Apply Version Bumps
 
 
-From this folder (`javascript/`), run command below to update versions, changelogs, and package metadata.
+From this folder (`javascript/`), run commands below to update versions, changelogs, and package metadata.
 
 
 ```
@@ -237,6 +237,7 @@ This command:
 - Updates all CHANGELOG.md files
 - Removes processed changeset files
 
+After running this command if you want to see the version bumps, type: `git diff` from `javascript/` folder.
 
 
 Next, commit the version bump metadata and create an annotated tag for the new version:
@@ -244,7 +245,7 @@ Next, commit the version bump metadata and create an annotated tag for the new v
 Capture the VERSION:
 
 ```sh
-VERSION="$(node -p "require('./packages/update-markdown-toc/package.json').version")"
+VERSION="$(node -p "require('./update-markdown-toc/package.json').version")"
 ```
 
 And add the tag:
