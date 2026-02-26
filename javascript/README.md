@@ -239,16 +239,14 @@ This command:
 
 
 
-Next, create an annotated tag for the new version:
+Next, commit the version bump metadata and create an annotated tag for the new version:
+
+Capture the VERSION:
 
 ```sh
-VERSION="$(node -p "require('./package.json').version")" && \
-git add . && \
-git commit -m "chore: release v${VERSION}" && \
-git tag -a "v${VERSION}" -m "Release v${VERSION}"
+VERSION="$(node -p "require('./packages/update-markdown-toc/package.json').version")"
 ```
 
-Then, commit and tag:
 
 
 ```sh
@@ -256,6 +254,7 @@ git add . && \
 git commit -m "chore: release v${VERSION}" && \
 git tag -a "v${VERSION}" -m "Release v${VERSION}"
 ```
+
 
 
 ### 5. Publish (Push + Tags + CI)
