@@ -247,7 +247,7 @@ Capture the VERSION:
 VERSION="$(node -p "require('./packages/update-markdown-toc/package.json').version")"
 ```
 
-
+And add the tag:
 
 ```sh
 git add . && \
