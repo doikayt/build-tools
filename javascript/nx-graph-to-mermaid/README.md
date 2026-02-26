@@ -13,9 +13,9 @@
   - [Inject Mode](#inject-mode)
   - [Update Mode (Generate + Inject)](#update-mode-generate--inject)
   - [Check Mode (CI Drift Detection)](#check-mode-ci-drift-detection)
-  - [Determinism](#determinism)
-  - [Example](#example)
-  - [License](#license)
+- [Determinism](#determinism)
+- [Example](#example)
+- [License](#license)
 <!-- TOC:END -->
 
 
@@ -290,7 +290,7 @@ This prevents stale diagrams from being merged.
 
 ---
 
-## Determinism
+# Determinism
 
 Output is fully deterministic:
 
@@ -306,7 +306,7 @@ Identical input → identical output.
 
 ---
 
-## Example
+# Example
 
 Given:
 
@@ -337,6 +337,6 @@ release --> package
 ```
 
 
-## License
+# License
 
 MIT
