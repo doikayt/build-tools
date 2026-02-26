@@ -221,6 +221,10 @@ git commit -m "chore: add changeset" .
 
 ### 4. Apply Version Bumps
 
+
+From this folder (`javascript/`), run command below to update versions, changelogs, and package metadata.
+
+
 ```
 npx changeset version
 ```
@@ -233,11 +237,24 @@ This command:
 - Updates all CHANGELOG.md files
 - Removes processed changeset files
 
-Commit:
 
+
+Next, create an annotated tag for the new version:
+
+```sh
+VERSION="$(node -p "require('./package.json').version")" && \
+git add . && \
+git commit -m "chore: release v${VERSION}" && \
+git tag -a "v${VERSION}" -m "Release v${VERSION}"
 ```
-git add .
-git commit -m "chore: release versions"
+
+Then, commit and tag:
+
+
+```sh
+git add . && \
+git commit -m "chore: release v${VERSION}" && \
+git tag -a "v${VERSION}" -m "Release v${VERSION}"
 ```
 
 
