@@ -65,14 +65,14 @@ graph TD
 ```
 
 
+See [Example](#example) for how project.json relates to the corresponding generated Mermaid diagram.
 
 
 ---
 
 ## Overview
 
-The plugin exposes a **single executor**.
-Behavior is controlled entirely by `options.mode`.
+Plugin behavior is controlled entirely by `options.mode`.
 
 Supported modes:
 

@@ -75,12 +75,13 @@ node_modules/.bin/ directory.
 
 After installation, the `update-markdown-toc` command can be invoked in any
 of the following ways from the project root (or a subdirectory) where the package was installed.
+All examples below invoke the tool with the default README.md file as the TOC update target.
 
 
 ### Using npx (recommended)
 
 ```bash
-npx update-markdown-toc README.md
+npx update-markdown-toc 
 ````
 
 
@@ -91,7 +92,7 @@ You may also add a script entry to your package.json:
 ```json
 {
   "scripts": {
-    "docs:toc": "update-markdown-toc README.md"
+    "docs:toc": "update-markdown-toc"
   }
 }
 ```
@@ -104,7 +105,7 @@ npm run docs:toc
 ### Using a direct path (advanced)
 
 ```bash
-./node_modules/.bin/update-markdown-toc README.md
+./node_modules/.bin/update-markdown-toc 
 ```
 
 
@@ -284,12 +285,12 @@ This tool was designed in accordance with the top-level
 [Build Philosophy](../../README.md#build-philosophy) of this repository.
 
 
-- **update mode** (writes files: this should be run locally by developers, and should never run in CI)
+- **update mode** (writes files: this should be run locally by developers, and should never run in CI. It is the default if `--check` not specified)
 - **check mode** (validates and exits non-zero if stale:  mainly intended to be run in CI -- optional for local use) 
 
 The intended workflow is:
 
-1. Developers run the update command locally.
+1. Developers run the command locally  in default mode (update mode, a.k.a. non `--check` mode) in their workspace
 2. Generated TOC content is reviewed and committed.
 3. CI runs in `--check` mode to ensure no drift exists.
 

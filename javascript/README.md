@@ -432,8 +432,8 @@ cd javascript
 
 # Rules
 
-- Version numbers must never be edited manually.
-- `npm publish` must never be run from individual package directories.
-- Internal dependency versions must never be manually adjusted.
+- Version numbers of packages must never be edited manually.
+- Version numbers of depended-on packages must never be manually adjusted.
+- `npm publish` must never be run from individual package directories (leave that to CI).
 - All releases must originate from committed Changesets.
-- Workspace root orchestrates — it does not contain product logic.
+- Workspace root (second level folder) orchestrates — it does not contain product logic.
