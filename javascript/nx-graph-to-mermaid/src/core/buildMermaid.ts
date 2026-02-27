@@ -1,3 +1,4 @@
+import { escapeHtml } from '@datalackey/tooling-core';
 interface NxTarget {
     dependsOn?: string[];
     description?: string;
@@ -181,10 +182,3 @@ function sanitizeNodeId(name: string): string {
     return result;
 }
 
-function escapeHtml(input: string): string {
-    return input
-        .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-}

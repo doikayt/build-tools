@@ -5,8 +5,9 @@
     "*"
   ],
   "scripts": {
-    "test": "npm -ws test  --if-present",
-    "build": "npm run test"
+    "test": "npm -ws test --if-present",
+    "build:ordered": "npm -w @datalackey/tooling-core run build && npm -w @datalackey/nx-graph-to-mermaid run build && npm -w @datalackey/autogen-markdown-doc run test --if-present",
+    "build": "npm run build:ordered"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
