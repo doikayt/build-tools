@@ -1,5 +1,5 @@
 import { parseArgs } from "node:util";
-export function parseCli(argv) {
+export function parseCli(argv: any) {
     const { values, positionals } = parseArgs({
         args: argv,
         options: {
