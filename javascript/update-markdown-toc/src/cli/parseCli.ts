@@ -28,7 +28,7 @@ export function parseCli(argv: any) {
 
     if (isRecursive && targetFile) {
         throw new Error(
-            "Cannot combine --recursive with a positional file argument."
+            "Cannot use --recursive with a file argument"
         );
     }
 

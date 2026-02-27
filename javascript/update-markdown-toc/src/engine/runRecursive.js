@@ -1,10 +1,14 @@
 import { processFile } from "./processFile.js";
 import { printStatus } from "./printStatus.js";
-import { collectMarkdownFiles } from "./walkMarkdownFiles.js";
+import { walkFiles } from "@datalackey/tooling-core";
 
 export function runRecursive(rootDir, config) {
-    const files = collectMarkdownFiles(rootDir, config.excludeList);
-    files.sort();
+
+    const files = walkFiles({
+        rootDir,
+        extensions: [".md"],
+        excludeDirs: config.excludeList ?? undefined
+    });
 
     let staleFound = false;
 
@@ -17,6 +21,7 @@ export function runRecursive(rootDir, config) {
             }
 
             printStatus(result.status, file, config);
+
         } catch (err) {
             console.error(`ERROR: ${err.message}`);
             return 1;
