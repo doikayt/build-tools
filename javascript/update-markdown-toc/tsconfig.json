@@ -3,9 +3,16 @@
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "outDir": "dist",
+
     "rootDir": "src",
-    "strict": false,
+    "outDir": "dist",
+
+    "strict": true,
+
+    "allowJs": true,
+    "checkJs": true,
+
+    "noEmitOnError": true,
     "declaration": false,
     "sourceMap": false
   },
