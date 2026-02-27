@@ -1,13 +1,11 @@
 {
   "name": "build-tools",
   "private": true,
-  "workspaces": [
-    "*"
-  ],
+  "workspaces": ["*"],
   "scripts": {
-    "test": "npm -ws test --if-present",
-    "build:ordered": "npm -w @datalackey/tooling-core run build && npm -w @datalackey/nx-graph-to-mermaid run build && npm -w @datalackey/autogen-markdown-doc run test --if-present",
-    "build": "npm run build:ordered"
+    "build:ordered": "npm -w @datalackey/tooling-core run build && npm -w @datalackey/nx-graph-to-mermaid run build",
+    "test:all": "npm -ws test --if-present",
+    "build": "npm run build:ordered && npm run test:all"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
