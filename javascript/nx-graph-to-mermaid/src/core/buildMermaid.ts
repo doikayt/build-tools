@@ -1,4 +1,6 @@
 import { escapeHtml } from '@datalackey/tooling-core';
+import { walkFiles } from '@datalackey/tooling-core';
+
 interface NxTarget {
     dependsOn?: string[];
     description?: string;
