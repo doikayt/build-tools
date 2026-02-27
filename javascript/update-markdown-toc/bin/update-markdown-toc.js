@@ -3,8 +3,8 @@
 import { resolve } from "node:path";
 import { existsSync, statSync } from "node:fs";
 
-import { parseCli } from "../src/cli/parseCli.js";
-import { runSingleFile, runRecursive } from "../src/index.js";
+import { parseCli } from "../dist/cli/parseCli.js";
+import { runSingleFile, runRecursive } from "../dist/index.js";
 
 function printHelp() {
     console.log(`
