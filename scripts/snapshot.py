@@ -198,7 +198,7 @@ import argparse
 
 # Configuration
 SKIP_FILES = {"package-lock.json", "combined_upload.txt", "filter_icon.html"}
-SKIP_DIRS = {".idea", "node_modules", ".git", ".cache", "dist", "coverage", "tmp", "logs", ".nx", "static", "samples", "update-markdown-toc"}
+SKIP_DIRS = {".idea", "node_modules", ".git", ".cache", "dist", "coverage", "tmp", "logs", ".nx", "static", "samples"}
 FINAL_OUTPUT = "/tmp/combined.txt"
 ALWAYS_INCLUDE = "/home/chris/grassroots_campaign_tools/.github/copilot-instructions.md"
 
