@@ -1,13 +1,4 @@
 import { parseArgs } from "node:util";
-
-/**
- * Pure CLI parser.
- *
- * - No console output
- * - No process.exit
- * - Throws on validation errors
- * - Returns frozen config object
- */
 export function parseCli(argv) {
     const { values, positionals } = parseArgs({
         args: argv,
