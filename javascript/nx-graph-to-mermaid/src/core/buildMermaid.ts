@@ -1,4 +1,3 @@
-import { escapeHtml } from '@datalackey/tooling-core';
 import { walkFiles } from '@datalackey/tooling-core';
 
 interface NxTarget {
@@ -184,3 +183,11 @@ function sanitizeNodeId(name: string): string {
     return result;
 }
 
+
+function escapeHtml(input: string): string {
+    return input
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
