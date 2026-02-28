@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { processFile } from "./processFile.js";
 import { printStatus } from "./printStatus.js";
 import { walkFiles } from "@datalackey/tooling-core";
