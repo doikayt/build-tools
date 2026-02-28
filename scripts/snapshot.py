@@ -143,7 +143,7 @@ Skip Logic
 
    The skip check is centralized in:
 
-       should_skip(path, extra_skip_dirs)
+       should_skip(path, skip_dirs)
 
 
 Usage
@@ -187,13 +187,11 @@ Limitations
 
 """
 
-
 import os
 import shutil
 import subprocess
 import tempfile
 import argparse
-
 
 
 # Configuration
@@ -202,116 +200,148 @@ SKIP_DIRS = {".idea", "node_modules", ".git", ".cache", "dist", "coverage", "tmp
 FINAL_OUTPUT = "/tmp/combined.txt"
 ALWAYS_INCLUDE = "/home/chris/grassroots_campaign_tools/.github/copilot-instructions.md"
 
-def should_skip(path, extra_skip_dirs=None):
-    """Check if path should be skipped based on our exclusion rules"""
+
+def normalize_exclude_token(token: str) -> str:
+    """
+    Normalize user-provided exclude tokens so they match directory names
+    encountered by os.walk().
+
+    Examples:
+      "update-markdown-toc/"  -> "update-markdown-toc"
+      "./update-markdown-toc" -> "update-markdown-toc"
+      "foo/bar"               -> "bar"
+    """
+    s = token.strip().rstrip("/\\")
+    if not s:
+        return ""
+    return os.path.basename(s)
+
+
+def should_skip(path, skip_dirs):
+    """Check if path should be skipped based on exclusion rules"""
     if os.path.basename(path) in SKIP_FILES:
         return True
-    
-    # Combine default and extra skip dirs
-    all_skip_dirs = set(SKIP_DIRS)
-    if extra_skip_dirs:
-        all_skip_dirs.update(extra_skip_dirs)
-    
-    if any(skip_dir in path.split(os.path.sep) for skip_dir in all_skip_dirs):
-        return True
+
+    path_parts = path.split(os.path.sep)
+    for part in path_parts:
+        if part in skip_dirs:
+            return True
+
     return False
 
-def append_file(file_path, output_file, extra_skip_dirs=None, force=False):
+
+def append_file(file_path, output_file, skip_dirs, force=False):
     """Append a single file’s name and content"""
     if not os.path.isfile(file_path):
-        print(f"❓ File not found: {file_path}")
         return
-    
-    if not force and should_skip(file_path, extra_skip_dirs):
-        print(f"⚠️ Skipping: {file_path}")
+
+    if not force and should_skip(file_path, skip_dirs):
         return
-    
+
     print(f"🔗 Adding: {file_path}")
+
     try:
-        with open(output_file, "a") as out, open(file_path, "r") as f:
+        with open(output_file, "a", encoding="utf-8") as out, \
+             open(file_path, "r", encoding="utf-8") as f:
+
             out.write(f"\n\n===== FILE: {file_path} =====\n")
             shutil.copyfileobj(f, out)
+
     except UnicodeDecodeError:
         print(f"⛔ Cannot read (likely binary): {file_path}")
     except PermissionError:
         print(f"🔒 Permission denied: {file_path}")
 
+
 def process_directory(root_dir, output_file, extra_skip_dirs=None):
-    """Recursively process all files in directory"""
-    # Combine default and extra skip dirs
-    all_skip_dirs = set(SKIP_DIRS)
+    """Recursively process all files in directory (deterministic ordering)"""
+
+    skip_dirs = set(SKIP_DIRS)
     if extra_skip_dirs:
-        all_skip_dirs.update(extra_skip_dirs)
-    
+        skip_dirs.update(extra_skip_dirs)
+
     for root, dirs, files in os.walk(root_dir):
-        # Prune skipped directories from os.walk's future traversal
-        dirs[:] = [d for d in dirs if d not in all_skip_dirs]
-        
-        for file in files:
+
+        # Deterministic directory pruning
+        dirs[:] = sorted([d for d in dirs if d not in skip_dirs])
+
+        for file in sorted(files):
             file_path = os.path.join(root, file)
-            append_file(file_path, output_file, extra_skip_dirs)
+
+            if should_skip(file_path, skip_dirs):
+                continue
+
+            append_file(file_path, output_file, skip_dirs)
+
 
 def copy_to_clipboard(file_path):
     """Handle clipboard copy for different platforms"""
     try:
-        if os.name == 'posix':  # Linux/Mac
-            subprocess.run(["xclip", "-selection", "clipboard", "-i", file_path], 
-                          check=True, stderr=subprocess.DEVNULL)
-        elif os.name == 'nt':  # Windows
-            subprocess.run(["clip"], stdin=open(file_path, "r"), 
-                          check=True, stderr=subprocess.DEVNULL)
+        if os.name == 'posix':
+            subprocess.run(
+                ["xclip", "-selection", "clipboard", "-i", file_path],
+                check=True,
+                stderr=subprocess.DEVNULL
+            )
+        elif os.name == 'nt':
+            with open(file_path, "r", encoding="utf-8") as f:
+                subprocess.run(
+                    ["clip"],
+                    stdin=f,
+                    check=True,
+                    stderr=subprocess.DEVNULL
+                )
         return True
     except (subprocess.CalledProcessError, FileNotFoundError):
         return False
 
+
 def main():
     parser = argparse.ArgumentParser(description='Combine files recursively')
-    parser.add_argument('folder', nargs='?', default='.', 
+    parser.add_argument('folder', nargs='?', default='.',
                        help='Folder to start scanning from (default: current directory)')
     parser.add_argument('-s', '--skip-foo', action='store_true',
-                       help='Do not include /tmp/foo.txt at the end')
+                       help='Do not include forced file at the end')
     parser.add_argument('-e', '--exclude', type=str,
                        help='Comma-separated list of additional directories to skip')
     args = parser.parse_args()
 
-    # Parse extra skip directories
     extra_skip_dirs = None
     if args.exclude:
-        extra_skip_dirs = [dir_name.strip() for dir_name in args.exclude.split(',') if dir_name.strip()]
+        tokens = args.exclude.split(",")
+        normalized = []
+        for token in tokens:
+            n = normalize_exclude_token(token)
+            if n:
+                normalized.append(n)
+
+        extra_skip_dirs = sorted(set(normalized))
         print(f"📋 Additional directories to skip: {', '.join(extra_skip_dirs)}")
 
-    # Validate folder exists
     if not os.path.isdir(args.folder):
         print(f"Error: '{args.folder}' is not a valid directory")
         return 1
 
-    # Create temp file
-    with tempfile.NamedTemporaryFile(mode='w+', prefix='combined_', suffix='.txt', delete=False) as tmp_file:
+    with tempfile.NamedTemporaryFile(mode='w+', prefix='combined_', suffix='.txt', delete=False, encoding="utf-8") as tmp_file:
         temp_path = tmp_file.name
-    
+
     try:
         print(f"📂 Scanning from: {os.path.abspath(args.folder)}")
-        
-        # Process specified directory recursively
+
         process_directory(args.folder, temp_path, extra_skip_dirs)
 
-        # Always include /tmp/foo.txt unless skipped
         if args.skip_foo:
             print(f"🚫 Skipped forced inclusion of: {ALWAYS_INCLUDE}")
         else:
-            #append_file(ALWAYS_INCLUDE, temp_path, extra_skip_dirs, force=True)
-            print(f"✅ NOOOOO       -- we have disabled Forced inclusion of: {ALWAYS_INCLUDE}")
+            print(f"ℹ️ Forced inclusion currently disabled: {ALWAYS_INCLUDE}")
 
-        # Secretly copy to /tmp/combined.txt
         shutil.copy2(temp_path, FINAL_OUTPUT)
-        
-        # Copy to clipboard
+
         if copy_to_clipboard(temp_path):
-            print(f"\n✅ Combined content copied to clipboard and saved at: /tmp/combined.txt")
+            print(f"\n✅ Combined content copied to clipboard and saved at: {FINAL_OUTPUT}")
         else:
-            print(f"\n⚠️ Couldn't copy to clipboard. Combined content saved at: /tmp/combined.txt")
-        
-    
+            print(f"\n⚠️ Couldn't copy to clipboard. Combined content saved at: {FINAL_OUTPUT}")
+
     except KeyboardInterrupt:
         print("\n🚫 Operation cancelled by user")
     except Exception as e:
@@ -319,6 +349,7 @@ def main():
     finally:
         if os.path.exists(temp_path):
             os.remove(temp_path)
+
 
 if __name__ == "__main__":
     main()
