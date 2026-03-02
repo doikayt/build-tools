@@ -70,10 +70,23 @@ This repository has three layers:
 Packages managed under this workspace:
 
 - [`@datalackey/update-markdown-toc`](./update-markdown-toc/README.md)
+  - CLI tool
 - [`@datalackey/nx-graph-to-mermaid`](./nx-graph-to-mermaid/README.md)
+  - NX plugin
 - [`@datalackey/autogen-markdown-doc`](./autogen-markdown-doc/README.md)
+  - CLI tool that bundles the packages above, allowing them to be used to independently, as well as via a simplified 'sensible defaults' entry point adequate for most common use cases.
+- [`@datalackey/tooling-cli`](./tooling-cli/README.md)
+  - private,
+  while  opinionated defaults.
+
+- [`@datalackey/tooling-core`](./tooling-core/README.md)
+  - private, unpublished package containing common logic
 
 
+These packages are:
+
+- ESM-only (Not dual-published for CommonJS)
+- Node >= 18
 
 
 ## Publishing as NPM Packages

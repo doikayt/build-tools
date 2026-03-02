@@ -2,7 +2,7 @@
 
 
 <!-- TOC:START -->
-- [NX-graph-to-mermaid](#nx-graph-to-mermaid)
+- [@datalackey/NX-graph-to-mermaid](#datalackeynx-graph-to-mermaid)
   - [Overview](#overview)
   - [Adding Documentation To NX Configuration](#adding-documentation-to-nx-configuration)
   - [Installation](#installation)
@@ -15,11 +15,12 @@
   - [Check Mode (CI Drift Detection)](#check-mode-ci-drift-detection)
 - [Determinism](#determinism)
 - [Example](#example)
+  - [Packaging, Publishing, and Inter-relationship with Other Plugins](#packaging-publishing-and-inter-relationship-with-other-plugins)
 - [License](#license)
 <!-- TOC:END -->
 
 
-# NX-graph-to-mermaid
+# @datalackey/NX-graph-to-mermaid
 
 > Deterministically generates Mermaid task flow diagrams from NX `project.json` config files.
 
@@ -335,6 +336,16 @@ release["release<br/>Full release pipeline"]
 
 release --> package
 ```
+
+---
+## Packaging, Publishing, and Inter-relationship with Other Plugins
+
+This package is one component of a small ecosystem of JavaScript tooling plugins maintained as individual npm packages in this repository.
+The versioning and release of these packages is governed by a coordinated release policy, and
+the packages adhere to common architectural policies (ESM-only, Node 18+, strict TypeScript configuration)
+that are more completely described [here](../README.md).
+---
+
 
 
 # License

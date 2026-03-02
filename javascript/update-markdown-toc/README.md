@@ -1,4 +1,4 @@
-# update-markdown-toc
+# @datalackey/update-markdown-toc
 
 <p align="center">
   <img
@@ -10,7 +10,7 @@
 
 
 <!-- TOC:START -->
-- [update-markdown-toc](#update-markdown-toc)
+- [@datalackey/update-markdown-toc](#datalackeyupdate-markdown-toc)
   - [Introduction](#introduction)
   - [Why not Some Other Markdown TOC Generator ?](#why-not-some-other-markdown-toc-generator-)
   - [Installation](#installation)
@@ -30,6 +30,7 @@
       - [Recursive Folder Traversal (Lenient Mode)](#recursive-folder-traversal-lenient-mode)
   - [Design Goals and Philosophy](#design-goals-and-philosophy)
   - [Guidelines For Project Contributors](#guidelines-for-project-contributors)
+  - [Packaging, Publishing, and Inter-relationship with Other Plugins](#packaging-publishing-and-inter-relationship-with-other-plugins)
 <!-- TOC:END -->
 
 ## Introduction
@@ -298,5 +299,13 @@ The intended workflow is:
 ## Guidelines For Project Contributors
 
 Contributors to the project should consult [this document](GUIDELINES-FOR-PROJECT-CONTRIBUTORS.md)
+
+
+## Packaging, Publishing, and Inter-relationship with Other Plugins
+
+This package is one component of a small ecosystem of JavaScript tooling plugins maintained as individual npm packages in this repository.
+The versioning and release of these packages is governed by a coordinated release policy, and
+the packages adhere to common architectural policies (ESM-only, Node 18+, strict TypeScript configuration)
+that are more completely described [here](../README.md).
 
 

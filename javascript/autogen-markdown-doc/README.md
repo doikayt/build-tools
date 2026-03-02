@@ -1,6 +1,7 @@
-# autogen-markdown-doc
+# @datalackey/autogen-markdown-doc
 
-A single entry point, intentionally opinionated, repository-wide documentation auto-generator and consistency checker.
+
+A simplified entry point, intentionally opinionated, repository-wide documentation auto-generator and consistency checker.
 
 ---
 
@@ -12,8 +13,8 @@ This package is an uber-bundle comprising the following npm packages:
 - [`@datalackey/nx-graph-to-mermaid`](../nx-graph-to-mermaid/README.md)
 
 
-By applying sensible defaults to the configuration options of the above tools `autogen-markdown-doc`
-enables you to do EITHER of the following via one short command:
+each of which can be used to independently, or via the following simplified pre-configured entrypoints 
+which apply 'sensible defaults' to the configuration options of the bundled plugins:
 
 - `update` 
   - auto-generate Tables of Contents (TOCs) for all
@@ -118,6 +119,16 @@ Use the underlying packages if you need:
 - File- or directory-specific operations
 - Mermaid-only or TOC-only workflows
 - Advanced or non-default configuration
+
+---
+
+## Packaging, Publishing, and Inter-relationship with Other Plugins
+
+This package is one component of a small ecosystem of JavaScript tooling plugins maintained as individual npm packages in this repository.
+The versioning and release of these packages is governed by a coordinated release policy, and 
+the packages adhere to common architectural policies (ESM-only, Node 18+, strict TypeScript configuration) 
+that are more completely described [here](../README.md).
+
 
 ---
 
