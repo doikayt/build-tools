@@ -1,15 +1,19 @@
-// @ts-nocheck
 import { processFile } from "./processFile.js";
 import { printStatus } from "./printStatus.js";
 import { walkFiles } from "@datalackey/tooling-core";
 
-export function runRecursive(rootDir, config) {
+import type { CliConfig } from "../types.js";
+
+export function runRecursive(
+    rootDir: string,
+    config: CliConfig
+): number {
 
     const files = walkFiles({
         rootDir,
         extensions: [".md"],
         excludeDirs: config.excludeList ?? undefined
-    });
+    }).sort();   // ensure deterministic order
 
     let staleFound = false;
 
@@ -23,8 +27,11 @@ export function runRecursive(rootDir, config) {
 
             printStatus(result.status, file, config);
 
-        } catch (err) {
-            console.error(`ERROR: ${err.message}`);
+        } catch (err: unknown) {
+            const message =
+                err instanceof Error ? err.message : String(err);
+
+            console.error(`ERROR: ${message}`);
             return 1;
         }
     }

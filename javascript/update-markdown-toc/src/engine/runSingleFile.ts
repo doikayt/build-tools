@@ -1,7 +1,12 @@
-// @ts-nocheck
 import { processFile } from "./processFile.js";
 import { printStatus } from "./printStatus.js";
-export function runSingleFile(filePath, config) {
+
+import type { CliConfig } from "../types.js";
+
+export function runSingleFile(
+    filePath: string,
+    config: CliConfig
+): number {
     const result = processFile(filePath, config);
 
     if (config.checkMode && result.status === "stale") {

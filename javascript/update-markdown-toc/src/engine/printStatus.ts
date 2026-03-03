@@ -1,4 +1,10 @@
-export function printStatus(status, filePath, config) {
+import type { CliConfig } from "../types.js";
+
+export function printStatus(
+  status: "updated" | "unchanged" | "stale" | "skipped",
+  filePath: string,
+  config: CliConfig
+): void {
     const { checkMode, verbose, quiet } = config;
 
     if (quiet) return;
