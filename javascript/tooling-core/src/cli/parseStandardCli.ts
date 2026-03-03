@@ -14,6 +14,43 @@ export type StandardCliConfig = {
   excludeList: string[] | null;
 };
 
+function applyValidationRules(
+  quiet: boolean,
+  verbose: boolean,
+  isRecursive: boolean,
+  targetFile: string | null,
+  checkMode: boolean,
+  excludeValue: unknown,
+  argv: string[]
+): void {
+  if (quiet && verbose) {
+    throw new Error("--quiet and --verbose cannot be used together.");
+  }
+
+  if (isRecursive && targetFile) {
+    throw new Error("Cannot use --recursive with a file argument");
+  }
+
+  if (checkMode && !isRecursive && !targetFile) {
+    throw new Error("--check requires a file argument or --recursive.");
+  }
+
+  if (excludeValue !== undefined) {
+    if (typeof excludeValue !== "string") {
+      throw new Error("--exclude requires an argument.");
+    }
+  }
+
+  // parseArgs already enforces missing value for --recursive
+  // but we defensively ensure correctness:
+
+  if (argv.includes("--recursive") || argv.includes("-r")) {
+    if (!isRecursive) {
+      throw new Error("--recursive requires a directory argument.");
+    }
+  }
+}
+
 export function parseStandardCli(argv: string[]): StandardCliConfig {
   const { values, positionals } = parseArgs({
     args: argv,
@@ -56,36 +93,15 @@ export function parseStandardCli(argv: string[]): StandardCliConfig {
 
   const isRecursive = recursivePath !== null;
 
-  // ------------------------------------------------------------
-  // Validation rules
-  // ------------------------------------------------------------
-
-  if (quiet && verbose) {
-    throw new Error("--quiet and --verbose cannot be used together.");
-  }
-
-  if (isRecursive && targetFile) {
-    throw new Error("Cannot use --recursive with a file argument");
-  }
-
-  if (checkMode && !isRecursive && !targetFile) {
-    throw new Error("--check requires a file argument or --recursive.");
-  }
-
-  if (values.exclude !== undefined) {
-    if (typeof values.exclude !== "string") {
-      throw new Error("--exclude requires an argument.");
-    }
-  }
-
-  // parseArgs already enforces missing value for --recursive
-  // but we defensively ensure correctness:
-
-  if (argv.includes("--recursive") || argv.includes("-r")) {
-    if (!isRecursive) {
-      throw new Error("--recursive requires a directory argument.");
-    }
-  }
+  applyValidationRules(
+    quiet,
+    verbose,
+    isRecursive,
+    targetFile,
+    checkMode,
+    values.exclude,
+    argv
+  );
 
   // ------------------------------------------------------------
   // Exclude parsing
