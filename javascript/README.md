@@ -89,6 +89,25 @@ These packages are:
 - Node >= 18
 
 
+## Consistent CLI Behavior Across Tools
+
+Tools in this workspace share a consistent command-line interface and behavior model.
+
+This includes:
+
+- Single-file and recursive directory modes
+- `--check` for CI validation
+- `--verbose` and `--quiet` output control
+- Deterministic traversal order
+- Predictable exit codes
+
+If you use one tool, you already understand how the others behave.
+
+For detailed documentation of shared command-line behavior, see:
+
+➡️ **[Common CLI Behavior](./CLI-BEHAVIOR.md)**
+
+
 ## Publishing as NPM Packages
 
 The above referenced JavaScript packages are versioned and published all together, as a single unit,

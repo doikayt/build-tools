@@ -291,6 +291,21 @@ This prevents stale diagrams from being merged.
 
 ---
 
+# Recursively Traversing a Folder Hierarchy to Process all files vs. Single File Processing
+
+The tool supports two distinct operating modes with intentionally different error-handling semantics:
+
+- Single-file mode (--recursive not specified)
+- Recursive folder traversal mode (--recursive specified)
+
+These modes are designed to support both strict validation and incremental adoption across real-world repositories.
+In the case of the latter mode, we assume some files may not yet have TOC markers, and that this is acceptable.
+
+Refer to [this document](../CLI-BEHAVIOR.md) for information on these processing modes and a discussion of other behavioral
+commonalities that all focused-use plugins in this repository share.
+
+---
+
 # Determinism
 
 Output is fully deterministic:

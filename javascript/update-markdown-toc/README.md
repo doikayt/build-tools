@@ -228,7 +228,8 @@ npx update-markdown-toc --check --recursive docs/
 ```
 
 
-If a pull request modifies documentation headings but forgets to update TOCs, this command will fail the build, forcing the contributor to regenerate and commit the correct TOC.
+If a pull request modifies documentation headings but forgets to update TOCs, this command will fail the build, 
+forcing the contributor to regenerate and commit the correct TOC.
 
 ### Recursively Traversing a Folder Hierarchy to Process all files vs. Single File Processing
 
@@ -239,6 +240,9 @@ The tool supports two distinct operating modes with intentionally different erro
 
 These modes are designed to support both strict validation and incremental adoption across real-world repositories.
 In the case of the latter mode, we assume some files may not yet have TOC markers, and that this is acceptable.
+
+Refer to [this document](../CLI-BEHAVIOR.md) for information on these processing modes and a discussion of other behavioral 
+commonalities that all focused-use plugins in this repository share.
 
 #### Single-File Processing (Strict Mode)
 
