@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 
-import { resolve } from "node:path";
-import { existsSync, statSync } from "node:fs";
+import {
+  parseStandardCli,
+  resolveTargets
+} from "@datalackey/tooling-core";
 
-import { parseCli } from "../dist/cli/parseCli.js";
-import { runSingleFile, runRecursive } from "../dist/index.js";
+import { RepositoryRunner } from "@datalackey/tooling-core";
+import { TocFileProcessor } from "../dist/engine/TocFileProcessor.js";
 
 function printHelp() {
-    console.log(`
+  console.log(`
 update-markdown-toc [options] [file]
 
 Options:
@@ -22,37 +24,25 @@ Options:
 }
 
 try {
-    const config = parseCli(process.argv.slice(2));
+  const config = parseStandardCli(process.argv.slice(2));
 
-    if (config.help) {
-        printHelp();
-        process.exit(0);
-    }
+  if (config.help) {
+    printHelp();
+    process.exit(0);
+  }
 
-    if (config.isRecursive) {
-        const resolved = resolve(process.cwd(), config.recursivePath);
+  const resolved = resolveTargets(config);
 
-        if (!existsSync(resolved)) {
-            console.error("ERROR: Recursive path does not exist");
-            process.exit(1);
-        }
+  const runner = new RepositoryRunner({
+    processor: new TocFileProcessor(),
+    config
+  });
 
-        if (!statSync(resolved).isDirectory()) {
-            console.error("ERROR: --recursive requires a directory");
-            process.exit(1);
-        }
-
-        process.exit(runRecursive(resolved, config));
-    }
-
-    const resolved = resolve(
-        process.cwd(),
-        config.targetFile || "README.md"
-    );
-
-    process.exit(runSingleFile(resolved, config));
+  process.exit(runner.runFiles(resolved.files));
 
 } catch (err) {
-    console.error(`ERROR: ${err.message}`);
-    process.exit(1);
+  const message =
+    err instanceof Error ? err.message : String(err);
+  console.error(`ERROR: ${message}`);
+  process.exit(1);
 }

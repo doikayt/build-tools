@@ -1,16 +1,3 @@
-export type CliConfig = {
-    help?: boolean;
+import type { StandardCliConfig } from "@datalackey/tooling-core";
 
-    checkMode: boolean;
-    verbose: boolean;
-    quiet: boolean;
-    debug: boolean;
-
-    isRecursive: boolean;
-    recursivePath: string | null;
-    targetFile: string | null;
-
-    // null = default behavior (use default excludes)
-    // []   = user explicitly disabled exclusions via --exclude ""
-    excludeList: string[] | null;
-};
+export type CliConfig = StandardCliConfig;

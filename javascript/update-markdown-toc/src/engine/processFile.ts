@@ -30,7 +30,7 @@ export function processFile(
     } catch (err: unknown) {
         const message = err instanceof Error ? err.message : String(err);
 
-        if (message === "TOC delimiters not found" && config.isRecursive) {
+        if (message === "TOC delimiters not found" && config.mode === "recursive") {
             return { status: "skipped" };
         }
 

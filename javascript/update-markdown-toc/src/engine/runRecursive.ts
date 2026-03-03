@@ -4,8 +4,8 @@ import { TocFileProcessor } from "./TocFileProcessor.js";
 import type { CliConfig } from "../types.js";
 
 export function runRecursive(
-  rootDir: string,
-  config: CliConfig
+    rootDir: string,
+    config: CliConfig
 ): number {
 
   const files = walkFiles({
