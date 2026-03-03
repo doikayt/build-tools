@@ -258,15 +258,33 @@ If either marker is missing, the tool prints an error message and exits with a n
 
 #### Recursive Folder Traversal (Lenient Mode)
 
-When operating in recursive mode, the tool traverses a directory tree and processes all *.md files it finds.
-In this mode, files without TOC markers are silently skipped, and files with TOC markers are processed normally.
-(Rational: for larger repos, it may not be feasible to add TOC markers to every Markdown file at once.)
-Stale files are reported (unless --quiet is specified) and will 
-result in a non-zero return value at the end of processing, but the 
-script will not immediately bail with an error -- processing continues for all files found.
+When operating in recursive mode, the tool traverses a directory tree and processes all `*.md` files it finds.
 
-When combined with --verbose, skipped files (Markdown files without start/end region markers) 
-are reported explicitly in this mode. For example: 
+In this mode:
+
+- Files without TOC markers are skipped silently (unless `--verbose` is specified).
+- Files with valid TOC markers are processed normally.
+- Stale files are reported (unless `--quiet` is specified).
+- When running in `--check` mode, stale files cause a non-zero exit code after traversal completes.
+
+Recursive mode is designed for gradual adoption across larger repositories, where not every Markdown file may yet contain TOC markers.
+Unlike single-file mode, recursive mode does **not** treat missing TOC markers as an error. This allows incremental rollout of TOC enforcement.
+
+However, structural or filesystem errors still abort the run immediately. These include:
+
+- unreadable files (e.g., permission errors),
+- mismatched TOC delimiters,
+- malformed TOC marker pairs,
+- files containing TOC markers but no Markdown headings.
+
+When such errors occur, the tool prints an error message and exits non-zero without continuing further traversal.
+
+When combined with `--verbose`, skipped files (Markdown files without start/end region markers) are reported explicitly. For example:
+
+```bash
+update-markdown-toc --recursive docs/ --verbose
+
+
 
 ```bash
 update-markdown-toc --recursive docs/ --verbose
