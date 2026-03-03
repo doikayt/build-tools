@@ -1,22 +1,17 @@
-import { processFile } from "./processFile.js";
-import { printStatus } from "./printStatus.js";
+import { RepositoryRunner } from "@datalackey/tooling-core";
+import { TocFileProcessor } from "./TocFileProcessor.js";
 
 import type { CliConfig } from "../types.js";
 
 export function runSingleFile(
-    filePath: string,
-    config: CliConfig
+  filePath: string,
+  config: CliConfig
 ): number {
-    const result = processFile(filePath, config);
 
-    if (config.checkMode && result.status === "stale") {
-        if (config.verbose && !config.quiet) {
-            console.log(`Stale: ${filePath}`);
-        }
-        return 1;
-    }
+  const runner = new RepositoryRunner({
+    processor: new TocFileProcessor(),
+    config
+  });
 
-    printStatus(result.status, filePath, config);
-
-    return 0;
+  return runner.runFiles([filePath]);
 }

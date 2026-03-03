@@ -75,6 +75,7 @@ export class RepositoryRunner<
   private printSummary(stats: Record<ProcessingStatus, number>) {
     const { quiet, verbose } = this.options.config;
     if (quiet || !verbose) return;
+    if (stats.updated + stats.unchanged + stats.stale + stats.skipped <= 1) return;
 
     console.log(
       `Summary: ${stats.updated} updated, ` +
