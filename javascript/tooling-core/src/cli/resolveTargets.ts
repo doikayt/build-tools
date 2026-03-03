@@ -7,9 +7,8 @@ export type ResolvedTargets =
     | { mode: "single"; files: string[] }
     | { mode: "recursive"; files: string[] };
 
-export function resolveTargets(
-    config: StandardCliConfig
-): ResolvedTargets {
+
+export function resolveTargets(config: StandardCliConfig): ResolvedTargets {
 
     if (config.help) {
         return { mode: "single", files: [] };
@@ -31,7 +30,6 @@ export function resolveTargets(
         }
 
         const stat = fs.statSync(resolved);
-
         if (!stat.isFile()) {
             throw new Error(`Not a file: ${resolved}`);
         }

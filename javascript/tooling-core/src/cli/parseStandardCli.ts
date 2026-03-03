@@ -14,42 +14,6 @@ export type StandardCliConfig = {
   excludeList: string[] | null;
 };
 
-function applyValidationRules(
-  quiet: boolean,
-  verbose: boolean,
-  isRecursive: boolean,
-  targetFile: string | null,
-  checkMode: boolean,
-  excludeValue: unknown,
-  argv: string[]
-): void {
-  if (quiet && verbose) {
-    throw new Error("--quiet and --verbose cannot be used together.");
-  }
-
-  if (isRecursive && targetFile) {
-    throw new Error("Cannot use --recursive with a file argument");
-  }
-
-  if (checkMode && !isRecursive && !targetFile) {
-    throw new Error("--check requires a file argument or --recursive.");
-  }
-
-  if (excludeValue !== undefined) {
-    if (typeof excludeValue !== "string") {
-      throw new Error("--exclude requires an argument.");
-    }
-  }
-
-  // parseArgs already enforces missing value for --recursive
-  // but we defensively ensure correctness:
-
-  if (argv.includes("--recursive") || argv.includes("-r")) {
-    if (!isRecursive) {
-      throw new Error("--recursive requires a directory argument.");
-    }
-  }
-}
 
 export function parseStandardCli(argv: string[]): StandardCliConfig {
   const { values, positionals } = parseArgs({
@@ -90,7 +54,6 @@ export function parseStandardCli(argv: string[]): StandardCliConfig {
 
   const recursivePath = values.recursive ?? null;
   const targetFile = positionals.length > 0 ? positionals[0] : null;
-
   const isRecursive = recursivePath !== null;
 
   applyValidationRules(
@@ -103,37 +66,8 @@ export function parseStandardCli(argv: string[]): StandardCliConfig {
     argv
   );
 
-  // ------------------------------------------------------------
-  // Exclude parsing
-  // ------------------------------------------------------------
-
-  let excludeList: string[] | null = null;
-
-  if (typeof values.exclude === "string") {
-    if (values.exclude === "") {
-      excludeList = [];
-    } else {
-      excludeList = values.exclude
-          .split(",")
-          .map(s => s.trim())
-          .filter(Boolean);
-    }
-  }
-
-  // ------------------------------------------------------------
-  // Mode normalization
-  // ------------------------------------------------------------
-
-  let mode: "single" | "recursive";
-  let targetPath: string | null;
-
-  if (isRecursive) {
-    mode = "recursive";
-    targetPath = recursivePath;
-  } else {
-    mode = "single";
-    targetPath = targetFile;
-  }
+  const excludeList = parseExcludeList(values.exclude);
+  const { mode, targetPath } = normalizeMode(isRecursive, recursivePath, targetFile);
 
   const config: StandardCliConfig = {
     help: false,
@@ -147,4 +81,74 @@ export function parseStandardCli(argv: string[]): StandardCliConfig {
   };
 
   return Object.freeze(config);
+}
+
+function parseExcludeList(excludeValue: unknown): string[] | null {
+  if (typeof excludeValue !== "string") {
+    return null;
+  }
+
+  if (excludeValue === "") {
+    return [];
+  }
+
+  return excludeValue
+      .split(",")
+      .map(s => s.trim())
+      .filter(Boolean);
+}
+
+function applyValidationRules(
+    quiet: boolean,
+    verbose: boolean,
+    isRecursive: boolean,
+    targetFile: string | null,
+    checkMode: boolean,
+    excludeValue: unknown,
+    argv: string[]
+): void {
+  if (quiet && verbose) {
+    throw new Error("--quiet and --verbose cannot be used together.");
+  }
+
+  if (isRecursive && targetFile) {
+    throw new Error("Cannot use --recursive with a file argument");
+  }
+
+  if (checkMode && !isRecursive && !targetFile) {
+    throw new Error("--check requires a file argument or --recursive.");
+  }
+
+  if (excludeValue !== undefined) {
+    if (typeof excludeValue !== "string") {
+      throw new Error("--exclude requires an argument.");
+    }
+  }
+
+  // parseArgs already enforces missing value for --recursive
+  // Here we verify the invariant: consistency between (internal) 'isRecursive' and user-specified flags
+
+  if (argv.includes("--recursive") || argv.includes("-r")) {
+    if (!isRecursive) {
+      throw new Error("--recursive requires a directory argument.");
+    }
+  }
+}
+
+function normalizeMode(
+    isRecursive: boolean,
+    recursivePath: string | null,
+    targetFile: string | null
+): { mode: "single" | "recursive"; targetPath: string | null } {
+  if (isRecursive) {
+    return {
+      mode: "recursive",
+      targetPath: recursivePath
+    };
+  }
+
+  return {
+    mode: "single",
+    targetPath: targetFile
+  };
 }

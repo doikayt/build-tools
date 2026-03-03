@@ -3,6 +3,8 @@
 
 A simplified entry point, intentionally opinionated, repository-wide documentation auto-generator and consistency checker.
 
+NOTE:  this plugin not currently stable as of 3/2024.  getting there...
+
 ---
 
 ## Overview
