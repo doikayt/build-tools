@@ -12,7 +12,8 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "npm run build && jest"
+    "test": "jest",
+    "test:unit": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js tests/unit"
   },
   "devDependencies": {
     "@types/jest": "^29.5.0",
