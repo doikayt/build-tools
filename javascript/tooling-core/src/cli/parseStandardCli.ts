@@ -59,7 +59,6 @@ export function parseStandardCli(argv: string[]): StandardCliConfig {
       targetFile,
       checkMode,
       values.exclude,
-      argv
   );
 
   const excludeList = parseExcludeList(values.exclude);
@@ -102,8 +101,7 @@ function applyValidationRules(
     isRecursive: boolean,
     targetFile: string | null,
     checkMode: boolean,
-    excludeValue: unknown,
-    argv: string[]
+    excludeValue: unknown
 ): void {
   if (quiet && verbose) {
     throw new Error("--quiet and --verbose cannot be used together.");
@@ -120,16 +118,6 @@ function applyValidationRules(
   if (excludeValue !== undefined) {
     if (typeof excludeValue !== "string") {
       throw new Error("--exclude requires an argument.");
-    }
-  }
-
-  // parseArgs already enforces missing value for --recursive
-  // Here we verify the invariant: consistency between (internal)
-  // 'isRecursive' and user-specified flags
-
-  if (argv.includes("--recursive") || argv.includes("-r")) {
-    if (!isRecursive) {
-      throw new Error("--recursive requires a directory argument.");
     }
   }
 }
