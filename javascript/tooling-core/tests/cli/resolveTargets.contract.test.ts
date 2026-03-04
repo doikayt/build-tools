@@ -13,7 +13,7 @@ function base(): StandardCliConfig {
     debug: false,
     mode: "single",
     targetPath: null,
-    excludeList: null
+    excludeList: undefined
   };
 }
 

@@ -10,10 +10,8 @@ export type StandardCliConfig = {
 
   mode: "single" | "recursive";
   targetPath: string | null;
-
-  excludeList: string[] | null;
+  excludeList?: string[];
 };
-
 
 export function parseStandardCli(argv: string[]): StandardCliConfig {
   const { values, positionals } = parseArgs({
@@ -33,7 +31,6 @@ export function parseStandardCli(argv: string[]): StandardCliConfig {
   // ------------------------------------------------------------
   // Help short-circuits all validation
   // ------------------------------------------------------------
-
   if (values.help) {
     return Object.freeze({
       help: true,
@@ -42,9 +39,8 @@ export function parseStandardCli(argv: string[]): StandardCliConfig {
       quiet: false,
       debug: false,
       mode: "single",
-      targetPath: null,
-      excludeList: null
-    });
+      targetPath: null
+    } satisfies StandardCliConfig);
   }
 
   const checkMode = Boolean(values.check);
@@ -57,45 +53,47 @@ export function parseStandardCli(argv: string[]): StandardCliConfig {
   const isRecursive = recursivePath !== null;
 
   applyValidationRules(
-    quiet,
-    verbose,
-    isRecursive,
-    targetFile,
-    checkMode,
-    values.exclude,
-    argv
+      quiet,
+      verbose,
+      isRecursive,
+      targetFile,
+      checkMode,
+      values.exclude,
+      argv
   );
 
   const excludeList = parseExcludeList(values.exclude);
-  const { mode, targetPath } = normalizeMode(isRecursive, recursivePath, targetFile);
+  const { mode, targetPath } = normalizeMode(
+      isRecursive,
+      recursivePath,
+      targetFile
+  );
 
   const config: StandardCliConfig = {
     help: false,
-    checkMode,
-    verbose,
-    quiet,
-    debug,
-    mode,
-    targetPath,
-    excludeList
+    checkMode: checkMode,
+    verbose: verbose,
+    quiet: quiet,
+    debug: debug,
+    mode: mode,
+    targetPath: targetPath,
+    excludeList: excludeList
   };
 
   return Object.freeze(config);
 }
 
-function parseExcludeList(excludeValue: unknown): string[] | null {
+function parseExcludeList(excludeValue: unknown): string[] | undefined {
   if (typeof excludeValue !== "string") {
-    return null;
+    return undefined;
   }
 
-  if (excludeValue === "") {
-    return [];
-  }
-
-  return excludeValue
+  const list = excludeValue
       .split(",")
-      .map(s => s.trim())
+      .map((s) => s.trim())
       .filter(Boolean);
+
+  return list;
 }
 
 function applyValidationRules(
@@ -126,7 +124,8 @@ function applyValidationRules(
   }
 
   // parseArgs already enforces missing value for --recursive
-  // Here we verify the invariant: consistency between (internal) 'isRecursive' and user-specified flags
+  // Here we verify the invariant: consistency between (internal)
+  // 'isRecursive' and user-specified flags
 
   if (argv.includes("--recursive") || argv.includes("-r")) {
     if (!isRecursive) {

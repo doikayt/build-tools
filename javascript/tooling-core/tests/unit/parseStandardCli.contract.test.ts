@@ -13,7 +13,7 @@ describe("parseStandardCli — happy paths", () => {
       debug: false,
       mode: "single",
       targetPath: "README.md",
-      excludeList: null
+      excludeList: undefined
     });
 
     expect(Object.isFrozen(config)).toBe(true);
@@ -33,7 +33,7 @@ describe("parseStandardCli — happy paths", () => {
       debug: false,
       mode: "recursive",
       targetPath: "docs",
-      excludeList: null
+      excludeList: undefined
     });
   });
 
