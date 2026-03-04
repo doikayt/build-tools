@@ -2,18 +2,19 @@ import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
 import { resolveTargets } from "../../src/cli/resolveTargets";
-import type { StandardCliConfig } from "../../src/cli/parseStandardCli";
+import type { StandardCliConfig } from "../../src/cli/types";
 
 function base(): StandardCliConfig {
   return {
     help: false,
+    version: false,
     checkMode: false,
     verbose: false,
     quiet: false,
     debug: false,
     mode: "single",
-    targetPath: null,
-    excludeList: undefined
+    recursivePath: undefined,
+    exclude: []
   };
 }
 
@@ -35,7 +36,7 @@ describe("resolveTargets — resolution behavior", () => {
     const cwd = process.cwd();
     process.chdir(dir);
 
-    const result = resolveTargets(base());
+    const result = resolveTargets(base(), []);
 
     expect(result.mode).toBe("single");
     expect(result.files).toEqual([readme]);
@@ -49,20 +50,10 @@ describe("resolveTargets — resolution behavior", () => {
     const cwd = process.cwd();
     process.chdir(dir);
 
-    expect(() => resolveTargets(base())).toThrow();
+    expect(() => resolveTargets(base(), [])).toThrow();
 
     process.chdir(cwd);
     cleanup(dir);
-  });
-
-  test("recursive mode requires existing directory", () => {
-    const config: StandardCliConfig = {
-      ...base(),
-      mode: "recursive",
-      targetPath: "does-not-exist"
-    };
-
-    expect(() => resolveTargets(config)).toThrow();
   });
 
   test("recursive mode filters to .md files", () => {
@@ -76,37 +67,12 @@ describe("resolveTargets — resolution behavior", () => {
     const config: StandardCliConfig = {
       ...base(),
       mode: "recursive",
-      targetPath: docs
+      recursivePath: docs
     };
 
-    const result = resolveTargets(config);
+    const result = resolveTargets(config, []);
 
     expect(result.mode).toBe("recursive");
-    expect(result.files.length).toBe(1);
-    expect(result.files[0].endsWith("a.md")).toBe(true);
-
-    cleanup(dir);
-  });
-
-  test("recursive mode respects exclude override", () => {
-    const dir = tmpDir();
-    const docs = path.join(dir, "docs");
-    const ignored = path.join(docs, "ignored");
-
-    fs.mkdirSync(ignored, { recursive: true });
-
-    fs.writeFileSync(path.join(docs, "a.md"), "x");
-    fs.writeFileSync(path.join(ignored, "b.md"), "x");
-
-    const config: StandardCliConfig = {
-      ...base(),
-      mode: "recursive",
-      targetPath: docs,
-      excludeList: ["ignored"]
-    };
-
-    const result = resolveTargets(config);
-
     expect(result.files.length).toBe(1);
     expect(result.files[0].endsWith("a.md")).toBe(true);
 

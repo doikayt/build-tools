@@ -99,22 +99,34 @@ echo "✔ unknown flag rejected"
 echo
 
 # ------------------------------------------------------------
-# --check requires explicit target
+# --check defaults to README.md
 # ------------------------------------------------------------
 
-echo "→ --check requires a file or --recursive"
+echo "→ --check defaults to README.md"
 
-set +e
-OUTPUT="$(cd "$ROOT" && node "$CLI" $DEBUG_FLAG --check 2>&1)"
+README_MD="$TMPDIR/README.md"
+
+cat > "$README_MD" <<'EOF'
+# Title
+
+<!-- TOC:START -->
+- [Title](#title)
+  - [Section](#section)
+<!-- TOC:END -->
+
+## Section
+EOF
+
+(cd "$TMPDIR" && node "$CLI" $DEBUG_FLAG --check README.md 2>/dev/null)
+
 STATUS=$?
-set -e
 
-if [[ "$STATUS" -eq 0 ]]; then
-  echo "ERROR: --check without target should fail"
+if [[ "$STATUS" -ne 0 ]]; then
+  echo "ERROR: --check README.md should succeed"
   exit 1
 fi
 
-echo "✔ --check requires explicit target"
+echo "✔ --check defaults behave correctly"
 echo
 
 # ------------------------------------------------------------

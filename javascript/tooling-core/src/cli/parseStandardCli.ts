@@ -1,141 +1,191 @@
-import { parseArgs } from "node:util";
+import type {
+  StandardCliConfig,
+  ParsedCliResult
+} from "./types.js"
 
-export type StandardCliConfig = {
-  help: boolean;
+export function parseStandardCli(argv: string[]): ParsedCliResult {
 
-  checkMode: boolean;
-  verbose: boolean;
-  quiet: boolean;
-  debug: boolean;
+  console.error("DEBUG parseStandardCli() called with argv:", argv)
 
-  mode: "single" | "recursive";
-  targetPath: string | null;
-  excludeList?: string[];
-};
+  const args = argv
+  console.error("DEBUG normalized args:", args)
 
-export function parseStandardCli(argv: string[]): StandardCliConfig {
-  const { values, positionals } = parseArgs({
-    args: argv,
-    allowPositionals: true,
-    options: {
-      check: { type: "boolean", short: "c" },
-      recursive: { type: "string", short: "r" },
-      exclude: { type: "string", short: "e" },
-      verbose: { type: "boolean", short: "v" },
-      quiet: { type: "boolean", short: "q" },
-      debug: { type: "boolean", short: "d" },
-      help: { type: "boolean", short: "h" }
-    }
-  });
+  const config = createDefaultConfig()
+  const positionals: string[] = []
+  const passthrough: string[] = []
 
-  // ------------------------------------------------------------
-  // Help short-circuits all validation
-  // ------------------------------------------------------------
-  if (values.help) {
-    return Object.freeze({
-      help: true,
-      checkMode: false,
-      verbose: false,
-      quiet: false,
-      debug: false,
-      mode: "single",
-      targetPath: null
-    } satisfies StandardCliConfig);
+  parseArguments(args, config, positionals, passthrough)
+
+  console.error("DEBUG after parseArguments:")
+  console.error("DEBUG config:", config)
+  console.error("DEBUG positionals:", positionals)
+  console.error("DEBUG passthrough:", passthrough)
+
+  if (!config.help && !config.version) {
+    validateFlagConflicts(config)
   }
 
-  const checkMode = Boolean(values.check);
-  const verbose = Boolean(values.verbose);
-  const quiet = Boolean(values.quiet);
-  const debug = Boolean(values.debug);
+  const result: ParsedCliResult = {
+    config,
+    positionals,
+    passthrough
+  }
 
-  const recursivePath = values.recursive ?? null;
-  const targetFile = positionals.length > 0 ? positionals[0] : null;
-  const isRecursive = recursivePath !== null;
+  console.error("DEBUG returning result:", result)
 
-  applyValidationRules(
-      quiet,
-      verbose,
-      isRecursive,
-      targetFile,
-      checkMode,
-      values.exclude,
-  );
+  return result
+}
 
-  const excludeList = parseExcludeList(values.exclude);
-  const { mode, targetPath } = normalizeMode(
-      isRecursive,
-      recursivePath,
-      targetFile
-  );
+
+function createDefaultConfig(): StandardCliConfig {
 
   const config: StandardCliConfig = {
     help: false,
-    checkMode: checkMode,
-    verbose: verbose,
-    quiet: quiet,
-    debug: debug,
-    mode: mode,
-    targetPath: targetPath,
-    excludeList: excludeList
-  };
+    version: false,
 
-  return Object.freeze(config);
-}
+    verbose: false,
+    quiet: false,
+    debug: false,
 
-function parseExcludeList(excludeValue: unknown): string[] | undefined {
-  if (typeof excludeValue !== "string") {
-    return undefined;
+    checkMode: false,
+
+    mode: "single",
+
+    exclude: []
   }
 
-  const list = excludeValue
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
+  console.error("DEBUG createDefaultConfig() ->", config)
 
-  return list;
+  return config
 }
 
-function applyValidationRules(
-    quiet: boolean,
-    verbose: boolean,
-    isRecursive: boolean,
-    targetFile: string | null,
-    checkMode: boolean,
-    excludeValue: unknown
+
+function parseArguments(
+    args: string[],
+    config: StandardCliConfig,
+    positionals: string[],
+    passthrough: string[]
 ): void {
-  if (quiet && verbose) {
-    throw new Error("--quiet and --verbose cannot be used together.");
-  }
 
-  if (isRecursive && targetFile) {
-    throw new Error("Cannot use --recursive with a file argument");
-  }
+  console.error("DEBUG parseArguments() starting")
 
-  if (checkMode && !isRecursive && !targetFile) {
-    throw new Error("--check requires a file argument or --recursive.");
-  }
+  for (let i = 0; i < args.length; i++) {
 
-  if (excludeValue !== undefined) {
-    if (typeof excludeValue !== "string") {
-      throw new Error("--exclude requires an argument.");
+    const arg = args[i]
+
+    console.error("DEBUG processing arg:", arg)
+
+    switch (arg) {
+
+      case "-h":
+      case "--help":
+        console.error("DEBUG matched help flag")
+        config.help = true
+        continue
+
+      case "--version":
+        console.error("DEBUG matched version flag")
+        config.version = true
+        continue
+
+      case "-v":
+      case "--verbose":
+        console.error("DEBUG matched verbose flag")
+        config.verbose = true
+        continue
+
+      case "-q":
+      case "--quiet":
+        console.error("DEBUG matched quiet flag")
+        config.quiet = true
+        continue
+
+      case "-d":
+      case "--debug":
+        console.error("DEBUG matched debug flag")
+        config.debug = true
+        continue
+
+      case "-c":
+      case "--check":
+        console.error("DEBUG matched check flag")
+        config.checkMode = true
+        continue
+
+      case "-r":
+      case "--recursive": {
+
+        console.error("DEBUG matched recursive flag")
+
+        const next = args[i + 1]
+        console.error("DEBUG recursive argument:", next)
+
+        if (next === undefined || next.startsWith("-")) {
+          throw new Error("--recursive requires a path")
+        }
+
+        config.mode = "recursive"
+        config.recursivePath = next
+
+        i++
+        continue
+      }
+
+      case "-e":
+      case "--exclude": {
+
+        console.error("DEBUG matched exclude flag")
+
+        const next = args[i + 1]
+        console.error("DEBUG exclude argument:", next)
+
+        if (next === undefined) {
+          throw new Error("--exclude requires a comma-separated list (or empty string)")
+        }
+
+        if (next !== "" && next.startsWith("-")) {
+          throw new Error("--exclude requires a comma-separated list (or empty string)")
+        }
+
+        config.exclude =
+            next === ""
+                ? []
+                : next
+                    .split(",")
+                    .map((s) => s.trim())
+                    .filter((s) => s.length > 0)
+
+        console.error("DEBUG parsed exclude list:", config.exclude)
+
+        i++
+        continue
+      }
+
+      default:
+
+        console.error("DEBUG default branch for arg:", arg)
+
+        if (arg.startsWith("-")) {
+          console.error("DEBUG treating as passthrough flag")
+          passthrough.push(arg)
+          continue
+        }
+
+        console.error("DEBUG treating as positional")
+        positionals.push(arg)
     }
   }
+
+  console.error("DEBUG parseArguments() finished")
 }
 
-function normalizeMode(
-    isRecursive: boolean,
-    recursivePath: string | null,
-    targetFile: string | null
-): { mode: "single" | "recursive"; targetPath: string | null } {
-  if (isRecursive) {
-    return {
-      mode: "recursive",
-      targetPath: recursivePath
-    };
-  }
 
-  return {
-    mode: "single",
-    targetPath: targetFile
-  };
+function validateFlagConflicts(config: StandardCliConfig): void {
+
+  console.error("DEBUG validateFlagConflicts()")
+
+  if (config.verbose && config.quiet) {
+    console.error("DEBUG conflict detected: verbose + quiet")
+    throw new Error("Cannot use --verbose and --quiet together")
+  }
 }

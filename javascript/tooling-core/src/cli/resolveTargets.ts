@@ -1,69 +1,66 @@
-import fs from "node:fs";
-import path from "node:path";
-import { walkFiles } from "../fs/walkFiles.js";
-import type { StandardCliConfig } from "./parseStandardCli.js";
+import fs from "node:fs"
+import path from "node:path"
+
+import { walkFiles } from "../fs/walkFiles.js"
+import type { StandardCliConfig } from "./types.js"
 
 export type ResolvedTargets =
     | { mode: "single"; files: string[] }
-    | { mode: "recursive"; files: string[] };
+    | { mode: "recursive"; files: string[] }
 
+export function resolveTargets(
+    config: StandardCliConfig,
+    positionals: string[]
+): ResolvedTargets {
 
-export function resolveTargets(config: StandardCliConfig): ResolvedTargets {
+    const cwd = process.cwd()
 
-    if (config.help) {
-        return { mode: "single", files: [] };
-    }
-
-    const cwd = process.cwd();
-
-    // ------------------------------------------------------------
-    // SINGLE MODE
-    // ------------------------------------------------------------
-
+    /*
+     SINGLE MODE
+    */
     if (config.mode === "single") {
 
-        const target = config.targetPath ?? "README.md";
-        const resolved = path.resolve(cwd, target);
+        const target = positionals[0] ?? "README.md"
+        const resolved = path.resolve(cwd, target)
 
         if (!fs.existsSync(resolved)) {
-            throw new Error(`File does not exist: ${resolved}`);
+            throw new Error(`File does not exist: ${resolved}`)
         }
 
-        const stat = fs.statSync(resolved);
+        const stat = fs.statSync(resolved)
         if (!stat.isFile()) {
-            throw new Error(`Not a file: ${resolved}`);
+            throw new Error(`Not a file: ${resolved}`)
         }
 
         return {
             mode: "single",
             files: [resolved]
-        };
+        }
     }
 
-    // ------------------------------------------------------------
-    // RECURSIVE MODE
-    // ------------------------------------------------------------
+    /*
+     RECURSIVE MODE
+    */
 
-    const resolvedRoot = path.resolve(cwd, config.targetPath!);
+    const root = config.recursivePath ?? "."
+    const resolvedRoot = path.resolve(cwd, root)
 
     if (!fs.existsSync(resolvedRoot)) {
-        throw new Error(`Recursive path does not exist: ${resolvedRoot}`);
+        throw new Error(`Directory does not exist: ${resolvedRoot}`)
     }
 
-    const stat = fs.statSync(resolvedRoot);
-
-    if (!stat.isDirectory()) {
-        throw new Error(`--recursive requires a directory: ${resolvedRoot}`);
+    if (!fs.statSync(resolvedRoot).isDirectory()) {
+        throw new Error(`Not a directory: ${resolvedRoot}`)
     }
 
     const files = walkFiles({
         rootDir: resolvedRoot,
         extensions: [".md"],
-        excludeDirs: config.excludeList ?? undefined
-    });
+        excludeDirs: config.exclude.length > 0 ? config.exclude : undefined
+    })
 
     return {
         mode: "recursive",
         files
-    };
+    }
 }

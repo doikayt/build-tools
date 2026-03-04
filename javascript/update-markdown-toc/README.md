@@ -130,8 +130,17 @@ Options:
   -h, --help                                Show this help message and exit
 ```
 
-When using --check, a target file or a recursive folder must be specified
-explicitly. Unlike normal operation, --check does not default to README.md.
+When using `--check`, if no file is specified, the tool defaults to `README.md`
+in the current working directory. This means the following two commands are equivalent:
+
+```bash
+npx update-markdown-toc --check
+npx update-markdown-toc --check README.md
+````
+
+To check an entire documentation tree in CI, use `--check --recursive <path>.`
+
+
 
 ### Configurable Exclusion List for Recursive Traversal
 
