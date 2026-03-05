@@ -20,18 +20,16 @@ Options:
 
 try {
 
-  const exitCode = runPlugin({
+  runPlugin({
     argv: process.argv.slice(2),
     processor: new TocFileProcessor(),
     printHelp
   });
 
-  process.exit(exitCode);
-
 } catch (err) {
 
   const message =
-    err instanceof Error ? err.message : String(err);
+      err instanceof Error ? err.message : String(err);
 
   console.error(`ERROR: ${message}`);
   process.exit(1);

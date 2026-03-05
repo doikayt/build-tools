@@ -44,7 +44,8 @@ bash scripts/recursive-traversal-test.sh
 
 ### Test trace mode (recommended when debugging)
 
-All recursive-mode test scripts accept a test-harness trace flag (`--trace` or `--show-run`), which prints the exact CLI command being executed before it runs. We may apply this to non-recursive tests in the future.
+All recursive-mode test scripts accept a test-harness trace flag (`--trace`), which prints the exact CLI command 
+being executed before it runs. We may apply this to non-recursive tests in the future.
 
 This flag does not alter CLI behavior. To enable CLI verbosity or debugging, re-run the printed command manually with `--verbose` or `--debug`.
 

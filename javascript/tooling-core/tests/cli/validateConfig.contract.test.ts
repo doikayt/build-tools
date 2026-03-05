@@ -5,7 +5,7 @@ function base(): StandardCliConfig {
   return {
     help: false,
     version: false,
-    checkMode: false,
+    runMode: "update",
     verbose: false,
     quiet: false,
     debug: false,

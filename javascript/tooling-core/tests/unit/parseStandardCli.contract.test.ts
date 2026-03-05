@@ -111,7 +111,7 @@ describe("parseStandardCli — check mode", () => {
       "README.md"
     ]);
 
-    expect(result.config.checkMode).toBe(true);
+    expect(result.config.runMode).toBe("check");
     expect(result.config.mode).toBe("single");
     expect(result.positionals).toEqual(["README.md"]);
   });
@@ -123,7 +123,7 @@ describe("parseStandardCli — check mode", () => {
       "docs"
     ]);
 
-    expect(result.config.checkMode).toBe(true);
+    expect(result.config.runMode).toBe("check");
     expect(result.config.mode).toBe("recursive");
   });
 

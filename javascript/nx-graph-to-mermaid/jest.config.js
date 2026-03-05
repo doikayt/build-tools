@@ -1,5 +1,9 @@
+// nx-graph-to-mermaid/jest.config.js
 module.exports = {
-  preset: 'ts-jest',
   testEnvironment: 'node',
-  roots: ['<rootDir>/tests']
+  roots: ['<rootDir>/tests'],
+
+  transform: {
+    '^.+\\.ts$': ['ts-jest', { tsconfig: 'tsconfig.test.json' }]
+  }
 };

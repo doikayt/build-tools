@@ -4,14 +4,10 @@ import path from "node:path";
 import { generateTOC } from "./generateToc.js";
 import type { CliConfig } from "../types.js";
 
-export type ProcessResult = {
-    status: "updated" | "unchanged" | "stale" | "skipped";
-};
-
 export function processFile(
     filePath: string,
     config: CliConfig
-): ProcessResult {
+): "updated" | "unchanged" | "stale" | "skipped" {
 
     const absolutePath = path.resolve(filePath);
 
@@ -28,23 +24,25 @@ export function processFile(
     try {
         updated = generateTOC(content);
     } catch (err: unknown) {
+
         const message = err instanceof Error ? err.message : String(err);
 
         if (message === "TOC delimiters not found" && config.mode === "recursive") {
-            return { status: "skipped" };
+            return "skipped";
         }
 
         throw new Error(`${absolutePath}: ${message}`);
     }
 
     if (updated === content) {
-        return { status: "unchanged" };
+        return "unchanged";
     }
 
-    if (config.checkMode) {
-        return { status: "stale" };
+    if (config.runMode === "check") {
+        return "stale";
     }
 
     fs.writeFileSync(filePath, updated, "utf8");
-    return { status: "updated" };
+
+    return "updated";
 }

@@ -6,7 +6,6 @@ export class TocFileProcessor
     implements FileProcessor<CliConfig>
 {
   process(filePath: string, config: CliConfig) {
-    const result = processFile(filePath, config);
-    return result.status;
+    return processFile(filePath, config);
   }
 }

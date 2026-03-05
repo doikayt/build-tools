@@ -1,6 +1,6 @@
 import { parseStandardCli } from "./parseStandardCli.js";
 import { listFilesToProcess } from "./listFilesToProcess.js";
-import { RepositoryRunner } from "../repository/RepositoryRunner.js";
+import {RepositoryRunner, RepositoryStats} from "../repository/RepositoryRunner.js";
 
 import type { ProcessingStatus } from "../repository/types.js";
 import { StandardCliConfig } from "./types.js";
@@ -18,7 +18,7 @@ export interface PluginOptions {
 
 export function runPlugin(
     options: PluginOptions
-): number {
+): RepositoryStats {
 
   const { argv, processor, printHelp } = options;
 
@@ -30,7 +30,12 @@ export function runPlugin(
   }
   if (config.help) {
     printHelp();
-    return 0;
+    return {
+      updated: 0,
+      unchanged: 0,
+      stale: 0,
+      skipped: 0
+    };
   }
 
   const resolved =

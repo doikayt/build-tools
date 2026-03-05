@@ -1,7 +1,9 @@
 # Basic Project
 
 <!-- TOC:START -->
-this should be replaced
+- [Basic Project](#basic-project)
+  - [Intro](#intro)
+  - [Usage](#usage)
 <!-- TOC:END -->
 
 ## Intro

@@ -1,3 +1,5 @@
+import type { RunMode } from "../cli/runMode.js";
+
 export type ProcessingStatus =
   | "updated"
   | "unchanged"
@@ -5,7 +7,7 @@ export type ProcessingStatus =
   | "skipped";
 
 export interface OutputPolicyConfig {
-  checkMode: boolean;
+  runMode: RunMode;
   verbose: boolean;
   quiet: boolean;
   debug: boolean;

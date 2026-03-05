@@ -1,3 +1,4 @@
+import type { RunMode } from "./runMode.js";
 import type {
   StandardCliConfig,
   ParsedCliResult
@@ -38,7 +39,7 @@ function createDefaultConfig(): StandardCliConfig {
     quiet: false,
     debug: false,
 
-    checkMode: false,
+    runMode: "update",
 
     mode: "single",
 
@@ -89,7 +90,7 @@ function parseArguments(
 
       case "-c":
       case "--check":
-        config.checkMode = true
+        config.runMode = "check"
         continue
 
       case "-r":

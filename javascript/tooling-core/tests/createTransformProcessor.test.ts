@@ -5,8 +5,7 @@ import os from "node:os";
 import { createTransformProcessor } from "../src";
 
 const testConfig = {
-  check: false,
-  checkMode: false,
+  runMode: "update" as const,
   verbose: false,
   quiet: false,
   debug: false

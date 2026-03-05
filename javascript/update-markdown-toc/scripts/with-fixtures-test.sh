@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Load test harness (enables --trace)
+source "$(dirname "$0")/test-lib.sh" "$@"
+
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 CLI="$ROOT/bin/update-markdown-toc.js"
 FIXTURES="$ROOT/test-fixtures"
@@ -37,7 +40,7 @@ for dir in "$FIXTURES"/*; do
     # Always restore README on exit from this iteration
     trap cleanup_fixture EXIT
 
-    node "$CLI" $DEBUG_FLAG "$README" 2>/dev/null
+    run node "$CLI" $DEBUG_FLAG "$README" 2>/dev/null
 
     if ! diff "$README" "$EXPECTED"; then
       echo
@@ -71,7 +74,7 @@ echo "========================================"
 MISSING_FILE="/tmp/not-there-file-$$.md"
 
 set +e
-OUTPUT="$(node "$CLI" $DEBUG_FLAG "$MISSING_FILE" 2>&1)"
+OUTPUT="$(run_capture node "$CLI" $DEBUG_FLAG "$MISSING_FILE" 2>&1)"
 STATUS=$?
 set -e
 
@@ -108,7 +111,7 @@ cat > "$NO_TOC_FILE" <<'EOF'
 EOF
 
 set +e
-OUTPUT="$(node "$CLI" $DEBUG_FLAG "$NO_TOC_FILE" 2>&1)"
+OUTPUT="$(run_capture node "$CLI" $DEBUG_FLAG "$NO_TOC_FILE" 2>&1)"
 STATUS=$?
 set -e
 
@@ -151,7 +154,7 @@ EOF
 chmod 000 "$UNREADABLE_FILE"
 
 set +e
-OUTPUT="$(node "$CLI" $DEBUG_FLAG "$UNREADABLE_FILE" 2>&1)"
+OUTPUT="$(run_capture node "$CLI" $DEBUG_FLAG "$UNREADABLE_FILE" 2>&1)"
 STATUS=$?
 set -e
 
@@ -176,4 +179,3 @@ echo
 echo "========================================"
 echo " ✅ ALL FIXTURE TESTS PASSED"
 echo "========================================"
-

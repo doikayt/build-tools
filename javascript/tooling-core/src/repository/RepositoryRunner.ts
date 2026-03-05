@@ -1,99 +1,127 @@
-import {
-  ProcessingStatus,
-  FileProcessor,
-  OutputPolicyConfig
-} from "./types.js";
+import type { OutputPolicyConfig } from "./types.js"
+
+export type ProcessingStatus =
+    | "updated"
+    | "unchanged"
+    | "stale"
+    | "skipped"
+
+export interface FileProcessor<TConfig extends OutputPolicyConfig> {
+  process(filePath: string, config: TConfig): ProcessingStatus
+}
 
 export interface RepositoryRunnerOptions<TConfig extends OutputPolicyConfig> {
-  processor: FileProcessor<TConfig>;
-  config: TConfig;
+  processor: FileProcessor<TConfig>
+  config: TConfig
+}
+
+export interface RepositoryStats {
+  updated: number
+  unchanged: number
+  stale: number
+  skipped: number
 }
 
 export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
 
-  constructor(
-    private options: RepositoryRunnerOptions<TConfig>
-  ) {}
+  private readonly processor: FileProcessor<TConfig>
+  private readonly config: TConfig
 
-  runFiles(files: string[]): number {
-    const { processor, config } = this.options;
+  constructor(options: RepositoryRunnerOptions<TConfig>) {
+    this.processor = options.processor
+    this.config = options.config
+  }
 
-    const stats: Record<ProcessingStatus, number> = {
+  runFiles(files: string[]): RepositoryStats {
+
+    const stats: RepositoryStats = {
       updated: 0,
       unchanged: 0,
       stale: 0,
       skipped: 0
-    };
+    }
+
+    const isRecursive = files.length > 1
 
     for (const file of files) {
+
+      let result: ProcessingStatus
+
       try {
-        const status = processor.process(file, config);
-        stats[status]++;
-        this.printStatus(status, file);
+        result = this.processor.process(file, this.config)
       } catch (err) {
-        this.printError(err);
-        return 1;
+
+        if (isRecursive) {
+          const message = err instanceof Error ? err.message : String(err)
+          console.error(`ERROR: ${message}`)
+          continue
+        }
+
+        throw err
+      }
+
+      if (!this.config.quiet) {
+        switch (result) {
+
+          case "updated":
+            console.log(`Updated: ${file}`)
+            break
+
+          case "unchanged":
+            console.log(`Up-to-date: ${file}`)
+            break
+
+          case "stale":
+            console.log(`Stale: ${file}`)
+            break
+
+          case "skipped":
+            console.log(`Skipped (no markers): ${file}`)
+            break
+        }
+      }
+
+      switch (result) {
+
+        case "updated":
+          stats.updated++
+          break
+
+        case "unchanged":
+          stats.unchanged++
+          break
+
+        case "stale":
+          stats.stale++
+          break
+
+        case "skipped":
+          stats.skipped++
+          break
       }
     }
 
-    this.printSummary(stats);
+    this.printSummary(stats, isRecursive)
 
-    if (config.checkMode && stats.stale > 0) {
-      return 1;
+    if (this.config.runMode === "check" && stats.stale > 0) {
+      process.exitCode = 1
     }
 
-    return 0;
+    return stats
   }
 
-  private printStatus(status: ProcessingStatus, file: string) {
-    const { quiet, verbose, checkMode } = this.options.config;
+  private printSummary(stats: RepositoryStats, isRecursive: boolean): void {
 
-    if (quiet) return;
-
-    if (checkMode) {
-      if (status === "stale") {
-        console.log(`Stale: ${file}`);
-      } else if (verbose && status !== "updated") {
-        console.log(this.format(status, file));
-      }
-      return;
+    if (this.config.quiet) {
+      return
     }
 
-    if (verbose) {
-      console.log(this.format(status, file));
-      return;
+    if (!isRecursive || !this.config.verbose) {
+      return
     }
-
-    if (status === "updated") {
-      console.log(`Updated: ${file}`);
-    }
-  }
-
-  private printSummary(stats: Record<ProcessingStatus, number>) {
-    const { quiet, verbose } = this.options.config;
-    if (quiet || !verbose) return;
-    if (stats.updated + stats.unchanged + stats.stale + stats.skipped <= 1) return;
 
     console.log(
-      `Summary: ${stats.updated} updated, ` +
-      `${stats.stale} stale, ` +
-      `${stats.unchanged} unchanged, ` +
-      `${stats.skipped} skipped`
-    );
-  }
-
-  private format(status: ProcessingStatus, file: string) {
-    switch (status) {
-      case "updated": return `Updated: ${file}`;
-      case "unchanged": return `Up-to-date: ${file}`;
-      case "stale": return `Stale: ${file}`;
-      case "skipped": return `Skipped (no markers): ${file}`;
-    }
-  }
-
-  private printError(err: unknown) {
-    const message =
-      err instanceof Error ? err.message : String(err);
-    console.error(`ERROR: ${message}`);
+        `Summary: ${stats.updated} updated, ${stats.stale} stale, ${stats.unchanged} unchanged, ${stats.skipped} skipped`
+    )
   }
 }

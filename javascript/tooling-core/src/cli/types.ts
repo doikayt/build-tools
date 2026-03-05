@@ -1,3 +1,5 @@
+import type { RunMode } from "./runMode.js"
+
 export interface StandardCliConfig {
     help: boolean
     version: boolean
@@ -6,7 +8,7 @@ export interface StandardCliConfig {
     quiet: boolean
     debug: boolean
 
-    checkMode: boolean
+    runMode: RunMode
 
     mode: "single" | "recursive"
 
