@@ -1,14 +1,14 @@
-export { walkFiles } from './fs/walkFiles.js';
+export { runPlugin } from "./cli/runPlugin.js";
 
-export * from "./repository/types.js";
-export * from "./repository/RepositoryRunner.js";
+export type {
+    ProcessingStatus,
+    FileProcessor,
+    OutputPolicyConfig
+} from "./repository/types.js";
 
-export { parseStandardCli } from "./cli/parseStandardCli.js";
 export type { StandardCliConfig } from "./cli/types.js";
 
-export { listFilesToProcess } from "./cli/listFilesToProcess.js";
-export type { ResolvedTargets } from "./cli/listFilesToProcess.js";
 
-export { validateConfig } from "./cli/validateConfig.js";
 
-export { runPlugin } from "./cli/runPlugin.js";
+
+export { walkFiles } from './fs/walkFiles.js';      // TODO - only need for mermaid.. can remove when that plugin uses more of tooling core
