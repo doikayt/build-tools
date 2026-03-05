@@ -4,16 +4,13 @@ import {
   OutputPolicyConfig
 } from "./types.js";
 
-export interface RepositoryRunnerOptions<
-  TConfig extends OutputPolicyConfig
-> {
+export interface RepositoryRunnerOptions<TConfig extends OutputPolicyConfig> {
   processor: FileProcessor<TConfig>;
   config: TConfig;
 }
 
-export class RepositoryRunner<
-  TConfig extends OutputPolicyConfig
-> {
+export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
+
   constructor(
     private options: RepositoryRunnerOptions<TConfig>
   ) {}

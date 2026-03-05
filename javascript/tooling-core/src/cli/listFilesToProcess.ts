@@ -8,7 +8,7 @@ export type ResolvedTargets =
     | { mode: "single"; files: string[] }
     | { mode: "recursive"; files: string[] }
 
-export function resolveTargets(
+export function listFilesToProcess(
     config: StandardCliConfig,
     positionals: string[]
 ): ResolvedTargets {

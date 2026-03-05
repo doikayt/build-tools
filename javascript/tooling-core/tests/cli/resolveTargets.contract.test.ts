@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
-import { resolveTargets } from "../../src/cli/resolveTargets";
+import { listFilesToProcess } from "../../src/cli/listFilesToProcess";
 import type { StandardCliConfig } from "../../src/cli/types";
 
 function base(): StandardCliConfig {
@@ -26,7 +26,7 @@ function cleanup(dir: string) {
   fs.rmSync(dir, { recursive: true, force: true });
 }
 
-describe("resolveTargets — resolution behavior", () => {
+describe("listFilesToProcess — resolution behavior", () => {
 
   test("single mode defaults to README.md", () => {
     const dir = tmpDir();
@@ -36,7 +36,7 @@ describe("resolveTargets — resolution behavior", () => {
     const cwd = process.cwd();
     process.chdir(dir);
 
-    const result = resolveTargets(base(), []);
+    const result = listFilesToProcess(base(), []);
 
     expect(result.mode).toBe("single");
     expect(result.files).toEqual([readme]);
@@ -50,7 +50,7 @@ describe("resolveTargets — resolution behavior", () => {
     const cwd = process.cwd();
     process.chdir(dir);
 
-    expect(() => resolveTargets(base(), [])).toThrow();
+    expect(() => listFilesToProcess(base(), [])).toThrow();
 
     process.chdir(cwd);
     cleanup(dir);
@@ -70,7 +70,7 @@ describe("resolveTargets — resolution behavior", () => {
       recursivePath: docs
     };
 
-    const result = resolveTargets(config, []);
+    const result = listFilesToProcess(config, []);
 
     expect(result.mode).toBe("recursive");
     expect(result.files.length).toBe(1);
