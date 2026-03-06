@@ -49,6 +49,10 @@ echo "→ Running recursive output matrix tests"
 bash "$SCRIPTS/recursive-output-matrix.test.sh" $TEST_TRACE_FLAG
 echo
 
+echo "→ Running recursive corner case tests"
+bash "$SCRIPTS/recursive-mode-corner-cases.test.sh" $TEST_TRACE_FLAG
+echo
+
 echo "→ Running CRLF line ending tests"
 bash "$SCRIPTS/crlf-line-endings.test.sh" $TEST_TRACE_FLAG
 echo
