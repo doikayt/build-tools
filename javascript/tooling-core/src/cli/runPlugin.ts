@@ -1,6 +1,7 @@
 import {RepositoryRunner} from "../repository/RepositoryRunner.js"
 import type {FileProcessor} from "../repository/RepositoryRunner.js"
 import type {StandardCliConfig} from "./types.js"
+import { createRunnerPolicy } from "../runner/createRunnerPolicy.js"
 
 export function runPlugin(
     files: string[],
@@ -8,14 +9,7 @@ export function runPlugin(
     config: StandardCliConfig
 ): void {
 
-    const isRecursive = config.mode === "recursive"
-
-    const policy = {
-        isRecursive: isRecursive,
-        printPerFileStatus: !config.quiet,
-        printSummary: isRecursive,
-        continueOnError: isRecursive
-    }
+    const policy = createRunnerPolicy(config)
 
     const runner =
         new RepositoryRunner<StandardCliConfig>({

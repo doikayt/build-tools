@@ -16,3 +16,4 @@ export { createTransformProcessor } from "./repository/createTransformProcessor.
 
 export * from "./runner/RunnerPolicy.js";
 export * from "./runner/DefaultRunnerPolicy.js";
+export { createRunnerPolicy } from "./runner/createRunnerPolicy.js";
