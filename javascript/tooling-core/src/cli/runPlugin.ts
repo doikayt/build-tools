@@ -1,49 +1,28 @@
-import { parseStandardCli } from "./parseStandardCli.js";
-import { listFilesToProcess } from "./listFilesToProcess.js";
-import {RepositoryRunner, RepositoryStats} from "../repository/RepositoryRunner.js";
-
-import type { ProcessingStatus } from "../repository/types.js";
-import { StandardCliConfig } from "./types.js";
-
-export interface PluginOptions {
-  argv: string[];
-  processor: {
-    process(
-        filePath: string,
-        config: StandardCliConfig
-    ): ProcessingStatus;
-  };
-  printHelp: () => void;
-}
+import { RepositoryRunner } from "../repository/RepositoryRunner.js"
+import type { FileProcessor } from "../repository/RepositoryRunner.js"
+import type { StandardCliConfig } from "./types.js"
 
 export function runPlugin(
-    options: PluginOptions
-): RepositoryStats {
+    files: string[],
+    processor: FileProcessor<StandardCliConfig>,
+    config: StandardCliConfig
+): void {
 
-  const { argv, processor, printHelp } = options;
+  const isRecursive = files.length > 1
 
-  const { config, positionals, passthrough } =
-      parseStandardCli(argv);
-
-  if (passthrough.length > 0) {
-    throw new Error(`Unknown option: ${passthrough[0]}`);
-  }
-  if (config.help) {
-    printHelp();
-    return {
-      updated: 0,
-      unchanged: 0,
-      stale: 0,
-      skipped: 0
-    };
+  const policy = {
+    isRecursive: isRecursive,
+    printPerFileStatus: true,
+    printSummary: isRecursive && config.verbose,
+    continueOnError: isRecursive
   }
 
-  const resolved =
-      listFilesToProcess(config, positionals);
   const runner =
       new RepositoryRunner<StandardCliConfig>({
-        processor,
-        config
-      });
-  return runner.runFiles(resolved.files);
+        processor: processor,
+        config: config,
+        policy: policy
+      })
+
+  runner.runFiles(files)
 }

@@ -16,3 +16,11 @@ export interface OutputPolicyConfig {
 export interface FileProcessor<TConfig extends OutputPolicyConfig> {
   process(filePath: string, config: TConfig): ProcessingStatus;
 }
+
+export interface RunnerPolicy {
+  isRecursive: boolean
+  printPerFileStatus: boolean
+  printSummary: boolean
+  continueOnError: boolean
+}
+

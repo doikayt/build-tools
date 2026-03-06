@@ -1,10 +1,11 @@
 import type { OutputPolicyConfig } from "./types.js"
+import type { RunnerPolicy } from "./types.js"
 
 export type ProcessingStatus =
-    | "updated"
-    | "unchanged"
-    | "stale"
-    | "skipped"
+  | "updated"
+  | "unchanged"
+  | "stale"
+  | "skipped"
 
 export interface FileProcessor<TConfig extends OutputPolicyConfig> {
   process(filePath: string, config: TConfig): ProcessingStatus
@@ -13,6 +14,7 @@ export interface FileProcessor<TConfig extends OutputPolicyConfig> {
 export interface RepositoryRunnerOptions<TConfig extends OutputPolicyConfig> {
   processor: FileProcessor<TConfig>
   config: TConfig
+  policy: RunnerPolicy
 }
 
 export interface RepositoryStats {
@@ -26,10 +28,12 @@ export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
 
   private readonly processor: FileProcessor<TConfig>
   private readonly config: TConfig
+  private readonly policy: RunnerPolicy
 
   constructor(options: RepositoryRunnerOptions<TConfig>) {
     this.processor = options.processor
     this.config = options.config
+    this.policy = options.policy
   }
 
   runFiles(files: string[]): RepositoryStats {
@@ -41,7 +45,9 @@ export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
       skipped: 0
     }
 
-    const isRecursive = files.length > 1
+    if (!Array.isArray(files)) {
+      throw new Error("RepositoryRunner expected files[] array");
+    }
 
     for (const file of files) {
 
@@ -51,7 +57,7 @@ export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
         result = this.processor.process(file, this.config)
       } catch (err) {
 
-        if (isRecursive) {
+        if (this.policy.continueOnError) {
           const message = err instanceof Error ? err.message : String(err)
           console.error(`ERROR: ${message}`)
           continue
@@ -60,8 +66,8 @@ export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
         throw err
       }
 
-      if (!this.config.quiet) {
-        switch (result) {
+      if (this.policy.printPerFileStatus && !this.config.quiet) {
+        switch (result) {     // TODO - refactor to method
 
           case "updated":
             console.log(`Updated: ${file}`)
@@ -81,7 +87,7 @@ export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
         }
       }
 
-      switch (result) {
+      switch (result) {       // TODO - refactor to method
 
         case "updated":
           stats.updated++
@@ -101,7 +107,7 @@ export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
       }
     }
 
-    this.printSummary(stats, isRecursive)
+    this.printSummary(stats)
 
     if (this.config.runMode === "check" && stats.stale > 0) {
       process.exitCode = 1
@@ -110,18 +116,14 @@ export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
     return stats
   }
 
-  private printSummary(stats: RepositoryStats, isRecursive: boolean): void {
+  private printSummary(stats: RepositoryStats): void {
 
-    if (this.config.quiet) {
-      return
-    }
-
-    if (!isRecursive || !this.config.verbose) {
+    if (!this.policy.printSummary || this.config.quiet) {
       return
     }
 
     console.log(
-        `Summary: ${stats.updated} updated, ${stats.stale} stale, ${stats.unchanged} unchanged, ${stats.skipped} skipped`
+      `Summary: ${stats.updated} updated, ${stats.stale} stale, ${stats.unchanged} unchanged, ${stats.skipped} skipped`
     )
   }
 }
