@@ -12,7 +12,7 @@ export function runPlugin(
 
   const policy = {
     isRecursive: isRecursive,
-    printPerFileStatus: true,
+    printPerFileStatus: !config.quiet,
     printSummary: isRecursive && config.verbose,
     continueOnError: isRecursive
   }
