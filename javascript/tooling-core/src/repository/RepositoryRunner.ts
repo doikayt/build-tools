@@ -38,14 +38,9 @@ export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
 
   runFiles(files: string[]): RepositoryStats {
 
-    const stats: RepositoryStats = {
-      updated: 0,
-      unchanged: 0,
-      stale: 0,
-      skipped: 0
-    }
+    const stats: RepositoryStats = this.getInitCounterState()   // all counters of file-processing-results intit to 0's
 
-    if (!Array.isArray(files)) {
+    if (!Array.isArray(files)) {                                // JavaScript plugin clients might pass us bad things
       throw new Error("RepositoryRunner expected files[] array");
     }
 
@@ -67,44 +62,9 @@ export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
       }
 
       if (this.policy.printPerFileStatus && !this.config.quiet) {
-        switch (result) {     // TODO - refactor to method
-
-          case "updated":
-            console.log(`Updated: ${file}`)
-            break
-
-          case "unchanged":
-            console.log(`Up-to-date: ${file}`)
-            break
-
-          case "stale":
-            console.log(`Stale: ${file}`)
-            break
-
-          case "skipped":
-            console.log(`Skipped (no markers): ${file}`)
-            break
-        }
+        this.printFileStatus(result, file);                        // Notify file processing result: updated,stale,etc.
       }
-
-      switch (result) {       // TODO - refactor to method
-
-        case "updated":
-          stats.updated++
-          break
-
-        case "unchanged":
-          stats.unchanged++
-          break
-
-        case "stale":
-          stats.stale++
-          break
-
-        case "skipped":
-          stats.skipped++
-          break
-      }
+      this.updateCounters(result, stats);
     }
 
     this.printSummary(stats)
@@ -114,6 +74,57 @@ export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
     }
 
     return stats
+  }
+
+  private updateCounters(result: "updated" | "unchanged" | "stale" | "skipped", stats: RepositoryStats) {
+    switch (result) {       // TODO - refactor to method
+
+      case "updated":
+        stats.updated++
+        break
+
+      case "unchanged":
+        stats.unchanged++
+        break
+
+      case "stale":
+        stats.stale++
+        break
+
+      case "skipped":
+        stats.skipped++
+        break
+    }
+  }
+
+  private printFileStatus(result: "updated" | "unchanged" | "stale" | "skipped", file: string) {
+    switch (result) {     // TODO - refactor to method
+
+      case "updated":
+        console.log(`Updated: ${file}`)
+        break
+
+      case "unchanged":
+        console.log(`Up-to-date: ${file}`)
+        break
+
+      case "stale":
+        console.log(`Stale: ${file}`)
+        break
+
+      case "skipped":
+        console.log(`Skipped (no markers): ${file}`)
+        break
+    }
+  }
+
+  private getInitCounterState() {
+    return {
+      updated: 0,
+      unchanged: 0,
+      stale: 0,
+      skipped: 0
+    };
   }
 
   private printSummary(stats: RepositoryStats): void {
