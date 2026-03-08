@@ -1,5 +1,5 @@
 import type { OutputPolicyConfig } from "./types.js"
-import type { RunnerPolicy } from "./types.js"
+import type { RunnerPolicy } from "../policy/RunnerPolicy.js"
 
 export type ProcessingStatus =
   | "updated"
@@ -52,7 +52,7 @@ export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
         result = this.processor.process(file, this.config)
       } catch (err) {
 
-        if (this.policy.continueOnError) {
+        if (this.policy.onProcessorError(file, err) === "continue") {
           const message = err instanceof Error ? err.message : String(err)
           console.error(`ERROR: ${message}`)
           continue
@@ -61,7 +61,7 @@ export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
         throw err
       }
 
-      if (this.policy.printPerFileStatus && !this.config.quiet) {
+      if (this.policy.shouldPrintFileStatus() && !this.config.quiet) {
         this.printFileStatus(result, file);                        // Notify file processing result: updated,stale,etc.
       }
       this.updateCounters(result, stats);
@@ -129,7 +129,7 @@ export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
 
   private printSummary(stats: RepositoryStats): void {
 
-    if (!this.policy.printSummary || this.config.quiet) {
+    if (!this.policy.shouldPrintSummary() || this.config.quiet) {
       return
     }
 

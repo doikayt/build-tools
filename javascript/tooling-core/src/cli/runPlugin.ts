@@ -1,22 +1,43 @@
-import {RepositoryRunner} from "../repository/RepositoryRunner.js"
-import type {FileProcessor} from "../repository/RepositoryRunner.js"
-import type {StandardCliConfig} from "./types.js"
-import { createRunnerPolicy } from "../runner/createRunnerPolicy.js"
+import { RepositoryRunner } from "../repository/RepositoryRunner.js"
+import type { OutputPolicyConfig } from "../repository/types.js"
+import type { FileProcessor } from "../repository/RepositoryRunner.js"
+import type { RunnerPolicy } from "../policy/RunnerPolicy.js"
 
-export function runPlugin(
+export function runPlugin<TConfig extends OutputPolicyConfig>(
     files: string[],
-    processor: FileProcessor<StandardCliConfig>,
-    config: StandardCliConfig
-): void {
+    processor: FileProcessor<TConfig>,
+    config: TConfig
+) {
 
-    const policy = createRunnerPolicy(config)
+    const policy: RunnerPolicy = {
 
-    const runner =
-        new RepositoryRunner<StandardCliConfig>({
-            processor: processor,
-            config: config,
-            policy: policy
-        })
+        onProcessorError(_file: string, error: unknown) {
 
-    runner.runFiles(files)
+            const message = error instanceof Error ? error.message : String(error)
+            console.error(`ERROR: ${message}`)
+
+            if (config.runMode === "update") {
+                return "continue"
+            }
+
+            return "abort"
+        },
+
+        shouldPrintFileStatus() {
+            return true
+        },
+
+        shouldPrintSummary() {
+            return true
+        }
+
+    }
+
+    const runner = new RepositoryRunner({
+        processor: processor,
+        config: config,
+        policy: policy
+    })
+
+    return runner.runFiles(files)
 }
