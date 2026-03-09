@@ -32,7 +32,8 @@ jobs:
         run: npm ci
 
       - name: Build projects
-        run: npx nx run-many -t build
+        run: npx nx run-many -t build --skip-nx-cache
+
 
       - name: Run tests
         run: npx nx run-many -t test

@@ -2,7 +2,7 @@ NEAR TERM TASKS TO ACOMPLISH:
 
 0.  Consider when we should add in plugin descriptor (see below).
 
-1. 
+1.
    Continue refactor: push behavior into Policy (which before refactor was largely descriptive).
 
 2. Support plugin-defined option validation layered on top of standard CLI options
