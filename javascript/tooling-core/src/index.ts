@@ -19,3 +19,6 @@ export { createRunnerPolicy } from "./runner/createRunnerPolicy.js";
 
 export type { PluginDescriptor, PluginOption } from "./cli/PluginDescriptor.js";
 export { validatePassthrough } from "./cli/validatePassthrough.js";
+
+export { generateHelp } from "./cli/generateHelp.js";
+export { printHelp } from "./cli/printHelp.js";

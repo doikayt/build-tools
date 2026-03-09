@@ -2,7 +2,8 @@ import {
   parseStandardCli,
   listFilesToProcess,
   runPlugin,
-  validatePassthrough
+  validatePassthrough,
+  printHelp
 } from "@datalackey/tooling-core"
 
 import { TocFileProcessor } from "../dist/engine/TocFileProcessor.js"
@@ -13,20 +14,6 @@ const descriptor = {
   options: []
 }
 
-function printHelp() {
-  console.log(`
-update-markdown-toc [options] [file]
-
-Options:
-  -c, --check
-  -r, --recursive <path>
-  -e, --exclude <dir1,dir2,...>
-  -v, --verbose
-  -q, --quiet
-  -d, --debug
-  -h, --help
-`)
-}
 
 const argv = process.argv.slice(2)
 
@@ -51,8 +38,9 @@ try {
   process.exit(1)
 }
 
+
 if (config.help) {
-  printHelp()
+  printHelp(descriptor)
   process.exit(0)
 }
 
