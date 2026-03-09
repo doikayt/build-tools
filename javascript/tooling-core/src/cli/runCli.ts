@@ -12,51 +12,31 @@ export interface RunCliOptions {
     argv?: string[]
 }
 
+function attempt<T>(fn: () => T): T {
+    try {
+        return fn()
+    } catch (err) {
+        const message = err instanceof Error ? err.message : String(err)
+        console.error(`ERROR: ${message}`)
+        process.exit(1)
+    }
+}
+
 export function runCli(options: RunCliOptions): void {
 
     const argv = options.argv ?? process.argv.slice(2)
-
-    let parsed
-
-    try {
-        parsed = parseStandardCli(argv)
-    } catch (err) {
-        const message = err instanceof Error ? err.message : String(err)
-        console.error(`ERROR: ${message}`)
-        process.exit(1)
-    }
-
+    const parsed = attempt(() => parseStandardCli(argv))
     const config = parsed.config
     const positionals = parsed.positionals ?? []
 
-    try {
-        validatePassthrough(options.descriptor, parsed.passthrough ?? [])
-    } catch (err) {
-        const message = err instanceof Error ? err.message : String(err)
-        console.error(`ERROR: ${message}`)
-        process.exit(1)
-    }
+    attempt(() => validatePassthrough(options.descriptor, parsed.passthrough ?? []))
 
     if (parsed.help) {
         printHelp(options.descriptor)
         process.exit(0)
     }
 
-    let targets
+    const targets = attempt(() => listFilesToProcess(config, positionals))
 
-    try {
-        targets = listFilesToProcess(config, positionals)
-    } catch (err) {
-        const message = err instanceof Error ? err.message : String(err)
-        console.error(`ERROR: ${message}`)
-        process.exit(1)
-    }
-
-    try {
-        runPlugin(targets.files, options.processor, config)
-    } catch (err) {
-        const message = err instanceof Error ? err.message : String(err)
-        console.error(`ERROR: ${message}`)
-        process.exit(1)
-    }
+    attempt(() => runPlugin(targets.files, options.processor, config))
 }
