@@ -1,7 +1,7 @@
 // tooling-core/tests/cli/generateHelp.test.ts
 
-import { generateHelp } from "../../src/cli/generateHelp.js"
-import type { PluginDescriptor } from "../../src/cli/PluginDescriptor.js"
+import { generateHelp } from "../../src"
+import type { PluginDescriptor } from "../../src"
 
 const descriptor: PluginDescriptor = {
     name: "my-plugin",
@@ -42,4 +42,28 @@ test("includes standard options", () => {
 
 test("returns a string", () => {
     expect(typeof generateHelp(descriptor)).toBe("string")
+})
+
+test("uses valueName in flag column when requiresValue is true", () => {
+    const d: PluginDescriptor = {
+        name: "my-plugin",
+        description: "Does useful things",
+        options: [
+            { flag: "--output", description: "Output path", requiresValue: true, valueName: "path" }
+        ]
+    }
+
+    expect(generateHelp(d)).toContain("--output <path>")
+})
+
+test("falls back to <value> when requiresValue is true but valueName not specified", () => {
+    const d: PluginDescriptor = {
+        name: "my-plugin",
+        description: "Does useful things",
+        options: [
+            { flag: "--output", description: "Output path", requiresValue: true }
+        ]
+    }
+
+    expect(generateHelp(d)).toContain("--output <value>")
 })

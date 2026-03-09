@@ -2,6 +2,7 @@ export interface PluginOption {
     flag: string
     description: string
     requiresValue?: boolean
+    valueName?: string
 }
 
 export interface PluginDescriptor {

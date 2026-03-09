@@ -23,7 +23,9 @@ export function generateHelp(descriptor: PluginDescriptor): string {
 
     const allOptions = [
         ...descriptor.options.map((o) => ({
-            flag: o.requiresValue === true ? `${o.flag} <value>` : o.flag,
+            flag: o.requiresValue === true
+                ? `${o.flag} <${o.valueName ?? "value"}>`
+                : o.flag,
             description: o.description
         })),
         ...STANDARD_OPTIONS
