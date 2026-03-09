@@ -1,5 +1,5 @@
 import { validatePassthrough } from "../../src/cli/validatePassthrough.js"
-import type { PluginDescriptor } from "../../src/cli/PluginDescriptor.js"
+import type { PluginDescriptor } from "../../src/cli/types.js"
 
 const descriptor: PluginDescriptor = {
     name: "test-plugin",

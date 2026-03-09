@@ -1,4 +1,4 @@
-import type { PluginDescriptor } from "./PluginDescriptor.js"
+import type { PluginDescriptor } from "./types.js"
 
 export function validatePassthrough(
     descriptor: PluginDescriptor,

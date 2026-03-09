@@ -1,6 +1,15 @@
 import type { RunConfig } from "../repository/types.js"
 import type { ParsedCliResult } from "./types.js"
 
+export function validateConfig(
+  config: RunConfig,
+  _positionals: string[]
+): void {
+  if (config.verbose && config.quiet) {
+    throw new Error("Cannot use --verbose and --quiet together")
+  }
+}
+
 export function parseStandardCli(argv: string[]): ParsedCliResult<RunConfig> {
 
   const args = argv
@@ -105,6 +114,8 @@ export function parseStandardCli(argv: string[]): ParsedCliResult<RunConfig> {
     quiet: quiet,
     debug: debug
   }
+
+  validateConfig(config, positionals)
 
   return {
     config: config,

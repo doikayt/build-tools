@@ -1,4 +1,4 @@
-import type { PluginDescriptor } from "./PluginDescriptor.js"
+import type { PluginDescriptor } from "./types.js"
 
 const STANDARD_OPTIONS = [
     { flag: "-c, --check",              description: "Do not write files; exit non-zero if stale" },

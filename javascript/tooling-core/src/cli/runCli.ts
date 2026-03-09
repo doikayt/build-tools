@@ -1,4 +1,4 @@
-import type { PluginDescriptor } from "./PluginDescriptor.js"
+import type { PluginDescriptor } from "./types.js"
 import type { FileProcessor, RunConfig } from "../repository/types.js"
 import { parseStandardCli } from "./parseStandardCli.js"
 import { listFilesToProcess } from "./listFilesToProcess.js"

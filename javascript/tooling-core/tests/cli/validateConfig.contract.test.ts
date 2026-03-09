@@ -1,5 +1,5 @@
-import { validateConfig } from "../../src/cli/validateConfig";
-import type { RunConfig } from "../../src/repository/types";
+import { validateConfig } from "../../src/cli/parseStandardCli.js";
+import type { RunConfig } from "../../src/repository/types.js";
 
 function base(): RunConfig {
   return {
