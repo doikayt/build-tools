@@ -2,12 +2,12 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { generateTOC } from "./generateToc.js";
-import type { RunConfig } from "@datalackey/tooling-core";
+import type { RunConfig, ProcessingStatus } from "@datalackey/tooling-core";
 
 export function processFile(
     filePath: string,
     config: RunConfig
-): "updated" | "unchanged" | "stale" | "skipped" {
+): ProcessingStatus {
 
     const absolutePath = path.resolve(filePath);
 

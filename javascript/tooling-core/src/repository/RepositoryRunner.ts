@@ -74,7 +74,7 @@ export class RepositoryRunner<TConfig extends RunConfig> {
     return stats
   }
 
-  private updateCounters(result: "updated" | "unchanged" | "stale" | "skipped", stats: RepositoryStats) {
+  private updateCounters(result: ProcessingStatus, stats: RepositoryStats) {
     switch (result) {       // TODO - refactor to method
 
       case "updated":
@@ -95,7 +95,7 @@ export class RepositoryRunner<TConfig extends RunConfig> {
     }
   }
 
-  private printFileStatus(result: "updated" | "unchanged" | "stale" | "skipped", file: string) {
+  private printFileStatus(result: ProcessingStatus, file: string) {
     switch (result) {     // TODO - refactor to method
 
       case "updated":
