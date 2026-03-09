@@ -1,5 +1,5 @@
 import { RepositoryRunner } from "../../src/repository/RepositoryRunner.js"
-import type { RunnerDecision } from "../../src/policy/RunnerPolicy.js"
+import type { RunnerDecision } from "../../src"
 
 test("runner aborts when policy returns abort", () => {
 
@@ -21,13 +21,14 @@ test("runner aborts when policy returns abort", () => {
       runMode: "update",
       mode: "single" as const,
       verbose: false,
-      debug: false,
-      quiet: true
+      quiet: true,
+      exclude: [],
+      debug: false
     },
     policy
   })
 
   expect(() => runner.runFiles(["a.md"]))
-    .toThrow("boom")
+      .toThrow("boom")
 
 })

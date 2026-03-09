@@ -22,7 +22,8 @@ test("runner continues when policy returns continue", () => {
       mode: "single" as const,
       verbose: false,
       debug: false,
-      quiet: true
+      quiet: true,
+      exclude: []
     },
     policy
   })

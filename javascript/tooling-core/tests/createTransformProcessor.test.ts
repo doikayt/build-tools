@@ -9,7 +9,8 @@ const testConfig = {
   mode: "single" as const,
   verbose: false,
   quiet: false,
-  debug: false
+  debug: false,
+  exclude: []
 };
 
 test("processor updates file when content changes", () => {
