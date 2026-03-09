@@ -16,3 +16,6 @@ export { createTransformProcessor } from "./repository/createTransformProcessor.
 
 export type { RunnerPolicy, RunnerDecision } from "./policy/RunnerPolicy.js";
 export { createRunnerPolicy } from "./runner/createRunnerPolicy.js";
+
+export type { PluginDescriptor, PluginOption } from "./cli/PluginDescriptor.js";
+export { validatePassthrough } from "./cli/validatePassthrough.js";

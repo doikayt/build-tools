@@ -1,12 +1,17 @@
-#!/usr/bin/env node
-
 import {
   parseStandardCli,
   listFilesToProcess,
-  runPlugin
+  runPlugin,
+  validatePassthrough
 } from "@datalackey/tooling-core"
 
 import { TocFileProcessor } from "../dist/engine/TocFileProcessor.js"
+
+const descriptor = {
+  name: "update-markdown-toc",
+  description: "Auto-generate Table of Contents for Markdown files",
+  options: []
+}
 
 function printHelp() {
   console.log(`
@@ -38,8 +43,11 @@ try {
 const config = parsed.config
 const positionals = parsed.positionals ?? []
 
-if (parsed.passthrough && parsed.passthrough.length > 0) {
-  console.error(`ERROR: Unknown option: ${parsed.passthrough[0]}`)
+try {
+  validatePassthrough(descriptor, parsed.passthrough ?? [])
+} catch (err) {
+  const message = err instanceof Error ? err.message : String(err)
+  console.error(`ERROR: ${message}`)
   process.exit(1)
 }
 
