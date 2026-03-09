@@ -1,7 +1,9 @@
 {
   "name": "build-tools",
   "private": true,
-  "workspaces": ["*"],
+  "workspaces": [
+    "*"
+  ],
   "scripts": {
     "build:ordered": "npm -w @datalackey/tooling-core run build && npm -w @datalackey/nx-graph-to-mermaid run build",
     "test:all": "npm -ws test --if-present",
@@ -9,6 +11,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
-    "@datalackey/update-markdown-toc": "^1.1.5"
+    "@datalackey/update-markdown-toc": "^1.1.5",
+    "nx": "22.5.4"
   }
 }

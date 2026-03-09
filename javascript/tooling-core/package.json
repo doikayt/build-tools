@@ -16,6 +16,17 @@
     "test:unit": "jest tests/unit",
     "build": "npm run compile && npm run test && npm run test:unit"
   },
+  "nx": {
+    "targets": {
+      "test": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "npm test",
+          "cwd": "tooling-core"
+        }
+      }
+    }
+  },
   "devDependencies": {
     "@types/jest": "^29.5.0",
     "@types/node": "^18.16.0",
