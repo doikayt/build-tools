@@ -2,11 +2,11 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { generateTOC } from "./generateToc.js";
-import type { CliConfig } from "../types.js";
+import type { RunConfig } from "@datalackey/tooling-core";
 
 export function processFile(
     filePath: string,
-    config: CliConfig
+    config: RunConfig
 ): "updated" | "unchanged" | "stale" | "skipped" {
 
     const absolutePath = path.resolve(filePath);
