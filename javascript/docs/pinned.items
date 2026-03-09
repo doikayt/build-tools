@@ -1,0 +1,88 @@
+NEAR TERM TASKS TO ACOMPLISH:
+
+1. Normalize ProcessingStatus Handling in RepositoryRunner
+   1) Fix current failing test: summary should print only in recursive mode, never in single-file processing mode.
+   2) Continue refactor: push behavior into Policy (which before refactor was largely descriptive).
+
+2. Support plugin-defined option validation layered on top of standard CLI options
+
+3. Centralize CLI printHelp() in tooling-core
+
+4. Refactor update-markdown-toc to use more functionality from tooling-core
+
+5. Bootstrap help/README injection support for newly created plugins
+   Framework-generated complete plugin help from declarative metadata (passed by client plugin)
+      - Feature to inject generated plugin help into README via delimiter tags
+Architectural interpretation (brief)
+
+This priority order actually corresponds to three layers of work in your framework.
+
+Execution layer
+
+RepositoryRunner
+RunnerPolicy
+ProcessingStatus handling
+
+→ Item 1
+
+CLI framework layer
+
+parseStandardCli
+plugin option extensions
+validation
+help generation
+
+→ Items 2–3
+
+Plugin simplification
+
+update-markdown-toc
+nx-graph-to-mermaid
+future plugins
+
+→ Items 4–5
+
+Important design consequence
+
+Items 2 + 3 + 5 naturally converge to a single concept:
+
+PluginDescriptor
+
+Example concept:
+
+export interface PluginDescriptor {
+  name: string
+  description: string
+
+  options: CliOption[]
+
+  validate?(config: StandardCliConfig): void
+}
+
+Which enables:
+
+framework CLI
+    ↓
+parseStandardCli()
+    ↓
+pluginDescriptor.options
+    ↓
+validate()
+    ↓
+generateHelp()
+    ↓
+inject README help
+
+So those three items form one coherent subsystem, not three independent tasks.
+
+Execution order recommendation
+
+Your order is already correct, but structurally it becomes:
+
+1. Fix ProcessingStatus + Policy behavior
+2. Extend CLI option validation
+3. Move help printing into tooling-core
+4. Simplify update-markdown-toc
+5. Implement plugin help generation + README injection
+
+This sequence avoids rewriting CLI logic twice.

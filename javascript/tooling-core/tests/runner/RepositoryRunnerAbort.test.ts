@@ -1,4 +1,5 @@
 import { RepositoryRunner } from "../../src/repository/RepositoryRunner.js"
+import type { RunnerDecision } from "../../src/policy/RunnerPolicy.js"
 
 test("runner aborts when policy returns abort", () => {
 
@@ -9,14 +10,20 @@ test("runner aborts when policy returns abort", () => {
   }
 
   const policy = {
-    onProcessorError: () => "abort",
+    onProcessorError: (): RunnerDecision => "abort",
     shouldPrintFileStatus: () => false,
     shouldPrintSummary: () => false
   }
 
   const runner = new RepositoryRunner({
     processor,
-    config: { quiet: true },
+    config: {
+      runMode: "update",
+      mode: "single" as const,
+      verbose: false,
+      debug: false,
+      quiet: true
+    },
     policy
   })
 

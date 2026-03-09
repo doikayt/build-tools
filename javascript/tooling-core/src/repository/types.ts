@@ -117,6 +117,7 @@ export interface FileProcessor<TConfig extends OutputPolicyConfig> {
 
 export interface OutputPolicyConfig {
   runMode: RunMode;
+  mode: "single" | "recursive";
   verbose: boolean;
   quiet: boolean;
   debug: boolean;

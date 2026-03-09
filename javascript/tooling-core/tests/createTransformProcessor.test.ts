@@ -6,6 +6,7 @@ import { createTransformProcessor } from "../src";
 
 const testConfig = {
   runMode: "update" as const,
+  mode: "single" as const,
   verbose: false,
   quiet: false,
   debug: false

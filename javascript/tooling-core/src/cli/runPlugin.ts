@@ -9,6 +9,8 @@ export function runPlugin<TConfig extends OutputPolicyConfig>(
     config: TConfig
 ) {
 
+    const isRecursiveRun = config.mode === "recursive"
+
     const policy: RunnerPolicy = {
 
         onProcessorError(_file: string, error: unknown) {
@@ -16,7 +18,7 @@ export function runPlugin<TConfig extends OutputPolicyConfig>(
             const message = error instanceof Error ? error.message : String(error)
             console.error(`ERROR: ${message}`)
 
-            if (config.runMode === "update") {
+            if (isRecursiveRun) {
                 return "continue"
             }
 
@@ -28,7 +30,7 @@ export function runPlugin<TConfig extends OutputPolicyConfig>(
         },
 
         shouldPrintSummary() {
-            return true
+            return isRecursiveRun
         }
 
     }

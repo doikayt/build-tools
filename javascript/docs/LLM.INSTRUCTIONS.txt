@@ -1,0 +1,70 @@
+# General Instructions for Typescript Projects
+
+
+
+
+
+## Language stack
+  - TypeScript, Jest, NX for complex builds else package.json
+
+
+## Coding style
+    - prefer that code examples never use object shorthand like `{ value }` 
+        where the key and variable have the same name, because it causes confusion. 
+        Always use explicit property/value pairs like `{ value: input }` or `{ contents: data }`.
+    - default to strict equality (`===`) everywhere; avoid loose equality (`==`) 
+      except deliberate cases such as `value == null` to match null and undefined.
+    - Linting configuration rule: enforce explicit presence/value checks 
+      and avoid truthiness checks to prevent accidentally rejecting valid 
+      falsy values such as 0, false, or empty strings.
+    - Whenever markdown content is generated (e.g., README sections), 
+      it must always be shown inside a fenced markdown code block and never rendered as rich text.
+    - When requesting migration scripts, prefer deterministic full-file overwrites rather 
+      than scripts that modify existing files incrementally.
+        - When in tension with 'keep diffs to a minimum' directive, prefer minimized diffs.
+    - When providing a full file, never include line numbers; output must be directly copy-pasteable.
+
+    ## Scripts
+        - Any script generated for user should:
+            - have in its documentation the directory to run from.
+            - avoid scripts that auto-cd based on script location.
+        - When code mod script requested: show script itself directly, 
+
+
+## Interaction Style
+    - prefer incremental steps when refactoring working code to avoid regressions.
+    - If you are uncertain about something, say so briefly — do not guess silently
+    - If a request is ambiguous, ask ONE clarifying question before proceeding
+    - Be terse:
+        No preamble/postamble to code changes: i.e.> DO NOT: "Sure! Here's the updated file..."
+    - If a conversation loops without progress for a long time, coding assistant 
+      should proactively suggest alternate approaches to break the loop.
+
+
+
+## Policies
+    - documentation first -- assume docs are correct.
+    - when proposing code modifications:
+        - Do not change variable names or identifiers unless that IS the change
+        - prefer showing whole file, unless change very minor 
+            - When showing full files, never elide or truncate; 
+              output complete files with no omissions.
+        - if not showing whole file always give specific line numbers to make change
+        - keep diffs to a minimum
+            - Do not reformat or re-indent code outside the changed lines
+            - DO NOT change any documentation unless that doc is not in sync wi/ code to be modfied
+            - Only change area of functionality to be corrected/updated/deleted.
+                    - Don't change formatting
+                    - Don't 'volunteer' improvements of any kind.. even correcting spelling
+                      unless specifically related to area of code to udate/change.  
+
+
+## Testing:
+    - if a code change touches a pure logic function with no side effect and that function 
+      has no current coverage, then 
+            suggest a unit test to go along with the code change
+
+    - Propose tests in the same style as existing tests in the file
+    - Do not propose tests for unchanged code paths
+
+
