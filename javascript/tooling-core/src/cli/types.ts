@@ -1,21 +1,14 @@
 import type { RunMode } from "./runMode.js"
+import {CoreConfig} from "../repository/types.js";
 
-export interface StandardCliConfig {
+
+export interface StandardCliConfig extends CoreConfig {
     help: boolean
     version: boolean
-
-    verbose: boolean
-    quiet: boolean
-    debug: boolean
-
-    runMode: RunMode
-
-    mode: "single" | "recursive"
-
     recursivePath?: string
-
     exclude: string[]
 }
+
 
 export interface ParsedCliResult {
     config: StandardCliConfig
