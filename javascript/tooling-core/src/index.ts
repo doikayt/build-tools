@@ -22,3 +22,6 @@ export { validatePassthrough } from "./cli/validatePassthrough.js";
 
 export { generateHelp } from "./cli/generateHelp.js";
 export { printHelp } from "./cli/printHelp.js";
+
+export { runCli } from "./cli/runCli.js";
+export type { RunCliOptions } from "./cli/runCli.js";
