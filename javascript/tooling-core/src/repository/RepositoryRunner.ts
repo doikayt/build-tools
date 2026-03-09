@@ -1,4 +1,4 @@
-import type { OutputPolicyConfig } from "./types.js"
+import type { CoreConfig } from "./types.js"
 import type { RunnerPolicy } from "../policy/RunnerPolicy.js"
 
 export type ProcessingStatus =
@@ -7,11 +7,11 @@ export type ProcessingStatus =
   | "stale"
   | "skipped"
 
-export interface FileProcessor<TConfig extends OutputPolicyConfig> {
+export interface FileProcessor<TConfig extends CoreConfig> {
   process(filePath: string, config: TConfig): ProcessingStatus
 }
 
-export interface RepositoryRunnerOptions<TConfig extends OutputPolicyConfig> {
+export interface RepositoryRunnerOptions<TConfig extends CoreConfig> {
   processor: FileProcessor<TConfig>
   config: TConfig
   policy: RunnerPolicy
@@ -24,7 +24,7 @@ export interface RepositoryStats {
   skipped: number
 }
 
-export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
+export class RepositoryRunner<TConfig extends CoreConfig> {
 
   private readonly processor: FileProcessor<TConfig>
   private readonly config: TConfig

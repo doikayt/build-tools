@@ -105,11 +105,11 @@ The RunnerPolicy decides:
 */
 
 
-export interface FileProcessor<TConfig extends OutputPolicyConfig> {
+export interface FileProcessor<TConfig extends CoreConfig> {
   process(filePath: string, config: TConfig): ProcessingStatus;
 }
 
-export interface OutputPolicyConfig {
+export interface CoreConfig {
   runMode: RunMode;
   mode: "single" | "recursive";
   verbose: boolean;

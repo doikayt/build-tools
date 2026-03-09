@@ -1,18 +1,18 @@
 import type { PluginDescriptor } from "./PluginDescriptor.js"
-import type { FileProcessor, OutputPolicyConfig } from "../repository/types.js"
+import type { FileProcessor, CoreConfig } from "../repository/types.js"
 import { parseStandardCli } from "./parseStandardCli.js"
 import { listFilesToProcess } from "./listFilesToProcess.js"
 import { validatePassthrough } from "./validatePassthrough.js"
 import { printHelp } from "./printHelp.js"
 import { runPlugin } from "./runPlugin.js"
 
-export interface RunCliOptions<TConfig extends OutputPolicyConfig> {
+export interface RunCliOptions<TConfig extends CoreConfig> {
     descriptor: PluginDescriptor
     processor: FileProcessor<TConfig>
     argv?: string[]
 }
 
-export function runCli<TConfig extends OutputPolicyConfig>(
+export function runCli<TConfig extends CoreConfig>(
     options: RunCliOptions<TConfig>
 ): void {
 
@@ -55,7 +55,7 @@ export function runCli<TConfig extends OutputPolicyConfig>(
     }
 
     try {
-        runPlugin(targets.files, options.processor as FileProcessor<OutputPolicyConfig>, config)
+        runPlugin(targets.files, options.processor as FileProcessor<CoreConfig>, config)
     } catch (err) {
         const message = err instanceof Error ? err.message : String(err)
         console.error(`ERROR: ${message}`)
