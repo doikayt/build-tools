@@ -6,15 +6,13 @@ import { validatePassthrough } from "./validatePassthrough.js"
 import { printHelp } from "./printHelp.js"
 import { runPlugin } from "./runPlugin.js"
 
-export interface RunCliOptions<TConfig extends CoreConfig> {
+export interface RunCliOptions {
     descriptor: PluginDescriptor
-    processor: FileProcessor<TConfig>
+    processor: FileProcessor<CoreConfig>
     argv?: string[]
 }
 
-export function runCli<TConfig extends CoreConfig>(
-    options: RunCliOptions<TConfig>
-): void {
+export function runCli(options: RunCliOptions): void {
 
     const argv = options.argv ?? process.argv.slice(2)
 
@@ -55,7 +53,7 @@ export function runCli<TConfig extends CoreConfig>(
     }
 
     try {
-        runPlugin(targets.files, options.processor as FileProcessor<CoreConfig>, config)
+        runPlugin(targets.files, options.processor, config)
     } catch (err) {
         const message = err instanceof Error ? err.message : String(err)
         console.error(`ERROR: ${message}`)

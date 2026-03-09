@@ -36,7 +36,7 @@ export class RepositoryRunner<TConfig extends CoreConfig> {
     this.policy = options.policy
   }
 
-  runFiles(files: string[]): RepositoryStats {
+  runFiles(files: string[]): RepositoryStats {                  // TODO - name it 'run'
 
     const stats: RepositoryStats = this.getInitCounterState()   // all counters of file-processing-results intit to 0's
 
