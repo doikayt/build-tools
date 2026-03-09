@@ -11,10 +11,9 @@
   },
   "types": "./dist/index.d.ts",
   "scripts": {
-    "compile": "tsc",
+    "build": "tsc",
     "test": "jest",
-    "test:unit": "jest tests/unit",
-    "build": "npm run compile && npm run test && npm run test:unit"
+    "lint": "tsc -p tsconfig.json --noEmit"
   },
   "nx": {
     "targets": {
