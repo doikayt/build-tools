@@ -14,6 +14,5 @@ export type { StandardCliConfig } from "./cli/types.js";
 export { walkFiles } from './fs/walkFiles.js';      // TODO - only need for mermaid.. can remove when that plugin uses more of tooling core
 export { createTransformProcessor } from "./repository/createTransformProcessor.js";
 
-export * from "./runner/RunnerPolicy.js";
-export * from "./runner/DefaultRunnerPolicy.js";
+export type { RunnerPolicy, RunnerDecision } from "./policy/RunnerPolicy.js";
 export { createRunnerPolicy } from "./runner/createRunnerPolicy.js";

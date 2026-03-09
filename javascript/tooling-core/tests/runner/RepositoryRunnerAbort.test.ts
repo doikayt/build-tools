@@ -10,8 +10,8 @@ test("runner aborts when policy returns abort", () => {
   }
 
   const policy = {
-    onProcessorError: (): RunnerDecision => "abort",
-    shouldPrintFileStatus: () => false,
+    handleProcessorError: (): RunnerDecision => "abort",
+    shouldPrint: () => false,
     shouldPrintSummary: () => false
   }
 

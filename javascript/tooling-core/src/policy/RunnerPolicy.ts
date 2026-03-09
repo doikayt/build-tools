@@ -1,11 +1,9 @@
-export type RunnerDecision = "continue" | "abort"
+import type { ProcessingStatus } from "../repository/types.js"
+
+export type RunnerDecision = "abort" | "continue"
 
 export interface RunnerPolicy {
-
-  onProcessorError(file: string, error: unknown): RunnerDecision
-
-  shouldPrintFileStatus(): boolean
-
-  shouldPrintSummary(): boolean
-
+    shouldPrint(status: ProcessingStatus): boolean
+    shouldPrintSummary(): boolean
+    handleProcessorError(file: string, error: unknown): RunnerDecision
 }

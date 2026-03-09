@@ -52,16 +52,14 @@ export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
         result = this.processor.process(file, this.config)
       } catch (err) {
 
-        if (this.policy.onProcessorError(file, err) === "continue") {
-          const message = err instanceof Error ? err.message : String(err)
-          console.error(`ERROR: ${message}`)
+        if (this.policy.handleProcessorError(file, err) === "continue") {
           continue
         }
 
         throw err
       }
 
-      if (this.policy.shouldPrintFileStatus() && !this.config.quiet) {
+      if (this.policy.shouldPrint(result)) {
         this.printFileStatus(result, file);                        // Notify file processing result: updated,stale,etc.
       }
       this.updateCounters(result, stats);
@@ -129,7 +127,7 @@ export class RepositoryRunner<TConfig extends OutputPolicyConfig> {
 
   private printSummary(stats: RepositoryStats): void {
 
-    if (!this.policy.shouldPrintSummary() || this.config.quiet) {
+    if (!this.policy.shouldPrintSummary()) {
       return
     }
 

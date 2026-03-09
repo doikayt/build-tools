@@ -10,8 +10,8 @@ test("runner continues when policy returns continue", () => {
   }
 
   const policy = {
-    onProcessorError: (): RunnerDecision => "continue",
-    shouldPrintFileStatus: () => false,
+    handleProcessorError: (): RunnerDecision => "continue",
+    shouldPrint: () => false,
     shouldPrintSummary: () => false
   }
 

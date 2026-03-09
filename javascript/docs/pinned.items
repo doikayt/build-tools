@@ -1,8 +1,9 @@
 NEAR TERM TASKS TO ACOMPLISH:
 
-1. Normalize ProcessingStatus Handling in RepositoryRunner
-   1) Fix current failing test: summary should print only in recursive mode, never in single-file processing mode.
-   2) Continue refactor: push behavior into Policy (which before refactor was largely descriptive).
+0.  Consider when we should add in plugin descriptor (see below).
+
+1. 
+   Continue refactor: push behavior into Policy (which before refactor was largely descriptive).
 
 2. Support plugin-defined option validation layered on top of standard CLI options
 

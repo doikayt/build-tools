@@ -103,12 +103,6 @@ The RunnerPolicy decides:
   • what messages are printed
   • how results affect exit codes
 */
-export interface RunnerPolicy {
-  isRecursive: boolean
-  printPerFileStatus: boolean
-  printSummary: boolean
-  continueOnError: boolean
-}
 
 
 export interface FileProcessor<TConfig extends OutputPolicyConfig> {
@@ -128,4 +122,3 @@ export type ProcessingStatus =
     | "unchanged"
     | "stale"
     | "skipped";
-
