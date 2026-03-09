@@ -1,7 +1,7 @@
-import type { CoreConfig } from "../repository/types.js"
+import type { RunConfig } from "../repository/types.js"
 import type { ParsedCliResult } from "./types.js"
 
-export function parseStandardCli(argv: string[]): ParsedCliResult<CoreConfig> {
+export function parseStandardCli(argv: string[]): ParsedCliResult<RunConfig> {
 
   const args = argv
 
@@ -96,7 +96,7 @@ export function parseStandardCli(argv: string[]): ParsedCliResult<CoreConfig> {
     }
   }
 
-  const config: CoreConfig = {
+  const config: RunConfig = {
     runMode: runMode,
     mode: mode,
     recursivePath: recursivePath,

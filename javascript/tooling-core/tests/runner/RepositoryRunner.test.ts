@@ -28,7 +28,7 @@ test("runner continues when policy returns continue", () => {
     policy
   })
 
-  const stats = runner.runFiles(["a.md", "b.md"])
+  const stats = runner.run(["a.md", "b.md"])
 
   expect(stats.updated).toBe(0)
   expect(stats.unchanged).toBe(0)

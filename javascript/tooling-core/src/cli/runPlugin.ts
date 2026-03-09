@@ -1,9 +1,9 @@
 import { RepositoryRunner } from "../repository/RepositoryRunner.js"
-import type { CoreConfig } from "../repository/types.js"
+import type { RunConfig } from "../repository/types.js"
 import type { FileProcessor } from "../repository/RepositoryRunner.js"
 import { createRunnerPolicy } from "../runner/createRunnerPolicy.js"
 
-export function runPlugin<TConfig extends CoreConfig>(
+export function runPlugin<TConfig extends RunConfig>(
     files: string[],
     processor: FileProcessor<TConfig>,
     config: TConfig
@@ -16,5 +16,5 @@ export function runPlugin<TConfig extends CoreConfig>(
         policy: policy
     })
 
-    return runner.runFiles(files)
+    return runner.run(files)
 }

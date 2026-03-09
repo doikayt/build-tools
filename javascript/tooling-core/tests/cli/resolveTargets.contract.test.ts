@@ -2,9 +2,9 @@ import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
 import { listFilesToProcess } from "../../src/cli/listFilesToProcess";
-import type { CoreConfig } from "../../src/repository/types";
+import type { RunConfig } from "../../src/repository/types";
 
-function base(): CoreConfig {
+function base(): RunConfig {
   return {
     runMode: "update",
     verbose: false,
@@ -62,7 +62,7 @@ describe("listFilesToProcess — resolution behavior", () => {
     fs.writeFileSync(path.join(docs, "a.md"), "x");
     fs.writeFileSync(path.join(docs, "b.txt"), "x");
 
-    const config: CoreConfig = {
+    const config: RunConfig = {
       ...base(),
       mode: "recursive",
       recursivePath: docs

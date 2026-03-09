@@ -2,14 +2,14 @@ import fs from "node:fs"
 import path from "node:path"
 
 import { walkFiles } from "../fs/walkFiles.js"
-import type { CoreConfig } from "../repository/types.js"
+import type { RunConfig } from "../repository/types.js"
 
 export type ResolvedTargets =
     | { mode: "single"; files: string[] }
     | { mode: "recursive"; files: string[] }
 
 export function listFilesToProcess(
-    config: CoreConfig,
+    config: RunConfig,
     positionals: string[]
 ): ResolvedTargets {
 

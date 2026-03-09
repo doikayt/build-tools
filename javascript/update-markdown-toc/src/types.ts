@@ -1,3 +1,3 @@
-import type { CoreConfig } from "@datalackey/tooling-core";
+import type { RunConfig } from "@datalackey/tooling-core";
 
-export type CliConfig = CoreConfig;
+export type CliConfig = RunConfig;

@@ -1,7 +1,7 @@
 import { validateConfig } from "../../src/cli/validateConfig";
-import type { CoreConfig } from "../../src/repository/types";
+import type { RunConfig } from "../../src/repository/types";
 
-function base(): CoreConfig {
+function base(): RunConfig {
   return {
     runMode: "update",
     verbose: false,
@@ -16,7 +16,7 @@ function base(): CoreConfig {
 describe("validateConfig — CLI invariants", () => {
 
   test("quiet + verbose conflict", () => {
-    const config: CoreConfig = {
+    const config: RunConfig = {
       ...base(),
       quiet: true,
       verbose: true

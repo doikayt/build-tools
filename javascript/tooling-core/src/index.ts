@@ -5,7 +5,7 @@ export { listFilesToProcess } from "./cli/listFilesToProcess.js";
 export type {
     ProcessingStatus,
     FileProcessor,
-    CoreConfig
+    RunConfig
 } from "./repository/types.js";
 
 export type { ParsedCliResult } from "./cli/types.js";

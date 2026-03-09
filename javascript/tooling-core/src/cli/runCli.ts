@@ -1,5 +1,5 @@
 import type { PluginDescriptor } from "./PluginDescriptor.js"
-import type { FileProcessor, CoreConfig } from "../repository/types.js"
+import type { FileProcessor, RunConfig } from "../repository/types.js"
 import { parseStandardCli } from "./parseStandardCli.js"
 import { listFilesToProcess } from "./listFilesToProcess.js"
 import { validatePassthrough } from "./validatePassthrough.js"
@@ -8,7 +8,7 @@ import { runPlugin } from "./runPlugin.js"
 
 export interface RunCliOptions {
     descriptor: PluginDescriptor
-    processor: FileProcessor<CoreConfig>
+    processor: FileProcessor<RunConfig>
     argv?: string[]
 }
 

@@ -1,9 +1,9 @@
 import fs from "node:fs";
 import type { FileProcessor } from "./types.js";
-import type { CoreConfig, ProcessingStatus } from "./types.js";
+import type { RunConfig, ProcessingStatus } from "./types.js";
 
 export function createTransformProcessor<
-    TConfig extends CoreConfig & { check?: boolean }
+    TConfig extends RunConfig & { check?: boolean }
 >(
     transform: (content: string, config: TConfig) => string
 ): FileProcessor<TConfig> {

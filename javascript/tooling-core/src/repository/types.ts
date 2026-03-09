@@ -2,11 +2,11 @@ import type { RunMode } from "../cli/runMode.js";
 
 
 
-export interface FileProcessor<TConfig extends CoreConfig> {
+export interface FileProcessor<TConfig extends RunConfig> {
   process(filePath: string, config: TConfig): ProcessingStatus;
 }
 
-export interface CoreConfig {
+export interface RunConfig {
   runMode: RunMode;
   mode: "single" | "recursive";
   recursivePath?: string;

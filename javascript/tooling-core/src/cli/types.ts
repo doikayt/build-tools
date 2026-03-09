@@ -1,6 +1,6 @@
-import type { CoreConfig } from "../repository/types.js"
+import type { RunConfig } from "../repository/types.js"
 
-export interface ParsedCliResult<TConfig extends CoreConfig = CoreConfig> {
+export interface ParsedCliResult<TConfig extends RunConfig = RunConfig> {
     config: TConfig
     positionals: string[]
     passthrough: string[]

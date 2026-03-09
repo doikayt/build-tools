@@ -1,7 +1,7 @@
-import type { CoreConfig } from "../repository/types.js"
+import type { RunConfig } from "../repository/types.js"
 
 export function validateConfig(
-    config: CoreConfig,
+    config: RunConfig,
     positionals: string[]
 ): void {
     if (config.verbose && config.quiet) {

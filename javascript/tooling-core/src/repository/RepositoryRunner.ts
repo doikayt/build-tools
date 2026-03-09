@@ -1,4 +1,4 @@
-import type { CoreConfig } from "./types.js"
+import type { RunConfig } from "./types.js"
 import type { RunnerPolicy } from "../policy/RunnerPolicy.js"
 
 export type ProcessingStatus =
@@ -7,11 +7,11 @@ export type ProcessingStatus =
   | "stale"
   | "skipped"
 
-export interface FileProcessor<TConfig extends CoreConfig> {
+export interface FileProcessor<TConfig extends RunConfig> {
   process(filePath: string, config: TConfig): ProcessingStatus
 }
 
-export interface RepositoryRunnerOptions<TConfig extends CoreConfig> {
+export interface RepositoryRunnerOptions<TConfig extends RunConfig> {
   processor: FileProcessor<TConfig>
   config: TConfig
   policy: RunnerPolicy
@@ -24,7 +24,7 @@ export interface RepositoryStats {
   skipped: number
 }
 
-export class RepositoryRunner<TConfig extends CoreConfig> {
+export class RepositoryRunner<TConfig extends RunConfig> {
 
   private readonly processor: FileProcessor<TConfig>
   private readonly config: TConfig
@@ -36,7 +36,7 @@ export class RepositoryRunner<TConfig extends CoreConfig> {
     this.policy = options.policy
   }
 
-  runFiles(files: string[]): RepositoryStats {                  // TODO - name it 'run'
+  run(files: string[]): RepositoryStats {                  // TODO - name it 'run'
 
     const stats: RepositoryStats = this.getInitCounterState()   // all counters of file-processing-results intit to 0's
 
