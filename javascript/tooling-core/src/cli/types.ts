@@ -1,13 +1,9 @@
-import type { RunMode } from "./runMode.js"
 import type { CoreConfig } from "../repository/types.js"
 
-export interface StandardCliConfig extends CoreConfig {
-    help: boolean
-    version: boolean
-}
-
-export interface ParsedCliResult {
-    config: StandardCliConfig
+export interface ParsedCliResult<TConfig extends CoreConfig = CoreConfig> {
+    config: TConfig
     positionals: string[]
     passthrough: string[]
+    help: boolean
+    version: boolean
 }

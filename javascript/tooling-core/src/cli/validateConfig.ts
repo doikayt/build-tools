@@ -1,7 +1,7 @@
-import type { StandardCliConfig } from "./types.js"
+import type { CoreConfig } from "../repository/types.js"
 
 export function validateConfig(
-    config: StandardCliConfig,
+    config: CoreConfig,
     positionals: string[]
 ): void {
     if (config.verbose && config.quiet) {

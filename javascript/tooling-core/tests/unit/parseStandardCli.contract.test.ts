@@ -77,7 +77,7 @@ describe("parseStandardCli — help", () => {
 
   test("--help returns help=true", () => {
     const result = parseStandardCli(["--help"]);
-    expect(result.config.help).toBe(true);
+    expect(result.help).toBe(true);
   });
 
 });

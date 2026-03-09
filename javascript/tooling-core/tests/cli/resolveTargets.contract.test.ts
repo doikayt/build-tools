@@ -2,12 +2,10 @@ import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
 import { listFilesToProcess } from "../../src/cli/listFilesToProcess";
-import type { StandardCliConfig } from "../../src/cli/types";
+import type { CoreConfig } from "../../src/repository/types";
 
-function base(): StandardCliConfig {
+function base(): CoreConfig {
   return {
-    help: false,
-    version: false,
     runMode: "update",
     verbose: false,
     quiet: false,
@@ -64,7 +62,7 @@ describe("listFilesToProcess — resolution behavior", () => {
     fs.writeFileSync(path.join(docs, "a.md"), "x");
     fs.writeFileSync(path.join(docs, "b.txt"), "x");
 
-    const config: StandardCliConfig = {
+    const config: CoreConfig = {
       ...base(),
       mode: "recursive",
       recursivePath: docs

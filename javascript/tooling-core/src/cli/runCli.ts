@@ -37,7 +37,7 @@ export function runCli(options: RunCliOptions): void {
         process.exit(1)
     }
 
-    if (config.help) {
+    if (parsed.help) {
         printHelp(options.descriptor)
         process.exit(0)
     }
