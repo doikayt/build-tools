@@ -44,4 +44,3 @@ In either case:
 - CI never modifies functional source code.
 - Only version metadata and changelogs may be updated automatically.
 - Release changes are explicit, reviewable, and traceable in Git history.
-
