@@ -1,11 +1,14 @@
 import fs from 'node:fs';
-import { buildMermaid } from '../../core/buildMermaid';
+import { buildMermaid } from '../../core/buildMermaid.js';
 import {
     RawOptions,
     NormalizedOptions,
     resolveExecutionContext
-} from './normalizeOptions';
+} from './normalizeOptions.js';
+import { injectBetweenMarkers } from '@datalackey/tooling-core';
 
+const NX_GRAPH_START = '<!-- NX_GRAPH:START -->';
+const NX_GRAPH_END = '<!-- NX_GRAPH:END -->';
 
 /**
  * Main entry point for our NX plugin.
@@ -36,7 +39,7 @@ async function runExecutor(
             return handleUpdate(options, buildMermaid(project as any));
 
         default: {
-            const _exhaustive: never = options.mode;
+            const _exhaustive: never = options.mode as never;
             return fail(`Unsupported mode: ${_exhaustive}`);
         }
     }
@@ -72,7 +75,7 @@ function handleInject(
     try {
         const generatedContent = fs.readFileSync(options.generatedMermaidPath!, 'utf-8');
         const markdownContent = fs.readFileSync(options.markdownPath!, 'utf-8');
-        const updated = injectBetweenMarkers(markdownContent, generatedContent);
+        const updated = injectBetweenMarkers(markdownContent, generatedContent, NX_GRAPH_START, NX_GRAPH_END);
 
         fs.writeFileSync(options.markdownPath!, updated, 'utf-8');
 
@@ -94,7 +97,7 @@ function handleUpdate(
         }
 
         const markdownContent = fs.readFileSync(options.markdownPath!, 'utf-8');
-        const updated = injectBetweenMarkers(markdownContent, mermaid);
+        const updated = injectBetweenMarkers(markdownContent, mermaid, NX_GRAPH_START, NX_GRAPH_END);
 
         fs.writeFileSync(options.markdownPath!, updated, 'utf-8');
 
@@ -103,25 +106,6 @@ function handleUpdate(
     } catch (error) {
         return fail((error as Error).message);
     }
-}
-
-
-function injectBetweenMarkers(markdown: string, content: string): string {
-
-    const start = '<!-- NX_GRAPH:START -->';
-    const end = '<!-- NX_GRAPH:END -->';
-
-    const startIndex = markdown.indexOf(start);
-    const endIndex = markdown.indexOf(end);
-
-    if (startIndex === -1 || endIndex === -1 || endIndex <= startIndex) {
-        throw new Error('NX_GRAPH markers not found or invalid');
-    }
-
-    const before = markdown.substring(0, startIndex + start.length);
-    const after = markdown.substring(endIndex);
-
-    return `${before}\n${content}\n${after}`;
 }
 
 function fail(message: string): { success: false } {

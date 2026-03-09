@@ -1,1 +1,1 @@
-export { default as generate } from './executors/generate/executor';
+export { default as generate } from './executors/generate/executor.js';

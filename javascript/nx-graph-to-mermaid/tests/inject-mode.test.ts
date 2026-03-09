@@ -88,7 +88,7 @@ describe('inject mode behavior', () => {
 
         expect(result.success).toBe(false);
         expect(consoleSpy).toHaveBeenCalledWith(
-            'NX_GRAPH markers not found or invalid'
+            'Markers not found or invalid: <!-- NX_GRAPH:START -->'
         );
     });
 
