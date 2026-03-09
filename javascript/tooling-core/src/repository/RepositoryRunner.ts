@@ -1,11 +1,6 @@
-import type { RunConfig } from "./types.js"
+import type { RunConfig, ProcessingStatus } from "./types.js"
 import type { RunnerPolicy } from "../policy/RunnerPolicy.js"
 
-export type ProcessingStatus =
-  | "updated"
-  | "unchanged"
-  | "stale"
-  | "skipped"
 
 export interface FileProcessor<TConfig extends RunConfig> {
   process(filePath: string, config: TConfig): ProcessingStatus
