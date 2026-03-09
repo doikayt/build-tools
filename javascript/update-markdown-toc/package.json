@@ -7,6 +7,7 @@
   "private": false,
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "pretest": "npm run build",
     "test": "bash scripts/run-all-tests.sh",
     "prepack": "npm run build && npm run test"
   },
@@ -45,11 +46,12 @@
   },
   "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/update-markdown-toc",
   "dependencies": {
+    "@datalackey/tooling-core": "*",
     "github-slugger": "^2.0.0",
-    "ts-dedent": "^2.2.0",
-    "@datalackey/tooling-core": "*"
+    "ts-dedent": "^2.2.0"
   },
   "devDependencies": {
+    "@types/node": "^18.19.130",
     "jest": "^30.2.0",
     "typescript": "^5.9.3"
   }
