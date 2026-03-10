@@ -1,7 +1,7 @@
 import { RepositoryRunner } from "../repository/RepositoryRunner.js"
 import type { RunConfig } from "../repository/types.js"
 import type { FileProcessor } from "../repository/RepositoryRunner.js"
-import { createRunnerPolicy } from "../runner/createRunnerPolicy.js"
+import { createRunnerPolicy } from "../policy/createRunnerPolicy.js"
 
 export function runPlugin<TConfig extends RunConfig>(
     files: string[],

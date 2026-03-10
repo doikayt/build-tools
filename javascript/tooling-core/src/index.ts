@@ -15,7 +15,7 @@ export { injectBetweenMarkers } from "./markdown/injectBetweenMarkers.js";
 export { createTransformProcessor } from "./repository/createTransformProcessor.js";
 
 export type { RunnerPolicy, RunnerDecision } from "./policy/RunnerPolicy.js";
-export { createRunnerPolicy } from "./runner/createRunnerPolicy.js";
+export { createRunnerPolicy } from "./policy/createRunnerPolicy.js";
 
 export { validatePassthrough } from "./cli/validatePassthrough.js";
 export { generateHelp } from "./cli/generateHelp.js";

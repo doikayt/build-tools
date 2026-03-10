@@ -1,4 +1,4 @@
-import type { RunnerPolicy, RunnerDecision } from "../policy/RunnerPolicy.js"
+import type { RunnerPolicy, RunnerDecision } from "./RunnerPolicy.js"
 import type { RunConfig, ProcessingStatus } from "../repository/types.js"
 
 // TODO: PluginDescriptor will hook in here — custom option definitions, validation,
