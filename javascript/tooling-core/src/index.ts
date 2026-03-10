@@ -1,5 +1,5 @@
 export { runPlugin } from "./cli/runPlugin.js";
-export { parseStandardCli } from "./cli/parseStandardCli.js";
+export { parseStandardCli, buildPassthroughMap, buildConfig, parseStringOption, parseBooleanOption, parseNumberOption } from "./cli/parseStandardCli.js";
 export { listFilesToProcess } from "./cli/listFilesToProcess.js";
 
 export type {
@@ -17,7 +17,6 @@ export { createTransformProcessor } from "./repository/createTransformProcessor.
 export type { RunnerPolicy, RunnerDecision } from "./policy/RunnerPolicy.js";
 export { createRunnerPolicy } from "./policy/createRunnerPolicy.js";
 
-export { validatePassthrough } from "./cli/validatePassthrough.js";
 export { generateHelp } from "./cli/generateHelp.js";
 export { printHelp } from "./cli/printHelp.js";
 export { runCli } from "./cli/runCli.js";

@@ -1,4 +1,5 @@
 import type { RunConfig } from "../repository/types.js"
+import type { PluginOption } from "./types.js"
 import type { ParsedCliResult } from "./types.js"
 
 export function validateConfig(
@@ -124,4 +125,74 @@ export function parseStandardCli(argv: string[]): ParsedCliResult<RunConfig> {
     help: help,
     version: version
   }
+}
+
+
+export function buildPassthroughMap(
+    options: PluginOption[],
+    passthrough: string[]
+): Map<string, string | boolean> {
+
+    const known = new Map(options.map((o) => [o.flag, o]))
+    const result = new Map<string, string | boolean>()
+
+    for (let i = 0; i < passthrough.length; i++) {
+        const arg = passthrough[i]
+        const option = known.get(arg)
+
+        if (option === undefined) {
+            throw new Error(`Unknown option: ${arg}`)
+        }
+
+        if (option.requiresValue === true) {
+            const next = passthrough[i + 1]
+            if (next === undefined || next.startsWith("-")) {
+                throw new Error(`Option ${arg} requires a value`)
+            }
+            result.set(arg, next)
+            i++
+        } else {
+            result.set(arg, true)
+        }
+    }
+
+    return result
+}
+
+export function parseStringOption(
+    flag: string,
+    map: Map<string, string | boolean>
+): string | undefined {
+    const value = map.get(flag)
+    if (value === undefined) return undefined
+    if (typeof value !== "string") throw new Error(`Option ${flag} requires a string value`)
+    return value
+}
+
+export function parseBooleanOption(
+    flag: string,
+    map: Map<string, string | boolean>
+): boolean {
+    return map.get(flag) === true
+}
+
+export function parseNumberOption(
+    flag: string,
+    map: Map<string, string | boolean>
+): number | undefined {
+    const value = map.get(flag)
+    if (value === undefined) return undefined
+    const n = Number(value)
+    if (isNaN(n)) throw new Error(`Option ${flag} requires a numeric value`)
+    return n
+}
+
+export function buildConfig<TConfig extends RunConfig>(
+    standard: RunConfig,
+    passthroughMap: Map<string, string | boolean>,
+    parseOptions?: (standard: RunConfig, passthrough: Map<string, string | boolean>) => TConfig
+): TConfig {
+    return parseOptions
+        ? parseOptions(standard, passthroughMap)
+        : standard as TConfig
 }

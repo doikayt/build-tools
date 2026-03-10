@@ -13,6 +13,7 @@ describe('check mode behavior', () => {
     let consoleSpy: jest.SpyInstance;
 
     beforeEach(() => {
+        safeUnlink(generatedPath)
         fs.writeFileSync(
             projectPath,
             JSON.stringify({

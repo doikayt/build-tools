@@ -11,11 +11,12 @@ export interface PluginOption {
   valueName?: string
 }
 
-export interface PluginDescriptor {
+export interface PluginDescriptor<TConfig extends RunConfig = RunConfig> {
   name: string
   description: string
   options: PluginOption[]
-  validate?(config: unknown): void
+  parseOptions?(standard: RunConfig, passthrough: Map<string, string | boolean>): TConfig
+  validate?(config: TConfig): void
 }
 
 export interface ParsedCliResult<TConfig extends RunConfig = RunConfig> {
