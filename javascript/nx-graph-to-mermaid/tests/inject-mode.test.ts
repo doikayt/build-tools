@@ -1,9 +1,11 @@
-import { vi, describe, test, expect, beforeEach, afterEach } from 'vitest';
+import { vi, describe, test, expect, beforeEach, afterEach, type MockInstance } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import runExecutor from '../src/executors/generate/executor.js';
 import { safeUnlink } from './utils/fs.js';
+
+const FENCE = '```';
 
 describe('inject mode behavior', () => {
 
@@ -12,7 +14,7 @@ describe('inject mode behavior', () => {
     const generatedPath = path.join(tmpDir, 'tmp-generated.md');
     const markdownPath = path.join(tmpDir, 'tmp-readme.md');
 
-    let consoleSpy: ReturnType<typeof vi.spyOn>;
+    let consoleSpy: MockInstance<[message?: any, ...optionalParams: any[]], void>;
 
     beforeEach(() => {
         fs.writeFileSync(
@@ -55,7 +57,7 @@ describe('inject mode behavior', () => {
 
     test('fails if markdown file missing', async () => {
 
-        fs.writeFileSync(generatedPath, `${'```mermaid'}\ngraph TD\n\n${'```'}`, 'utf-8');
+        fs.writeFileSync(generatedPath, FENCE + 'mermaid\ngraph TD\n\n' + FENCE, 'utf-8');
 
         const result = await runExecutor({
             projectJsonPath: projectPath,
@@ -72,7 +74,7 @@ describe('inject mode behavior', () => {
 
     test('fails if NX_GRAPH markers missing', async () => {
 
-        fs.writeFileSync(generatedPath, `${'```mermaid'}\ngraph TD\n\n${'```'}`, 'utf-8');
+        fs.writeFileSync(generatedPath, FENCE + 'mermaid\ngraph TD\n\n' + FENCE, 'utf-8');
         fs.writeFileSync(markdownPath, 'NO MARKERS HERE', 'utf-8');
 
         const result = await runExecutor({
@@ -90,7 +92,7 @@ describe('inject mode behavior', () => {
 
     test('replaces only content between markers', async () => {
 
-        const generatedContent = `${'```mermaid'}\ngraph TD\n\n  build\n\n${'```'}`;
+        const generatedContent = FENCE + 'mermaid\ngraph TD\n\n  build\n\n' + FENCE;
         fs.writeFileSync(generatedPath, generatedContent, 'utf-8');
 
         fs.writeFileSync(
@@ -126,7 +128,7 @@ Footer
 
     test('inject mode is idempotent', async () => {
 
-        const generatedContent = `${'```mermaid'}\ngraph TD\n\n  build\n\n${'```'}`;
+        const generatedContent = FENCE + 'mermaid\ngraph TD\n\n  build\n\n' + FENCE;
         fs.writeFileSync(generatedPath, generatedContent, 'utf-8');
 
         fs.writeFileSync(
