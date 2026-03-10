@@ -1,10 +1,7 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "nxCloudId": "69ae2fd080581c6afcd42409",
   "npmScope": "datalackey",
-  "projects": {
-    "tooling-core": "tooling-core"
-  },
+  "projects": {},
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],

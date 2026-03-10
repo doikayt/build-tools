@@ -1,16 +1,18 @@
+import { vi, describe, test, expect, beforeEach, afterEach } from 'vitest';
 import fs from 'fs';
 import path from 'path';
-import runExecutor from '../src/executors/generate/executor';
-import { safeUnlink } from './utils/fs';
+import os from 'os';
+import runExecutor from '../src/executors/generate/executor.js';
+import { safeUnlink } from './utils/fs.js';
 
 describe('inject mode behavior', () => {
 
-    const tmpDir = __dirname;
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'inject-test-'));
     const projectPath = path.join(tmpDir, 'tmp-project.json');
     const generatedPath = path.join(tmpDir, 'tmp-generated.md');
     const markdownPath = path.join(tmpDir, 'tmp-readme.md');
 
-    let consoleSpy: jest.SpyInstance;
+    let consoleSpy: ReturnType<typeof vi.spyOn>;
 
     beforeEach(() => {
         fs.writeFileSync(
@@ -24,7 +26,7 @@ describe('inject mode behavior', () => {
             })
         );
 
-        consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+        consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     });
 
     afterEach(() => {
@@ -38,14 +40,12 @@ describe('inject mode behavior', () => {
 
         fs.writeFileSync(markdownPath, 'README', 'utf-8');
 
-        const result = await runExecutor(
-            {
-                projectJsonPath: projectPath,
-                mode: 'inject',
-                generatedMermaidPath: generatedPath,
-                markdownPath
-            }
-        );
+        const result = await runExecutor({
+            projectJsonPath: projectPath,
+            mode: 'inject',
+            generatedMermaidPath: generatedPath,
+            markdownPath
+        });
 
         expect(result.success).toBe(false);
         expect(consoleSpy).toHaveBeenCalledWith(
@@ -57,14 +57,12 @@ describe('inject mode behavior', () => {
 
         fs.writeFileSync(generatedPath, `${'```mermaid'}\ngraph TD\n\n${'```'}`, 'utf-8');
 
-        const result = await runExecutor(
-            {
-                projectJsonPath: projectPath,
-                mode: 'inject',
-                generatedMermaidPath: generatedPath,
-                markdownPath
-            }
-        );
+        const result = await runExecutor({
+            projectJsonPath: projectPath,
+            mode: 'inject',
+            generatedMermaidPath: generatedPath,
+            markdownPath
+        });
 
         expect(result.success).toBe(false);
         expect(consoleSpy).toHaveBeenCalledWith(
@@ -77,14 +75,12 @@ describe('inject mode behavior', () => {
         fs.writeFileSync(generatedPath, `${'```mermaid'}\ngraph TD\n\n${'```'}`, 'utf-8');
         fs.writeFileSync(markdownPath, 'NO MARKERS HERE', 'utf-8');
 
-        const result = await runExecutor(
-            {
-                projectJsonPath: projectPath,
-                mode: 'inject',
-                generatedMermaidPath: generatedPath,
-                markdownPath
-            }
-        );
+        const result = await runExecutor({
+            projectJsonPath: projectPath,
+            mode: 'inject',
+            generatedMermaidPath: generatedPath,
+            markdownPath
+        });
 
         expect(result.success).toBe(false);
         expect(consoleSpy).toHaveBeenCalledWith(
@@ -111,14 +107,12 @@ Footer
             'utf-8'
         );
 
-        const result = await runExecutor(
-            {
-                projectJsonPath: projectPath,
-                mode: 'inject',
-                generatedMermaidPath: generatedPath,
-                markdownPath
-            }
-        );
+        const result = await runExecutor({
+            projectJsonPath: projectPath,
+            mode: 'inject',
+            generatedMermaidPath: generatedPath,
+            markdownPath
+        });
 
         expect(result.success).toBe(true);
 
@@ -130,9 +124,6 @@ Footer
         expect(updated).not.toContain('OLD CONTENT');
     });
 
-
-
-    // Note: in inject mode we don't really need content of project.json file because mark up already generated.
     test('inject mode is idempotent', async () => {
 
         const generatedContent = `${'```mermaid'}\ngraph TD\n\n  build\n\n${'```'}`;
@@ -152,33 +143,25 @@ Footer
             'utf-8'
         );
 
-        // First injection
-        await runExecutor(
-            {
-                projectJsonPath: projectPath,
-                mode: 'inject',
-                generatedMermaidPath: generatedPath,
-                markdownPath
-            }
-        );
+        await runExecutor({
+            projectJsonPath: projectPath,
+            mode: 'inject',
+            generatedMermaidPath: generatedPath,
+            markdownPath
+        });
 
         const first = fs.readFileSync(markdownPath, 'utf-8');
 
-        // Second injection
-        await runExecutor(
-            {
-                projectJsonPath: projectPath,
-                mode: 'inject',
-                generatedMermaidPath: generatedPath,
-                markdownPath
-            }
-        );
+        await runExecutor({
+            projectJsonPath: projectPath,
+            mode: 'inject',
+            generatedMermaidPath: generatedPath,
+            markdownPath
+        });
 
         const second = fs.readFileSync(markdownPath, 'utf-8');
 
         expect(first).toBe(second);
     });
-
-
 
 });

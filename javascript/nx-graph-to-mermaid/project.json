@@ -1,0 +1,17 @@
+{
+  "name": "@datalackey/nx-graph-to-mermaid",
+  "sourceRoot": "nx-graph-to-mermaid/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "command": "npm run build",
+      "cwd": "nx-graph-to-mermaid",
+      "outputs": ["{projectRoot}/dist"],
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "command": "npx vitest run --config {projectRoot}/vitest.config.ts",
+      "dependsOn": ["build"]
+    }
+  }
+}

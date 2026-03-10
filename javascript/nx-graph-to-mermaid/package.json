@@ -42,7 +42,7 @@
   },
   "scripts": {
     "build": "tsc && npm run copy-schemas",
-    "test": "npm run build && jest",
+    "test": "vitest run",
     "check:toc": "npx update-markdown-toc --check --recursive .",
     "update:toc": "npx update-markdown-toc --recursive .",
     "copy-schemas": "mkdir -p dist/executors/generate && cp src/executors/generate/schema.json dist/executors/generate/schema.json",
@@ -51,11 +51,9 @@
   },
   "devDependencies": {
     "@datalackey/update-markdown-toc": "1.1.8",
-    "@types/jest": "^29.5.0",
     "@types/node": "^18.16.0",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.1.1",
-    "typescript": "^5.4.0"
+    "typescript": "^5.4.0",
+    "vitest": "^1.0.0"
   },
   "dependencies": {
     "@datalackey/tooling-core": "*"

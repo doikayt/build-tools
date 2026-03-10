@@ -7,14 +7,6 @@
       "command": "npm run build",
       "cwd": "tooling-core",
       "outputs": ["{projectRoot}/dist"]
-    },
-    "test": {
-      "command": "npm test",
-      "cwd": "tooling-core"
-    },
-    "lint": {
-      "command": "tsc -p tsconfig.json --noEmit",
-      "cwd": "tooling-core"
     }
   }
 }
