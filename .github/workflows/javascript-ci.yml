@@ -3,7 +3,7 @@ name: CI - JavaScript/Typescript/Node Projects
 on:
   workflow_dispatch:
   push:
-    branches: [ nxify ]
+    branches: [ main ]
     paths:
       - 'javascript/**'
   pull_request:
