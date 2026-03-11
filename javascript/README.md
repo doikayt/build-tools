@@ -71,37 +71,3 @@ If you use one tool, you already understand how the others behave.
 For detailed documentation of shared command-line behavior, see:
 
 ➡️ **[Common CLI Behavior](./CLI-BEHAVIOR.md)**
-
----
-
-## Publishing as NPM Packages
-
-The above referenced JavaScript packages are versioned and published all together, as a single unit,
-to the [public npm registry](https://www.npmjs.com/package/package).
-
-We enforce a [semantic versioning](https://semver.org/) policy via
-[Changesets](https://changesets-docs.vercel.app/)
-rather than relying on manual update and synchronization of version numbers and
-changelog entries across packages.
-
----
-
-## Sideways Version Bump Policy
-
-This workspace follows a coordinated release alignment policy, enforced by the use of `fixed` in
-our [Changesets configuration](.changeset/config.json).
-
-The rule is: when any publishable package in this workspace is version bumped
-(patch, minor, or major), all other publishable packages will be bumped to that same exact
-version number — even if there were no source changes within those packages,
-and even if they have no direct dependency relationship with the changed package.
-
-The purpose of this policy is to ensure release coherence: ruling out
-any ambiguity about compatibility between sibling packages.
-
-Implications:
-
-- Maintainers must never manually edit version numbers.
-- Maintainers must never manually adjust internal dependency ranges.
-- Always use Changesets to produce coordinated releases.
-- After successful publishing, all packages in the workspace will be at the same version number.
