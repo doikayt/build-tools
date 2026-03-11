@@ -1,4 +1,9 @@
+<!-- TOC:START -->
+<!-- TOC:END -->
+
+
 # build-tools
+
 
 This repository contains tooling designed to assist in building and maintaining software projects —
 primarily JavaScript/TypeScript projects at this point.
@@ -44,3 +49,8 @@ In either case:
 - CI never modifies functional source code.
 - Only version metadata and changelogs may be updated automatically.
 - Release changes are explicit, reviewable, and traceable in Git history.
+
+
+## For Project Maintainers
+
+Please see the [this document](CONTRIBUTING.md) for more information.
