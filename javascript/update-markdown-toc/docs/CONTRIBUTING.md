@@ -13,6 +13,10 @@
 
 This document describes workflows intended for maintainers of update-markdown-toc. End users do not need these steps.
 
+For workspace-level setup, build pipeline, and release workflow see: [javascript/docs/CONTRIBUTING.md](../../docs/CONTRIBUTING.md)
+
+
+
 
 ## Running Tests
 
