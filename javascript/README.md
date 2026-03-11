@@ -1,4 +1,8 @@
 <!-- TOC:START -->
+- [Tooling for JavaScript/TypeScript/Node Projects](#tooling-for-javascripttypescriptnode-projects)
+  - [Overview](#overview)
+  - [Packages](#packages)
+  - [Consistent CLI Behavior Across Tools](#consistent-cli-behavior-across-tools)
 <!-- TOC:END -->
 
 # Tooling for JavaScript/TypeScript/Node Projects
@@ -8,9 +12,9 @@
 This workspace contains JavaScript/TypeScript tooling packages for documentation-related build automation.
 The packages are designed around a philosophy of progressive disclosure — simple by default, configurable when needed.
 
-For design and build philosophy see: [Repository Design Philosophy](../README.md#design-philosophy)
+For discussion of design principles which influence how these tools run, see [here](../README.md#design-philosophy)
 
-For maintainer and contributor documentation see: [docs/CONTRIBUTING.md](./docs/CONTRIBUTING.md)
+For maintainer and contributor documentation see: [here](./docs/CONTRIBUTING.md)
 
 ---
 

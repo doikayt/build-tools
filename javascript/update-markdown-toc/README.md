@@ -329,7 +329,7 @@ The intended workflow is:
 
 ## Guidelines For Project Contributors
 
-Contributors to the project should consult [this document](GUIDELINES-FOR-PROJECT-CONTRIBUTORS.md)
+Contributors to the project should consult [this document](docs/CONTRIBUTING.md)
 
 
 ## Packaging, Publishing, and Inter-relationship with Other Plugins

@@ -1,4 +1,11 @@
 <!-- TOC:START -->
+- [build-tools](#build-tools)
+  - [Tools](#tools)
+  - [Overarching Design Patterns Followed](#overarching-design-patterns-followed)
+    - [UX Philosophy](#ux-philosophy)
+    - [Build Philosophy](#build-philosophy)
+      - [Release Exception (Version Management)](#release-exception-version-management)
+  - [For Project Maintainers](#for-project-maintainers)
 <!-- TOC:END -->
 
 
@@ -7,19 +14,8 @@
 
 This repository contains tooling designed to assist in building and maintaining software projects —
 primarily JavaScript/TypeScript projects at this point.
-
----
-
-## Tools
-
-So far, we have:
-
-- a [command-line tool](javascript/update-markdown-toc/README.md) to update the
-  Table of Contents (TOC) in Markdown files.
-
-- an [NX](https://nx.dev/) [plugin](javascript/nx-graph-to-mermaid/README.md) that generates
-  a deterministic Mermaid task flow diagram from an NX `project.json` file —
-  with optional CI drift detection and Markdown injection support.
+[This document](./javascript/README.md#packages) describes the tools that are 
+currently available.
 
 ---
 
