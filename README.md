@@ -22,8 +22,8 @@ currently available.
 
 ### UX Philosophy
 
-UX is typically considered to be GUI-related, but here we consider the commands and switches exposed by our tools to be 
-'our UI'.  The design of this UI follows the principle of **progressive disclosure** —
+UX is typically considered to be GUI-related, but here we consider the commands and switches exposed by our 
+CLI-based tools to be 'our UI'.  The design of this UI follows the principle of **progressive disclosure** —
 a well-established UX pattern that surfaces simplicity first, and reveals
 complexity only when needed. See [Nielsen Norman Group](https://www.nngroup.com/articles/progressive-disclosure/)
 for a canonical treatment of this principle.
@@ -34,10 +34,10 @@ In practice this means:
   with no flags or configuration required.
 - Advanced options (custom exclusion lists, recursive depth, check-only mode, etc.)
   are available but never forced on the user.
-- The `@datalackey/autogen-markdown-doc` package is the clearest expression of
-  this principle: it bundles `update-markdown-toc` and `nx-graph-to-mermaid`
-  into a single command with opinionated defaults that cover the 80% case —
-  update all TOC and Mermaid anchor points across a repository with a single invocation.
+- The [`@datalackey/autogen-markdown-doc`](./javascript/autogen-markdown-doc/README.md) package is the clearest expression of
+  this principle: it bundles [`update-markdown-toc`](./javascript/update-markdown-toc/README.md) and [`nx-graph-to-mermaid`](./javascript/nx-graph-to-mermaid/README.md)
+  into a single command with opinionated defaults that cover the 80% case:
+  single invocation-based  update of all Markdown tables-of-contents and Mermaid build graph anchor points across a repository
 
 This philosophy is closely related to **convention over configuration** —
 the system works correctly out of the box, and you only configure what deviates from the norm.
