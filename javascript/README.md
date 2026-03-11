@@ -6,11 +6,13 @@
 ## Overview
 
 This workspace contains JavaScript/TypeScript tooling packages for documentation-related build automation.
-The packages are designed around a philosophy of
-progressive disclosure — simple by default, configurable when needed.
+The packages are designed around a philosophy of progressive disclosure — simple by default, configurable when needed.
 
-For maintainer and contributor documentation see:
-[docs/CONTRIBUTING.md](./docs/CONTRIBUTING.md)
+For design and build philosophy see: [Repository Design Philosophy](../README.md#design-philosophy)
+
+For maintainer and contributor documentation see: [docs/CONTRIBUTING.md](./docs/CONTRIBUTING.md)
+
+---
 
 ## Packages
 
@@ -28,29 +30,6 @@ These packages are:
 
 - ESM-only (not dual-published for CommonJS)
 - Node >= 18
-
----
-
-## Design Philosophy
-
-The tools in this workspace follow a principle of **progressive disclosure** —
-a well-established UX pattern that surfaces simplicity first, and reveals
-complexity only when needed.
-
-In practice this means:
-
-- The default invocation of any tool in this workspace should work correctly
-  for the most common use case, with no flags or configuration required.
-- Advanced options (custom exclusion lists, recursive depth, check-only mode, etc.)
-  are available but never forced on the user.
-- The `@datalackey/autogen-markdown-doc` package is the clearest expression of
-  this principle: it bundles `update-markdown-toc` and `nx-graph-to-mermaid`
-  into a single command with opinionated defaults that cover the 80% case —
-  update all TOC and Mermaid anchor points across a repository with a single invocation.
-
-This philosophy is closely related to **convention over configuration** —
-the system works correctly out of the box, and you only configure what
-deviates from the norm.
 
 ---
 

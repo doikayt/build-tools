@@ -23,19 +23,47 @@ So far, we have:
 
 ---
 
-## Build Philosophy
+## Overarching Design Patterns Followed
+
+### UX Philosophy
+
+UX is typically considered to be GUI-related, but here we consider the commands and switches exposed by our tools to be 
+'our UI'.  The design of this UI follows the principle of **progressive disclosure** —
+a well-established UX pattern that surfaces simplicity first, and reveals
+complexity only when needed. See [Nielsen Norman Group](https://www.nngroup.com/articles/progressive-disclosure/)
+for a canonical treatment of this principle.
+
+In practice this means:
+
+- The default invocation of any tool should work correctly for the most common use case,
+  with no flags or configuration required.
+- Advanced options (custom exclusion lists, recursive depth, check-only mode, etc.)
+  are available but never forced on the user.
+- The `@datalackey/autogen-markdown-doc` package is the clearest expression of
+  this principle: it bundles `update-markdown-toc` and `nx-graph-to-mermaid`
+  into a single command with opinionated defaults that cover the 80% case —
+  update all TOC and Mermaid anchor points across a repository with a single invocation.
+
+This philosophy is closely related to **convention over configuration** —
+the system works correctly out of the box, and you only configure what deviates from the norm.
+Martin Fowler's [bliki entry](https://martinfowler.com/bliki/ConventionOverConfiguration.html)
+gives a concise treatment of this principle.
+
+---
+
+### Build Philosophy
 
 Core principles:
 
 - Checked-in source code is the source of truth.
 - CI validates, tests, and publishes.
-- CI does not generate code, does not modify existing logic and does not change any non-version related configuration 
+- CI does not generate code, does not modify existing logic and does not change any non-version related configuration
   (note: CI *will* bump version numbers as described in Release Exception section below).
 - Builds must be reproducible locally -- across developer machines and CI.
 
-### Release Exception (Version Management)
+#### Release Exception (Version Management)
 
-There is one controlled exception to the “CI does not modify the repository” rule:
+There is one controlled exception to the "CI does not modify the repository" rule:
 
 Version bumps and changelog updates are managed using Changesets.
 
@@ -50,7 +78,8 @@ In either case:
 - Only version metadata and changelogs may be updated automatically.
 - Release changes are explicit, reviewable, and traceable in Git history.
 
+---
 
 ## For Project Maintainers
 
-Please see the [this document](CONTRIBUTING.md) for more information.
+Please see [this document](CONTRIBUTING.md) for more information.
