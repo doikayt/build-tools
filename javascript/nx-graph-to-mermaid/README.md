@@ -72,6 +72,7 @@ See [Example](#example) for how project.json relates to the corresponding genera
 
 ---
 
+
 ## Overview
 
 Plugin behavior is controlled entirely by `options.mode`.
@@ -354,6 +355,12 @@ release --> package
 ```
 
 ---
+## Built With
+
+- [`@datalackey/tooling-core`](../tooling-core/README.md) — shared internal utilities
+
+For the full workspace tech stack see: [TECH-STACK.md](../TECH-STACK.md)
+
 ## Packaging, Publishing, and Inter-relationship with Other Plugins
 
 This package is one component of a small ecosystem of JavaScript tooling plugins maintained as individual npm packages in this repository.

@@ -33,6 +33,7 @@
   - [Packaging, Publishing, and Inter-relationship with Other Plugins](#packaging-publishing-and-inter-relationship-with-other-plugins)
 <!-- TOC:END -->
 
+
 ## Introduction
 
 A Node.js command-line **documentation helper** which automatically:
@@ -326,6 +327,11 @@ The intended workflow is:
 2. Generated TOC content is reviewed and committed.
 3. CI runs in `--check` mode to ensure no drift exists.
 
+## Built With
+
+- [`@datalackey/tooling-core`](../tooling-core/README.md) — shared internal utilities
+
+For the full workspace tech stack see: [TECH-STACK.md](../TECH-STACK.md)
 
 ## Guidelines For Project Contributors
 

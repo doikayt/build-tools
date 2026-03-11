@@ -124,6 +124,14 @@ Use the underlying packages if you need:
 
 ---
 
+## Built With
+
+- [`@datalackey/update-markdown-toc`](../update-markdown-toc/README.md) — Markdown TOC generation
+- [`@datalackey/nx-graph-to-mermaid`](../nx-graph-to-mermaid/README.md) — Mermaid diagram generation
+
+For the full workspace tech stack see: [TECH-STACK.md](../TECH-STACK.md)
+
+
 ## Packaging, Publishing, and Inter-relationship with Other Plugins
 
 This package is one component of a small ecosystem of JavaScript tooling plugins maintained as individual npm packages in this repository.
