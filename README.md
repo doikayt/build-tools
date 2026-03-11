@@ -1,7 +1,6 @@
 <!-- TOC:START -->
 - [build-tools](#build-tools)
-  - [Tools](#tools)
-  - [Overarching Design Patterns Followed](#overarching-design-patterns-followed)
+  - [Design Principles](#design-principles)
     - [UX Philosophy](#ux-philosophy)
     - [Build Philosophy](#build-philosophy)
       - [Release Exception (Version Management)](#release-exception-version-management)
@@ -19,7 +18,7 @@ currently available.
 
 ---
 
-## Overarching Design Patterns Followed
+## Design Principles
 
 ### UX Philosophy
 
