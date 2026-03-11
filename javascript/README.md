@@ -487,3 +487,4 @@ cd javascript
 - `npm publish` must never be run from individual package directories (leave that to CI).
 - All releases must originate from committed Changesets.
 - Workspace root (second level folder) orchestrates — it does not contain product logic.
+
