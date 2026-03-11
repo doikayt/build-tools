@@ -42,8 +42,7 @@ In practice this means:
 
 This philosophy is closely related to **convention over configuration** —
 the system works correctly out of the box, and you only configure what deviates from the norm.
-Martin Fowler's [bliki entry](https://martinfowler.com/bliki/ConventionOverConfiguration.html)
-gives a concise treatment of this principle.
+See [Convention over Configuration](https://en.wikipedia.org/wiki/Convention_over_configuration) on Wikipedia for a broader treatment of this principle.
 
 ---
 

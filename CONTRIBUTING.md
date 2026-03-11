@@ -1,8 +1,8 @@
 # Contributing
 
-Thank you for your interest in contributing to this project.
+Thank you for your interest in contributing!
 
-This repository contains tooling for multiple platforms. Please read the
+This project's repository contains tooling for multiple platforms. Please read the
 relevant guide for the area you are working on.
 
 ---

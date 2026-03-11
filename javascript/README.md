@@ -12,7 +12,7 @@
 This workspace contains JavaScript/TypeScript tooling packages for documentation-related build automation.
 The packages are designed around a philosophy of progressive disclosure — simple by default, configurable when needed.
 
-For discussion of design principles which influence how these tools run, see [here](../README.md#design-philosophy)
+For a discussion of design principles which influence how these tools run, see [here](../README.md#design-philosophy)
 
 For maintainer and contributor documentation see: [here](./docs/CONTRIBUTING.md)
 
