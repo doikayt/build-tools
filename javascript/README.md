@@ -2,6 +2,7 @@
 - [Tooling for JavaScript/TypeScript/Node Projects](#tooling-for-javascripttypescriptnode-projects)
   - [Overview](#overview)
   - [Overall Repo Structure Model](#overall-repo-structure-model)
+  - [Consistent CLI Behavior Across Tools](#consistent-cli-behavior-across-tools)
   - [Publishing as NPM Packages](#publishing-as-npm-packages)
   - [Sideways Version Bump Policy](#sideways-version-bump-policy)
   - [Development and Release Engineering Workflows](#development-and-release-engineering-workflows)

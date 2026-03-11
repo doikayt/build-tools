@@ -4,9 +4,12 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "command": "npm run build",
-      "cwd": "tooling-core",
+      "command": "cd tooling-core && tsc -p tsconfig.json",
       "outputs": ["{projectRoot}/dist"]
+    },
+    "test": {
+      "command": "cd tooling-core && jest",
+      "dependsOn": ["build"]
     }
   }
 }

@@ -3,11 +3,17 @@
   "sourceRoot": "nx-graph-to-mermaid/src",
   "projectType": "library",
   "targets": {
-    "build": {
-      "command": "npm run build",
+    "copy-schemas": {
+      "description": "Copy executor JSON schemas to dist so NX can locate them at runtime",
+      "command": "mkdir -p nx-graph-to-mermaid/dist/executors/generate && cp nx-graph-to-mermaid/src/executors/generate/schema.json nx-graph-to-mermaid/dist/executors/generate/schema.json",
       "cwd": "nx-graph-to-mermaid",
+      "dependsOn": []
+    },
+    "build": {
+      "command": "cd nx-graph-to-mermaid && tsc",
+      "cwd": "{projectRoot}",
       "outputs": ["{projectRoot}/dist"],
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build", "copy-schemas"]
     },
     "test": {
       "command": "npx vitest run --config {projectRoot}/vitest.config.ts",

@@ -1,0 +1,14 @@
+{
+  "name": "build-tools-workspace",
+  "projectType": "library",
+  "targets": {
+    "update:toc": {
+      "command": "node update-markdown-toc/bin/update-markdown-toc.js --recursive .",
+      "cwd": "{workspaceRoot}"
+    },
+    "check:toc": {
+      "command": "node update-markdown-toc/bin/update-markdown-toc.js --check --recursive .",
+      "cwd": "{workspaceRoot}"
+    }
+  }
+}

@@ -1,4 +1,20 @@
 <!-- TOC:START -->
+- [Common CLI Behavior](#common-cli-behavior)
+- [1. Processing Modes](#1-processing-modes)
+  - [Single-File Mode](#single-file-mode)
+  - [Recursive Mode](#recursive-mode)
+- [2. Status Types](#2-status-types)
+    - [Updated](#updated)
+    - [Up-to-date](#up-to-date)
+    - [Stale](#stale)
+    - [Skipped](#skipped)
+- [3. Default Output Behavior](#3-default-output-behavior)
+- [4. Verbose Mode (`--verbose`)](#4-verbose-mode---verbose)
+- [5. Quiet Mode (`--quiet`)](#5-quiet-mode---quiet)
+- [6. Check Mode (`--check`)](#6-check-mode---check)
+- [7. Exit Codes](#7-exit-codes)
+- [8. Error Behavior](#8-error-behavior)
+- [9. Deterministic Processing](#9-deterministic-processing)
 <!-- TOC:END -->
 
 # Common CLI Behavior

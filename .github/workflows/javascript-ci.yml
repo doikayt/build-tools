@@ -1,6 +1,7 @@
 name: CI - JavaScript/Typescript/Node Projects
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
     paths:
@@ -31,12 +32,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build projects
-        run: npx nx run-many -t build --skip-nx-cache
-
-
-      - name: Run tests
-        run: npx nx run-many -t test
+      - name: Build and test
+        run: npx nx run-many -t build,test --skip-nx-cache
 
       - name: Check Changesets (PR only)
         if: github.event_name == 'pull_request'

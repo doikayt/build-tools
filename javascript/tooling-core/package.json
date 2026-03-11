@@ -11,9 +11,6 @@
   },
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "test": "jest",
-    "lint": "tsc -p tsconfig.json --noEmit"
   },
   "nx": {
     "targets": {
