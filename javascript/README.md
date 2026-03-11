@@ -1,94 +1,58 @@
 <!-- TOC:START -->
-- [Tooling for JavaScript/TypeScript/Node Projects](#tooling-for-javascripttypescriptnode-projects)
-  - [Overview](#overview)
-  - [Overall Repo Structure Model](#overall-repo-structure-model)
-  - [Consistent CLI Behavior Across Tools](#consistent-cli-behavior-across-tools)
-  - [Publishing as NPM Packages](#publishing-as-npm-packages)
-  - [Sideways Version Bump Policy](#sideways-version-bump-policy)
-  - [Development and Release Engineering Workflows](#development-and-release-engineering-workflows)
-    - [Day to Day Development (Package Level) Overview](#day-to-day-development-package-level-overview)
-    - [Integration Testing Overview (Via Combined All-in-One Plugin)](#integration-testing-overview-via-combined-all-in-one-plugin)
-    - [Packaging and Release Steps Overview](#packaging-and-release-steps-overview)
-  - [Packaging and Release Workflow Details](#packaging-and-release-workflow-details)
-    - [1. Ensure a Clean Working Tree](#1-ensure-a-clean-working-tree)
-    - [2. Run All Tests](#2-run-all-tests)
-    - [3. Create a Changeset](#3-create-a-changeset)
-    - [4. Apply Version Bumps](#4-apply-version-bumps)
-    - [5. Publish (Push + Tags + CI)](#5-publish-push--tags--ci)
-    - [6. Verify Release](#6-verify-release)
-  - [Handling `changeset status` Errors](#handling-changeset-status-errors)
-    - [What this means](#what-this-means)
-    - [When you will see this](#when-you-will-see-this)
-    - [How to resolve](#how-to-resolve)
-      - [Option A — This change SHOULD trigger a release](#option-a--this-change-should-trigger-a-release)
-      - [Option B — This change should NOT trigger a release](#option-b--this-change-should-not-trigger-a-release)
-    - [Maintainer rules](#maintainer-rules)
-- [Activity Diagram](#activity-diagram)
-- [Rules](#rules)
 <!-- TOC:END -->
-
-
-
 
 # Tooling for JavaScript/TypeScript/Node Projects
 
 ## Overview
 
-This document will mostly be of interest to project maintainers. It describes the structure, development workflows, 
-and release engineering processes for the JavaScript/TypeScript/Node oriented packages within this repository.
+This workspace contains JavaScript/TypeScript tooling packages for documentation-related build automation.
+The packages are designed around a philosophy of
+progressive disclosure — simple by default, configurable when needed.
 
+For maintainer and contributor documentation see:
+[docs/CONTRIBUTING.md](./docs/CONTRIBUTING.md)
 
-## Overall Repo Structure Model
-
-This repository has three layers:
-- The repository root, which contains [CI configuration](../.github/workflows/javascript-ci.yml) and resides one level up from the folder containing this document.
-- The secondary (platform) level where this document lives.  Each folder at this level is specific 
-  to some given platform (e.g.: JVM, Javascript, Python,etc.) and contains 
-  appropriate release packaging and publishing configuration for that platform.
--  The lowest level consists of individually consumable packages for plugins and tools.
-   (Note: npm packaging/publishing format applies
-   in the case of the JavaScript ecosystem. Second level folders 
-   we add in the future would house package/publish tools in formats
-   suitable for other ecosystems. For example, JVM packages
-   would be published using Gradle/Maven style Group/Artifact/Version-based packages.)
-
-
-
-```
- Repo Root                       ← CI configuration
-│
-├── javascript/                  ← npm workspace + Changesets control plane
-│   ├── update-markdown-toc/
-│   ├── nx-graph-to-mermaid/
-│   └── autogen-markdown-doc/
-│
-├── jvm/                         ← possible future JVM workspace
-│
-└── python/                      ← possible future Python workspace
-
-```
-
-Packages managed under this workspace:
+## Packages
 
 - [`@datalackey/update-markdown-toc`](./update-markdown-toc/README.md)
   - CLI tool
 - [`@datalackey/nx-graph-to-mermaid`](./nx-graph-to-mermaid/README.md)
   - NX plugin
 - [`@datalackey/autogen-markdown-doc`](./autogen-markdown-doc/README.md)
-  - CLI tool that bundles the packages above, allowing them to be used to independently, as well as via a simplified 'sensible defaults' entry point adequate for most common use cases.
-- [`@datalackey/tooling-cli`](./tooling-cli/README.md)
-  - private,
-  while  opinionated defaults.
-
+  - CLI tool that bundles the packages above, allowing them to be used independently,
+    as well as via a simplified 'sensible defaults' entry point adequate for most common use cases.
 - [`@datalackey/tooling-core`](./tooling-core/README.md)
   - private, unpublished package containing common logic
 
-
 These packages are:
 
-- ESM-only (Not dual-published for CommonJS)
+- ESM-only (not dual-published for CommonJS)
 - Node >= 18
 
+---
+
+## Design Philosophy
+
+The tools in this workspace follow a principle of **progressive disclosure** —
+a well-established UX pattern that surfaces simplicity first, and reveals
+complexity only when needed.
+
+In practice this means:
+
+- The default invocation of any tool in this workspace should work correctly
+  for the most common use case, with no flags or configuration required.
+- Advanced options (custom exclusion lists, recursive depth, check-only mode, etc.)
+  are available but never forced on the user.
+- The `@datalackey/autogen-markdown-doc` package is the clearest expression of
+  this principle: it bundles `update-markdown-toc` and `nx-graph-to-mermaid`
+  into a single command with opinionated defaults that cover the 80% case —
+  update all TOC and Mermaid anchor points across a repository with a single invocation.
+
+This philosophy is closely related to **convention over configuration** —
+the system works correctly out of the box, and you only configure what
+deviates from the norm.
+
+---
 
 ## Consistent CLI Behavior Across Tools
 
@@ -108,6 +72,7 @@ For detailed documentation of shared command-line behavior, see:
 
 ➡️ **[Common CLI Behavior](./CLI-BEHAVIOR.md)**
 
+---
 
 ## Publishing as NPM Packages
 
@@ -115,376 +80,28 @@ The above referenced JavaScript packages are versioned and published all togethe
 to the [public npm registry](https://www.npmjs.com/package/package).
 
 We enforce a [semantic versioning](https://semver.org/) policy via
-[Changesets](https://changesets-docs.vercel.app/?utm_source=chatgpt.com)
+[Changesets](https://changesets-docs.vercel.app/)
 rather than relying on manual update and synchronization of version numbers and
 changelog entries across packages.
 
+---
 
 ## Sideways Version Bump Policy
 
-In addition to adhering to semantic versioning, this workspace also follows
-a coordinated release alignment policy, enforced by the use of 'fixed' in
-our [Changesets configuration](.changeset/config.json)
+This workspace follows a coordinated release alignment policy, enforced by the use of `fixed` in
+our [Changesets configuration](.changeset/config.json).
+
 The rule is: when any publishable package in this workspace is version bumped
 (patch, minor, or major), all other publishable packages will be bumped to that same exact
 version number — even if there were no source changes within those packages,
 and even if they have no direct dependency relationship with the changed package.
+
 The purpose of this policy is to ensure release coherence: ruling out
 any ambiguity about compatibility between sibling packages.
 
-
 Implications:
-- Maintainers must:
-    - Never manually edit version numbers.
-    - Never manually adjust internal dependency ranges.
-    - Always use Changesets to produce coordinated releases.
+
+- Maintainers must never manually edit version numbers.
+- Maintainers must never manually adjust internal dependency ranges.
+- Always use Changesets to produce coordinated releases.
 - After successful publishing, all packages in the workspace will be at the same version number.
-
-
----
-
-## Development and Release Engineering Workflows
-
-### Day to Day Development (Package Level) Overview
-
-When working on a specific plugin:
-
-```
-cd javascript/nx-graph-to-mermaid
-```
-
-Typical workflow:
-
-- Edit source files
-- npm run build
-- npm test
-- git add .
-- git commit
-- git push
-
-Day-to-day development lives inside the individual package folder.
-
----
-
-### Integration Testing Overview (Via Combined All-in-One Plugin)
-
-Cross-package testing lives inside:
-
-```
-javascript/autogen-markdown-doc
-```
-
-The wrapper package is the integration boundary.  
-It imports and composes the base plugins, and adds a little bit of its own functionality.
-
-Cross-package tests belong there — not at workspace root.
-
----
-
-### Packaging and Release Steps Overview
-
-Release mechanics must run from:
-
-```
-cd javascript
-```
-
-Because that is where we have:
-
-- `package.json` (with `"workspaces"`)
-- `.changeset/`
-- release configuration
-
-
-Release commands:
-
-- `npx changeset`
-- `npx changeset version`
-- `npx changeset publish`
-
----
-
-
-## Packaging and Release Workflow Details
-
-### 1. Ensure a Clean Working Tree
-
-```
-git status
-```
-
-There should be no uncommitted changes.
-
----
-
-### 2. Run All Tests
-
-From workspace root:
-
-```
-cd javascript
-npm run build
-```
-
-This runs tests across all workspaces.
-STOP if any test fails.
-
----
-
-### 3. Create a Changeset
-
-```
-npx changeset
-```
-
-You will be prompted to:
-
-- Select affected packages  (use up/down arrow to choose and spacebar to (un)select)
-- Choose semver bump (patch / minor / major)
-- Provide release summary
-
-Commit:
-
-```
-git add .changeset
-git commit -m "chore: add changeset" .
-```
-
----
-
-### 4. Apply Version Bumps
-
-
-From this folder (`javascript/`), run commands below to update versions, changelogs, and package metadata.
-
-
-```
-npx changeset version
-```
-
-This command:
-
-- Updates package.json versions
-- Applies sideways bumps
-- Updates dependency ranges
-- Updates all CHANGELOG.md files
-- Removes processed changeset files
-
-After running this command if you want to see the version bumps, type: `git diff` from `javascript/` folder.
-
-
-Next, commit the version bump metadata and create an annotated tag for the new version:
-
-Capture the VERSION:
-
-```sh
-VERSION="$(node -p "require('./update-markdown-toc/package.json').version")"
-```
-
-And add the tag:
-
-```sh
-git add . && \
-git commit -m "chore: release v${VERSION}" && \
-git tag -a "v${VERSION}" -m "Release v${VERSION}"
-```
-
-
-
-### 5. Publish (Push + Tags + CI)
-
-Publishing is performed automatically by GitHub Actions when release
-commits are pushed to `main`.
-
-Maintainers should **not** normally run `npx changeset publish` locally.
-
-After applying version bumps, perform a single push that includes tags:
-
-    git push origin main --follow-tags
-
-This single command:
-
--   pushes the release commits
--   pushes the version tags created by Changesets
--   triggers the release workflow
--   results in packages being published to npm
-
-The configuration for the release workflow is viewable [here](../.github/workflows/release.yml).
-You can monitor publish results [here](https://github.com/datalackey/build-tools/actions/workflows/release.yml).
-
-
-
-The workflow will:
-
--   install dependencies\
--   run `npx changeset publish`\
--   publish packages to npm using the configured `NODE_AUTH_TOKEN`
-
-------------------------------------------------------------------------
-
-### 6. Verify Release
-
-After the workflow completes, confirm:
-
--   GitHub Actions run succeeded
--   Packages appear on npm
--   Versions match expected coordinated bump
-
-No additional manual tag push step is required when using the
-`--follow-tags` push above.
-
-
----
-## Handling `changeset status` Errors
-
-When running:
-
-```
-npx changeset status
-```
-
-you may see:
-
-```
-🦋  error Some packages have been changed but no changesets were found.
-🦋  error Run `changeset add` to resolve this error.
-🦋  error If this change doesn't need a release, run `changeset add --empty`.
-```
-
-### What this means
-
-
-Changesets has detected that:
-
-- Files affecting publishable packages have changed, and
-- No corresponding `.changeset/*.md` file exists describing release intent.
-
-Changesets refuses to proceed because releases in this repository must always be **explicit and deterministic**.
-
-This safeguard prevents:
-
-- accidental releases
-- ambiguous version bumps
-- silent drift between code and published packages
-
----
-
-### When you will see this
-
-You will typically encounter this message after:
-
-- modifying code in a publishable package
-- merging a PR without adding a changeset
-- running local experiments that touched package files
-
----
-
-### How to resolve
-
-You must choose the correct intent.
-
----
-
-#### Option A — This change SHOULD trigger a release
-
-Create a changeset:
-
-```
-npx changeset
-```
-
-Follow the prompts:
-
-- select affected package(s)
-- choose bump type (patch / minor / major)
-- provide a short summary
-
-Then commit the generated file:
-
-```
-git add .changeset
-git commit -m "chore: add changeset"
-```
-
-After this, `changeset status` will succeed.
-
----
-
-#### Option B — This change should NOT trigger a release
-
-If the change is non-functional (for example):
-
-- documentation updates
-- CI changes
-- test-only changes
-- repository plumbing
-
-create an **empty changeset**:
-
-```
-npx changeset add --empty
-```
-
-Then commit:
-
-```
-git add .changeset
-git commit -m "chore: add empty changeset"
-```
-
-This explicitly records that no version bump is required.
-
----
-
-### Maintainer rules
-
-- Never ignore this error.
-- Never manually edit package versions.
-- Every change affecting publishable packages must have a changeset (real or empty).
-- This rule is required for deterministic, auditable releases.
-
-If this error appears in CI, it indicates the PR is missing required release metadata.
-
----
-
-# Activity Diagram
-
-DEVELOPMENT FLOW
-
-```
-cd javascript/nx-graph-to-mermaid
-
-  edit files
-  npm run build
-  npm test
-  git commit
-  git push
-```
-
-RELEASE FLOW
-
-```
-cd javascript
-
-  DEVELOPER                              CI  (https://github.com/datalackey/build-tools/actions)
-  
-  npx changeset
-  git commit .
-  git push
-
-  npx changeset version
-  git commit
-  git push --follow-tags
-                                         Runs release workflow 
-```
-
----
-
-# Rules
-
-- Version numbers of packages must never be edited manually.
-- Version numbers of depended-on packages must never be manually adjusted.
-- `npm publish` must never be run from individual package directories (leave that to CI).
-- All releases must originate from committed Changesets.
-- Workspace root (second level folder) orchestrates — it does not contain product logic.
-
