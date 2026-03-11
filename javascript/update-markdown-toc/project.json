@@ -1,0 +1,18 @@
+{
+  "name": "@datalackey/update-markdown-toc",
+  "sourceRoot": "update-markdown-toc/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "command": "npm run build",
+      "cwd": "update-markdown-toc",
+      "outputs": ["{projectRoot}/dist"],
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "command": "echo disabled",
+      "cwd": "update-markdown-toc",
+      "dependsOn": ["build"]
+    }
+  }
+}
