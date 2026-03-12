@@ -68,7 +68,7 @@ describe('check mode behavior', () => {
         );
     });
 
-    test.skip('succeeds if no drift', async () => {
+    test('succeeds if no drift', async () => {
 
         await runExecutor({
             projectJsonPath: projectPath,

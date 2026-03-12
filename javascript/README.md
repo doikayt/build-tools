@@ -12,7 +12,7 @@
 This workspace contains JavaScript/TypeScript tooling packages for documentation-related build automation.
 
 See [here](../README.md#design-philosophy) for a discussion 
-the principles which shaped the design of these tools (progressive UI disclosure, CLI as a verifier 
+the principles which shaped the design of these tools (e.g., progressive UI disclosure, CLI as a verifier 
 and never generator of code.) 
 
 For maintainer and contributor documentation see: [here](./docs/CONTRIBUTING.md)

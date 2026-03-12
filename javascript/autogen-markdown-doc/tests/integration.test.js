@@ -40,7 +40,7 @@ OLD GRAPH
         );
     });
 
-    test.skip('updates Mermaid graph and TOC', () => {
+    test('updates Mermaid graph and TOC', () => {
 
         execSync(
             `node ./bin/autogen-markdown-doc.js ${projectPath} ${markdownPath}`,
