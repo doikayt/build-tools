@@ -1,8 +1,11 @@
-import { vi, describe, test, expect, beforeEach, afterEach } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 import runExecutor from '../src/executors/generate/executor.js';
 import { safeUnlink } from './utils/fs.js';
+import { vi, describe, test, expect, beforeEach, afterEach, type MockInstance } from 'vitest';
+
+
+
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 describe('check mode behavior', () => {
@@ -11,7 +14,8 @@ describe('check mode behavior', () => {
     const projectPath = path.resolve(tmpDir, 'tmp-project.json');
     const generatedPath = path.resolve(tmpDir, 'tmp-generated.md');
 
-    let consoleSpy: ReturnType<typeof vi.spyOn>;
+    let consoleSpy: MockInstance;
+
 
     beforeEach(() => {
         safeUnlink(generatedPath);

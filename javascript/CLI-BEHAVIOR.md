@@ -167,9 +167,9 @@ When `--quiet` is used:
 - Exit codes still reflect success or failure.
 
 
----
 
-# 6. Check Mode (`--check`)
+---
+## 6. Check Mode (`--check`)
 
 When `--check` is specified:
 
@@ -177,22 +177,50 @@ When `--check` is specified:
 - Files that would change are reported as `Stale`.
 - The tool exits with a non-zero status if any file is stale.
 
-Examples:
+For tools that support link validation, `--check` performs three tiers of validation
+in order:
 
-```
-npx @datalackey/update-markdown-toc --check README.md
-```
+### TOC Validation
 
-```
-npx @datalackey/update-markdown-toc --recursive docs/ --check --verbose
-```
+Verifies that the auto-generated TOC block is up to date with the document's
+headings. This is the baseline `--check` behavior. If the TOC is stale the file
+is reported as `Stale` and the run exits non-zero. Link validation does not run
+if TOC validation fails.
 
-Exit behavior:
+### Intra-document Link Validation
 
-- Exit code `0` → no changes required.
-- Exit code `1` → at least one file is stale.
+Verifies links in the authored body of the file — outside the TOC block. Covers:
+
+- relative file links (e.g. `[x](./other-doc.md)`)
+- relative links with anchors (e.g. `[x](./other-doc.md#install)`)
+- fragment-only same-file links (e.g. `[x](#install)`)
+- image paths (e.g. `![diagram](./diagram.png)`)
+
+Links using `mailto:`, `tel:`, `data:`, or `javascript:` schemes are ignored.
+
+### External Link Validation
+
+Verifies HTTP/HTTPS links by making outbound requests. Runs after intra-document
+validation.
+
+Each request is subject to a per-request timeout (default: 3000ms), configurable
+via `--link-timeout-ms`. If a request exceeds the timeout it is reported as a
+failure.
+
+Note: in this release, each external URL is requested independently with no
+response caching. In repositories with many external links, or where the same
+URL appears multiple times, this may noticeably slow down a `--check` run.
+Per-run caching is planned for a subsequent release. In the meantime,
+`--no-external-link-check` is available to skip this tier entirely in
+time-sensitive CI environments.
+
+To disable external link validation entirely use `--no-external-link-check`.
+
+### Exit Behavior
+
+- Exit code `0` → no changes required, no broken links.
+- Exit code `1` → at least one file is stale, or at least one broken link found.
 - Non-zero exit codes also occur for structural errors.
-
 
 ---
 

@@ -1,5 +1,4 @@
-// Import test globals explicitly to avoid depending on ambient type resolution
-import runExecutor from '../src/executors/generate/executor';
+import runExecutor from '../src/executors/generate/executor.js';
 
 describe('generate executor - missing project.json', () => {
   it('fails when project.json does not exist', async () => {

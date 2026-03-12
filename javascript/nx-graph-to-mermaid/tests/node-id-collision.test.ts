@@ -1,4 +1,4 @@
-import { buildMermaid } from '../src/core/buildMermaid';
+import { buildMermaid } from '../src/core/buildMermaid.js';
 
 describe('node id collision detection', () => {
 

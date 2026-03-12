@@ -123,6 +123,8 @@ update-markdown-toc [options] [file]
 
 Options:
   -c, --check     <path-to-file-or-folder>  Do not write files; exit non-zero if TOC is stale
+  -n, --no-external-link-check              Skip external HTTP/HTTPS link validation during --check
+  -l, --link-timeout-ms <ms>                Per-request timeout for external link checks (default: 3000)
   -r, --recursive <path-to-folder>          Recursively process all .md files under the given folder
   -e, --exclude   <dir1,dir2,...>           Comma-separated list of directory names to exclude during recursive traversal (overrides default exclusion list)
   -v, --verbose                             Print status for every file processed
@@ -237,9 +239,25 @@ Example:
 npx update-markdown-toc --check --recursive docs/
 ```
 
+#### Link Validation in Check Mode
 
-If a pull request modifies documentation headings but forgets to update TOCs, this command will fail the build, 
-forcing the contributor to regenerate and commit the correct TOC.
+When running with `--check`, the tool performs three tiers of link validation in these scopes:
+  - table of contents links, 
+  - intra-document links, and 
+  - external links.
+
+For full details on behavior, failure output, and performance considerations
+see [Common CLI Behavior — Check Mode](../CLI-BEHAVIOR.md#6-check-mode---check).
+
+To skip external link validation:
+```bash
+npx update-markdown-toc --check README.md --no-external-link-check
+```
+
+
+If a pull request modifies documentation headings but forgets to update TOCs or other links targeted for 
+validation in a particular run, then the above command will fail the build, 
+forcing the contributor to regenerate and commit with corrected TOC and other links.
 
 ### Recursively Traversing a Folder Hierarchy to Process all files vs. Single File Processing
 
@@ -327,11 +345,6 @@ The intended workflow is:
 2. Generated TOC content is reviewed and committed.
 3. CI runs in `--check` mode to ensure no drift exists.
 
-## Built With
-
-- [`@datalackey/tooling-core`](../tooling-core/README.md) — shared internal utilities
-
-For the full workspace tech stack see: [TECH-STACK.md](../TECH-STACK.md)
 
 ## Guidelines For Project Contributors
 

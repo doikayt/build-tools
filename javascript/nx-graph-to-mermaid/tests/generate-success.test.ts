@@ -1,4 +1,4 @@
-import { normalizeOptions } from '../src/executors/generate/normalizeOptions';
+import { normalizeOptions } from '../src/executors/generate/normalizeOptions.js';
 
 describe('normalizeOptions()', () => {
 
