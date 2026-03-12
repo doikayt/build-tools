@@ -34,3 +34,6 @@ export type {
   LinkValidationOptions,
   ExternalLinkStatus
 } from './markdown/types.js'
+export { slugHeading } from './markdown/slugHeading.js'
+export { validateFragmentLink } from './markdown/validateFragmentLink.js'
+export { validateRelativeLink } from './markdown/validateRelativeLink.js'
