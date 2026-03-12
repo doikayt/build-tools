@@ -4,7 +4,8 @@
     "rootDir": ".",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "noEmit": true
+    "noEmit": true,
+    "types": ["vitest/globals"]
   },
   "include": ["tests/**/*.ts", "src/**/*.ts", "../tooling-core/src/**/*.ts"]
 }

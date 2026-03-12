@@ -1,8 +1,6 @@
 import type { RunnerPolicy, RunnerDecision } from "./RunnerPolicy.js"
 import type { RunConfig, ProcessingStatus } from "../repository/types.js"
-
-// TODO: PluginDescriptor will hook in here — custom option definitions, validation,
-// and help generation will be driven from a descriptor passed alongside config.
+import { debugLog } from "../logging/debugLog.js"
 
 export function createRunnerPolicy(config: RunConfig): RunnerPolicy {
 
@@ -11,20 +9,34 @@ export function createRunnerPolicy(config: RunConfig): RunnerPolicy {
     return {
 
         shouldPrint(status: ProcessingStatus): boolean {
-            if (config.quiet) return false
-            if (status === "updated" || status === "stale") return true
-            return config.verbose
+            if (config.quiet) {
+                debugLog(config, `policy.shouldPrint: false (quiet) status=${status}`)
+                return false
+            }
+            if (status === "updated" || status === "stale") {
+                debugLog(config, `policy.shouldPrint: true status=${status}`)
+                return true
+            }
+            const result = config.verbose
+            debugLog(config, `policy.shouldPrint: ${result} status=${status}`)
+            return result
         },
 
         shouldPrintSummary(): boolean {
-            if (config.quiet) return false
+            if (config.quiet) {
+                debugLog(config, `policy.shouldPrintSummary: false (quiet)`)
+                return false
+            }
+            debugLog(config, `policy.shouldPrintSummary: ${isRecursiveRun}`)
             return isRecursiveRun
         },
 
         handleProcessorError(_file: string, error: unknown): RunnerDecision {
             const message = error instanceof Error ? error.message : String(error)
             console.error(`ERROR: ${message}`)
-            return isRecursiveRun ? "continue" : "abort"
+            const decision: RunnerDecision = isRecursiveRun ? "continue" : "abort"
+            debugLog(config, `policy.handleProcessorError: decision=${decision} error=${message}`)
+            return decision
         }
     }
 }

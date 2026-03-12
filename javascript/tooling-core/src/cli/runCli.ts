@@ -43,14 +43,12 @@ export function runCli<TConfig extends RunConfig = RunConfig>(
     const config = attempt(() =>
         buildConfig(standard, passthroughMap, options.descriptor.parseOptions)
     )
+    debugLog(config, `runCli: argv=${JSON.stringify(argv)} | config=${JSON.stringify(config)}`)
 
-    debugLog(config, `runCli: argv=${JSON.stringify(argv)}`)
-    debugLog(config, `runCli: config=${JSON.stringify(config)}`)
 
     attempt(() => options.descriptor.validate?.(config))
 
     const targets = attempt(() => listFilesToProcess(config, positionals))
-
     debugLog(config, `runCli: targets=${JSON.stringify(targets.files)}`)
 
     attempt(() => runPlugin(targets.files, options.processor, config))
