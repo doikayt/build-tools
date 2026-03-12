@@ -4,6 +4,7 @@ import { parseStandardCli, buildPassthroughMap, buildConfig } from "./parseStand
 import { listFilesToProcess } from "./listFilesToProcess.js"
 import { printHelp } from "./printHelp.js"
 import { runPlugin } from "./runPlugin.js"
+import { debugLog } from "../logging/debugLog.js"
 
 export interface RunCliOptions<TConfig extends RunConfig = RunConfig> {
     descriptor: PluginDescriptor<TConfig>
@@ -24,8 +25,8 @@ function attempt<T>(fn: () => T): T {
 export function runCli<TConfig extends RunConfig = RunConfig>(
     options: RunCliOptions<TConfig>
 ): void {
-
     const argv = options.argv ?? process.argv.slice(2)
+
     const parsed = attempt(() => parseStandardCli(argv))
     const standard = parsed.config
     const positionals = parsed.positionals ?? []
@@ -43,9 +44,14 @@ export function runCli<TConfig extends RunConfig = RunConfig>(
         buildConfig(standard, passthroughMap, options.descriptor.parseOptions)
     )
 
+    debugLog(config, `runCli: argv=${JSON.stringify(argv)}`)
+    debugLog(config, `runCli: config=${JSON.stringify(config)}`)
+
     attempt(() => options.descriptor.validate?.(config))
 
     const targets = attempt(() => listFilesToProcess(config, positionals))
+
+    debugLog(config, `runCli: targets=${JSON.stringify(targets.files)}`)
 
     attempt(() => runPlugin(targets.files, options.processor, config))
 }
