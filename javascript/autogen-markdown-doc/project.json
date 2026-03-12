@@ -1,8 +1,12 @@
 {
-  "name": "@datalackey/autogen-markdown-doc",
+  "name": "autogen-markdown-doc",
   "sourceRoot": "autogen-markdown-doc",
   "projectType": "library",
   "targets": {
+    "build": {
+      "command": "echo 'no build step'",
+      "outputs": []
+    },
     "test": {
       "command": "cd autogen-markdown-doc && jest",
       "dependsOn": [
