@@ -2,8 +2,8 @@ import { describe, test, expect, beforeAll, afterAll } from 'vitest'
 import fs from 'node:fs'
 import path from 'node:path'
 import os from 'node:os'
-import { validateRelativeLink } from '../../src/markdown/validateRelativeLink.js'
-import type { LinkRecord } from '../../src/markdown/types.js'
+import { validateRelativeLink } from '../../src/index.js'
+import type { LinkRecord } from '../../src/index.js'
 
 let tmpDir: string
 

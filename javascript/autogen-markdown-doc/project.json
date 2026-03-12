@@ -1,0 +1,14 @@
+{
+  "name": "@datalackey/autogen-markdown-doc",
+  "sourceRoot": "autogen-markdown-doc",
+  "projectType": "library",
+  "targets": {
+    "test": {
+      "command": "cd autogen-markdown-doc && jest",
+      "dependsOn": [
+        "@datalackey/nx-graph-to-mermaid:build",
+        "@datalackey/update-markdown-toc:build"
+      ]
+    }
+  }
+}
