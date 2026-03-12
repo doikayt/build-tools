@@ -37,3 +37,5 @@ export type {
 export { slugHeading } from './markdown/slugHeading.js'
 export { validateFragmentLink } from './markdown/validateFragmentLink.js'
 export { validateRelativeLink } from './markdown/validateRelativeLink.js'
+export { validateExternalLink } from './markdown/validateExternalLink.js'
+export { validateMarkdownLinks } from './markdown/validateMarkdownLinks.js'

@@ -1,3 +1,15 @@
+
+
+
+6. validateMarkdownLinks.ts — external result warning/error discrimination
+   is currently string-prefix based (fragile). Refactor to use ExternalLinkStatus
+   discriminated union consistently through the call chain so the classifier
+   in validateMarkdownLinks never inspects reason strings.
+
+
+
+
+
 NEAR TERM TASKS TO ACOMPLISH:
 
 0.  Consider when we should add in plugin descriptor (see below).
