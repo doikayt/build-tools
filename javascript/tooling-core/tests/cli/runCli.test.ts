@@ -1,3 +1,4 @@
+import { vi, describe, test, expect, beforeEach, afterEach, type MockInstance } from 'vitest'
 import { runCli } from "../../src"
 import type { ProcessingStatus } from "../../src"
 import fs from "node:fs"
@@ -16,10 +17,10 @@ const noopProcessor = {
     }
 }
 
-let mockExit: jest.SpyInstance
+let mockExit: MockInstance
 
 beforeEach(() => {
-    mockExit = jest
+    mockExit = vi
         .spyOn(process, "exit")
         .mockImplementation((() => {}) as () => never)
 })

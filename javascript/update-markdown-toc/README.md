@@ -25,12 +25,14 @@
   - [Usage Scenarios](#usage-scenarios)
     - [As Part of code/test/debug Work Flow](#as-part-of-codetestdebug-work-flow)
     - [Continuous Integration](#continuous-integration)
+      - [Link Validation in Check Mode](#link-validation-in-check-mode)
     - [Recursively Traversing a Folder Hierarchy to Process all files vs. Single File Processing](#recursively-traversing-a-folder-hierarchy-to-process-all-files-vs-single-file-processing)
       - [Single-File Processing (Strict Mode)](#single-file-processing-strict-mode)
       - [Recursive Folder Traversal (Lenient Mode)](#recursive-folder-traversal-lenient-mode)
   - [Design Goals and Philosophy](#design-goals-and-philosophy)
-  - [Guidelines For Project Contributors](#guidelines-for-project-contributors)
   - [Packaging, Publishing, and Inter-relationship with Other Plugins](#packaging-publishing-and-inter-relationship-with-other-plugins)
+  - [Known Limitations](#known-limitations)
+  - [Guidelines For Project Contributors](#guidelines-for-project-contributors)
 <!-- TOC:END -->
 
 
@@ -346,10 +348,6 @@ The intended workflow is:
 3. CI runs in `--check` mode to ensure no drift exists.
 
 
-## Guidelines For Project Contributors
-
-Contributors to the project should consult [this document](docs/CONTRIBUTING.md)
-
 
 ## Packaging, Publishing, and Inter-relationship with Other Plugins
 
@@ -358,4 +356,19 @@ The versioning and release of these packages is governed by a coordinated releas
 the packages adhere to common architectural policies (ESM-only, Node 18+, strict TypeScript configuration)
 that are more completely described [here](../README.md).
 
+## Known Limitations
+
+**Fragment link validation with formatted headings**
+
+Fragment link validation uses AST-based heading extraction, which may produce
+different slugs than the TOC generator for headings containing inline formatting
+such as code spans or bold text (e.g. `## Install \`foo\``).
+
+In practice this affects only headings with inline code, bold, or italic syntax.
+Plain-text headings are unaffected. A fix to unify both paths is planned for a
+future release.
+
+## Guidelines For Project Contributors
+
+Contributors to the project should consult [this document](docs/CONTRIBUTING.md)
 

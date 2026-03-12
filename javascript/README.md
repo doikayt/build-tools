@@ -21,8 +21,6 @@ For maintainer and contributor documentation see: [here](./docs/CONTRIBUTING.md)
 
 ## Packages
 
-## Packages
-
 - [`@datalackey/update-markdown-toc`](./update-markdown-toc/README.md)
   - CLI tool that auto-generates and validates Tables of Contents in Markdown files and checks other types of links.
 - [`@datalackey/nx-graph-to-mermaid`](./nx-graph-to-mermaid/README.md)

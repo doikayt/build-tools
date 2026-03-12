@@ -8,7 +8,7 @@
       "outputs": ["{projectRoot}/dist"]
     },
     "test": {
-      "command": "cd tooling-core && jest",
+      "command": "cd tooling-core && npx vitest run --config vitest.config.ts",
       "dependsOn": ["build"]
     }
   }

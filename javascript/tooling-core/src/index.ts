@@ -21,3 +21,16 @@ export { generateHelp } from "./cli/generateHelp.js";
 export { printHelp } from "./cli/printHelp.js";
 export { runCli } from "./cli/runCli.js";
 export type { RunCliOptions } from "./cli/runCli.js";
+
+export { extractLinks } from './markdown/extractLinks.js'
+export { parseHeadings } from './markdown/parseHeadings.js'
+export type {
+  LinkKind,
+  LinkRecord,
+  HeadingRecord,
+  LinkValidationError,
+  LinkValidationWarning,
+  LinkValidationResult,
+  LinkValidationOptions,
+  ExternalLinkStatus
+} from './markdown/types.js'
