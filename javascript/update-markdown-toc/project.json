@@ -1,18 +1,15 @@
 {
-  "name": "@datalackey/update-markdown-toc",
-  "sourceRoot": "update-markdown-toc/src",
+  "name": "@datalackey/autogen-markdown-doc",
+  "sourceRoot": "autogen-markdown-doc",
   "projectType": "library",
   "targets": {
-    "build": {
-      "command": "cd update-markdown-toc && tsc -p tsconfig.json",
-      "cwd": "update-markdown-toc",
-      "outputs": ["{projectRoot}/dist"],
-      "dependsOn": ["^build"]
-    },
     "test": {
-      "command": "echo disabled",
-      "cwd": "update-markdown-toc",
-      "dependsOn": ["build"]
+      "command": "cd autogen-markdown-doc && jest",
+      "dependsOn": [
+        "@datalackey/nx-graph-to-mermaid:build",
+        "@datalackey/update-markdown-toc:build"
+      ]
     }
   }
 }
+
