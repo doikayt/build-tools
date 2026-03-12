@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest'
-import { validateFragmentLink } from '../../src/index.js'
-import type { LinkRecord, HeadingRecord } from '../../src/index.js'
+import {LinkRecord, HeadingRecord, validateFragmentLink} from '../../src/index.js'
+
 
 const headings: HeadingRecord[] = [
   { line: 1, rawText: 'Introduction', slug: 'introduction' },
