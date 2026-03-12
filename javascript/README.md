@@ -12,7 +12,7 @@
 This workspace contains JavaScript/TypeScript tooling packages for documentation-related build automation.
 
 See [here](../README.md#design-philosophy) for a discussion 
-the principles which shaped the design of these tools (e.g., progressive UI disclosure, CLI as a verifier 
+of the principles which shaped the design of these tools (e.g., progressive UI disclosure, CLI as a verifier 
 and never generator of code.) 
 
 For maintainer and contributor documentation see: [here](./docs/CONTRIBUTING.md)
@@ -21,15 +21,17 @@ For maintainer and contributor documentation see: [here](./docs/CONTRIBUTING.md)
 
 ## Packages
 
+## Packages
+
 - [`@datalackey/update-markdown-toc`](./update-markdown-toc/README.md)
-  - CLI tool
+  - CLI tool that auto-generates and validates Tables of Contents in Markdown files and checks other types of links.
 - [`@datalackey/nx-graph-to-mermaid`](./nx-graph-to-mermaid/README.md)
-  - NX plugin
+  - NX executor plugin that generates deterministic Mermaid task-flow diagrams from `project.json` target definitions
 - [`@datalackey/autogen-markdown-doc`](./autogen-markdown-doc/README.md)
-  - CLI tool that bundles the packages above, allowing them to be used independently,
-    as well as via a simplified 'sensible defaults' entry point adequate for most common use cases.
+  - CLI tool that bundles the packages above with opinionated defaults, covering TOC and Mermaid diagram management across an entire repository in a single command
 - [`@datalackey/tooling-core`](./tooling-core/README.md)
-  - private, unpublished package containing common logic
+  - private, unpublished package containing shared logic and utilities used by the other packages in this workspace
+
 
 These packages are:
 
