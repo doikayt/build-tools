@@ -12,16 +12,17 @@ export interface HeadingRecord {
   slug: string
 }
 
-export interface LinkValidationError {
+interface FileLineRef {
   file: string
   line: number
+}
+
+export interface LinkValidationError extends FileLineRef {
   link: string
   reason: string
 }
 
-export interface LinkValidationWarning {
-  file: string
-  line: number
+export interface LinkValidationWarning extends FileLineRef {
   link: string
   reason: string
 }

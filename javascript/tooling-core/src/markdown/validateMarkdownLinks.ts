@@ -53,7 +53,7 @@ export async function validateMarkdownLinks(
 
   const headings = parseHeadings(markdownText)
 
-  for (const link of links) {
+  for (const link of links) {                                       // TODO - consider refactor of similar logic
     if (link.kind === 'fragment') {
       const error = validateFragmentLink(filePath, link, headings)
       if (error !== null) {
@@ -63,7 +63,7 @@ export async function validateMarkdownLinks(
       }
     }
 
-    if (link.kind === 'relative') {
+    if (link.kind === 'relative') {                                         // TODO - consider refactor of similar logic
       const error = validateRelativeLink(filePath, link)
       if (error !== null) {
         errors.push(error)
