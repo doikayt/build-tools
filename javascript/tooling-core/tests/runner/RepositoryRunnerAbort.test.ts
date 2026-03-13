@@ -1,5 +1,5 @@
 import { RepositoryRunner } from "../../src/repository/RepositoryRunner.js"
-import type { RunnerDecision } from "../../src/index.js"
+import type { RunnerDecision } from "../../src"
 
 test("runner aborts when policy returns abort", async () => {
   const processor = {

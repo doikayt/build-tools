@@ -1,125 +1,151 @@
-import type {RunConfig} from "../repository/types.js"
-import type {PluginOption} from "./types.js"
-import type {ParsedCliResult} from "./types.js"
-import {debugLog} from "../logging/debugLog.js"
+import type { RunConfig } from "../repository/types.js"
+import type { PluginOption } from "./types.js"
+import type { ParsedCliResult } from "./types.js"
+import { debugLog } from "../logging/debugLog.js"
+
+const DEFAULT_LINK_TIMEOUT_MS = 3000
 
 export function validateConfig(
-    config: RunConfig,
-    _positionals: string[]
+  config: RunConfig,
+  _positionals: string[]
 ): void {
-    if (config.verbose && config.quiet) {
-        throw new Error("Cannot use --verbose and --quiet together")
-    }
+  if (config.verbose && config.quiet) {
+    throw new Error("Cannot use --verbose and --quiet together")
+  }
 }
 
-export function parseStandardCli(argv: string[]): ParsedCliResult<RunConfig> {          // TODO -refactor (too long)
+export function parseStandardCli(argv: string[]): ParsedCliResult<RunConfig> {
 
-    const args = argv
+  const args = argv
 
-    let help = false
-    let version = false
-    let verbose = false
-    let quiet = false
-    let debug = false
-    let runMode: "update" | "check" = "update"
-    let mode: "single" | "recursive" = "single"
-    let recursivePath: string | undefined = undefined
-    let exclude: string[] = []
+  let help = false
+  let version = false
+  let verbose = false
+  let quiet = false
+  let debug = false
+  let runMode: "update" | "check" = "update"
+  let mode: "single" | "recursive" = "single"
+  let recursivePath: string | undefined = undefined
+  let exclude: string[] = []
+  let validateExternalLinks = true
+  let linkTimeoutMs = DEFAULT_LINK_TIMEOUT_MS
 
-    const positionals: string[] = []
-    const passthrough: string[] = []
+  const positionals: string[] = []
+  const passthrough: string[] = []
 
-    for (let i = 0; i < args.length; i++) {
+  for (let i = 0; i < args.length; i++) {
 
-        const arg = args[i]
+    const arg = args[i]
 
-        switch (arg) {
+    switch (arg) {
 
-            case "-h":
-            case "--help":
-                help = true
-                continue
+      case "-h":
+      case "--help":
+        help = true
+        continue
 
-            case "--version":
-                version = true
-                continue
+      case "--version":
+        version = true
+        continue
 
-            case "-v":
-            case "--verbose":
-                verbose = true
-                continue
+      case "-v":
+      case "--verbose":
+        verbose = true
+        continue
 
-            case "-q":
-            case "--quiet":
-                quiet = true
-                continue
+      case "-q":
+      case "--quiet":
+        quiet = true
+        continue
 
-            case "-d":
-            case "--debug":
-                debug = true
-                continue
+      case "-d":
+      case "--debug":
+        debug = true
+        continue
 
-            case "-c":
-            case "--check":
-                runMode = "check"
-                continue
+      case "-c":
+      case "--check":
+        runMode = "check"
+        continue
 
-            case "-r":
-            case "--recursive": {
-                const next = args[i + 1]
-                if (next === undefined || next.startsWith("-")) {
-                    throw new Error("--recursive requires a path")
-                }
-                mode = "recursive"
-                recursivePath = next
-                i++
-                continue
-            }
+      case "-n":
+      case "--no-external-link-check":
+        validateExternalLinks = false
+        continue
 
-            case "-e":
-            case "--exclude": {
-                const next = args[i + 1]
-                if (next === undefined) {
-                    throw new Error("--exclude requires a comma-separated list (or empty string)")
-                }
-                if (next !== "" && next.startsWith("-")) {
-                    throw new Error("--exclude requires a comma-separated list (or empty string)")
-                }
-                exclude = next === ""
-                    ? []
-                    : next.split(",").map((s) => s.trim()).filter((s) => s.length > 0)
-                i++
-                continue
-            }
-
-            default:
-                if (arg.startsWith("-")) {
-                    passthrough.push(arg)
-                    continue
-                }
-                positionals.push(arg)
+      case "-l":
+      case "--link-timeout-ms": {
+        const next = args[i + 1]
+        if (next === undefined || next.startsWith("-")) {
+          throw new Error("--link-timeout-ms requires a numeric value")
         }
-    }
-
-    if (!help && !version) {
-        if (verbose && quiet) {
-            throw new Error("Cannot use --verbose and --quiet together")
+        const parsed = Number(next)
+        if (isNaN(parsed)) {
+          throw new Error("--link-timeout-ms requires a numeric value")
         }
+        linkTimeoutMs = parsed
+        i++
+        continue
+      }
+
+      case "-r":
+      case "--recursive": {
+        const next = args[i + 1]
+        if (next === undefined || next.startsWith("-")) {
+          throw new Error("--recursive requires a path")
+        }
+        mode = "recursive"
+        recursivePath = next
+        i++
+        continue
+      }
+
+      case "-e":
+      case "--exclude": {
+        const next = args[i + 1]
+        if (next === undefined) {
+          throw new Error("--exclude requires a comma-separated list (or empty string)")
+        }
+        if (next !== "" && next.startsWith("-")) {
+          throw new Error("--exclude requires a comma-separated list (or empty string)")
+        }
+        exclude = next === ""
+            ? []
+            : next.split(",").map((s) => s.trim()).filter((s) => s.length > 0)
+        i++
+        continue
+      }
+
+      default:
+        if (arg.startsWith("-")) {
+          passthrough.push(arg)
+          continue
+        }
+        positionals.push(arg)
     }
+  }
 
-    const config: RunConfig = {
-        runMode: runMode,
-        mode: mode,
-        recursivePath: recursivePath,
-        exclude: exclude,
-        verbose: verbose,
-        quiet: quiet,
-        debug: debug
+  if (!help && !version) {
+    if (verbose && quiet) {
+      throw new Error("Cannot use --verbose and --quiet together")
     }
+  }
 
-    validateConfig(config, positionals)
+  const config: RunConfig = {
+    runMode: runMode,
+    mode: mode,
+    recursivePath: recursivePath,
+    exclude: exclude,
+    verbose: verbose,
+    quiet: quiet,
+    debug: debug,
+    validateExternalLinks: validateExternalLinks,
+    linkTimeoutMs: linkTimeoutMs
+  }
 
-    let retval = {
+  validateConfig(config, positionals)
+
+  let retval = {
         config: config,
         positionals: positionals,
         passthrough: passthrough,
@@ -128,8 +154,8 @@ export function parseStandardCli(argv: string[]): ParsedCliResult<RunConfig> {  
     };
     debugLog(config, `parseStandardCli: result=${retval}`)
     return retval
-}
 
+}
 
 export function buildPassthroughMap(
     options: PluginOption[],

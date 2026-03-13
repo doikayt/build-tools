@@ -1,6 +1,4 @@
-import type { RunMode } from "../cli/types.js";
-
-
+import type { RunMode } from "../cli/types.js"
 
 export interface FileProcessor<TConfig extends RunConfig> {
   process(filePath: string, config: TConfig): ProcessingStatus;
@@ -14,6 +12,8 @@ export interface RunConfig {
   verbose: boolean;
   quiet: boolean;
   debug: boolean;
+  validateExternalLinks: boolean;
+  linkTimeoutMs: number;
 }
 
 export type ProcessingStatus =
