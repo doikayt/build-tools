@@ -4,6 +4,7 @@ import { parseHeadings } from './parseHeadings.js'
 import { validateFragmentLink } from './validateFragmentLink.js'
 import { validateRelativeLink } from './validateRelativeLink.js'
 import { validateExternalLink } from './validateExternalLink.js'
+import { runWithConcurrency } from '../util/concurrency.js'
 import type {
   LinkValidationOptions,
   LinkValidationResult,
@@ -12,29 +13,6 @@ import type {
 } from './types.js'
 
 const DEFAULT_CONCURRENCY = 5
-
-async function runWithConcurrency<T>(
-  tasks: Array<() => Promise<T>>,
-  concurrency: number
-): Promise<T[]> {
-  const results: T[] = []
-  let index = 0
-
-  async function worker(): Promise<void> {
-    while (index < tasks.length) {
-      const current = index++
-      results[current] = await tasks[current]()
-    }
-  }
-
-  const workers = Array.from(
-    { length: Math.min(concurrency, tasks.length) },
-    () => worker()
-  )
-
-  await Promise.all(workers)
-  return results
-}
 
 export async function validateMarkdownLinks(
   filePath: string,
@@ -53,7 +31,7 @@ export async function validateMarkdownLinks(
 
   const headings = parseHeadings(markdownText)
 
-  for (const link of links) {                                       // TODO - consider refactor of similar logic
+  for (const link of links) {
     if (link.kind === 'fragment') {
       const error = validateFragmentLink(filePath, link, headings)
       if (error !== null) {
@@ -63,7 +41,7 @@ export async function validateMarkdownLinks(
       }
     }
 
-    if (link.kind === 'relative') {                                         // TODO - consider refactor of similar logic
+    if (link.kind === 'relative') {
       const error = validateRelativeLink(filePath, link)
       if (error !== null) {
         errors.push(error)
