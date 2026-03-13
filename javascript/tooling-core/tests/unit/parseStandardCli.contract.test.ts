@@ -1,4 +1,4 @@
-import { parseStandardCli } from "../../src/cli/parseStandardCli";
+import { parseStandardCli } from "../../src/index.js";
 
 describe("parseStandardCli — happy paths", () => {
 

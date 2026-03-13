@@ -6,7 +6,7 @@ import { printHelp } from "./printHelp.js"
 import { runPlugin } from "./runPlugin.js"
 import { debugLog } from "../logging/debugLog.js"
 
-export interface RunCliOptions<TConfig extends RunConfig = RunConfig> {
+export interface RunCliOptions<TConfig extends RunConfig> {
     descriptor: PluginDescriptor<TConfig>
     processor: FileProcessor<TConfig>
     argv?: string[]
@@ -22,13 +22,12 @@ function attempt<T>(fn: () => T): T {
     }
 }
 
-export function runCli<TConfig extends RunConfig = RunConfig>(
+export async function runCli<TConfig extends RunConfig = RunConfig>(
     options: RunCliOptions<TConfig>
-): void {
+): Promise<void> {
     const argv = options.argv ?? process.argv.slice(2)
 
     const parsed = attempt(() => parseStandardCli(argv))
-    const standard = parsed.config
     const positionals = parsed.positionals ?? []
 
     const passthroughMap = attempt(() =>
@@ -41,15 +40,18 @@ export function runCli<TConfig extends RunConfig = RunConfig>(
     }
 
     const config = attempt(() =>
-        buildConfig(standard, passthroughMap, options.descriptor.parseOptions)
+        buildConfig(parsed.config, passthroughMap, options.descriptor.parseOptions)
     )
-    debugLog(config, `runCli: argv=${JSON.stringify(argv)} | config=${JSON.stringify(config)}`)
 
+    debugLog(config, `runCli: argv=${JSON.stringify(argv)} | config=${JSON.stringify(config)}`)
 
     attempt(() => options.descriptor.validate?.(config))
 
     const targets = attempt(() => listFilesToProcess(config, positionals))
+
     debugLog(config, `runCli: targets=${JSON.stringify(targets.files)}`)
 
-    attempt(() => runPlugin(targets.files, options.processor, config))
+    const stats = await runPlugin(targets.files, options.processor, config)
+
+    debugLog(config, `runCli: stats=${JSON.stringify(stats)}`)
 }

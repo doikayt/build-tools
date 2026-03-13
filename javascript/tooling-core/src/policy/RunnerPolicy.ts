@@ -99,10 +99,10 @@ FileProcessor implementations should:
   • throw errors when processing fails
 
 The RunnerPolicy decides:
+  • whether execution continues after a processor error
+  • what messages are printed per file
+  • whether a summary line is printed
 
-  • whether execution continues
-  • what messages are printed
-  • how results affect exit codes
 */
 export interface RunnerPolicy {
     shouldPrint(status: ProcessingStatus): boolean

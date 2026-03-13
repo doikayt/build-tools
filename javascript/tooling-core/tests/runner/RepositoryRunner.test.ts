@@ -1,20 +1,17 @@
 import { RepositoryRunner } from "../../src/repository/RepositoryRunner.js"
 import type { RunnerDecision } from "../../src/policy/RunnerPolicy.js"
 
-test("runner continues when policy returns continue", () => {
-
+test("runner continues when policy returns continue", async () => {
   const processor = {
     process() {
       throw new Error("boom")
     }
   }
-
   const policy = {
     handleProcessorError: (): RunnerDecision => "continue",
     shouldPrint: () => false,
     shouldPrintSummary: () => false
   }
-
   const runner = new RepositoryRunner({
     processor,
     config: {
@@ -27,12 +24,9 @@ test("runner continues when policy returns continue", () => {
     },
     policy
   })
-
-  const stats = runner.run(["a.md", "b.md"])
-
+  const stats = await runner.runAsync(["a.md", "b.md"])
   expect(stats.updated).toBe(0)
   expect(stats.unchanged).toBe(0)
   expect(stats.stale).toBe(0)
   expect(stats.skipped).toBe(0)
-
 })

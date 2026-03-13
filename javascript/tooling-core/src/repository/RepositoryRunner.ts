@@ -30,31 +30,31 @@ export class RepositoryRunner<TConfig extends RunConfig> {
     this.policy = options.policy
   }
 
-  run(files: string[]): RepositoryStats {
+  async runAsync(files: string[]): Promise<RepositoryStats> {
     const stats: RepositoryStats = this.getInitCounterState()
 
     if (!Array.isArray(files)) {
       throw new Error("RepositoryRunner expected files[] array")
     }
 
-    debugLog(this.config, `RepositoryRunner.run: starting, fileCount=${files.length}, runMode=${this.config.runMode}, mode=${this.config.mode}`)
+    debugLog(this.config, `RepositoryRunner.runAsync: starting, fileCount=${files.length}, runMode=${this.config.runMode}, mode=${this.config.mode}`)
 
     for (const file of files) {
       let result: ProcessingStatus
 
-      debugLog(this.config, `RepositoryRunner.run: processing file=${file}`)
+      debugLog(this.config, `RepositoryRunner.runAsync: processing file=${file}`)
 
       try {
         result = this.processor.process(file, this.config)
       } catch (err) {
-        debugLog(this.config, `RepositoryRunner.run: processor error file=${file} err=${err instanceof Error ? err.message : String(err)}`)
+        debugLog(this.config, `RepositoryRunner.runAsync: processor error file=${file} err=${err instanceof Error ? err.message : String(err)}`)
         if (this.policy.handleProcessorError(file, err) === "continue") {
           continue
         }
         throw err
       }
 
-      debugLog(this.config, `RepositoryRunner.run: result=${result} file=${file}`)
+      debugLog(this.config, `RepositoryRunner.runAsync: result=${result} file=${file}`)
 
       if (this.policy.shouldPrint(result)) {
         this.printFileStatus(result, file)
@@ -63,7 +63,7 @@ export class RepositoryRunner<TConfig extends RunConfig> {
       this.updateCounters(result, stats)
     }
 
-    debugLog(this.config, `RepositoryRunner.run: complete stats=${JSON.stringify(stats)}`)
+    debugLog(this.config, `RepositoryRunner.runAsync: complete stats=${JSON.stringify(stats)}`)
 
     this.printSummary(stats)
 
@@ -108,7 +108,7 @@ export class RepositoryRunner<TConfig extends RunConfig> {
     }
   }
 
-  private getInitCounterState() {
+  private getInitCounterState(): RepositoryStats {
     return {
       updated: 0,
       unchanged: 0,
