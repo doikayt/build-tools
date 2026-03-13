@@ -20,7 +20,9 @@ test("runner continues when policy returns continue", async () => {
       verbose: false,
       debug: false,
       quiet: true,
-      exclude: []
+      exclude: [],
+      validateExternalLinks: true,
+      linkTimeoutMs: 3000
     },
     policy
   })

@@ -1,5 +1,6 @@
 import { RepositoryRunner } from "../../src/repository/RepositoryRunner.js"
-import type { RunnerDecision } from "../../src"
+import type { RunnerDecision } from "../../src/index.js"
+
 
 test("runner aborts when policy returns abort", async () => {
   const processor = {
@@ -20,7 +21,9 @@ test("runner aborts when policy returns abort", async () => {
       verbose: false,
       quiet: true,
       exclude: [],
-      debug: false
+      debug: false,
+      validateExternalLinks: true,
+      linkTimeoutMs: 3000
     },
     policy
   })
