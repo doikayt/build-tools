@@ -359,7 +359,7 @@ changelog entries across packages.
 ## Sideways Version Bump Policy
 
 This workspace follows a coordinated release alignment policy, enforced by the use of `fixed` in
-our [Changesets configuration](.changeset/config.json).
+our [Changesets configuration](../.changeset/config.json).
 
 The rule is: when any publishable package in this workspace is version bumped
 (patch, minor, or major), all other publishable packages will be bumped to that same exact

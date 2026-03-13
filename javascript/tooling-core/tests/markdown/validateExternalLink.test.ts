@@ -46,12 +46,37 @@ describe('validateExternalLink()', () => {
     expect(result).toBeNull()
   })
 
+  test('returns null for 307', async () => {
+    mockFetch(307)
+    const result = await validateExternalLink('README.md', makeLink('https://example.com'), makeOptions())
+    expect(result).toBeNull()
+  })
+
+  test('returns null for 308', async () => {
+    mockFetch(308)
+    const result = await validateExternalLink('README.md', makeLink('https://example.com'), makeOptions())
+    expect(result).toBeNull()
+  })
+
+  test('returns warning for 403', async () => {
+    mockFetch(403)
+    const result = await validateExternalLink('README.md', makeLink('https://example.com'), makeOptions())
+    expect(result).not.toBeNull()
+    expect(result!.reason).toContain('forbidden')
+  })
+
+  test('returns warning for 500', async () => {
+    mockFetch(500)
+    const result = await validateExternalLink('README.md', makeLink('https://example.com'), makeOptions())
+    expect(result).not.toBeNull()
+    expect(result!.reason).toContain('server error')
+  })
+
   test('falls back to GET on 405', async () => {
     const fetchMock = vi.fn()
       .mockResolvedValueOnce({ status: 405 })
       .mockResolvedValueOnce({ status: 200 })
     vi.stubGlobal('fetch', fetchMock)
-
     const result = await validateExternalLink('README.md', makeLink('https://example.com'), makeOptions())
     expect(result).toBeNull()
     expect(fetchMock).toHaveBeenCalledTimes(2)
@@ -71,6 +96,13 @@ describe('validateExternalLink()', () => {
     const result = await validateExternalLink('README.md', makeLink('https://example.com'), makeOptions())
     expect(result).not.toBeNull()
     expect(result!.reason).toBe('unreachable')
+  })
+
+  test('sends User-Agent header', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ status: 200 })
+    vi.stubGlobal('fetch', fetchMock)
+    await validateExternalLink('README.md', makeLink('https://example.com'), makeOptions())
+    expect(fetchMock.mock.calls[0][1].headers['User-Agent']).toContain('link-checker')
   })
 
   test('calls onVerbose for request', async () => {

@@ -171,8 +171,19 @@ When `--quiet` is used:
 - Exit codes still reflect success or failure.
 
 
+---
+
+# 5a. Debug Mode (`--debug`)
+
+When `--debug` is used:
+
+- Diagnostic messages are written to `stderr`.
+- Each internal logging message is prefixed with `[debug]`.
+- Normal stdout output is unaffected.
+- Intended for development and troubleshooting only -- orthogonal to `--quiet` and `--verbose`
 
 ---
+
 ## 6. Check Mode (`--check`)
 
 When `--check` is specified:
@@ -188,8 +199,8 @@ in order:
 
 Verifies that the auto-generated TOC block is up to date with the document's
 headings. This is the baseline `--check` behavior. If the TOC is stale the file
-is reported as `Stale` and the run exits non-zero. Link validation does not run
-if TOC validation fails.
+is reported as `Stale` and the run exits non-zero. Link validation continues to run
+even if TOC validation fails.
 
 ### Intra-document Link Validation
 
@@ -269,3 +280,13 @@ Recursive traversal is deterministic:
 - `node_modules` directories are ignored by default.
 - Only supported file extensions are processed.
 
+
+# Passing CLI flags when invoking via NX
+
+When invoking the tool through an NX target, flags like `--help` are consumed
+by NX before reaching the script. Use `--args` to pass them through:
+```bash
+npx nx run build-tools-workspace:update:toc --args="--help"
+```
+
+This applies to any CLI flag intended for the tool itself rather than NX.

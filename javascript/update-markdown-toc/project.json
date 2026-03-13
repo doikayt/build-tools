@@ -1,15 +1,14 @@
 {
-  "name": "@datalackey/autogen-markdown-doc",
-  "sourceRoot": "autogen-markdown-doc",
+  "name": "@datalackey/update-markdown-toc",
+  "sourceRoot": "update-markdown-toc/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "command": "cd update-markdown-toc && npm run build"
+    },
     "test": {
-      "command": "cd autogen-markdown-doc && jest",
-      "dependsOn": [
-        "@datalackey/nx-graph-to-mermaid:build",
-        "@datalackey/update-markdown-toc:build"
-      ]
+      "command": "cd update-markdown-toc && bash scripts/run-all-tests.sh",
+      "dependsOn": ["build", "@datalackey/tooling-core:build"]
     }
   }
 }
-

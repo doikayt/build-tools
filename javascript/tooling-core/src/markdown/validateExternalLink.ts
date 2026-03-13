@@ -1,97 +1,95 @@
-import type {
-  LinkRecord,
-  LinkValidationError,
-  LinkValidationWarning,
-  LinkValidationOptions,
-  ExternalLinkStatus
-} from './types.js'
+import type { LinkRecord, LinkValidationError, LinkValidationWarning, LinkValidationOptions } from './types.js'
 
-const DEFAULT_TIMEOUT_MS = 3000
-
-function classifyStatus(status: number): ExternalLinkStatus {
-  if (status === 301) {
-    return { kind: 'warning', reason: `permanent redirect (${status})` }
-  }
-  if (status >= 302 && status < 400) {
-    return { kind: 'valid' }
-  }
-  if (status >= 400) {
-    return { kind: 'error', reason: `HTTP ${status}` }
-  }
-  return { kind: 'valid' }
-}
-
-async function fetchWithTimeout(
-  url: string,
-  method: 'HEAD' | 'GET',
-  timeoutMs: number
-): Promise<Response> {
-  const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), timeoutMs)
-
-  try {
-    return await fetch(url, {
-      method: method,
-      signal: controller.signal,
-      redirect: 'follow'
-    })
-  } finally {
-    clearTimeout(timer)
-  }
-}
+const USER_AGENT = 'Mozilla/5.0 (compatible; link-checker/1.0)'
 
 export async function validateExternalLink(
-  sourceFilePath: string,
-  link: LinkRecord,
-  options: LinkValidationOptions
+    filePath: string,
+    link: LinkRecord,
+    options: LinkValidationOptions = {}
 ): Promise<LinkValidationError | LinkValidationWarning | null> {
-  const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS
 
-  options.onVerbose?.(`→ HTTP request: ${link.href}`)
+    const timeoutMs = options.timeoutMs ?? 3000
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), timeoutMs)
 
-  let response: Response
+    const headers = { 'User-Agent': USER_AGENT }
 
-  try {
-    response = await fetchWithTimeout(link.href, 'HEAD', timeoutMs)
+    let status: number
 
-    if (response.status === 405 || response.status === 501) {
-      response = await fetchWithTimeout(link.href, 'GET', timeoutMs)
+    try {
+        const response = await fetch(link.href, {
+            method: 'HEAD',
+            signal: controller.signal,
+            headers: headers
+        })
+        status = response.status
+
+        if (status === 405) {
+            const getResponse = await fetch(link.href, {
+                method: 'GET',
+                signal: controller.signal,
+                headers: headers
+            })
+            status = getResponse.status
+        }
+    } catch (err) {
+        clearTimeout(timer)
+        const isAbort = err instanceof Error && err.name === 'AbortError'
+        return {
+            file: filePath,
+            line: link.line,
+            link: link.href,
+            reason: isAbort ? 'timeout' : 'unreachable'
+        } as LinkValidationError
     }
-  } catch (err) {
-    const isTimeout =
-      err instanceof Error &&
-      (err.name === 'AbortError' || err.message.includes('abort'))
 
-    const reason = isTimeout ? 'timeout' : 'unreachable'
+    clearTimeout(timer)
 
-    return {
-      file: sourceFilePath,
-      line: link.line,
-      link: link.href,
-      reason: reason
+    if (status >= 200 && status < 300) {
+        options.onVerbose?.(`✓ ${link.href}`)
+        return null
     }
-  }
 
-  const status = classifyStatus(response.status)
-
-  if (status.kind === 'error') {
-    return {
-      file: sourceFilePath,
-      line: link.line,
-      link: link.href,
-      reason: status.reason
+    if (status === 301) {
+        return {
+            file: filePath,
+            line: link.line,
+            link: link.href,
+            reason: 'permanent redirect (301)'
+        } as LinkValidationWarning
     }
-  }
 
-  if (status.kind === 'warning') {
-    return {
-      file: sourceFilePath,
-      line: link.line,
-      link: link.href,
-      reason: status.reason
+    if (status === 302 || status === 307 || status === 308) {
+        options.onVerbose?.(`✓ ${link.href}`)
+        return null
     }
-  }
 
-  options.onVerbose?.(`✓ Link validated: ${link.href}`)
-  return null
+    if (status === 403) {
+        return {
+            file: filePath,
+            line: link.line,
+            link: link.href,
+            reason: 'access forbidden (403) — resource may exist but requests are blocked'
+        } as LinkValidationWarning
+    }
+
+    if (status >= 400 && status < 500) {
+        return {
+            file: filePath,
+            line: link.line,
+            link: link.href,
+            reason: `HTTP ${status}`
+        } as LinkValidationError
+    }
+
+    if (status >= 500) {
+        return {
+            file: filePath,
+            line: link.line,
+            link: link.href,
+            reason: `server error (${status})`
+        } as LinkValidationWarning
+    }
+
+    return null
 }
