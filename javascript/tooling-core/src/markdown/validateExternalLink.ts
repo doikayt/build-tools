@@ -20,7 +20,8 @@ export async function validateExternalLink(
         const response = await fetch(link.href, {
             method: 'HEAD',
             signal: controller.signal,
-            headers: headers
+            headers: headers,
+            redirect: 'manual'
         })
         status = response.status
 

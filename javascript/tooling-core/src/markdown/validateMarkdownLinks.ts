@@ -72,8 +72,9 @@ export async function validateMarkdownLinks(
 
     if ('reason' in result) {
       const isWarning =
-        result.reason.startsWith('permanent redirect') ||
-        result.reason.startsWith('5')
+          result.reason.startsWith('permanent redirect') ||
+          result.reason.startsWith('access forbidden') ||
+          result.reason.startsWith('server error')
 
       if (isWarning) {
         warnings.push(result as LinkValidationWarning)

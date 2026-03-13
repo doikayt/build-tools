@@ -251,6 +251,7 @@ When running with `--check`, the tool performs three tiers of link validation in
 For full details on behavior, failure output, and performance considerations
 see [Common CLI Behavior — Check Mode](../CLI-BEHAVIOR.md#6-check-mode---check).
 
+
 To skip external link validation:
 ```bash
 npx update-markdown-toc --check README.md --no-external-link-check

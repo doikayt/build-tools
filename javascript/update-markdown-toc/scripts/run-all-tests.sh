@@ -61,6 +61,10 @@ echo "→ Running idempotency tests"
 bash "$SCRIPTS/idempotency.test.sh" $TEST_TRACE_FLAG
 echo
 
+
+echo "→ Running link validation integration tests"
+bash "$SCRIPTS/link-validation-test.sh" $TEST_TRACE_FLAG
+echo
 echo "========================================"
 echo " ✅ ALL TESTS PASSED"
 echo "========================================"
