@@ -55,7 +55,7 @@ const server = http.createServer((req, res) => {
 
 server.listen(port, '127.0.0.1', () => {
   // Print port to stdout so the shell script can read it
-  console.log(server.address().port)
+  console.log(String(server.address().port))
 })
 
 process.on('SIGTERM', () => {
