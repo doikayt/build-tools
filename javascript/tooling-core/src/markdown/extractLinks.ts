@@ -6,8 +6,6 @@ import type { LinkKind, LinkRecord } from './types.js'
 
 const IGNORED_SCHEMES = ['mailto:', 'tel:', 'data:', 'javascript:']
 
-const SKIP_NODE_TYPES = new Set(['code', 'inlineCode', 'html'])
-
 function classifyHref(href: string): LinkKind | null {
   for (const scheme of IGNORED_SCHEMES) {
     if (href.startsWith(scheme)) {
@@ -57,10 +55,12 @@ export function extractLinks(
   options?: {
     managedBlockStartMarker?: string
     managedBlockEndMarker?: string
+    onDebug?: (message: string) => void
   }
 ): { links: LinkRecord[], skippedCount: number } {
   const startMarker = options?.managedBlockStartMarker ?? '<!-- TOC:START -->'
   const endMarker = options?.managedBlockEndMarker ?? '<!-- TOC:END -->'
+  const onDebug = options?.onDebug
 
   const managedRanges = findManagedBlockRanges(markdownText, startMarker, endMarker)
   const tree = unified().use(remarkParse).parse(markdownText) as Root
@@ -68,31 +68,32 @@ export function extractLinks(
   const links: LinkRecord[] = []
   let skippedCount = 0
 
-  visit(tree, (node) => {
-    if (SKIP_NODE_TYPES.has(node.type)) {
-      return 'skip'
-    }
-
-    if (node.type !== 'link' && node.type !== 'image' && node.type !== 'definition') {
-      return
-    }
-
-    const typedNode = node as Link | Image | Definition
-    const href = typedNode.url
-    const line = node.position?.start.line ?? 0
-
+  function processNode(href: string, line: number): void {
     if (isInManagedBlock(line, managedRanges)) {
+      onDebug?.(`extractLinks: SKIPPED (managed block) href=${href} line=${line}`)
       skippedCount++
       return
     }
-
     const kind = classifyHref(href)
     if (kind === null) {
+      onDebug?.(`extractLinks: SKIPPED (ignored scheme) href=${href} line=${line}`)
       skippedCount++
       return
     }
-
+    onDebug?.(`extractLinks: ADDED kind=${kind} href=${href} line=${line}`)
     links.push({ href: href, line: line, kind: kind })
+  }
+
+  visit(tree, 'link', (node: Link) => {
+    processNode(node.url, node.position?.start.line ?? 0)
+  })
+
+  visit(tree, 'image', (node: Image) => {
+    processNode(node.url, node.position?.start.line ?? 0)
+  })
+
+  visit(tree, 'definition', (node: Definition) => {
+    processNode(node.url, node.position?.start.line ?? 0)
   })
 
   return { links: links, skippedCount: skippedCount }

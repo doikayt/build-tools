@@ -8,6 +8,10 @@ export async function runLinkValidation(
 ): Promise<void> {
     debugLog(config, `runLinkValidation: starting, fileCount=${files.length}, validateExternal=${config.validateExternalLinks}`)
 
+    const onDebug = config.debug
+        ? (msg: string) => process.stderr.write(`[debug] ${msg}\n`)
+        : undefined
+
     const results = await Promise.all(
         files.map(file =>
             validateMarkdownLinks(file, {
@@ -16,7 +20,8 @@ export async function runLinkValidation(
                 verbose: config.verbose,
                 onVerbose: config.verbose
                     ? (msg) => console.log(msg)
-                    : undefined
+                    : undefined,
+                onDebug: onDebug
             })
         )
     )

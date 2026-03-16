@@ -46,7 +46,6 @@ export async function runCli<TConfig extends RunConfig = RunConfig>(
     )
     debugLog(config, `runCli: argv=${JSON.stringify(argv)} | config=${JSON.stringify(config)}`)
 
-
     attempt(() => options.descriptor.validate?.(config))
 
     const targets = attempt(() => listFilesToProcess(config, positionals))

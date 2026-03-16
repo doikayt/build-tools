@@ -16,6 +16,8 @@ export async function validateExternalLink(
 
     let status: number
 
+    options.onDebug?.(`validateExternalLink: fetching href=${link.href} timeoutMs=${timeoutMs}`)
+
     try {
         const response = await fetch(link.href, {
             method: 'HEAD',
@@ -26,6 +28,7 @@ export async function validateExternalLink(
         status = response.status
 
         if (status === 405) {
+            options.onDebug?.(`validateExternalLink: 405 HEAD, retrying with GET href=${link.href}`)
             const getResponse = await fetch(link.href, {
                 method: 'GET',
                 signal: controller.signal,
@@ -36,15 +39,19 @@ export async function validateExternalLink(
     } catch (err) {
         clearTimeout(timer)
         const isAbort = err instanceof Error && err.name === 'AbortError'
+        const reason = isAbort ? 'timeout' : 'unreachable'
+        options.onDebug?.(`validateExternalLink: fetch error href=${link.href} reason=${reason}`)
         return {
             file: filePath,
             line: link.line,
             link: link.href,
-            reason: isAbort ? 'timeout' : 'unreachable'
+            reason: reason
         } as LinkValidationError
     }
 
     clearTimeout(timer)
+
+    options.onDebug?.(`validateExternalLink: status=${status} href=${link.href}`)
 
     if (status >= 200 && status < 300) {
         options.onVerbose?.(`✓ ${link.href}`)

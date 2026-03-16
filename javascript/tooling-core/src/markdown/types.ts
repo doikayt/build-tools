@@ -42,6 +42,7 @@ export interface LinkValidationOptions {
   managedBlockEndMarker?: string
   verbose?: boolean
   onVerbose?: (message: string) => void
+  onDebug?: (message: string) => void
 }
 
 export type ExternalLinkStatus =
