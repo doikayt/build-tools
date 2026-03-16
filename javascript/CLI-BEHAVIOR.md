@@ -11,6 +11,7 @@
 - [3. Default Output Behavior](#3-default-output-behavior)
 - [4. Verbose Mode (`--verbose`)](#4-verbose-mode---verbose)
 - [5. Quiet Mode (`--quiet`)](#5-quiet-mode---quiet)
+- [5a. Debug Mode (`--debug`)](#5a-debug-mode---debug)
   - [6. Check Mode (`--check`)](#6-check-mode---check)
     - [TOC Validation](#toc-validation)
     - [Intra-document Link Validation](#intra-document-link-validation)
@@ -19,6 +20,7 @@
 - [7. Exit Codes](#7-exit-codes)
 - [8. Error Behavior](#8-error-behavior)
 - [9. Deterministic Processing](#9-deterministic-processing)
+- [Passing CLI flags when invoking via NX](#passing-cli-flags-when-invoking-via-nx)
 <!-- TOC:END -->
 
 # Common CLI Behavior

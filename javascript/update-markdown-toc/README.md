@@ -249,7 +249,7 @@ When running with `--check`, the tool performs three tiers of link validation in
   - external links.
 
 For full details on behavior, failure output, and performance considerations
-see [Common CLI Behavior — Check Mode](../CLI-BEHAVIOR.md#6-check-mode---check).
+see [Common CLI Behavior — Check Mode](../CLI-BEHAVIOR.md#
 
 
 To skip external link validation:
