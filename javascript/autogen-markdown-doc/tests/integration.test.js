@@ -12,7 +12,7 @@ describe('autogen-markdown-doc integration', () => {
     beforeAll(() => {
 
         fs.writeFileSync(
-            projectPath,
+    projectPath,
             JSON.stringify({
                 targets: {
                     build: { description: 'Compile source' },
@@ -43,7 +43,7 @@ OLD GRAPH
     test('updates Mermaid graph and TOC', () => {
 
         execSync(
-            `node ./bin/autogen-markdown-doc.js ${projectPath} ${markdownPath}`,
+            `node ./bin/autogen-markdown-doc.js --project-json ${projectPath} ${markdownPath}`,
             {
                 cwd: path.resolve(__dirname, '..'),
                 stdio: 'inherit'
