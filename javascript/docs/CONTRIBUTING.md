@@ -375,3 +375,11 @@ Implications:
 - Maintainers must never manually adjust internal dependency ranges.
 - Always use Changesets to produce coordinated releases.
 - After successful publishing, all packages in the workspace will be at the same version number.
+
+
+## Design Principles 
+
+For the reasoning behind structural and architectural decisions that shaped the implementation of all 
+current plug-ins (and which should be followed going forward), refer to  [this document](DESIGN-PRINCIPLES.md)
+
+

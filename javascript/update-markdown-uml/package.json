@@ -1,0 +1,55 @@
+{
+  "name": "@datalackey/update-markdown-uml",
+  "version": "0.1.0",
+  "description": "Generates and validates UML class and package diagrams for TypeScript source trees, injecting them into Markdown documentation files",
+  "license": "MIT",
+  "type": "module",
+  "private": false,
+  "bin": {
+    "update-markdown-uml": "./bin/update-markdown-uml.js"
+  },
+  "files": [
+    "bin/",
+    "dist/",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "uml",
+    "typescript",
+    "mermaid",
+    "documentation",
+    "class-diagram",
+    "package-diagram",
+    "ci",
+    "automation"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/datalackey/build-tools.git",
+    "directory": "javascript/update-markdown-uml"
+  },
+  "bugs": {
+    "url": "https://github.com/datalackey/build-tools/issues"
+  },
+  "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/update-markdown-uml",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npx vitest run --config vitest.config.ts"
+  },
+  "dependencies": {
+    "@datalackey/tooling-core": "*",
+    "ts-morph": "^24.0.0",
+    "tsuml2": "^0.17.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.0.0"
+  }
+}

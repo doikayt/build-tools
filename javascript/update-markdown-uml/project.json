@@ -1,0 +1,16 @@
+{
+  "name": "@datalackey/update-markdown-uml",
+  "sourceRoot": "update-markdown-uml/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "command": "cd update-markdown-uml && npm run build",
+      "outputs": ["{projectRoot}/dist"],
+      "dependsOn": ["@datalackey/tooling-core:build"]
+    },
+    "test": {
+      "command": "npx vitest run --config {projectRoot}/vitest.config.ts",
+      "dependsOn": ["build"]
+    }
+  }
+}
