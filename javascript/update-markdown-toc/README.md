@@ -128,7 +128,7 @@ Options:
   -n, --no-external-link-check              Skip external HTTP/HTTPS link validation during --check
   -l, --link-timeout-ms <ms>                Per-request timeout for external link checks (default: 3000)
   -r, --recursive <path-to-folder>          Recursively process all .md files under the given folder
-  -e, --exclude   <dir1,dir2,...>           Comma-separated list of directory names to exclude during recursive traversal (overrides default exclusion list)
+  -e, --exclude   <dir1,dir2,...>           Directory names to exclude during recursive traversal (overrides default)
   -v, --verbose                             Print status for every file processed
   -q, --quiet                               Suppress all non-error output
   -d, --debug                               Print debug diagnostics to stderr

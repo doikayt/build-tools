@@ -9,9 +9,9 @@ export const descriptor: PluginDescriptor<UmlRunConfig> = {
   options: [
     {
       flag: "--exclude-packages",
-      description: "Comma-separated list of leaf package directory names to exclude from diagram generation",
+      description: "Leaf package directory names to exclude from diagram generation",
       requiresValue: true,
-      valueName: "packages"
+      valueName: "pkg1,pkg2,..."
     },
     {
       flag: "--source",
