@@ -3,6 +3,11 @@ import type { PluginOption } from "./types.js"
 import type { ParsedCliResult } from "./types.js"
 import { debugLog } from "../logging/debugLog.js"
 
+// Option B: PluginOption[] is passed into parseStandardCli so the parser
+// knows upfront which unknown flags require values. This eliminates the
+// need for a peek heuristic in the default case and correctly handles
+// all flag/positional combinations.
+
 const DEFAULT_LINK_TIMEOUT_MS = 3000
 
 export function validateConfig(
@@ -14,9 +19,20 @@ export function validateConfig(
   }
 }
 
-export function parseStandardCli(argv: string[]): ParsedCliResult<RunConfig> {
+export function parseStandardCli(
+  argv: string[],
+  pluginOptions?: PluginOption[]
+): ParsedCliResult<RunConfig> {
 
   const args = argv
+
+  // Build a lookup of which unknown flags require a value so the default
+  // case can consume the next token correctly without a fragile peek heuristic.
+  const valueRequiringFlags = new Set<string>(
+    (pluginOptions ?? [])
+      .filter((o) => o.requiresValue === true)
+      .map((o) => o.flag)
+  )
 
   let help = false
   let version = false
@@ -27,8 +43,13 @@ export function parseStandardCli(argv: string[]): ParsedCliResult<RunConfig> {
   let mode: "single" | "recursive" = "single"
   let recursivePath: string | undefined = undefined
   let exclude: string[] = []
-  let validateExternalLinks = true
-  let linkTimeoutMs = DEFAULT_LINK_TIMEOUT_MS
+
+  // validateExternalLinks and linkTimeoutMs remain in RunConfig with their
+  // defaults so that runLinkValidation always has sensible values.
+  // Plugins that expose these flags (e.g. update-markdown-toc) override
+  // them via their own parseOptions implementation.
+  const validateExternalLinks = true
+  const linkTimeoutMs = DEFAULT_LINK_TIMEOUT_MS
 
   const positionals: string[] = []
   const passthrough: string[] = []
@@ -68,26 +89,6 @@ export function parseStandardCli(argv: string[]): ParsedCliResult<RunConfig> {
         runMode = "check"
         continue
 
-      case "-n":
-      case "--no-external-link-check":
-        validateExternalLinks = false
-        continue
-
-      case "-l":
-      case "--link-timeout-ms": {
-        const next = args[i + 1]
-        if (next === undefined || next.startsWith("-")) {
-          throw new Error("--link-timeout-ms requires a numeric value")
-        }
-        const parsed = Number(next)
-        if (isNaN(parsed)) {
-          throw new Error("--link-timeout-ms requires a numeric value")
-        }
-        linkTimeoutMs = parsed
-        i++
-        continue
-      }
-
       case "-r":
       case "--recursive": {
         const next = args[i + 1]
@@ -119,6 +120,14 @@ export function parseStandardCli(argv: string[]): ParsedCliResult<RunConfig> {
       default:
         if (arg.startsWith("-")) {
           passthrough.push(arg)
+          if (valueRequiringFlags.has(arg)) {
+            const next = args[i + 1]
+            if (next === undefined || next.startsWith("-")) {
+              throw new Error(`Option ${arg} requires a value`)
+            }
+            passthrough.push(next)
+            i++
+          }
           continue
         }
         positionals.push(arg)
@@ -145,16 +154,15 @@ export function parseStandardCli(argv: string[]): ParsedCliResult<RunConfig> {
 
   validateConfig(config, positionals)
 
-  let retval = {
-        config: config,
-        positionals: positionals,
-        passthrough: passthrough,
-        help: help,
-        version: version
-    };
-    debugLog(config, `parseStandardCli: result=${retval}`)
-    return retval
-
+  const retval = {
+    config: config,
+    positionals: positionals,
+    passthrough: passthrough,
+    help: help,
+    version: version
+  }
+  debugLog(config, `parseStandardCli: result=${JSON.stringify(retval)}`)
+  return retval
 }
 
 export function buildPassthroughMap(
@@ -162,58 +170,58 @@ export function buildPassthroughMap(
     passthrough: string[]
 ): Map<string, string | boolean> {
 
-    const known = new Map(options.map((o) => [o.flag, o]))
-    const result = new Map<string, string | boolean>()
+  const known = new Map(options.map((o) => [o.flag, o]))
+  const result = new Map<string, string | boolean>()
 
-    for (let i = 0; i < passthrough.length; i++) {
-        const arg = passthrough[i]
-        const option = known.get(arg)
+  for (let i = 0; i < passthrough.length; i++) {
+    const arg = passthrough[i]
+    const option = known.get(arg)
 
-        if (option === undefined) {
-            throw new Error(`Unknown option: ${arg}`)
-        }
-
-        if (option.requiresValue === true) {
-            const next = passthrough[i + 1]
-            if (next === undefined || next.startsWith("-")) {
-                throw new Error(`Option ${arg} requires a value`)
-            }
-            result.set(arg, next)
-            i++
-        } else {
-            result.set(arg, true)
-        }
+    if (option === undefined) {
+      throw new Error(`Unknown option: ${arg}`)
     }
 
-    return result
+    if (option.requiresValue === true) {
+      const next = passthrough[i + 1]
+      if (next === undefined || next.startsWith("-")) {
+        throw new Error(`Option ${arg} requires a value`)
+      }
+      result.set(arg, next)
+      i++
+    } else {
+      result.set(arg, true)
+    }
+  }
+
+  return result
 }
 
 export function parseStringOption(
     flag: string,
     map: Map<string, string | boolean>
 ): string | undefined {
-    const value = map.get(flag)
-    if (value === undefined) return undefined
-    if (typeof value !== "string") throw new Error(`Option ${flag} requires a string value`)
-    return value
+  const value = map.get(flag)
+  if (value === undefined) return undefined
+  if (typeof value !== "string") throw new Error(`Option ${flag} requires a string value`)
+  return value
 }
 
 export function parseBooleanOption(
     flag: string,
     map: Map<string, string | boolean>
 ): boolean {
-    return map.get(flag) === true
+  return map.get(flag) === true
 }
 
 export function parseNumberOption(
     flag: string,
     map: Map<string, string | boolean>
 ): number | undefined {
-    const value = map.get(flag)
-    if (value === undefined) return undefined
-    const n = Number(value)
-    if (isNaN(n)) throw new Error(`Option ${flag} requires a numeric value`)
-    return n
+  const value = map.get(flag)
+  if (value === undefined) return undefined
+  const n = Number(value)
+  if (isNaN(n)) throw new Error(`Option ${flag} requires a numeric value`)
+  return n
 }
 
 export function buildConfig<TConfig extends RunConfig>(
@@ -221,7 +229,7 @@ export function buildConfig<TConfig extends RunConfig>(
     passthroughMap: Map<string, string | boolean>,
     parseOptions?: (standard: RunConfig, passthrough: Map<string, string | boolean>) => TConfig
 ): TConfig {
-    return parseOptions
-        ? parseOptions(standard, passthroughMap)
-        : standard as TConfig
+  return parseOptions
+      ? parseOptions(standard, passthroughMap)
+      : standard as TConfig
 }

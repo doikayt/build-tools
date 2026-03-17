@@ -2,12 +2,9 @@
 
 import { runCli } from "@datalackey/tooling-core"
 import { TocFileProcessor } from "../dist/engine/TocFileProcessor.js"
+import { descriptor } from "../dist/cli/descriptor.js"
 
 await runCli({
-  descriptor: {
-    name: "update-markdown-toc",
-    description: "Auto-generate Table of Contents for Markdown files",
-    options: []
-  },
+  descriptor: descriptor,
   processor: new TocFileProcessor()
 })

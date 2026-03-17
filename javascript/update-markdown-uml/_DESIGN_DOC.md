@@ -113,9 +113,10 @@ A Markdown table immediately below the overview diagram:
 
 | Package | Description |
 |---------|-------------|
-| [cli](#cli) | CLI parsing, plugin wiring, and help generation |
-| [repository](#repository) | File traversal, processing orchestration, and stats |
+| cli | CLI parsing, plugin wiring, and help generation |
+| repository | File traversal, processing orchestration, and stats |
 
+Package names are clickable links to the corresponding package details section.
 Description sourced from the first line of `_PACKAGE_INFO.md` in each leaf
 directory. If absent or blank, the table shows `TBD` in the description column.
 This is intentional — a visible `TBD` signals that a description is missing.

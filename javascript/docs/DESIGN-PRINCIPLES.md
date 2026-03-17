@@ -182,5 +182,6 @@ The tools in this workspace are not only documentation generators — they are
 architectural feedback mechanisms. When generated output is difficult to read,
 that difficulty is usually a property of the source structure, not the tool.
 
-See [ARCHITECTURAL-SIGNALS.md](./ARCHITECTURAL-SIGNALS.md) for a full
+See [ARCHITECTURAL-SIGNALS.md](./DOCS_AS_ARCHITECTURE_REVIEW.md) for a full
 treatment of this principle and the specific signals each tool surfaces.
+

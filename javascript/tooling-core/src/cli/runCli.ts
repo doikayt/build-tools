@@ -29,7 +29,11 @@ export async function runCli<TConfig extends RunConfig = RunConfig>(
 ): Promise<RepositoryStats> {
     const argv = options.argv ?? process.argv.slice(2)
 
-    const parsed = attempt(() => parseStandardCli(argv))
+    // Pass plugin-specific options into parseStandardCli so it knows which
+    // unknown flags require values — avoids peek heuristics in the parser.
+    const parsed = attempt(() =>
+        parseStandardCli(argv, options.descriptor.options)
+    )
     const positionals = parsed.positionals ?? []
 
     const passthroughMap = attempt(() =>
