@@ -40,7 +40,8 @@
   "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/update-markdown-uml",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "npx vitest run --config vitest.config.ts"
+    "test": "npx vitest run --config vitest.config.ts",
+    "prepack": "npm run build"
   },
   "dependencies": {
     "@datalackey/tooling-core": "*",

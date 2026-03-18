@@ -155,6 +155,39 @@ several reasons:
   (similar patterns are used by tools like doctoc and markdown-toc)
 
 ---
+## Why `dist/` Must Be Present at Publish Time
+
+All packages compile TypeScript to `dist/` via `tsc`. This directory is
+gitignored — compiled artifacts are never committed. But `dist/` IS included
+in the npm published artifact via the `files` field in `package.json`.
+
+Packages lower in the dependency tree (e.g. `autogen-markdown-doc`) import
+compiled JavaScript from `dist/` of their `@datalackey/*` dependencies —
+never TypeScript source. This is the standard npm model.
+
+The dependency tree is:
+```
+autogen-markdown-doc
+  ├── update-markdown-toc  → dist/
+  │     └── tooling-core   → dist/
+  └── nx-graph-to-mermaid  → dist/
+        └── tooling-core   → dist/
+```
+
+`tooling-core` sits at the base and has no `@datalackey/*` dependencies of
+its own.
+
+### The `prepack` contract
+
+Every package in this workspace that compiles TypeScript must declare:
+```json
+"prepack": "npm run build"
+```
+
+This ensures `tsc` runs before `npm publish`, so `dist/` is always present
+and current in the published artifact.
+---
+
 
 ## Progressive Disclosure in CLI Design
 
