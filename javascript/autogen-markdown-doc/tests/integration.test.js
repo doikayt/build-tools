@@ -61,6 +61,11 @@ OLD GRAPH
     test('updates Mermaid graph and TOC when --project-json provided', () => {
         const result = runBin(['--project-json', projectPath, markdownPath], tmpDir);
 
+        if (result.status !== 0) {
+            throw new Error(
+                `bin exited ${result.status}\nstdout: ${result.stdout}\nstderr: ${result.stderr}`
+            );
+        }
         expect(result.status).toBe(0);
 
         const updated = fs.readFileSync(markdownPath, 'utf-8');
@@ -93,8 +98,13 @@ OLD GRAPH
         );
 
         const result = runBin([tocOnlyPath], tmpDir);
-
+        if (result.status !== 0) {
+            throw new Error(
+                `bin exited ${result.status}\nstdout: ${result.stdout}\nstderr: ${result.stderr}`
+            );
+        }
         expect(result.status).toBe(0);
+
 
         const updated = fs.readFileSync(tocOnlyPath, 'utf-8');
 
