@@ -12,7 +12,7 @@ function runBin(args, cwd) {
     if (PUBLISHED_VERSION) {
         return spawnSync(
             'npx',
-            ['--yes', `@datalackey/autogen-markdown-doc@${PUBLISHED_VERSION}`, '--', ...args],
+            ['--yes', '--package', `@datalackey/autogen-markdown-doc@${PUBLISHED_VERSION}`, 'autogen-markdown-doc', ...args],
             { encoding: 'utf-8', cwd: cwd }
         );
     }
