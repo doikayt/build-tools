@@ -1,5 +1,13 @@
 # @datalackey/update-markdown-uml
 
+## 1.1.10
+
+### Patch Changes
+
+- fix: add prepack to ensure dist is built before publish. Then:
+- Updated dependencies
+  - @datalackey/tooling-core@1.1.10
+
 ## 1.1.9
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @datalackey/autogen-markdown-doc
 
+## 1.1.10
+
+### Patch Changes
+
+- fix: add prepack to ensure dist is built before publish. Then:
+- Updated dependencies
+  - @datalackey/nx-graph-to-mermaid@1.1.10
+  - @datalackey/update-markdown-toc@1.1.10
+
 ## 1.1.9
 
 ### Patch Changes
