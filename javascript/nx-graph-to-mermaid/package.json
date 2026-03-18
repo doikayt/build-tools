@@ -45,8 +45,7 @@
     "test": "vitest run",
     "check:toc": "npx update-markdown-toc --check --recursive .",
     "update:toc": "npx update-markdown-toc --recursive .",
-    "copy-schemas": "mkdir -p dist/executors/generate && cp src/executors/generate/schema.json dist/executors/generate/schema.json",
-    "prepack": "npm run build"
+    "copy-schemas": "mkdir -p dist/executors/generate && cp src/executors/generate/schema.json dist/executors/generate/schema.json"
   },
   "devDependencies": {
     "@datalackey/update-markdown-toc": "1.1.10",

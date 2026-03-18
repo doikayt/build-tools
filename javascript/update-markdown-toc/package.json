@@ -7,8 +7,7 @@
   "private": false,
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "bash scripts/run-all-tests.sh",
-    "prepack": "npm run build"
+    "test": "bash scripts/run-all-tests.sh"
   },
   "bin": {
     "update-markdown-toc": "./bin/update-markdown-toc.js"

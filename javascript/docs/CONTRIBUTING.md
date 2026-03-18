@@ -21,7 +21,8 @@ npx nx run-many -t build,test --skip-nx-cache
 ## Overall Repo Structure Model
 
 This repo has three layers:
-- The repository root, which contains [CI configuration](../../.github/workflows/javascript-ci.yml) and resides one level up from the `javascript` folder.
+- The repository root, which contains [CI configuration](../../.github/workflows/javascript-ci.yml) and 
+  resides one level up from the `javascript` folder.
 - The secondary (platform) level where the `javascript/` folder lives. Each folder at this level is specific
   to some given platform (e.g.: JVM, Javascript, Python, etc.) and contains
   appropriate release packaging and publishing configuration for that platform.
@@ -202,10 +203,10 @@ This single command:
 - triggers the release workflow
 - results in packages being published to npm
 
-The configuration for the release workflow is viewable [here](../../.github/workflows/release.yml).
-You can monitor publish results [here](https://github.com/datalackey/build-tools/actions/workflows/release.yml).
+The configuration for the release workflow is specified as a job in the workflow yml referenced above
+You can monitor publish results [here](https://github.com/datalackey/build-tools/actions/workflows/javascript-ci.yml).
 
-The workflow will:
+The release workflow will:
 
 - install dependencies
 - run `npx changeset publish`
