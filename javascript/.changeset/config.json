@@ -9,8 +9,6 @@
     "@datalackey/autogen-markdown-doc",
     "@datalackey/tooling-core",
     "@datalackey/update-markdown-uml"
-  ]
-]
   ],
   "linked": [],
   "access": "public",
