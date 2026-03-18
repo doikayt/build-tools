@@ -12,9 +12,16 @@
 
 
 This repository contains tooling designed to assist in building and maintaining software projects —
-primarily JavaScript/TypeScript projects at this point.
-[This document](./javascript/README.md#packages) describes the tools that are 
-currently available.
+primarily JavaScript/TypeScript projects at this point. The unifying theme of our currently available tools
+(described [here](./javascript/README.md#packages)) is automated documentation generation and verification —
+keeping documentation structurally correct and synchronized with source artifacts -- without manual effort.
+
+The tools operate on the principle that documentation drift is a build failure, not a review comment.
+Generated content is deterministic, injected into Markdown files at points targeted by special start/end tags,
+and CI-enforceable: running in update mode writes correct documentation, 
+running in check mode verifies it, and the two are guaranteed to agree.
+
+
 
 ---
 
@@ -52,7 +59,7 @@ Core principles:
 - Checked-in source code is the source of truth.
 - CI validates, tests, and publishes.
 - CI does not generate code, does not modify existing logic and does not change any non-version related configuration
-  (note: CI *will* bump version numbers as described in Release Exception section below).
+  (note: CI *will* bump version numbers as described in the *Release Exception* section below).
 - Builds must be reproducible locally -- across developer machines and CI.
 
 #### Release Exception (Version Management)

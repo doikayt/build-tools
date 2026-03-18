@@ -3,8 +3,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { execSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import { generate as runExecutor } from '@datalackey/nx-graph-to-mermaid';
+
+const require = createRequire(import.meta.url);
 
 function parseArgs(argv) {
     const args = argv.slice(2);
@@ -68,22 +70,16 @@ async function main() {
     }
 
     // 2️⃣ Run update-markdown-toc
-    const tocBin = fileURLToPath(
-        new URL(
-            '../../node_modules/@datalackey/update-markdown-toc/bin/update-markdown-toc.js',
-            import.meta.url
-        )
+    const tocBin = require.resolve(
+        '@datalackey/update-markdown-toc/bin/update-markdown-toc.js'
     );
     execSync(`node "${tocBin}" "${markdownPath}"`, { stdio: 'inherit' });
 
     // 3️⃣ Run update-markdown-uml
     //    Stub prints alive message. Replace with real invocation
     //    once implementation is complete.
-    const umlBin = fileURLToPath(
-        new URL(
-            '../../node_modules/@datalackey/update-markdown-uml/bin/update-markdown-uml.js',
-            import.meta.url
-        )
+    const umlBin = require.resolve(
+        '@datalackey/update-markdown-uml/bin/update-markdown-uml.js'
     );
     const umlOutput = execSync(`node "${umlBin}"`, { encoding: 'utf-8' });
     process.stdout.write(umlOutput);
