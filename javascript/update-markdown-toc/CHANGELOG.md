@@ -1,5 +1,13 @@
 # @datalackey/update-markdown-toc
 
+## 1.1.12
+
+### Patch Changes
+
+- 3661429: url base fix
+- Updated dependencies [3661429]
+  - @datalackey/tooling-core@1.1.12
+
 ## 1.1.11
 
 ### Patch Changes
