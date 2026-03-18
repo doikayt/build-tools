@@ -1,5 +1,11 @@
 # @datalackey/tooling-core
 
+## 1.1.13
+
+### Patch Changes
+
+- 05d2400: depend fix
+
 ## 1.1.12
 
 ### Patch Changes

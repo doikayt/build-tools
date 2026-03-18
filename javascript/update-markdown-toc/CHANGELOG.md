@@ -1,5 +1,13 @@
 # @datalackey/update-markdown-toc
 
+## 1.1.13
+
+### Patch Changes
+
+- 05d2400: depend fix
+- Updated dependencies [05d2400]
+  - @datalackey/tooling-core@1.1.13
+
 ## 1.1.12
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # @datalackey/autogen-markdown-doc
 
+## 1.1.13
+
+### Patch Changes
+
+- 05d2400: depend fix
+- Updated dependencies [05d2400]
+  - @datalackey/nx-graph-to-mermaid@1.1.13
+  - @datalackey/update-markdown-toc@1.1.13
+  - @datalackey/update-markdown-uml@1.1.13
+
 ## 1.1.12
 
 ### Patch Changes
