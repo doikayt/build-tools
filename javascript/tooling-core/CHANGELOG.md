@@ -1,5 +1,11 @@
 # @datalackey/tooling-core
 
+## 1.1.11
+
+### Patch Changes
+
+- make tooling-core non-private (publish it).
+
 ## 1.1.10
 
 ### Patch Changes

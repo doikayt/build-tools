@@ -1,5 +1,14 @@
 # @datalackey/autogen-markdown-doc
 
+## 1.1.11
+
+### Patch Changes
+
+- make tooling-core non-private (publish it).
+- Updated dependencies
+  - @datalackey/nx-graph-to-mermaid@1.1.11
+  - @datalackey/update-markdown-toc@1.1.11
+
 ## 1.1.10
 
 ### Patch Changes
