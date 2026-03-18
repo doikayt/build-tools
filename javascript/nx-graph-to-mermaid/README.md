@@ -366,7 +366,7 @@ For the full workspace tech stack see: [TECH-STACK.md](../TECH-STACK.md)
 
 This package is one component of a small ecosystem of JavaScript tooling plugins maintained as individual npm packages in this repository.
 The versioning and release of these packages is governed by a coordinated release policy, and
-the packages adhere to common architectural policies (ESM-only, Node 18+, strict TypeScript configuration)
+the packages adhere to common design and architectural principles policies
 that are more completely described [here](../README.md).
 ---
 
