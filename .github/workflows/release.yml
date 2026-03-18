@@ -1,5 +1,5 @@
+# .github/workflows/release.yml
 name: Release
-
 on:
   push:
     branches:
@@ -7,24 +7,19 @@ on:
     paths:
       - 'javascript/**'
   workflow_dispatch:
-
 jobs:
   release:
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
-
     defaults:
       run:
         working-directory: javascript
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -32,11 +27,16 @@ jobs:
           registry-url: https://registry.npmjs.org
           cache: npm
           cache-dependency-path: javascript/package-lock.json
-
       - name: Install deps
         run: npm ci
-
       - name: Publish with Changesets
+        id: publish
         run: npx changeset publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Wait for npm registry propagation
+        run: sleep 15
+      - name: Post-publish smoke test
+        run: |
+          VERSION=$(node -p "require('./autogen-markdown-doc/package.json').version")
+          bash scripts/post-publish-smoke-test.sh "$VERSION"
