@@ -31,7 +31,8 @@
   "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/autogen-markdown-doc",
   "dependencies": {
     "@datalackey/update-markdown-toc": "1.1.12",
-    "@datalackey/nx-graph-to-mermaid": "1.1.12"
+    "@datalackey/nx-graph-to-mermaid": "1.1.12",
+    "@datalackey/update-markdown-uml": "1.1.12"
   },
   "devDependencies": {
     "jest": "^29.7.0"

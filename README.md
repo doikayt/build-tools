@@ -16,10 +16,11 @@ primarily JavaScript/TypeScript projects at this point. The unifying theme of ou
 (described [here](./javascript/README.md#packages)) is automated documentation generation and verification —
 keeping documentation structurally correct and synchronized with source artifacts -- without manual effort.
 
-The tools operate on the principle that documentation drift is a build failure, not a review comment.
-Generated content is deterministic, injected into Markdown files at points targeted by special start/end tags,
-and CI-enforceable: running in update mode writes correct documentation, 
-running in check mode verifies it, and the two are guaranteed to agree.
+The tools operate on the principle that documentation drift (inconsistency between source artifacts and 
+documentation that describes those artifacts) is a build failure, not fodder for a review comment.
+Generated content is deterministic, injected into Markdown files at precise locations, targeted by special start/end tags.
+Running in `update` mode writes correct documentation, 
+running in `check` mode verifies it, and the two are guaranteed to agree.
 
 
 
