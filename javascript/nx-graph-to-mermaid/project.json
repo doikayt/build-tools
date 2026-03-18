@@ -10,7 +10,7 @@
       "dependsOn": []
     },
     "build": {
-      "command": "cd nx-graph-to-mermaid && tsc",
+      "command": "cd nx-graph-to-mermaid && rm -rf dist && tsc",
       "cwd": "{projectRoot}",
       "outputs": ["{projectRoot}/dist"],
       "dependsOn": ["^build", "copy-schemas"]

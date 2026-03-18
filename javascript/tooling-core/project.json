@@ -4,7 +4,7 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "command": "cd tooling-core && tsc -p tsconfig.json",
+      "command": "cd tooling-core && rm -rf dist && tsc -p tsconfig.json",
       "outputs": ["{projectRoot}/dist"]
     },
     "test": {

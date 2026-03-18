@@ -4,7 +4,8 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "command": "cd update-markdown-toc && npm run build"
+      "command": "cd update-markdown-toc && rm -rf dist && npm run build",
+      "outputs": ["{projectRoot}/dist"]
     },
     "test": {
       "command": "cd update-markdown-toc && bash scripts/run-all-tests.sh",
