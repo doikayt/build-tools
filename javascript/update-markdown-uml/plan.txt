@@ -1,0 +1,27 @@
+look in /tmp
+.github/workflows/new.yml
+
+    that has the better ordering we talkd about
+
+.>>>
+
+    bad version to fail release tests..
+
+    any logging that would help ?
+
+    use tooling core logging.. not custom [uml]
+
+- get stub cli and unit tests to work
+    - invoke cli [with switches]
+        show the TCCONFIG structure that swithes are parsed to as stub demo
+
+- get working as part of the build.  
+    - should be able to push to github no failures.
+
+- force early integration with autogen-markdown-doc
+
+- publish release as plugin (when stub is working ok)
+
+- implement stuff in tooling-core
+    - refactor out now redundant code in  mermaid and toc plugins to use above
+  

@@ -1,5 +1,16 @@
 # @datalackey/autogen-markdown-doc
 
+## 1.1.9
+
+### Patch Changes
+
+- 419b360: first cut at uml plugin
+- 023b90e: uml plugin stubbed
+- Updated dependencies [419b360]
+- Updated dependencies [023b90e]
+  - @datalackey/nx-graph-to-mermaid@1.1.9
+  - @datalackey/update-markdown-toc@1.1.9
+
 ## 1.1.8
 
 ### Patch Changes
