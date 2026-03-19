@@ -78,7 +78,7 @@ export function resolveExecutionContext(
  * No file existence checks at this point.
  */
 export function normalizeOptions(raw: RawOptions): NormalizedOptions {
-    if (raw.projectJsonPath == null || raw.projectJsonPath === '') {
+    if (raw.projectJsonPath === null || raw.projectJsonPath === '') {
         throw new Error('projectJsonPath is required');
     }
 
