@@ -12,7 +12,8 @@
     },
     "lint": {
       "command": "npx eslint 'tooling-core/src/**/*.ts' 'update-markdown-toc/src/**/*.ts' 'nx-graph-to-mermaid/src/**/*.ts' 'update-markdown-uml/src/**/*.ts'",
-      "cwd": "{workspaceRoot}"
+      "cwd": "{workspaceRoot}",
+      "dependsOn": ["^build"]
     }
   }
 }
