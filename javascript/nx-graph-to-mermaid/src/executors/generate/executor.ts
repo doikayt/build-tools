@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import { buildMermaid } from '../../core/buildMermaid.js';
+import type { NxProjectJson } from '../../core/buildMermaid.js';
 import {
     RawOptions,
     NormalizedOptions,
@@ -13,9 +14,9 @@ const NX_GRAPH_END = '<!-- NX_GRAPH:END -->';
 /**
  * Main entry point for our NX plugin.
  */
-async function runExecutor(
+function runExecutor(
     rawOptions: RawOptions
-): Promise<{ success: boolean }> {
+): { success: boolean } {
 
     const ctx = resolveExecutionContext(rawOptions);
     if (!ctx.success) {
@@ -30,17 +31,17 @@ async function runExecutor(
             return handleInject(options);
 
         case 'check':
-            return handleCheck(options, buildMermaid(project as any));
+            return handleCheck(options, buildMermaid(project as NxProjectJson));
 
         case 'generate':
-            return handleGenerate(options, buildMermaid(project as any));
+            return handleGenerate(options, buildMermaid(project as NxProjectJson));
 
         case 'update':
-            return handleUpdate(options, buildMermaid(project as any));
+            return handleUpdate(options, buildMermaid(project as NxProjectJson));
 
         default: {
-            const _exhaustive: never = options.mode as never;
-            return fail(`Unsupported mode: ${_exhaustive}`);
+            const _exhaustive: never = options.mode;
+            return fail(`Unsupported mode: ${String(_exhaustive)}`);
         }
     }
 }
@@ -92,7 +93,7 @@ function handleUpdate(
 ): { success: boolean } {
 
     try {
-        if (options.generatedMermaidPath) {
+        if (options.generatedMermaidPath !== undefined) {
             fs.writeFileSync(options.generatedMermaidPath, mermaid, 'utf-8');
         }
 

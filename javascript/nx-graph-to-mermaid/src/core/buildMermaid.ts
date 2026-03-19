@@ -3,7 +3,7 @@ interface NxTarget {
     description?: string;
 }
 
-interface NxProjectJson {
+export interface NxProjectJson {
     targets?: Record<string, NxTarget>;
 }
 
@@ -38,7 +38,7 @@ function validateProjectStructure(
     project: NxProjectJson
 ): Record<string, NxTarget> {
 
-    if (!project || typeof project !== 'object') {
+    if (project === null || typeof project !== 'object') {
         throw new Error('Invalid project.json structure');
     }
 
@@ -51,7 +51,7 @@ function validateProjectStructure(
         throw new Error('project.json must contain a "targets" object');
     }
 
-    const targets = project.targets as Record<string, NxTarget>;
+    const targets = project.targets;
 
     for (const [name, value] of Object.entries(targets)) {
         if (typeof value !== 'object' || value === null || Array.isArray(value)) {
@@ -122,7 +122,7 @@ function renderNodes(
         const nodeId = nodeIdMap.get(name)!;
         const description = targets[name].description;
 
-        if (description) {
+        if (description !== undefined) {
             lines.push(
                 `  ${nodeId}["${name}<br/>${escapeHtml(description)}"]`
             );
@@ -147,7 +147,7 @@ function renderEdges(
 
         for (const dep of deps) {
 
-            if (!targets[dep]) {
+            if (targets[dep] === undefined) {
                 throw new Error(
                     `Target "${name}" depends on missing target "${dep}"`
                 );

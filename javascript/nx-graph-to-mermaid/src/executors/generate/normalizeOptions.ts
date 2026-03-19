@@ -1,4 +1,3 @@
-
 import fs from 'node:fs';
 
 export type Mode = 'generate' | 'check' | 'inject' | 'update';
@@ -54,7 +53,7 @@ export function resolveExecutionContext(
             return { success: false };
         }
 
-        return { success: true, options };
+        return { success: true, options: options };
     }
 
     // CHECK mode: generated file must exist before rebuild
@@ -67,11 +66,11 @@ export function resolveExecutionContext(
 
     // GENERATE, CHECK, UPDATE require project.json
     const project = loadProjectJson(options.projectJsonPath);
-    if (!project) {
+    if (project === null) {
         return { success: false };
     }
 
-    return { success: true, options, project };
+    return { success: true, options: options, project: project };
 }
 
 /**
@@ -79,7 +78,7 @@ export function resolveExecutionContext(
  * No file existence checks at this point.
  */
 export function normalizeOptions(raw: RawOptions): NormalizedOptions {
-    if (!raw.projectJsonPath) {
+    if (raw.projectJsonPath == null || raw.projectJsonPath === '') {
         throw new Error('projectJsonPath is required');
     }
 
@@ -88,75 +87,75 @@ export function normalizeOptions(raw: RawOptions): NormalizedOptions {
     switch (mode) {
 
         case 'generate': {
-            if (!raw.generatedMermaidPath) {
+            if (raw.generatedMermaidPath === undefined) {
                 throw new Error('generatedMermaidPath is required in generate mode');
             }
 
-            if (raw.markdownPath) {
+            if (raw.markdownPath !== undefined) {
                 throw new Error('markdownPath is invalid in generate mode');
             }
 
             return {
                 projectJsonPath: raw.projectJsonPath,
-                mode,
+                mode: mode,
                 generatedMermaidPath: raw.generatedMermaidPath
             };
         }
 
         case 'check': {
-            if (!raw.generatedMermaidPath) {
+            if (raw.generatedMermaidPath === undefined) {
                 throw new Error('generatedMermaidPath is required in check mode');
             }
 
-            if (raw.markdownPath) {
+            if (raw.markdownPath !== undefined) {
                 throw new Error('markdownPath is invalid in check mode');
             }
 
             return {
                 projectJsonPath: raw.projectJsonPath,
-                mode,
+                mode: mode,
                 generatedMermaidPath: raw.generatedMermaidPath
             };
         }
 
         case 'inject': {
-            if (!raw.generatedMermaidPath) {
+            if (raw.generatedMermaidPath === undefined) {
                 throw new Error('generatedMermaidPath is required in inject mode');
             }
 
-            if (!raw.markdownPath) {
+            if (raw.markdownPath === undefined) {
                 throw new Error('markdownPath is required in inject mode');
             }
 
             return {
                 projectJsonPath: raw.projectJsonPath,
-                mode,
+                mode: mode,
                 generatedMermaidPath: raw.generatedMermaidPath,
                 markdownPath: raw.markdownPath
             };
         }
 
         case 'update': {
-            if (!raw.markdownPath) {
+            if (raw.markdownPath === undefined) {
                 throw new Error('markdownPath is required in update mode');
             }
 
             return {
                 projectJsonPath: raw.projectJsonPath,
-                mode,
+                mode: mode,
                 generatedMermaidPath: raw.generatedMermaidPath,
                 markdownPath: raw.markdownPath
             };
         }
 
         default: {
-            throw new Error(`Unsupported mode: ${(mode as never)}`);
+            throw new Error(`Unsupported mode: ${String(mode)}`);
         }
     }
 }
 
 
-function loadProjectJson(path: string): unknown | null {
+function loadProjectJson(path: string): unknown {
     if (!fs.existsSync(path)) {
         console.error(`project.json not found at: ${path}`);
         return null;
@@ -164,7 +163,7 @@ function loadProjectJson(path: string): unknown | null {
 
     try {
         const raw = fs.readFileSync(path, 'utf-8');
-        return JSON.parse(raw);
+        return JSON.parse(raw) as unknown;
     } catch {
         console.error('Failed to read or parse project.json');
         return null;
