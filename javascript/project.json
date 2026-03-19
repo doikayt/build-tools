@@ -9,6 +9,10 @@
     "check:toc": {
       "command": "node update-markdown-toc/bin/update-markdown-toc.js --check --recursive .",
       "cwd": "{workspaceRoot}"
+    },
+    "lint": {
+      "command": "npx eslint 'tooling-core/src/**/*.ts' 'update-markdown-toc/src/**/*.ts' 'nx-graph-to-mermaid/src/**/*.ts' 'update-markdown-uml/src/**/*.ts'",
+      "cwd": "{workspaceRoot}"
     }
   }
 }
