@@ -1,3 +1,15 @@
+
+<!-- TOC:START -->
+- [Auto-Generated Documentation as an Architectural Smell Detector](#auto-generated-documentation-as-an-architectural-smell-detector)
+  - [The Core Idea](#the-core-idea)
+  - [Signal 1 — The Busy UML Diagram](#signal-1--the-busy-uml-diagram)
+  - [Signal 2 — The Verbose Package Summary](#signal-2--the-verbose-package-summary)
+  - [Signal 3 — The Deep TOC](#signal-3--the-deep-toc)
+  - [Signal 4 — The Complex Build Graph](#signal-4--the-complex-build-graph)
+  - [The Common Thread](#the-common-thread)
+<!-- TOC:END -->
+
+
 # Auto-Generated Documentation as an Architectural Smell Detector
 
 This document describes how the output of the documentation tools in this

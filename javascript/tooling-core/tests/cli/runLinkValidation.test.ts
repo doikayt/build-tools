@@ -127,4 +127,13 @@ describe('runLinkValidation()', () => {
     expect(consoleSpy).not.toHaveBeenCalled()
     consoleSpy.mockRestore()
   })
+
+  test('does not print warnings when quiet is true', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ status: 301 }))
+    const file = writeFile('quiet-warning.md', '# Title\n\n[link](https://example.com)\n')
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    await runLinkValidation([file], { ...baseConfig, validateExternalLinks: true, quiet: true })
+    expect(consoleSpy).not.toHaveBeenCalled()
+    consoleSpy.mockRestore()
+  })
 })

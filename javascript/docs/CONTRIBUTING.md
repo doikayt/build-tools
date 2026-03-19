@@ -1,3 +1,34 @@
+<!-- TOC:START -->
+- [Contributing to JavaScript/TypeScript/Node Packages](#contributing-to-javascripttypescriptnode-packages)
+  - [First-Time Setup](#first-time-setup)
+  - [Overall Repo Structure Model](#overall-repo-structure-model)
+  - [Build Pipeline](#build-pipeline)
+  - [Development and Release Engineering Workflows](#development-and-release-engineering-workflows)
+    - [Day to Day Development (Package Level) Overview](#day-to-day-development-package-level-overview)
+    - [Integration Testing Overview (Via Combined All-in-One Plugin)](#integration-testing-overview-via-combined-all-in-one-plugin)
+    - [Packaging and Release Steps Overview](#packaging-and-release-steps-overview)
+  - [Packaging and Release Workflow Details](#packaging-and-release-workflow-details)
+    - [1. Ensure a Clean Working Tree](#1-ensure-a-clean-working-tree)
+    - [2. Run All Tests](#2-run-all-tests)
+    - [3. Create a Changeset](#3-create-a-changeset)
+    - [4. Apply Version Bumps](#4-apply-version-bumps)
+    - [5. Publish (Push + Tags + CI)](#5-publish-push--tags--ci)
+    - [6. Verify Release](#6-verify-release)
+  - [Handling `changeset status` Errors](#handling-changeset-status-errors)
+    - [What this means](#what-this-means)
+    - [When you will see this](#when-you-will-see-this)
+    - [How to resolve](#how-to-resolve)
+      - [Option A — This change SHOULD trigger a release](#option-a--this-change-should-trigger-a-release)
+      - [Option B — This change should NOT trigger a release](#option-b--this-change-should-not-trigger-a-release)
+    - [rules](#rules)
+    - [Maintainer rules](#maintainer-rules)
+  - [Activity Diagram](#activity-diagram)
+  - [Rules](#rules-1)
+  - [Publishing as NPM Packages](#publishing-as-npm-packages)
+  - [Sideways Version Bump Policy](#sideways-version-bump-policy)
+  - [Design Principles](#design-principles)
+<!-- TOC:END -->
+
 # Contributing to JavaScript/TypeScript/Node Packages
 
 This guide is targeted to project contributors and covers first-time setup, day-to-day development, and release engineering
@@ -293,6 +324,7 @@ git commit -m "chore: add empty changeset"
 
 ---
 
+### rules
 ### Maintainer rules
 
 - Never ignore this error.

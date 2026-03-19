@@ -1,4 +1,16 @@
 <!-- TOC:START -->
+- [Design Principles](#design-principles)
+  - [Bin Files Are JavaScript, Not TypeScript](#bin-files-are-javascript-not-typescript)
+  - [ESM-Only, No CommonJS](#esm-only-no-commonjs)
+  - [No Bundler](#no-bundler)
+  - [One Lock File at the Workspace Root](#one-lock-file-at-the-workspace-root)
+  - [The CLI Framework Pattern](#the-cli-framework-pattern)
+  - [Check Mode Is Byte-for-Byte Comparison](#check-mode-is-byte-for-byte-comparison)
+  - [The Marker Injection Pattern](#the-marker-injection-pattern)
+  - [Why `dist/` Must Be Present at Publish Time](#why-dist-must-be-present-at-publish-time)
+    - [The `prepack` contract](#the-prepack-contract)
+  - [Progressive Disclosure in CLI Design](#progressive-disclosure-in-cli-design)
+  - [Documentation Tools as Architectural Signals](#documentation-tools-as-architectural-signals)
 <!-- TOC:END -->
 
 

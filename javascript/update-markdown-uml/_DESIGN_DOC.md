@@ -1,6 +1,38 @@
 # update-markdown-uml — Design Document
 
 <!-- TOC:START -->
+- [update-markdown-uml — Design Document](#update-markdown-uml--design-document)
+  - [Overview](#overview)
+  - [Design Principles](#design-principles)
+    - [Diagrams as Architectural Fitness Functions](#diagrams-as-architectural-fitness-functions)
+    - [Progressive Disclosure](#progressive-disclosure)
+    - [Convention Over Configuration](#convention-over-configuration)
+  - [User-Facing API](#user-facing-api)
+    - [Marker Placement](#marker-placement)
+    - [Generated Output Structure](#generated-output-structure)
+  - [Generated Content Detail](#generated-content-detail)
+    - [Package Overview Diagram](#package-overview-diagram)
+    - [Package Details Table](#package-details-table)
+    - [Package Details Section](#package-details-section)
+      - [cli](#cli)
+      - [repository](#repository)
+  - [Source Discovery](#source-discovery)
+  - [Package Description Convention](#package-description-convention)
+  - [CLI Interface](#cli-interface)
+    - [`--exclude-packages` / `-x`](#--exclude-packages---x)
+  - [Check Mode](#check-mode)
+  - [Recursive Mode](#recursive-mode)
+  - [Output and Summary](#output-and-summary)
+    - [Default Output](#default-output)
+    - [Verbose Output](#verbose-output)
+    - [Quiet Output](#quiet-output)
+  - [Planned Tooling Core Contributions](#planned-tooling-core-contributions)
+    - [`findMarker` and `findMarkers`](#findmarker-and-findmarkers)
+    - [`injectSections`](#injectsections)
+  - [Refactor Candidates](#refactor-candidates)
+  - [Dependencies](#dependencies)
+  - [Out of Scope (v1)](#out-of-scope-v1)
+  - [Open Questions](#open-questions)
 <!-- TOC:END -->
 
 ## Overview

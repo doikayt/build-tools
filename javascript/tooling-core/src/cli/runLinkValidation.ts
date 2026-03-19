@@ -36,8 +36,10 @@ export async function runLinkValidation(
             hasErrors = true
         }
 
-        for (const warning of result.warnings) {
-            console.log(`⚠ Link warning in ${warning.file}:${warning.line} → ${warning.link} (${warning.reason})`)
+        if (!config.quiet) {
+            for (const warning of result.warnings) {
+                console.log(`⚠ Link warning in ${warning.file}:${warning.line} → ${warning.link} (${warning.reason})`)
+            }
         }
     }
 
