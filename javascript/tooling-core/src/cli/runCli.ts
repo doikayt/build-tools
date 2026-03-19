@@ -56,7 +56,7 @@ export async function runCli<TConfig extends RunConfig = RunConfig>(
 
     debugLog(config, `runCli: targets=${JSON.stringify(targets.files)}`)
 
-    const stats = await runPlugin(targets.files, options.processor, config)
+    const stats = runPlugin(targets.files, options.processor, config)
 
     debugLog(config, `runCli: stats=${JSON.stringify(stats)}`)
 

@@ -30,7 +30,7 @@ export class RepositoryRunner<TConfig extends RunConfig> {
         this.policy = options.policy
     }
 
-    runAsync(files: string[]): RepositoryStats {
+    run(files: string[]): RepositoryStats {
         const stats: RepositoryStats = this.getInitCounterState()
 
         if (!Array.isArray(files)) {

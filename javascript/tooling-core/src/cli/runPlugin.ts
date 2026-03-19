@@ -19,5 +19,5 @@ export function runPlugin<TConfig extends RunConfig>(
         policy: policy
     })
 
-    return runner.runAsync(files)
+    return runner.run(files)
 }

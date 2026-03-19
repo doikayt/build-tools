@@ -27,5 +27,5 @@ test("runner aborts when policy returns abort", () => {
     },
     policy
   })
-  expect(() => runner.runAsync(["a.md"])).toThrow("boom")
+  expect(() => runner.run(["a.md"])).toThrow("boom")
 })
