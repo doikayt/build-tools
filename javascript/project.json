@@ -1,6 +1,12 @@
 {
   "name": "build-tools-workspace",
   "projectType": "library",
+  "implicitDependencies": [
+    "@datalackey/tooling-core",
+    "@datalackey/update-markdown-toc",
+    "@datalackey/nx-graph-to-mermaid",
+    "@datalackey/update-markdown-uml"
+  ],
   "targets": {
     "update:toc": {
       "command": "node update-markdown-toc/bin/update-markdown-toc.js --recursive .",

@@ -72,3 +72,57 @@ Two test runners exist for historical reasons. New packages should prefer Vitest
   └── @datalackey/nx-graph-to-mermaid
         └── @datalackey/tooling-core
 ```
+
+
+### Type Resolution and the Lint Target
+
+ESLint is configured for type-aware linting via
+[`tsconfig.eslint.json`](tsconfig.eslint.json) with
+`@typescript-eslint/parser`. That parser performs type-aware linting, which
+means it needs fully resolved types for all imports.
+
+Each package resolves `@datalackey/tooling-core` via a `paths` alias in its own
+[`tsconfig.json`](nx-graph-to-mermaid/tsconfig.json), pointing directly at
+the source:
+```json
+"paths": {
+  "@datalackey/tooling-core": ["../tooling-core/src/index.ts"]
+}
+```
+
+However, [`tsconfig.eslint.json`](tsconfig.eslint.json) is a standalone
+config — it includes all package source files directly via its own `include`
+globs, but it does not inherit from or compose the per-package `tsconfig.json`
+files, and therefore does not see their `paths` declarations.
+
+So when ESLint's parser encounters `import ... from '@datalackey/tooling-core'`
+in any package's source, it resolves that as a normal npm package — looking in
+`node_modules/@datalackey/tooling-core/package.json` and following the
+`exports` field's `"types"` condition:
+```json
+"exports": {
+  ".": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js"
+  }
+}
+```
+
+That points to `./dist/index.d.ts` — which only exists after a build. Without
+`dist`, resolution fails and everything imported from `tooling-core` becomes
+`any`, triggering widespread `@typescript-eslint/no-unsafe-*` violations across
+all packages that depend on it.
+
+#### Automatic Build Ordering
+
+A full build of all packages must complete before lint is attempted. This is
+handled automatically: the lint target in
+[`project.json`](project.json) declares:
+```json
+"dependsOn": ["^build"]
+```
+
+and `build-tools-workspace` declares
+[`implicitDependencies`](project.json) covering all packages in the
+workspace. NX resolves this into a full build of every package before the lint
+command runs. No manual build step is required.
