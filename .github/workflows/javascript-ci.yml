@@ -34,7 +34,7 @@ jobs:
         run: npx nx run build-tools-workspace:lint
 
       - name: Build and test
-        run: npx nx run-many -t build,test --skip-nx-cache
+        run: npx nx run-many -t build,test
 
       - name: Check Changesets (PR only)
         if: github.event_name == 'pull_request'
