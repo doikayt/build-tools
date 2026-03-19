@@ -3,8 +3,18 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "paths": {
+      "@datalackey/tooling-core": [
+        "../tooling-core/src/index.ts"
+      ]
+    }
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../tooling-core"
+    }
+  ]
 }
