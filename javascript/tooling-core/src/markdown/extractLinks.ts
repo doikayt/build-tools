@@ -1,7 +1,7 @@
 import { unified } from 'unified'
 import remarkParse from 'remark-parse'
 import { visit } from 'unist-util-visit'
-import type { Root, Link, Image, Definition } from 'mdast'
+import type { Link, Image, Definition } from 'mdast'
 import type { LinkKind, LinkRecord } from './types.js'
 
 const IGNORED_SCHEMES = ['mailto:', 'tel:', 'data:', 'javascript:']
@@ -63,7 +63,7 @@ export function extractLinks(
   const onDebug = options?.onDebug
 
   const managedRanges = findManagedBlockRanges(markdownText, startMarker, endMarker)
-  const tree = unified().use(remarkParse).parse(markdownText) as Root
+  const tree = unified().use(remarkParse).parse(markdownText)
 
   const links: LinkRecord[] = []
   let skippedCount = 0

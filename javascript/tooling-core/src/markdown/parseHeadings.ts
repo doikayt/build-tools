@@ -2,7 +2,7 @@ import { unified } from 'unified'
 import remarkParse from 'remark-parse'
 import { visit } from 'unist-util-visit'
 import GithubSlugger from 'github-slugger'
-import type { Root, Heading, Text } from 'mdast'
+import type { Heading, Text } from 'mdast'
 import type { HeadingRecord } from './types.js'
 
 function extractHeadingText(node: Heading): string {
@@ -14,7 +14,7 @@ function extractHeadingText(node: Heading): string {
 }
 
 export function parseHeadings(markdownText: string): HeadingRecord[] {
-  const tree = unified().use(remarkParse).parse(markdownText) as Root
+  const tree = unified().use(remarkParse).parse(markdownText)
   const slugger = new GithubSlugger()
   const headings: HeadingRecord[] = []
 

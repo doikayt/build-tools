@@ -17,7 +17,7 @@ export function createTransformProcessor<
       if (updated === original) {
         return "unchanged";
       }
-      if (config.check) {
+      if (config.check === true) {
         return "stale";
       }
 

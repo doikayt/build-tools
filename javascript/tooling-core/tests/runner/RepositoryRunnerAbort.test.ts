@@ -2,7 +2,7 @@ import { RepositoryRunner } from "../../src/repository/RepositoryRunner.js"
 import type { RunnerDecision } from "../../src/index.js"
 
 
-test("runner aborts when policy returns abort", async () => {
+test("runner aborts when policy returns abort", () => {
   const processor = {
     process() {
       throw new Error("boom")
@@ -27,5 +27,5 @@ test("runner aborts when policy returns abort", async () => {
     },
     policy
   })
-  await expect(runner.runAsync(["a.md"])).rejects.toThrow("boom")
+  expect(() => runner.runAsync(["a.md"])).toThrow("boom")
 })

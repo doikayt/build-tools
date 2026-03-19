@@ -9,7 +9,7 @@ export function runPlugin<TConfig extends RunConfig>(
     files: string[],
     processor: FileProcessor<TConfig>,
     config: TConfig
-): Promise<RepositoryStats> {
+): RepositoryStats {
     debugLog(config, `runPlugin: fileCount=${files.length}`)
 
     const policy = createRunnerPolicy(config)

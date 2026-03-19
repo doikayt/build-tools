@@ -1,8 +1,9 @@
 # General Instructions for Typescript Projects
 
 
-
-
+## Typescript
+- Interface methods that do not use `this` must be annotated with `this: void`
+  as the first parameter to prevent unintentional scoping errors.
 
 ## Language stack
   - TypeScript, Jest, NX for complex builds else package.json

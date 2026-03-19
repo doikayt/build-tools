@@ -15,8 +15,8 @@ export interface PluginDescriptor<TConfig extends RunConfig = RunConfig> {
   name: string
   description: string
   options: PluginOption[]
-  parseOptions?(standard: RunConfig, passthrough: Map<string, string | boolean>): TConfig
-  validate?(config: TConfig): void
+  parseOptions?(this: void, standard: RunConfig, passthrough: Map<string, string | boolean>): TConfig
+  validate?(this: void, config: TConfig): void
 }
 
 export interface ParsedCliResult<TConfig extends RunConfig = RunConfig> {
@@ -26,3 +26,7 @@ export interface ParsedCliResult<TConfig extends RunConfig = RunConfig> {
     help: boolean
     version: boolean
 }
+
+
+
+
