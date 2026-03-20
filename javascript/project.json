@@ -13,7 +13,7 @@
       "cwd": "{workspaceRoot}"
     },
     "check:toc": {
-      "command": "node update-markdown-toc/bin/update-markdown-toc.js --check --recursive .",
+      "command": "node update-markdown-toc/bin/update-markdown-toc.js --check --recursive   . -e node_modules,test,test-fixtures,tests",
       "cwd": "{workspaceRoot}"
     },
     "lint": {

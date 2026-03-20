@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Check TOC
+        run: npx nx run build-tools-workspace:check:toc
+
       - name: Lint
         run: npx nx run build-tools-workspace:lint
 
