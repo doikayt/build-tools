@@ -33,7 +33,7 @@ jobs:
       - name: Lint
         run: npx nx run build-tools-workspace:lint
 
-      - name: Check TOC
+      - name: Check Markdown TOC Consistency
         run: node update-markdown-toc/bin/update-markdown-toc.js --check --recursive   . -e node_modules,test,test-fixtures,tests
 
       - name: Build and test

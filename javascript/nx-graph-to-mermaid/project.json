@@ -12,12 +12,34 @@
     "build": {
       "command": "cd nx-graph-to-mermaid && rm -rf dist && tsc",
       "cwd": "{projectRoot}",
-      "outputs": ["{projectRoot}/dist"],
-      "dependsOn": ["^build", "copy-schemas"]
+      "outputs": [
+        "{projectRoot}/dist"
+      ],
+      "dependsOn": [
+        "^build",
+        "copy-schemas"
+      ]
     },
     "test": {
       "command": "npx vitest run --config {projectRoot}/vitest.config.ts",
-      "dependsOn": ["build"]
+      "dependsOn": [
+        "build"
+      ]
+    },
+    "lint": {
+      "command": "npx eslint 'nx-graph-to-mermaid/src/**/*.ts'",
+      "cwd": "{workspaceRoot}",
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/src/**/*.ts",
+        "{workspaceRoot}/tsconfig.eslint.json",
+        "{workspaceRoot}/.eslintrc*",
+        "{workspaceRoot}/eslint.config*"
+      ],
+      "outputs": [],
+      "dependsOn": [
+        "@datalackey/tooling-core:build"
+      ]
     }
   }
 }

@@ -15,12 +15,19 @@
     "check:toc": {
       "command": "node update-markdown-toc/bin/update-markdown-toc.js --check --recursive   . -e node_modules,test,test-fixtures,tests",
       "cwd": "{workspaceRoot}",
-      "dependsOn": ["@datalackey/tooling-core:build"]
+      "dependsOn": [
+        "@datalackey/tooling-core:build"
+      ]
     },
     "lint": {
-      "command": "npx eslint 'tooling-core/src/**/*.ts' 'update-markdown-toc/src/**/*.ts' 'nx-graph-to-mermaid/src/**/*.ts' 'update-markdown-uml/src/**/*.ts'",
+      "command": "npx nx run-many -t lint --projects=@datalackey/tooling-core,@datalackey/update-markdown-toc,@datalackey/nx-graph-to-mermaid,@datalackey/update-markdown-uml",
       "cwd": "{workspaceRoot}",
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "@datalackey/tooling-core:lint",
+        "@datalackey/update-markdown-toc:lint",
+        "@datalackey/nx-graph-to-mermaid:lint",
+        "@datalackey/update-markdown-uml:lint"
+      ]
     }
   }
 }

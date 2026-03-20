@@ -5,11 +5,31 @@
   "targets": {
     "build": {
       "command": "cd update-markdown-toc && rm -rf dist && npm run build",
-      "outputs": ["{projectRoot}/dist"]
+      "outputs": [
+        "{projectRoot}/dist"
+      ]
     },
     "test": {
       "command": "cd update-markdown-toc && bash scripts/run-all-tests.sh",
-      "dependsOn": ["build", "@datalackey/tooling-core:build"]
+      "dependsOn": [
+        "build",
+        "@datalackey/tooling-core:build"
+      ]
+    },
+    "lint": {
+      "command": "npx eslint 'update-markdown-toc/src/**/*.ts'",
+      "cwd": "{workspaceRoot}",
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/src/**/*.ts",
+        "{workspaceRoot}/tsconfig.eslint.json",
+        "{workspaceRoot}/.eslintrc*",
+        "{workspaceRoot}/eslint.config*"
+      ],
+      "outputs": [],
+      "dependsOn": [
+        "@datalackey/tooling-core:build"
+      ]
     }
   }
 }
