@@ -30,11 +30,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Check TOC
-        run: npx nx run build-tools-workspace:check:toc
-
       - name: Lint
         run: npx nx run build-tools-workspace:lint
+
+      - name: Check TOC
+        run: node update-markdown-toc/bin/update-markdown-toc.js --check --recursive   . -e node_modules,test,test-fixtures,tests
 
       - name: Build and test
         run: npx nx run-many -t build,test
