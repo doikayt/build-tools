@@ -10,7 +10,6 @@
 
 # build-tools
 
-
 This repository contains tooling designed to assist in building and maintaining software projects —
 primarily JavaScript/TypeScript projects at this point. The unifying theme of our currently available tools
 (described [here](./javascript/README.md#packages)) is automated documentation generation and verification —
