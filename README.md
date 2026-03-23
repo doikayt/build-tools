@@ -1,4 +1,7 @@
 <!-- TOC:START -->
+- [build-tools](#build-tools)
+  - [Design Principles](#design-principles)
+    - [UX Philosophy](#ux-philosophy)
     - [Build Philosophy](#build-philosophy)
       - [Release Exception (Version Management)](#release-exception-version-management)
   - [For Project Maintainers](#for-project-maintainers)
