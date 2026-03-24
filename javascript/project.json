@@ -15,7 +15,9 @@
     "check:toc": {
       "command": "node update-markdown-toc/bin/update-markdown-toc.js --check --recursive   . -e node_modules,test,test-fixtures,tests",
       "cwd": "{workspaceRoot}",
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
     },
     "check:lint": {
       "command": "npx nx run-many -t lint --projects=@datalackey/tooling-core,@datalackey/update-markdown-toc,@datalackey/nx-graph-to-mermaid,@datalackey/update-markdown-uml",
@@ -36,9 +38,13 @@
       "cwd": "{workspaceRoot}"
     },
     "ci": {
-      "command": "npx nx run build-tools-workspace:check:toc && npx nx run build-tools-workspace:check:lint && npx nx run build-tools-workspace:check:format",
-      "cwd": "{workspaceRoot}",
-      "dependsOn": ["^build", "^test"]
+      "dependsOn": [
+        "^build",
+        "^test",
+        "build-tools-workspace:check:toc",
+        "build-tools-workspace:check:lint",
+        "build-tools-workspace:check:format"
+      ]
     }
   }
 }

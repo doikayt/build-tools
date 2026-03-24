@@ -31,7 +31,7 @@ jobs:
         run: npm ci
 
       - name: CI
-        run: npx nx run build-tools-workspace:ci --skip-nx-cache`
+        run: npx nx run build-tools-workspace:ci --skip-nx-cache
 
       - name: Run tests
         run: npx nx run-many -t test
