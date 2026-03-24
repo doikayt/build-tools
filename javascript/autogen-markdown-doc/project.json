@@ -1,18 +1,18 @@
 {
-    "name": "autogen-markdown-doc",
-    "sourceRoot": "autogen-markdown-doc",
-    "projectType": "library",
-    "targets": {
-        "build": {
-            "command": "echo 'no build step'",
-            "outputs": []
-        },
-        "test": {
-            "command": "cd autogen-markdown-doc && jest",
-            "dependsOn": [
-                "@datalackey/nx-graph-to-mermaid:build",
-                "@datalackey/update-markdown-toc:build"
-            ]
-        }
+  "name": "autogen-markdown-doc",
+  "sourceRoot": "autogen-markdown-doc",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "command": "echo 'no build step'",
+      "outputs": []
+    },
+    "test": {
+      "command": "cd autogen-markdown-doc && jest",
+      "dependsOn": [
+        "@datalackey/nx-graph-to-mermaid:build",
+        "@datalackey/update-markdown-toc:build"
+      ]
     }
+  }
 }

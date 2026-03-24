@@ -105,7 +105,7 @@ The RunnerPolicy decides:
 
 */
 export interface RunnerPolicy {
-    shouldPrint(status: ProcessingStatus): boolean;
-    shouldPrintSummary(): boolean;
-    handleProcessorError(file: string, error: unknown): RunnerDecision;
+  shouldPrint(status: ProcessingStatus): boolean;
+  shouldPrintSummary(): boolean;
+  handleProcessorError(file: string, error: unknown): RunnerDecision;
 }

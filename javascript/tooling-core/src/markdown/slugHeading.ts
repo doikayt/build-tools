@@ -7,5 +7,5 @@ import GithubSlugger from "github-slugger";
  * duplicate-heading counters are scoped correctly to that document.
  */
 export function slugHeading(rawText: string, slugger: GithubSlugger): string {
-    return slugger.slug(rawText);
+  return slugger.slug(rawText);
 }

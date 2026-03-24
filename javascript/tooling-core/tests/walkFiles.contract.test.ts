@@ -5,144 +5,144 @@ import os from "node:os";
 import { walkFiles, DEFAULT_EXCLUDE_DIRS } from "../src/fs/walkFiles";
 
 function makeTmpDir(): string {
-    return fs.mkdtempSync(path.join(os.tmpdir(), "walk-contract-"));
+  return fs.mkdtempSync(path.join(os.tmpdir(), "walk-contract-"));
 }
 
 function write(filePath: string): void {
-    fs.mkdirSync(path.dirname(filePath), { recursive: true });
-    fs.writeFileSync(filePath, "x", "utf8");
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, "x", "utf8");
 }
 
 function cleanup(dir: string): void {
-    fs.rmSync(dir, { recursive: true, force: true });
+  fs.rmSync(dir, { recursive: true, force: true });
 }
 
 describe("walkFiles() contract", () => {
-    test("throws if rootDir does not exist", () => {
-        const missing = path.join(os.tmpdir(), "definitely-not-there");
+  test("throws if rootDir does not exist", () => {
+    const missing = path.join(os.tmpdir(), "definitely-not-there");
 
-        expect(() => walkFiles({ rootDir: missing })).toThrow();
+    expect(() => walkFiles({ rootDir: missing })).toThrow();
+  });
+
+  test("returns absolute paths relative to rootDir input", () => {
+    const dir = makeTmpDir();
+
+    write(path.join(dir, "a.txt"));
+
+    const result = walkFiles({ rootDir: dir });
+
+    expect(result[0]).toBe(path.join(dir, "a.txt"));
+
+    cleanup(dir);
+  });
+
+  test("empty extensions array behaves like no filter", () => {
+    const dir = makeTmpDir();
+
+    write(path.join(dir, "a.txt"));
+    write(path.join(dir, "b.md"));
+
+    const result = walkFiles({
+      rootDir: dir,
+      extensions: [],
     });
 
-    test("returns absolute paths relative to rootDir input", () => {
-        const dir = makeTmpDir();
+    const basenames = result.map((p) => path.basename(p));
+    expect(basenames).toEqual(["a.txt", "b.md"]);
 
-        write(path.join(dir, "a.txt"));
+    cleanup(dir);
+  });
 
-        const result = walkFiles({ rootDir: dir });
+  test("multiple extension filter works", () => {
+    const dir = makeTmpDir();
 
-        expect(result[0]).toBe(path.join(dir, "a.txt"));
+    write(path.join(dir, "a.txt"));
+    write(path.join(dir, "b.md"));
+    write(path.join(dir, "c.json"));
 
-        cleanup(dir);
+    const result = walkFiles({
+      rootDir: dir,
+      extensions: [".md", ".json"],
     });
 
-    test("empty extensions array behaves like no filter", () => {
-        const dir = makeTmpDir();
+    const basenames = result.map((p) => path.basename(p));
+    expect(basenames).toEqual(["b.md", "c.json"]);
 
-        write(path.join(dir, "a.txt"));
-        write(path.join(dir, "b.md"));
+    cleanup(dir);
+  });
 
-        const result = walkFiles({
-            rootDir: dir,
-            extensions: [],
-        });
+  test("extension matching is suffix-based (not substring)", () => {
+    const dir = makeTmpDir();
 
-        const basenames = result.map(p => path.basename(p));
-        expect(basenames).toEqual(["a.txt", "b.md"]);
+    write(path.join(dir, "file.md"));
+    write(path.join(dir, "file.md.backup"));
 
-        cleanup(dir);
+    const result = walkFiles({
+      rootDir: dir,
+      extensions: [".md"],
     });
 
-    test("multiple extension filter works", () => {
-        const dir = makeTmpDir();
+    const basenames = result.map((p) => path.basename(p));
+    expect(basenames).toEqual(["file.md"]);
 
-        write(path.join(dir, "a.txt"));
-        write(path.join(dir, "b.md"));
-        write(path.join(dir, "c.json"));
+    cleanup(dir);
+  });
 
-        const result = walkFiles({
-            rootDir: dir,
-            extensions: [".md", ".json"],
-        });
+  test("nested directories are sorted lexicographically", () => {
+    const dir = makeTmpDir();
 
-        const basenames = result.map(p => path.basename(p));
-        expect(basenames).toEqual(["b.md", "c.json"]);
+    write(path.join(dir, "b", "z.txt"));
+    write(path.join(dir, "a", "y.txt"));
+    write(path.join(dir, "a", "x.txt"));
 
-        cleanup(dir);
+    const result = walkFiles({ rootDir: dir });
+    const relative = result.map((p) => path.relative(dir, p));
+
+    expect(relative).toEqual([
+      path.join("a", "x.txt"),
+      path.join("a", "y.txt"),
+      path.join("b", "z.txt"),
+    ]);
+
+    cleanup(dir);
+  });
+
+  test("custom excludeDirs completely overrides default", () => {
+    const dir = makeTmpDir();
+
+    write(path.join(dir, "node_modules", "hidden.txt"));
+    write(path.join(dir, "visible.txt"));
+
+    const result = walkFiles({
+      rootDir: dir,
+      excludeDirs: [], // disable exclusions
     });
 
-    test("extension matching is suffix-based (not substring)", () => {
-        const dir = makeTmpDir();
+    const basenames = result.map((p) => path.basename(p));
 
-        write(path.join(dir, "file.md"));
-        write(path.join(dir, "file.md.backup"));
+    expect(basenames).toEqual(["hidden.txt", "visible.txt"].sort());
 
-        const result = walkFiles({
-            rootDir: dir,
-            extensions: [".md"],
-        });
+    cleanup(dir);
+  });
 
-        const basenames = result.map(p => path.basename(p));
-        expect(basenames).toEqual(["file.md"]);
+  test("DEFAULT_EXCLUDE_DIRS contains node_modules", () => {
+    expect(DEFAULT_EXCLUDE_DIRS).toContain("node_modules");
+  });
 
-        cleanup(dir);
-    });
+  test("deterministic across many runs", () => {
+    const dir = makeTmpDir();
 
-    test("nested directories are sorted lexicographically", () => {
-        const dir = makeTmpDir();
+    for (let i = 0; i < 20; i++) {
+      write(path.join(dir, `file-${i}.txt`));
+    }
 
-        write(path.join(dir, "b", "z.txt"));
-        write(path.join(dir, "a", "y.txt"));
-        write(path.join(dir, "a", "x.txt"));
+    const first = walkFiles({ rootDir: dir });
 
-        const result = walkFiles({ rootDir: dir });
-        const relative = result.map(p => path.relative(dir, p));
+    for (let i = 0; i < 10; i++) {
+      const again = walkFiles({ rootDir: dir });
+      expect(again).toEqual(first);
+    }
 
-        expect(relative).toEqual([
-            path.join("a", "x.txt"),
-            path.join("a", "y.txt"),
-            path.join("b", "z.txt"),
-        ]);
-
-        cleanup(dir);
-    });
-
-    test("custom excludeDirs completely overrides default", () => {
-        const dir = makeTmpDir();
-
-        write(path.join(dir, "node_modules", "hidden.txt"));
-        write(path.join(dir, "visible.txt"));
-
-        const result = walkFiles({
-            rootDir: dir,
-            excludeDirs: [], // disable exclusions
-        });
-
-        const basenames = result.map(p => path.basename(p));
-
-        expect(basenames).toEqual(["hidden.txt", "visible.txt"].sort());
-
-        cleanup(dir);
-    });
-
-    test("DEFAULT_EXCLUDE_DIRS contains node_modules", () => {
-        expect(DEFAULT_EXCLUDE_DIRS).toContain("node_modules");
-    });
-
-    test("deterministic across many runs", () => {
-        const dir = makeTmpDir();
-
-        for (let i = 0; i < 20; i++) {
-            write(path.join(dir, `file-${i}.txt`));
-        }
-
-        const first = walkFiles({ rootDir: dir });
-
-        for (let i = 0; i < 10; i++) {
-            const again = walkFiles({ rootDir: dir });
-            expect(again).toEqual(first);
-        }
-
-        cleanup(dir);
-    });
+    cleanup(dir);
+  });
 });

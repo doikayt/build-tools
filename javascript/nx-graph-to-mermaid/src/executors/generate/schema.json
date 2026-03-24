@@ -1,26 +1,26 @@
 {
-    "$schema": "http://json-schema.org/schema",
-    "title": "NX Graph to Mermaid Executor",
-    "type": "object",
-    "properties": {
-        "projectJsonPath": {
-            "type": "string",
-            "description": "Path to project.json"
-        },
-        "mode": {
-            "type": "string",
-            "enum": ["generate", "check", "inject", "update"],
-            "default": "generate"
-        },
-        "generatedMermaidPath": {
-            "type": "string",
-            "description": "Path to write or read generated Mermaid file"
-        },
-        "markdownPath": {
-            "type": "string",
-            "description": "Markdown file for injection"
-        }
+  "$schema": "http://json-schema.org/schema",
+  "title": "NX Graph to Mermaid Executor",
+  "type": "object",
+  "properties": {
+    "projectJsonPath": {
+      "type": "string",
+      "description": "Path to project.json"
     },
-    "required": ["projectJsonPath"],
-    "additionalProperties": false
+    "mode": {
+      "type": "string",
+      "enum": ["generate", "check", "inject", "update"],
+      "default": "generate"
+    },
+    "generatedMermaidPath": {
+      "type": "string",
+      "description": "Path to write or read generated Mermaid file"
+    },
+    "markdownPath": {
+      "type": "string",
+      "description": "Markdown file for injection"
+    }
+  },
+  "required": ["projectJsonPath"],
+  "additionalProperties": false
 }

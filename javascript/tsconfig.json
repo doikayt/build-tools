@@ -1,9 +1,9 @@
 {
-    "files": [],
-    "references": [
-        { "path": "./tooling-core" },
-        { "path": "./update-markdown-toc" },
-        { "path": "./nx-graph-to-mermaid" },
-        { "path": "./update-markdown-uml" }
-    ]
+  "files": [],
+  "references": [
+    { "path": "./tooling-core" },
+    { "path": "./update-markdown-toc" },
+    { "path": "./nx-graph-to-mermaid" },
+    { "path": "./update-markdown-uml" }
+  ]
 }

@@ -3,7 +3,7 @@ import type { RunConfig } from "@datalackey/tooling-core";
 import { processFile } from "./processFile.js";
 
 export class TocFileProcessor implements FileProcessor<RunConfig> {
-    process(filePath: string, config: RunConfig): ProcessingStatus {
-        return processFile(filePath, config);
-    }
+  process(filePath: string, config: RunConfig): ProcessingStatus {
+    return processFile(filePath, config);
+  }
 }

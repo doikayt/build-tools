@@ -1,28 +1,28 @@
 {
-    "name": "@datalackey/tooling-core",
-    "sourceRoot": "tooling-core/src",
-    "projectType": "library",
-    "targets": {
-        "build": {
-            "command": "cd tooling-core && rm -rf dist && tsc -p tsconfig.json",
-            "outputs": ["{projectRoot}/dist"]
-        },
-        "test": {
-            "command": "cd tooling-core && npx vitest run --config vitest.config.ts",
-            "dependsOn": ["build"]
-        },
-        "lint": {
-            "command": "npx eslint 'tooling-core/src/**/*.ts'",
-            "cwd": "{workspaceRoot}",
-            "cache": true,
-            "inputs": [
-                "{projectRoot}/src/**/*.ts",
-                "{workspaceRoot}/tsconfig.eslint.json",
-                "{workspaceRoot}/.eslintrc*",
-                "{workspaceRoot}/eslint.config*"
-            ],
-            "outputs": [],
-            "dependsOn": ["@datalackey/tooling-core:build"]
-        }
+  "name": "@datalackey/tooling-core",
+  "sourceRoot": "tooling-core/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "command": "cd tooling-core && rm -rf dist && tsc -p tsconfig.json",
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "test": {
+      "command": "cd tooling-core && npx vitest run --config vitest.config.ts",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "command": "npx eslint 'tooling-core/src/**/*.ts'",
+      "cwd": "{workspaceRoot}",
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/src/**/*.ts",
+        "{workspaceRoot}/tsconfig.eslint.json",
+        "{workspaceRoot}/.eslintrc*",
+        "{workspaceRoot}/eslint.config*"
+      ],
+      "outputs": [],
+      "dependsOn": ["@datalackey/tooling-core:build"]
     }
+  }
 }

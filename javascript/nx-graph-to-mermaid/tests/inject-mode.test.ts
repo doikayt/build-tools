@@ -1,4 +1,12 @@
-import { vi, describe, test, expect, beforeEach, afterEach, type MockInstance } from "vitest";
+import {
+  vi,
+  describe,
+  test,
+  expect,
+  beforeEach,
+  afterEach,
+  type MockInstance,
+} from "vitest";
 import fs from "fs";
 import path from "path";
 import os from "os";
@@ -8,87 +16,99 @@ import { safeUnlink } from "./utils/fs.js";
 const FENCE = "```";
 
 describe("inject mode behavior", () => {
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "inject-test-"));
-    const projectPath = path.join(tmpDir, "tmp-project.json");
-    const generatedPath = path.join(tmpDir, "tmp-generated.md");
-    const markdownPath = path.join(tmpDir, "tmp-readme.md");
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "inject-test-"));
+  const projectPath = path.join(tmpDir, "tmp-project.json");
+  const generatedPath = path.join(tmpDir, "tmp-generated.md");
+  const markdownPath = path.join(tmpDir, "tmp-readme.md");
 
-    let consoleSpy: MockInstance<[message?: any, ...optionalParams: any[]], void>;
+  let consoleSpy: MockInstance<[message?: any, ...optionalParams: any[]], void>;
 
-    beforeEach(() => {
-        fs.writeFileSync(
-            projectPath,
-            JSON.stringify({
-                targets: {
-                    build: {
-                        description: "Compile source",
-                    },
-                },
-            })
-        );
+  beforeEach(() => {
+    fs.writeFileSync(
+      projectPath,
+      JSON.stringify({
+        targets: {
+          build: {
+            description: "Compile source",
+          },
+        },
+      })
+    );
 
-        consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    safeUnlink(projectPath);
+    safeUnlink(generatedPath);
+    safeUnlink(markdownPath);
+    consoleSpy.mockRestore();
+  });
+
+  test("fails if generated file missing", async () => {
+    fs.writeFileSync(markdownPath, "README", "utf-8");
+
+    const result = await runExecutor({
+      projectJsonPath: projectPath,
+      mode: "inject",
+      generatedMermaidPath: generatedPath,
+      markdownPath,
     });
 
-    afterEach(() => {
-        safeUnlink(projectPath);
-        safeUnlink(generatedPath);
-        safeUnlink(markdownPath);
-        consoleSpy.mockRestore();
+    expect(result.success).toBe(false);
+    expect(consoleSpy).toHaveBeenCalledWith(
+      `Generated file not found at: ${generatedPath}`
+    );
+  });
+
+  test("fails if markdown file missing", async () => {
+    fs.writeFileSync(
+      generatedPath,
+      FENCE + "mermaid\ngraph TD\n\n" + FENCE,
+      "utf-8"
+    );
+
+    const result = await runExecutor({
+      projectJsonPath: projectPath,
+      mode: "inject",
+      generatedMermaidPath: generatedPath,
+      markdownPath,
     });
 
-    test("fails if generated file missing", async () => {
-        fs.writeFileSync(markdownPath, "README", "utf-8");
+    expect(result.success).toBe(false);
+    expect(consoleSpy).toHaveBeenCalledWith(
+      `Markdown file not found at: ${markdownPath}`
+    );
+  });
 
-        const result = await runExecutor({
-            projectJsonPath: projectPath,
-            mode: "inject",
-            generatedMermaidPath: generatedPath,
-            markdownPath,
-        });
+  test("fails if NX_GRAPH markers missing", async () => {
+    fs.writeFileSync(
+      generatedPath,
+      FENCE + "mermaid\ngraph TD\n\n" + FENCE,
+      "utf-8"
+    );
+    fs.writeFileSync(markdownPath, "NO MARKERS HERE", "utf-8");
 
-        expect(result.success).toBe(false);
-        expect(consoleSpy).toHaveBeenCalledWith(`Generated file not found at: ${generatedPath}`);
+    const result = await runExecutor({
+      projectJsonPath: projectPath,
+      mode: "inject",
+      generatedMermaidPath: generatedPath,
+      markdownPath,
     });
 
-    test("fails if markdown file missing", async () => {
-        fs.writeFileSync(generatedPath, FENCE + "mermaid\ngraph TD\n\n" + FENCE, "utf-8");
+    expect(result.success).toBe(false);
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "Markers not found or invalid: <!-- NX_GRAPH:START -->"
+    );
+  });
 
-        const result = await runExecutor({
-            projectJsonPath: projectPath,
-            mode: "inject",
-            generatedMermaidPath: generatedPath,
-            markdownPath,
-        });
+  test("replaces only content between markers", async () => {
+    const generatedContent = FENCE + "mermaid\ngraph TD\n\n  build\n\n" + FENCE;
+    fs.writeFileSync(generatedPath, generatedContent, "utf-8");
 
-        expect(result.success).toBe(false);
-        expect(consoleSpy).toHaveBeenCalledWith(`Markdown file not found at: ${markdownPath}`);
-    });
-
-    test("fails if NX_GRAPH markers missing", async () => {
-        fs.writeFileSync(generatedPath, FENCE + "mermaid\ngraph TD\n\n" + FENCE, "utf-8");
-        fs.writeFileSync(markdownPath, "NO MARKERS HERE", "utf-8");
-
-        const result = await runExecutor({
-            projectJsonPath: projectPath,
-            mode: "inject",
-            generatedMermaidPath: generatedPath,
-            markdownPath,
-        });
-
-        expect(result.success).toBe(false);
-        expect(consoleSpy).toHaveBeenCalledWith(
-            "Markers not found or invalid: <!-- NX_GRAPH:START -->"
-        );
-    });
-
-    test("replaces only content between markers", async () => {
-        const generatedContent = FENCE + "mermaid\ngraph TD\n\n  build\n\n" + FENCE;
-        fs.writeFileSync(generatedPath, generatedContent, "utf-8");
-
-        fs.writeFileSync(
-            markdownPath,
-            `
+    fs.writeFileSync(
+      markdownPath,
+      `
 # Title
 
 <!-- NX_GRAPH:START -->
@@ -97,33 +117,33 @@ OLD CONTENT
 
 Footer
 `,
-            "utf-8"
-        );
+      "utf-8"
+    );
 
-        const result = await runExecutor({
-            projectJsonPath: projectPath,
-            mode: "inject",
-            generatedMermaidPath: generatedPath,
-            markdownPath,
-        });
-
-        expect(result.success).toBe(true);
-
-        const updated = fs.readFileSync(markdownPath, "utf-8");
-
-        expect(updated).toContain(generatedContent);
-        expect(updated).toContain("# Title");
-        expect(updated).toContain("Footer");
-        expect(updated).not.toContain("OLD CONTENT");
+    const result = await runExecutor({
+      projectJsonPath: projectPath,
+      mode: "inject",
+      generatedMermaidPath: generatedPath,
+      markdownPath,
     });
 
-    test("inject mode is idempotent", async () => {
-        const generatedContent = FENCE + "mermaid\ngraph TD\n\n  build\n\n" + FENCE;
-        fs.writeFileSync(generatedPath, generatedContent, "utf-8");
+    expect(result.success).toBe(true);
 
-        fs.writeFileSync(
-            markdownPath,
-            `
+    const updated = fs.readFileSync(markdownPath, "utf-8");
+
+    expect(updated).toContain(generatedContent);
+    expect(updated).toContain("# Title");
+    expect(updated).toContain("Footer");
+    expect(updated).not.toContain("OLD CONTENT");
+  });
+
+  test("inject mode is idempotent", async () => {
+    const generatedContent = FENCE + "mermaid\ngraph TD\n\n  build\n\n" + FENCE;
+    fs.writeFileSync(generatedPath, generatedContent, "utf-8");
+
+    fs.writeFileSync(
+      markdownPath,
+      `
 # Title
 
 <!-- NX_GRAPH:START -->
@@ -132,27 +152,27 @@ OLD CONTENT
 
 Footer
 `,
-            "utf-8"
-        );
+      "utf-8"
+    );
 
-        await runExecutor({
-            projectJsonPath: projectPath,
-            mode: "inject",
-            generatedMermaidPath: generatedPath,
-            markdownPath,
-        });
-
-        const first = fs.readFileSync(markdownPath, "utf-8");
-
-        await runExecutor({
-            projectJsonPath: projectPath,
-            mode: "inject",
-            generatedMermaidPath: generatedPath,
-            markdownPath,
-        });
-
-        const second = fs.readFileSync(markdownPath, "utf-8");
-
-        expect(first).toBe(second);
+    await runExecutor({
+      projectJsonPath: projectPath,
+      mode: "inject",
+      generatedMermaidPath: generatedPath,
+      markdownPath,
     });
+
+    const first = fs.readFileSync(markdownPath, "utf-8");
+
+    await runExecutor({
+      projectJsonPath: projectPath,
+      mode: "inject",
+      generatedMermaidPath: generatedPath,
+      markdownPath,
+    });
+
+    const second = fs.readFileSync(markdownPath, "utf-8");
+
+    expect(first).toBe(second);
+  });
 });

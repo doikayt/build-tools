@@ -5,6 +5,6 @@ import { TocFileProcessor } from "../dist/engine/TocFileProcessor.js";
 import { descriptor } from "../dist/cli/descriptor.js";
 
 await runCli({
-    descriptor: descriptor,
-    processor: new TocFileProcessor(),
+  descriptor: descriptor,
+  processor: new TocFileProcessor(),
 });

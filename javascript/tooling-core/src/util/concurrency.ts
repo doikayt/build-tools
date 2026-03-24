@@ -4,21 +4,24 @@
  * regardless of completion order.
  */
 export async function runWithConcurrency<T>(
-    tasks: Array<() => Promise<T>>,
-    concurrency: number
+  tasks: Array<() => Promise<T>>,
+  concurrency: number
 ): Promise<T[]> {
-    const results: T[] = [];
-    let index = 0;
+  const results: T[] = [];
+  let index = 0;
 
-    async function worker(): Promise<void> {
-        while (index < tasks.length) {
-            const current = index++;
-            results[current] = await tasks[current]();
-        }
+  async function worker(): Promise<void> {
+    while (index < tasks.length) {
+      const current = index++;
+      results[current] = await tasks[current]();
     }
+  }
 
-    const workers = Array.from({ length: Math.min(concurrency, tasks.length) }, () => worker());
+  const workers = Array.from(
+    { length: Math.min(concurrency, tasks.length) },
+    () => worker()
+  );
 
-    await Promise.all(workers);
-    return results;
+  await Promise.all(workers);
+  return results;
 }

@@ -1,9 +1,9 @@
 {
-    "extends": "./tsconfig.base.json",
-    "include": [
-        "tooling-core/src/**/*.ts",
-        "update-markdown-toc/src/**/*.ts",
-        "nx-graph-to-mermaid/src/**/*.ts",
-        "update-markdown-uml/src/**/*.ts"
-    ]
+  "extends": "./tsconfig.base.json",
+  "include": [
+    "tooling-core/src/**/*.ts",
+    "update-markdown-toc/src/**/*.ts",
+    "nx-graph-to-mermaid/src/**/*.ts",
+    "update-markdown-uml/src/**/*.ts"
+  ]
 }

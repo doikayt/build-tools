@@ -1,10 +1,10 @@
 {
-    "$schema": "https://json.schemastore.org/nx-plugin",
-    "executors": {
-        "run": {
-            "implementation": "./dist/executors/generate/executor.js",
-            "schema": "./dist/executors/generate/schema.json",
-            "description": "NX Graph to Mermaid executor (mode-driven)"
-        }
+  "$schema": "https://json.schemastore.org/nx-plugin",
+  "executors": {
+    "run": {
+      "implementation": "./dist/executors/generate/executor.js",
+      "schema": "./dist/executors/generate/schema.json",
+      "description": "NX Graph to Mermaid executor (mode-driven)"
     }
+  }
 }

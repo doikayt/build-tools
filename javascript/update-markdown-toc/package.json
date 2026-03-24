@@ -1,56 +1,56 @@
 {
-    "name": "@datalackey/update-markdown-toc",
-    "version": "1.1.13",
-    "description": "Auto-generate Table of Contents for a Markdown file (or files, recursively from a top level folder)",
-    "license": "MIT",
-    "type": "module",
-    "private": false,
-    "scripts": {
-        "build": "tsc -p tsconfig.json",
-        "test": "bash scripts/run-all-tests.sh"
-    },
-    "bin": {
-        "update-markdown-toc": "./bin/update-markdown-toc.js"
-    },
-    "files": [
-        "bin/",
-        "dist/"
-    ],
-    "engines": {
-        "node": ">=18"
-    },
-    "keywords": [
-        "build",
-        "automation",
-        "javascript",
-        "typescript",
-        "node",
-        "documentation",
-        "readme",
-        "toc",
-        "markdown",
-        "ci"
-    ],
-    "publishConfig": {
-        "access": "public"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/datalackey/build-tools.git",
-        "directory": "javascript/update-markdown-toc"
-    },
-    "bugs": {
-        "url": "https://github.com/datalackey/build-tools/issues"
-    },
-    "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/update-markdown-toc",
-    "dependencies": {
-        "@datalackey/tooling-core": "*",
-        "github-slugger": "^2.0.0",
-        "ts-dedent": "^2.2.0"
-    },
-    "devDependencies": {
-        "@types/node": "^18.19.130",
-        "jest": "^30.2.0",
-        "typescript": "^5.9.3"
-    }
+  "name": "@datalackey/update-markdown-toc",
+  "version": "1.1.13",
+  "description": "Auto-generate Table of Contents for a Markdown file (or files, recursively from a top level folder)",
+  "license": "MIT",
+  "type": "module",
+  "private": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "bash scripts/run-all-tests.sh"
+  },
+  "bin": {
+    "update-markdown-toc": "./bin/update-markdown-toc.js"
+  },
+  "files": [
+    "bin/",
+    "dist/"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "build",
+    "automation",
+    "javascript",
+    "typescript",
+    "node",
+    "documentation",
+    "readme",
+    "toc",
+    "markdown",
+    "ci"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/datalackey/build-tools.git",
+    "directory": "javascript/update-markdown-toc"
+  },
+  "bugs": {
+    "url": "https://github.com/datalackey/build-tools/issues"
+  },
+  "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/update-markdown-toc",
+  "dependencies": {
+    "@datalackey/tooling-core": "*",
+    "github-slugger": "^2.0.0",
+    "ts-dedent": "^2.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.19.130",
+    "jest": "^30.2.0",
+    "typescript": "^5.9.3"
+  }
 }

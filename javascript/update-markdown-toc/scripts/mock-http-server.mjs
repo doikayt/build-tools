@@ -18,46 +18,48 @@ import http from "node:http";
 const port = parseInt(process.argv[2] ?? "0", 10);
 
 const server = http.createServer((req, res) => {
-    const path = req.url ?? "/";
+  const path = req.url ?? "/";
 
-    if (path === "/ok") {
-        res.writeHead(200);
-        res.end("OK");
-        return;
-    }
+  if (path === "/ok") {
+    res.writeHead(200);
+    res.end("OK");
+    return;
+  }
 
-    if (path === "/not-found") {
-        res.writeHead(404);
-        res.end("Not Found");
-        return;
-    }
-
-    if (path === "/forbidden") {
-        res.writeHead(403);
-        res.end("Forbidden");
-        return;
-    }
-
-    if (path === "/moved") {
-        res.writeHead(301, { Location: `http://localhost:${server.address().port}/ok` });
-        res.end();
-        return;
-    }
-
-    if (path === "/slow") {
-        // Never responds — used to test timeout
-        return;
-    }
-
+  if (path === "/not-found") {
     res.writeHead(404);
-    res.end("Unknown route");
+    res.end("Not Found");
+    return;
+  }
+
+  if (path === "/forbidden") {
+    res.writeHead(403);
+    res.end("Forbidden");
+    return;
+  }
+
+  if (path === "/moved") {
+    res.writeHead(301, {
+      Location: `http://localhost:${server.address().port}/ok`,
+    });
+    res.end();
+    return;
+  }
+
+  if (path === "/slow") {
+    // Never responds — used to test timeout
+    return;
+  }
+
+  res.writeHead(404);
+  res.end("Unknown route");
 });
 
 server.listen(port, "127.0.0.1", () => {
-    // Print port to stdout so the shell script can read it
-    console.log(String(server.address().port));
+  // Print port to stdout so the shell script can read it
+  console.log(String(server.address().port));
 });
 
 process.on("SIGTERM", () => {
-    server.close(() => process.exit(0));
+  server.close(() => process.exit(0));
 });
