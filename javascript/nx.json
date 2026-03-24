@@ -11,6 +11,10 @@
     "test": {
       "cache": true,
       "inputs": ["default", "^default"]
+    },
+    "ci": {
+      "dependsOn": ["build", "test", "lint"],
+      "cache": false
     }
   },
   "namedInputs": {

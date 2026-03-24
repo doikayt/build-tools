@@ -43,8 +43,6 @@
   "scripts": {
     "build": "tsc && npm run copy-schemas",
     "test": "vitest run",
-    "check:toc": "npx update-markdown-toc --check --recursive .",
-    "update:toc": "npx update-markdown-toc --recursive .",
     "copy-schemas": "mkdir -p dist/executors/generate && cp src/executors/generate/schema.json dist/executors/generate/schema.json"
   },
   "devDependencies": {
