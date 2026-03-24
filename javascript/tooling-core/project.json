@@ -4,8 +4,13 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "command": "cd tooling-core && rm -rf dist && tsc -p tsconfig.json",
-      "outputs": ["{projectRoot}/dist"]
+      "command": "cd tooling-core && rm -rf dist && tsc --noCheck -p tsconfig.json",
+      "outputs": ["{projectRoot}/dist"],
+      "//": [
+        "--noCheck (TS 5.5+): emit JS without type checking — fast transpile-only build.",
+        "Type correctness is enforced by the developer's IDE and by check:types in CI.",
+        "See build-tools-workspace/project.json check:types and nx.json for the full picture."
+      ]
     },
     "test": {
       "command": "cd tooling-core && npx vitest run --config vitest.config.ts",
@@ -23,6 +28,16 @@
       ],
       "outputs": [],
       "dependsOn": ["@datalackey/tooling-core:build"]
+    },
+    "typecheck": {
+      "//": [
+        "--noEmit: run the full type checker but write nothing to disk.",
+        "This is the CI gate that catches what the IDE should have caught locally.",
+        "We do NOT use --noCheck here — that would defeat the purpose.",
+        "dependsOn ^build ensures dependency .d.ts files exist before we typecheck."
+      ],
+      "command": "cd tooling-core && npx tsc -p tsconfig.json --noEmit",
+      "dependsOn": ["^build"]
     }
   }
 }

@@ -49,7 +49,22 @@
         "^test",
         "build-tools-workspace:check:toc",
         "build-tools-workspace:check:lint",
-        "build-tools-workspace:check:format"
+        "build-tools-workspace:check:format",
+        "build-tools-workspace:check:types"
+      ]
+    },
+    "check:types": {
+      "//": [
+        "Aggregates per-package typecheck targets.",
+        "Runs tsc --noEmit across all packages — CI gate only, not part of local build loop.",
+        "Philosophy: developers fix type errors in the IDE (red = do not commit).",
+        "This target exists to catch the lazy commit. See per-package typecheck targets."
+      ],
+      "dependsOn": [
+        "@datalackey/tooling-core:typecheck",
+        "@datalackey/update-markdown-toc:typecheck",
+        "@datalackey/nx-graph-to-mermaid:typecheck",
+        "@datalackey/update-markdown-uml:typecheck"
       ]
     }
   }
