@@ -52,7 +52,9 @@ export class RepositoryRunner<TConfig extends RunConfig> {
             } catch (err) {
                 debugLog(
                     this.config,
-                    `RepositoryRunner.runAsync: processor error file=${file} err=${err instanceof Error ? err.message : String(err)}`
+                    `RepositoryRunner.runAsync: processor error file=${file} err=${
+                        err instanceof Error ? err.message : String(err)
+                    }`
                 );
                 if (this.policy.handleProcessorError(file, err) === "continue") {
                     continue;

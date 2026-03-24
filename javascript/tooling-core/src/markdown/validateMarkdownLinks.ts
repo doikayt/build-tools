@@ -23,7 +23,9 @@ export async function validateMarkdownLinks(
     let validatedCount = 0;
 
     options.onDebug?.(
-        `validateMarkdownLinks: entry filePath=${filePath} validateExternal=${options.validateExternal ?? true} concurrency=${options.concurrency ?? DEFAULT_CONCURRENCY}`
+        `validateMarkdownLinks: entry filePath=${filePath} validateExternal=${
+            options.validateExternal ?? true
+        } concurrency=${options.concurrency ?? DEFAULT_CONCURRENCY}`
     );
 
     const markdownText = fs.readFileSync(filePath, "utf-8");
@@ -74,7 +76,9 @@ export async function validateMarkdownLinks(
         options.validateExternal !== false ? links.filter(l => l.kind === "external") : [];
 
     options.onDebug?.(
-        `validateMarkdownLinks: external links to validate: count=${externalLinks.length}${options.validateExternal === false ? " (skipped by option)" : ""}`
+        `validateMarkdownLinks: external links to validate: count=${externalLinks.length}${
+            options.validateExternal === false ? " (skipped by option)" : ""
+        }`
     );
 
     const concurrency = options.concurrency ?? DEFAULT_CONCURRENCY;
