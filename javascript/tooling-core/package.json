@@ -1,53 +1,53 @@
 {
-  "name": "@datalackey/tooling-core",
-  "version": "1.1.13",
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
-  },
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist/",
-    "README.md"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/datalackey/build-tools.git",
-    "directory": "javascript/tooling-core"
-  },
-  "bugs": {
-    "url": "https://github.com/datalackey/build-tools/issues"
-  },
-  "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/tooling-core",
-  "scripts": {},
-  "nx": {
-    "targets": {
-      "test": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "npm test",
-          "cwd": "tooling-core"
+    "name": "@datalackey/tooling-core",
+    "version": "1.1.13",
+    "type": "module",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
         }
-      }
+    },
+    "types": "./dist/index.d.ts",
+    "files": [
+        "dist/",
+        "README.md"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/datalackey/build-tools.git",
+        "directory": "javascript/tooling-core"
+    },
+    "bugs": {
+        "url": "https://github.com/datalackey/build-tools/issues"
+    },
+    "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/tooling-core",
+    "scripts": {},
+    "nx": {
+        "targets": {
+            "test": {
+                "executor": "nx:run-commands",
+                "options": {
+                    "command": "npm test",
+                    "cwd": "tooling-core"
+                }
+            }
+        }
+    },
+    "devDependencies": {
+        "@types/mdast": "^4.0.4",
+        "@types/node": "^18.16.0",
+        "@types/unist": "^3.0.3",
+        "typescript": "^5.4.0",
+        "vitest": "^4.0.18"
+    },
+    "dependencies": {
+        "github-slugger": "^2.0.0",
+        "remark-parse": "^11.0.0",
+        "unified": "^11.0.5",
+        "unist-util-visit": "^5.1.0"
     }
-  },
-  "devDependencies": {
-    "@types/mdast": "^4.0.4",
-    "@types/node": "^18.16.0",
-    "@types/unist": "^3.0.3",
-    "typescript": "^5.4.0",
-    "vitest": "^4.0.18"
-  },
-  "dependencies": {
-    "github-slugger": "^2.0.0",
-    "remark-parse": "^11.0.0",
-    "unified": "^11.0.5",
-    "unist-util-visit": "^5.1.0"
-  }
 }

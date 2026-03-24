@@ -1,23 +1,20 @@
 {
-  "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "npmScope": "datalackey",
-  "projects": {},
-  "targetDefaults": {
-    "build": {
-      "dependsOn": ["^build"],
-      "cache": true,
-      "inputs": ["default", "^default"]
+    "$schema": "./node_modules/nx/schemas/nx-schema.json",
+    "npmScope": "datalackey",
+    "projects": {},
+    "targetDefaults": {
+        "build": {
+            "dependsOn": ["^build"],
+            "cache": true,
+            "inputs": ["default", "^default"]
+        },
+        "test": {
+            "cache": true,
+            "inputs": ["default", "^default"]
+        }
     },
-    "test": {
-      "cache": true,
-      "inputs": ["default", "^default"]
+    "namedInputs": {
+        "default": ["{projectRoot}/**/*", "sharedGlobals"],
+        "sharedGlobals": []
     }
-  },
-  "namedInputs": {
-    "default": [
-      "{projectRoot}/**/*",
-      "sharedGlobals"
-    ],
-    "sharedGlobals": []
-  }
 }

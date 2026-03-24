@@ -1,40 +1,40 @@
 {
-  "name": "@datalackey/autogen-markdown-doc",
-  "version": "1.1.13",
-  "description": "Combined documentation automation: update-markdown-toc + nx-graph-to-mermaid",
-  "license": "MIT",
-  "type": "module",
-  "scripts": {
-    "test": "jest"
-  },
-  "bin": {
-    "autogen-markdown-doc": "./bin/autogen-markdown-doc.js"
-  },
-  "files": [
-    "bin/",
-    "README.md"
-  ],
-  "engines": {
-    "node": ">=18"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/datalackey/build-tools.git",
-    "directory": "javascript/autogen-markdown-doc"
-  },
-  "bugs": {
-    "url": "https://github.com/datalackey/build-tools/issues"
-  },
-  "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/autogen-markdown-doc",
-  "dependencies": {
-    "@datalackey/update-markdown-toc": "1.1.13",
-    "@datalackey/nx-graph-to-mermaid": "1.1.13",
-    "@datalackey/update-markdown-uml": "1.1.13"
-  },
-  "devDependencies": {
-    "jest": "^29.7.0"
-  }
+    "name": "@datalackey/autogen-markdown-doc",
+    "version": "1.1.13",
+    "description": "Combined documentation automation: update-markdown-toc + nx-graph-to-mermaid",
+    "license": "MIT",
+    "type": "module",
+    "scripts": {
+        "test": "jest"
+    },
+    "bin": {
+        "autogen-markdown-doc": "./bin/autogen-markdown-doc.js"
+    },
+    "files": [
+        "bin/",
+        "README.md"
+    ],
+    "engines": {
+        "node": ">=18"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/datalackey/build-tools.git",
+        "directory": "javascript/autogen-markdown-doc"
+    },
+    "bugs": {
+        "url": "https://github.com/datalackey/build-tools/issues"
+    },
+    "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/autogen-markdown-doc",
+    "dependencies": {
+        "@datalackey/update-markdown-toc": "1.1.13",
+        "@datalackey/nx-graph-to-mermaid": "1.1.13",
+        "@datalackey/update-markdown-uml": "1.1.13"
+    },
+    "devDependencies": {
+        "jest": "^29.7.0"
+    }
 }

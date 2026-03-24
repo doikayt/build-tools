@@ -1,66 +1,64 @@
-import { vi, describe, test, expect, beforeEach, afterEach, type MockInstance } from 'vitest'
-import { runCli } from "../../src"
-import type { ProcessingStatus } from "../../src"
-import fs from "node:fs"
-import path from "node:path"
-import os from "node:os"
+import { vi, describe, test, expect, beforeEach, afterEach, type MockInstance } from "vitest";
+import { runCli } from "../../src";
+import type { ProcessingStatus } from "../../src";
+import fs from "node:fs";
+import path from "node:path";
+import os from "node:os";
 
 const descriptor = {
     name: "test-plugin",
     description: "A test plugin",
-    options: []
-}
+    options: [],
+};
 
 const noopProcessor = {
     process(_filePath: string): ProcessingStatus {
-        return "unchanged"
-    }
-}
+        return "unchanged";
+    },
+};
 
-let mockExit: MockInstance
+let mockExit: MockInstance;
 
 beforeEach(() => {
-    mockExit = vi
-        .spyOn(process, "exit")
-        .mockImplementation((() => {}) as () => never)
-})
+    mockExit = vi.spyOn(process, "exit").mockImplementation((() => {}) as () => never);
+});
 
 afterEach(() => {
-    mockExit.mockRestore()
-})
+    mockExit.mockRestore();
+});
 
 test("calls process.exit(0) for --help", () => {
     runCli({
         descriptor: descriptor,
         processor: noopProcessor,
-        argv: ["--help"]
-    })
+        argv: ["--help"],
+    });
 
-    expect(mockExit).toHaveBeenCalledWith(0)
-})
+    expect(mockExit).toHaveBeenCalledWith(0);
+});
 
 test("calls process.exit(1) on unknown option", () => {
     runCli({
         descriptor: descriptor,
         processor: noopProcessor,
-        argv: ["--not-a-real-flag"]
-    })
+        argv: ["--not-a-real-flag"],
+    });
 
-    expect(mockExit).toHaveBeenCalledWith(1)
-})
+    expect(mockExit).toHaveBeenCalledWith(1);
+});
 
 test("processes a single file", () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "run-cli-test-"))
-    const file = path.join(dir, "README.md")
-    fs.writeFileSync(file, "# Hello")
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "run-cli-test-"));
+    const file = path.join(dir, "README.md");
+    fs.writeFileSync(file, "# Hello");
 
     runCli({
         descriptor: descriptor,
         processor: noopProcessor,
-        argv: [file]
-    })
+        argv: [file],
+    });
 
-    expect(mockExit).not.toHaveBeenCalled()
+    expect(mockExit).not.toHaveBeenCalled();
 
-    fs.rmSync(dir, { recursive: true, force: true })
-})
+    fs.rmSync(dir, { recursive: true, force: true });
+});

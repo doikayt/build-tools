@@ -1,17 +1,17 @@
 {
-  "name": "build-tools",
-  "private": true,
-  "workspaces": [
-    "*"
-  ],
-  "devDependencies": {
-    "@changesets/cli": "^2.29.8",
-    "@datalackey/typescript-build-config": "^0.0.1",
-    "@datalackey/update-markdown-toc": "^1.1.5",
-    "@typescript-eslint/eslint-plugin": "^8.57.1",
-    "@typescript-eslint/parser": "^8.57.1",
-    "eslint": "^9.39.4",
-    "nx": "22.5.4",
-    "vitest": "^4.0.18"
-  }
+    "name": "build-tools",
+    "private": true,
+    "workspaces": [
+        "*"
+    ],
+    "devDependencies": {
+        "@changesets/cli": "^2.29.8",
+        "@datalackey/typescript-build-config": "^0.0.1",
+        "@datalackey/update-markdown-toc": "^1.1.5",
+        "@typescript-eslint/eslint-plugin": "^8.57.1",
+        "@typescript-eslint/parser": "^8.57.1",
+        "eslint": "^9.39.4",
+        "nx": "22.5.4",
+        "vitest": "^4.0.18"
+    }
 }

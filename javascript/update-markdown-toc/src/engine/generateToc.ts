@@ -29,10 +29,7 @@ export function generateTOC(content: string): string {
     const before = content.slice(0, startIndex);
     const after = content.slice(endIndex + END.length);
 
-    const contentWithoutTOC =
-        before.replace(/\s*$/, "") +
-        lineEnding +
-        after.replace(/^\s*/, "");
+    const contentWithoutTOC = before.replace(/\s*$/, "") + lineEnding + after.replace(/^\s*/, "");
 
     const lines = contentWithoutTOC.split(lineEnding);
 
@@ -54,17 +51,14 @@ export function generateTOC(content: string): string {
         throw new Error("No headings found to generate TOC");
     }
 
-    const minLevel = Math.min(...headings.map((h) => h.level));
+    const minLevel = Math.min(...headings.map(h => h.level));
 
-    const tocLines = headings.map((h) => {
+    const tocLines = headings.map(h => {
         const indent = "  ".repeat(h.level - minLevel);
         return `${indent}- [${h.title}](#${h.anchor})`;
     });
 
-    const tocBlock =
-        lineEnding +
-        tocLines.join(lineEnding) +
-        lineEnding;
+    const tocBlock = lineEnding + tocLines.join(lineEnding) + lineEnding;
 
     return before + START + tocBlock + END + after;
 }

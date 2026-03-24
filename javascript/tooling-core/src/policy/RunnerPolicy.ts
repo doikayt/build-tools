@@ -1,6 +1,6 @@
-import type { ProcessingStatus } from "../repository/types.js"
+import type { ProcessingStatus } from "../repository/types.js";
 
-export type RunnerDecision = "abort" | "continue"
+export type RunnerDecision = "abort" | "continue";
 
 /*
 RunnerPolicy
@@ -105,7 +105,7 @@ The RunnerPolicy decides:
 
 */
 export interface RunnerPolicy {
-    shouldPrint(status: ProcessingStatus): boolean
-    shouldPrintSummary(): boolean
-    handleProcessorError(file: string, error: unknown): RunnerDecision
+    shouldPrint(status: ProcessingStatus): boolean;
+    shouldPrintSummary(): boolean;
+    handleProcessorError(file: string, error: unknown): RunnerDecision;
 }

@@ -8,43 +8,37 @@ export interface NxProjectJson {
 }
 
 export function buildMermaid(project: NxProjectJson): string {
-
     const targets = validateProjectStructure(project);
     const sortedTargetNames = Object.keys(targets).sort((a, b) => a.localeCompare(b));
     const nodeIdMap = prepareNodeIds(sortedTargetNames);
     const lines: string[] = [];
 
-    lines.push('graph TD');
-    lines.push('');
+    lines.push("graph TD");
+    lines.push("");
 
     renderNodes(lines, sortedTargetNames, targets, nodeIdMap);
-    lines.push('');
+    lines.push("");
     renderEdges(lines, sortedTargetNames, targets, nodeIdMap);
 
-    const body = lines.join('\n');
+    const body = lines.join("\n");
 
     return `\`\`\`mermaid
 ${body}
 \`\`\``;
 }
 
-
-
 // --------------------------------------------------
 // Validation
 // --------------------------------------------------
 
-function validateProjectStructure(
-    project: NxProjectJson
-): Record<string, NxTarget> {
-
-    if (project === null || typeof project !== 'object') {
-        throw new Error('Invalid project.json structure');
+function validateProjectStructure(project: NxProjectJson): Record<string, NxTarget> {
+    if (project === null || typeof project !== "object") {
+        throw new Error("Invalid project.json structure");
     }
 
     if (
-        !('targets' in project) ||
-        typeof project.targets !== 'object' ||
+        !("targets" in project) ||
+        typeof project.targets !== "object" ||
         project.targets === null ||
         Array.isArray(project.targets)
     ) {
@@ -54,7 +48,7 @@ function validateProjectStructure(
     const targets = project.targets;
 
     for (const [name, value] of Object.entries(targets)) {
-        if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+        if (typeof value !== "object" || value === null || Array.isArray(value)) {
             throw new Error(`Target "${name}" must be an object`);
         }
 
@@ -63,16 +57,13 @@ function validateProjectStructure(
                 throw new Error(`dependsOn for "${name}" must be an array`);
             }
             for (const dep of value.dependsOn) {
-                if (typeof dep !== 'string') {
+                if (typeof dep !== "string") {
                     throw new Error(`dependsOn for "${name}" must contain only strings`);
                 }
             }
         }
 
-        if (
-            value.description !== undefined &&
-            typeof value.description !== 'string'
-        ) {
+        if (value.description !== undefined && typeof value.description !== "string") {
             throw new Error(`description for "${name}" must be a string`);
         }
     }
@@ -84,15 +75,11 @@ function validateProjectStructure(
 // Node ID Preparation
 // --------------------------------------------------
 
-function prepareNodeIds(
-    sortedTargetNames: string[]
-): Map<string, string> {
-
+function prepareNodeIds(sortedTargetNames: string[]): Map<string, string> {
     const nodeIdMap = new Map<string, string>();
     const usedIds = new Set<string>();
 
     for (const name of sortedTargetNames) {
-
         const sanitized = sanitizeNodeId(name);
 
         if (usedIds.has(sanitized)) {
@@ -116,16 +103,12 @@ function renderNodes(
     targets: Record<string, NxTarget>,
     nodeIdMap: Map<string, string>
 ): void {
-
     for (const name of names) {
-
         const nodeId = nodeIdMap.get(name)!;
         const description = targets[name].description;
 
         if (description !== undefined) {
-            lines.push(
-                `  ${nodeId}["${name}<br/>${escapeHtml(description)}"]`
-            );
+            lines.push(`  ${nodeId}["${name}<br/>${escapeHtml(description)}"]`);
         } else {
             lines.push(`  ${nodeId}`);
         }
@@ -138,19 +121,12 @@ function renderEdges(
     targets: Record<string, NxTarget>,
     nodeIdMap: Map<string, string>
 ): void {
-
     for (const name of names) {
-
-        const deps = (targets[name].dependsOn ?? [])
-            .slice()
-            .sort((a, b) => a.localeCompare(b));
+        const deps = (targets[name].dependsOn ?? []).slice().sort((a, b) => a.localeCompare(b));
 
         for (const dep of deps) {
-
             if (targets[dep] === undefined) {
-                throw new Error(
-                    `Target "${name}" depends on missing target "${dep}"`
-                );
+                throw new Error(`Target "${name}" depends on missing target "${dep}"`);
             }
 
             const fromId = nodeIdMap.get(name)!;
@@ -165,27 +141,23 @@ function renderEdges(
 // --------------------------------------------------
 
 function sanitizeNodeId(name: string): string {
-
-    let result = name
-        .replace(/[^a-zA-Z0-9_]+/g, '_')
-        .replace(/_+/g, '_');
+    let result = name.replace(/[^a-zA-Z0-9_]+/g, "_").replace(/_+/g, "_");
 
     if (/^[0-9]/.test(result)) {
         result = `_${result}`;
     }
 
     if (result.length === 0) {
-        result = '_';
+        result = "_";
     }
 
     return result;
 }
 
-
 function escapeHtml(input: string): string {
     return input
-        .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
 }

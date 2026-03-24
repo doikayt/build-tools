@@ -34,7 +34,10 @@ jobs:
         run: npx nx run-many -t build
 
       - name: Lint
-        run: npx nx run build-tools-workspace:lint
+        run: npx nx run build-tools-workspace:check:lint
+
+      - name: Check Code Formatting
+        run: npx nx run build-tools-workspace:check:format
 
       - name: Check Markdown TOC Consistency
         run: node update-markdown-toc/bin/update-markdown-toc.js --check --recursive   . -e node_modules,test,test-fixtures,tests

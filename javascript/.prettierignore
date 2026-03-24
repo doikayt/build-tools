@@ -1,0 +1,14 @@
+dist/
+test/**/dist/
+node_modules/
+coverage/
+
+
+**/*.md
+
+# Generated or snapshot-like files
+**/expected/**
+**/*.gs
+**/*.html
+
+

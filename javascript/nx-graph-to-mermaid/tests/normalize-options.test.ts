@@ -1,68 +1,64 @@
-import { normalizeOptions } from '../src/executors/generate/normalizeOptions.js';
+import { normalizeOptions } from "../src/executors/generate/normalizeOptions.js";
 
-describe('normalizeOptions()', () => {
-
-    test('defaults to generate mode', () => {
+describe("normalizeOptions()", () => {
+    test("defaults to generate mode", () => {
         const result = normalizeOptions({
-            projectJsonPath: 'project.json',
-            generatedMermaidPath: 'out.md'
+            projectJsonPath: "project.json",
+            generatedMermaidPath: "out.md",
         });
 
-        expect(result.mode).toBe('generate');
+        expect(result.mode).toBe("generate");
     });
 
-    test('throws if projectJsonPath missing', () => {
-        expect(() =>
-            normalizeOptions({} as any)
-        ).toThrow('projectJsonPath is required');
+    test("throws if projectJsonPath missing", () => {
+        expect(() => normalizeOptions({} as any)).toThrow("projectJsonPath is required");
     });
 
     // ---------------------------
     // GENERATE MODE
     // ---------------------------
 
-    test('generate mode requires generatedMermaidPath', () => {
+    test("generate mode requires generatedMermaidPath", () => {
         expect(() =>
             normalizeOptions({
-                projectJsonPath: 'project.json',
-                mode: 'generate'
+                projectJsonPath: "project.json",
+                mode: "generate",
             })
-        ).toThrow('generatedMermaidPath is required in generate mode');
+        ).toThrow("generatedMermaidPath is required in generate mode");
     });
 
-    test('generate mode rejects markdownPath', () => {
+    test("generate mode rejects markdownPath", () => {
         expect(() =>
             normalizeOptions({
-                projectJsonPath: 'project.json',
-                mode: 'generate',
-                generatedMermaidPath: 'out.md',
-                markdownPath: 'README.md'
+                projectJsonPath: "project.json",
+                mode: "generate",
+                generatedMermaidPath: "out.md",
+                markdownPath: "README.md",
             })
-        ).toThrow('markdownPath is invalid in generate mode');
+        ).toThrow("markdownPath is invalid in generate mode");
     });
 
     // ---------------------------
     // CHECK MODE
     // ---------------------------
 
-    test('check mode requires generatedMermaidPath', () => {
+    test("check mode requires generatedMermaidPath", () => {
         expect(() =>
             normalizeOptions({
-                projectJsonPath: 'project.json',
-                mode: 'check'
+                projectJsonPath: "project.json",
+                mode: "check",
             })
-        ).toThrow('generatedMermaidPath is required in check mode');
+        ).toThrow("generatedMermaidPath is required in check mode");
     });
 
-    test('check mode rejects markdownPath', () => {
+    test("check mode rejects markdownPath", () => {
         expect(() =>
             normalizeOptions({
-                projectJsonPath: 'project.json',
-                mode: 'check',
-                generatedMermaidPath: 'out.md',
-                markdownPath: 'README.md'
+                projectJsonPath: "project.json",
+                mode: "check",
+                generatedMermaidPath: "out.md",
+                markdownPath: "README.md",
             })
-        ).toThrow('markdownPath is invalid in check mode');
+        ).toThrow("markdownPath is invalid in check mode");
     });
-
 });

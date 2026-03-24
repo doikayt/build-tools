@@ -5,9 +5,7 @@ import path from "node:path";
 import { walkFiles } from "../../src/fs/walkFiles.js";
 
 describe("walkFiles exclusion override", () => {
-
     test("node_modules traversal allowed when override provided", () => {
-
         const root = fs.mkdtempSync(path.join(os.tmpdir(), "walkfiles-test-"));
 
         fs.mkdirSync(path.join(root, "docs"), { recursive: true });
@@ -22,11 +20,9 @@ describe("walkFiles exclusion override", () => {
         const files = walkFiles({
             rootDir: root,
             extensions: [".md"],
-            excludeDirs: []
+            excludeDirs: [],
         });
 
         expect(files.sort()).toEqual([good, intruder].sort());
-
     });
-
 });

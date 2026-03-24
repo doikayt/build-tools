@@ -1,20 +1,16 @@
 {
-  "extends": "../tsconfig.base.json",
-  "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist",
-    "paths": {
-      "@datalackey/tooling-core": [
-        "../tooling-core/src/index.ts"
-      ]
-    }
-  },
-  "include": [
-    "src"
-  ],
-  "references": [
-    {
-      "path": "../tooling-core"
-    }
-  ]
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "dist",
+        "paths": {
+            "@datalackey/tooling-core": ["../tooling-core/src/index.ts"]
+        }
+    },
+    "include": ["src"],
+    "references": [
+        {
+            "path": "../tooling-core"
+        }
+    ]
 }

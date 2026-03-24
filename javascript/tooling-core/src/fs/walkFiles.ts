@@ -1,9 +1,7 @@
-import fs from 'node:fs';
-import path from 'node:path';
+import fs from "node:fs";
+import path from "node:path";
 
-export const DEFAULT_EXCLUDE_DIRS: readonly string[] = [
-    'node_modules'
-];
+export const DEFAULT_EXCLUDE_DIRS: readonly string[] = ["node_modules"];
 
 export interface WalkOptions {
     rootDir: string;
@@ -23,7 +21,6 @@ export interface WalkOptions {
  * - Uses DEFAULT_EXCLUDE_DIRS unless over-ride provided
  */
 export function walkFiles(options: WalkOptions): string[] {
-
     const rootDir = options.rootDir;
     const extensions = options.extensions;
     const excludeDirs = options.excludeDirs ?? DEFAULT_EXCLUDE_DIRS;

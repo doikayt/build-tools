@@ -1,4 +1,4 @@
-import GithubSlugger from 'github-slugger'
+import GithubSlugger from "github-slugger";
 
 /**
  * Converts a heading's raw text to a GitHub-style anchor slug.
@@ -7,5 +7,5 @@ import GithubSlugger from 'github-slugger'
  * duplicate-heading counters are scoped correctly to that document.
  */
 export function slugHeading(rawText: string, slugger: GithubSlugger): string {
-  return slugger.slug(rawText)
+    return slugger.slug(rawText);
 }

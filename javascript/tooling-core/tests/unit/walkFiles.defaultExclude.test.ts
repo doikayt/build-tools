@@ -5,9 +5,7 @@ import path from "node:path";
 import { walkFiles } from "../../src/fs/walkFiles.js";
 
 describe("walkFiles default exclusion policy", () => {
-
     test("node_modules is excluded by default", () => {
-
         const root = fs.mkdtempSync(path.join(os.tmpdir(), "walkfiles-test-"));
 
         fs.mkdirSync(path.join(root, "docs"), { recursive: true });
@@ -21,11 +19,9 @@ describe("walkFiles default exclusion policy", () => {
 
         const files = walkFiles({
             rootDir: root,
-            extensions: [".md"]
+            extensions: [".md"],
         });
 
         expect(files).toEqual([good]);
-
     });
-
 });

@@ -1,13 +1,11 @@
 {
-  "extends": "../tsconfig.base.json",
-  "tsBuildInfoFile": "dist/.tsbuildinfo",
-  "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist",
-    "composite": true,
-    "tsBuildInfoFile": "./dist/tsconfig.tsbuildinfo"
-  },
-  "include": [
-    "src"
-  ]
+    "extends": "../tsconfig.base.json",
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "dist",
+        "composite": true,
+        "tsBuildInfoFile": "./dist/tsconfig.tsbuildinfo"
+    },
+    "include": ["src"]
 }

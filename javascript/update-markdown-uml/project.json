@@ -1,37 +1,29 @@
 {
-  "name": "@datalackey/update-markdown-uml",
-  "sourceRoot": "update-markdown-uml/src",
-  "projectType": "library",
-  "targets": {
-    "build": {
-      "command": "cd update-markdown-uml && rm -rf dist && npm run build",
-      "outputs": [
-        "{projectRoot}/dist"
-      ],
-      "dependsOn": [
-        "@datalackey/tooling-core:build"
-      ]
-    },
-    "test": {
-      "command": "npx vitest run --config {projectRoot}/vitest.config.ts",
-      "dependsOn": [
-        "build"
-      ]
-    },
-    "lint": {
-      "command": "npx eslint 'update-markdown-uml/src/**/*.ts'",
-      "cwd": "{workspaceRoot}",
-      "cache": true,
-      "inputs": [
-        "{projectRoot}/src/**/*.ts",
-        "{workspaceRoot}/tsconfig.eslint.json",
-        "{workspaceRoot}/.eslintrc*",
-        "{workspaceRoot}/eslint.config*"
-      ],
-      "outputs": [],
-      "dependsOn": [
-        "@datalackey/tooling-core:build"
-      ]
+    "name": "@datalackey/update-markdown-uml",
+    "sourceRoot": "update-markdown-uml/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "command": "cd update-markdown-uml && rm -rf dist && npm run build",
+            "outputs": ["{projectRoot}/dist"],
+            "dependsOn": ["@datalackey/tooling-core:build"]
+        },
+        "test": {
+            "command": "npx vitest run --config {projectRoot}/vitest.config.ts",
+            "dependsOn": ["build"]
+        },
+        "lint": {
+            "command": "npx eslint 'update-markdown-uml/src/**/*.ts'",
+            "cwd": "{workspaceRoot}",
+            "cache": true,
+            "inputs": [
+                "{projectRoot}/src/**/*.ts",
+                "{workspaceRoot}/tsconfig.eslint.json",
+                "{workspaceRoot}/.eslintrc*",
+                "{workspaceRoot}/eslint.config*"
+            ],
+            "outputs": [],
+            "dependsOn": ["@datalackey/tooling-core:build"]
+        }
     }
-  }
 }

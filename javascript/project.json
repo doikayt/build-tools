@@ -1,31 +1,39 @@
 {
-  "name": "build-tools-workspace",
-  "projectType": "library",
-  "implicitDependencies": [
-    "@datalackey/tooling-core",
-    "@datalackey/update-markdown-toc",
-    "@datalackey/nx-graph-to-mermaid",
-    "@datalackey/update-markdown-uml"
-  ],
-  "targets": {
-    "update:toc": {
-      "command": "node update-markdown-toc/bin/update-markdown-toc.js --recursive .",
-      "cwd": "{workspaceRoot}"
-    },
-    "check:toc": {
-      "command": "node update-markdown-toc/bin/update-markdown-toc.js --check --recursive   . -e node_modules,test,test-fixtures,tests",
-      "cwd": "{workspaceRoot}",
-      "dependsOn": ["^build"]
-    },
-    "lint": {
-      "command": "npx nx run-many -t lint --projects=@datalackey/tooling-core,@datalackey/update-markdown-toc,@datalackey/nx-graph-to-mermaid,@datalackey/update-markdown-uml",
-      "cwd": "{workspaceRoot}",
-      "dependsOn": [
-        "@datalackey/tooling-core:lint",
-        "@datalackey/update-markdown-toc:lint",
-        "@datalackey/nx-graph-to-mermaid:lint",
-        "@datalackey/update-markdown-uml:lint"
-      ]
+    "name": "build-tools-workspace",
+    "projectType": "library",
+    "implicitDependencies": [
+        "@datalackey/tooling-core",
+        "@datalackey/update-markdown-toc",
+        "@datalackey/nx-graph-to-mermaid",
+        "@datalackey/update-markdown-uml"
+    ],
+    "targets": {
+        "update:toc": {
+            "command": "node update-markdown-toc/bin/update-markdown-toc.js --recursive .",
+            "cwd": "{workspaceRoot}"
+        },
+        "check:toc": {
+            "command": "node update-markdown-toc/bin/update-markdown-toc.js --check --recursive   . -e node_modules,test,test-fixtures,tests",
+            "cwd": "{workspaceRoot}",
+            "dependsOn": ["^build"]
+        },
+        "check:lint": {
+            "command": "npx nx run-many -t lint --projects=@datalackey/tooling-core,@datalackey/update-markdown-toc,@datalackey/nx-graph-to-mermaid,@datalackey/update-markdown-uml",
+            "cwd": "{workspaceRoot}",
+            "dependsOn": [
+                "@datalackey/tooling-core:lint",
+                "@datalackey/update-markdown-toc:lint",
+                "@datalackey/nx-graph-to-mermaid:lint",
+                "@datalackey/update-markdown-uml:lint"
+            ]
+        },
+        "check:format": {
+            "command": "npx prettier --check .",
+            "cwd": "{workspaceRoot}"
+        },
+        "format": {
+            "command": "npx prettier --write .",
+            "cwd": "{workspaceRoot}"
+        }
     }
-  }
 }

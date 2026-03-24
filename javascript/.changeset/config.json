@@ -1,20 +1,19 @@
 {
-  "$schema": "https://unpkg.com/@changesets/config@3.1.2/schema.json",
-  "changelog": "@changesets/cli/changelog",
-  "commit": false,
-  "fixed": [
-    [
-      "@datalackey/update-markdown-toc",
-      "@datalackey/nx-graph-to-mermaid",
-      "@datalackey/autogen-markdown-doc",
-      "@datalackey/tooling-core",
-      "@datalackey/update-markdown-uml"
-    ]
-  ],
-  "linked": [],
-  "access": "public",
-  "baseBranch": "main",
-  "updateInternalDependencies": "patch",
-  "ignore": []
+    "$schema": "https://unpkg.com/@changesets/config@3.1.2/schema.json",
+    "changelog": "@changesets/cli/changelog",
+    "commit": false,
+    "fixed": [
+        [
+            "@datalackey/update-markdown-toc",
+            "@datalackey/nx-graph-to-mermaid",
+            "@datalackey/autogen-markdown-doc",
+            "@datalackey/tooling-core",
+            "@datalackey/update-markdown-uml"
+        ]
+    ],
+    "linked": [],
+    "access": "public",
+    "baseBranch": "main",
+    "updateInternalDependencies": "patch",
+    "ignore": []
 }
-
