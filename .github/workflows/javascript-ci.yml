@@ -30,16 +30,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build first - so we can run tests, and do lint checks, markdown doc consistency checks, etc.
+      - name: Build first [then can run tests, do doc/code consistency checks]
         run: npx nx run-many -t build
 
-      - name: Lint
+      - name: Lint Check
         run: npx nx run build-tools-workspace:check:lint
 
-      - name: Check Code Formatting
-        run: npx nx run build-tools-workspace:check:format
+      - name: Check Code Formatting Check
+        run: npx nx run build-tools-workspace:check:format --skip-nx-cache
 
-      - name: Check Markdown TOC Consistency
+      - name: Check Markdown TOC Consistency Check
         run: node update-markdown-toc/bin/update-markdown-toc.js --check --recursive   . -e node_modules,test,test-fixtures,tests
 
       - name: Run tests
