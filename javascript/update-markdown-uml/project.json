@@ -28,8 +28,8 @@
     "typecheck": {
       "//": [
         "--noEmit: run the full type checker but write nothing to disk.",
-        "This is the CI gate that catches what the IDE should have caught locally.",
-        "We do NOT use --noCheck here — that would defeat the purpose.",
+        "This is the CI gate that catches what the IDE (properly configured to use Typescript service) ",
+        "should have caught locally. We do NOT use --noCheck here — that would defeat the purpose.",
         "dependsOn ^build ensures dependency .d.ts files exist before we typecheck."
       ],
       "command": "cd update-markdown-uml && npx tsc -p tsconfig.json --noEmit",

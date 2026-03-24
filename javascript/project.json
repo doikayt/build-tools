@@ -1,11 +1,13 @@
 {
   "name": "build-tools-workspace",
   "//": [
-    "This is the project definition for the workspace-level orchestration project.",
-    "(that is: build-tools-workspace.)",
+    "This is the project config for build-tools-workspace --the workspace-level orchestration project.",
     "",
     "It owns targets that are specific to this workspace as a whole (ci, check-toc,",
     "check-lint, check-format, format, update-toc).",
+    "The main purpose of this config file is enforcement of ",
+    "formatting, type safety, code layout and other conventions. These enforcement checks run invariably ",
+    "in CI, but also can (and should) be run locally, so as to avoid CI/build regressions",
     "",
     "For the rule on what belongs here vs nx.json targetDefaults, see nx.json '//'."
   ],
@@ -24,9 +26,7 @@
     "check-toc": {
       "command": "node update-markdown-toc/bin/update-markdown-toc.js --check --recursive   . -e node_modules,test,test-fixtures,tests",
       "cwd": "{workspaceRoot}",
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "check-lint": {
       "cwd": "{workspaceRoot}",
