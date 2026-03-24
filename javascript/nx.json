@@ -1,7 +1,28 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "npmScope": "datalackey",
-  "projects": {},
+  "//": [
+    "nx.json vs project.json — what goes where:",
+    "",
+    "nx.json targetDefaults: specifies behavior applied to a target NAME across ALL projects.",
+    "Use for: cache settings, input globs, and dependsOn patterns that are",
+    "identical for every package that has that target (e.g. every 'build'",
+    "depends on '^build', every 'test' is cached).",
+    "",
+    "project.json targets: everything specific to ONE project.",
+    "build-tools-workspace/project.json owns: check:toc, check:lint,",
+    "check:format, format, update:toc, and the ci aggregator target.",
+    "Per-package project.json files own: their own build, test, lint targets.",
+    "",
+    "Rule: if a target name appears in only one project, it belongs in",
+    "project.json only, never in nx.json targetDefaults.",
+    "",
+    "The ^ prefix in dependsOn (e.g. '^build') means: run the 'build' target",
+    "on all declared dependencies of this project first, not on the project itself.",
+    "Dependency relationships are declared via implicitDependencies in project.json",
+    "and via the dependencies field in package.json. NX combines both to resolve",
+    "the full build graph and guarantee correct execution order."
+  ],
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
@@ -11,10 +32,6 @@
     "test": {
       "cache": true,
       "inputs": ["default", "^default"]
-    },
-    "ci": {
-      "dependsOn": ["build", "test", "lint"],
-      "cache": false
     }
   },
   "namedInputs": {

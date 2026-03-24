@@ -1,5 +1,14 @@
 {
   "name": "build-tools-workspace",
+  "//": [
+    "This is the project definition for the workspace-level orchestration project.",
+    "(that is: build-tools-workspace.)",
+    "",
+    "It owns targets that are specific to this workspace as a whole (ci, check:toc,",
+    "check:lint, check:format, format, update:toc).",
+    "",
+    "For the rule on what belongs here vs nx.json targetDefaults, see nx.json '//'."
+  ],
   "projectType": "library",
   "implicitDependencies": [
     "@datalackey/tooling-core",
@@ -18,7 +27,6 @@
       "dependsOn": ["^build"]
     },
     "check:lint": {
-      "command": "npx nx run-many -t lint --projects=@datalackey/tooling-core,@datalackey/update-markdown-toc,@datalackey/nx-graph-to-mermaid,@datalackey/update-markdown-uml",
       "cwd": "{workspaceRoot}",
       "dependsOn": [
         "@datalackey/tooling-core:lint",
