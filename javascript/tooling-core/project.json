@@ -8,8 +8,8 @@
       "outputs": ["{projectRoot}/dist"],
       "//": [
         "--noCheck (TS 5.5+): emit JS without type checking — fast transpile-only build.",
-        "Type correctness is enforced by the developer's IDE and by check:types in CI.",
-        "See build-tools-workspace/project.json check:types and nx.json for the full picture."
+        "Type correctness is enforced by the developer's IDE and by check-types in CI.",
+        "See build-tools-workspace/project.json check-types and nx.json for the full picture."
       ]
     },
     "test": {

@@ -4,8 +4,8 @@
     "This is the project definition for the workspace-level orchestration project.",
     "(that is: build-tools-workspace.)",
     "",
-    "It owns targets that are specific to this workspace as a whole (ci, check:toc,",
-    "check:lint, check:format, format, update:toc).",
+    "It owns targets that are specific to this workspace as a whole (ci, check-toc,",
+    "check-lint, check-format, format, update-toc).",
     "",
     "For the rule on what belongs here vs nx.json targetDefaults, see nx.json '//'."
   ],
@@ -17,16 +17,18 @@
     "@datalackey/update-markdown-uml"
   ],
   "targets": {
-    "update:toc": {
+    "update-toc": {
       "command": "node update-markdown-toc/bin/update-markdown-toc.js --recursive .",
       "cwd": "{workspaceRoot}"
     },
-    "check:toc": {
+    "check-toc": {
       "command": "node update-markdown-toc/bin/update-markdown-toc.js --check --recursive   . -e node_modules,test,test-fixtures,tests",
       "cwd": "{workspaceRoot}",
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
     },
-    "check:lint": {
+    "check-lint": {
       "cwd": "{workspaceRoot}",
       "dependsOn": [
         "@datalackey/tooling-core:lint",
@@ -35,7 +37,7 @@
         "@datalackey/update-markdown-uml:lint"
       ]
     },
-    "check:format": {
+    "check-format": {
       "command": "npx prettier --check .",
       "cwd": "{workspaceRoot}"
     },
@@ -47,13 +49,13 @@
       "dependsOn": [
         "^build",
         "^test",
-        "build-tools-workspace:check:toc",
-        "build-tools-workspace:check:lint",
-        "build-tools-workspace:check:format",
-        "build-tools-workspace:check:types"
+        "build-tools-workspace:check-toc",
+        "build-tools-workspace:check-lint",
+        "build-tools-workspace:check-format",
+        "build-tools-workspace:check-types"
       ]
     },
-    "check:types": {
+    "check-types": {
       "//": [
         "Aggregates per-package typecheck targets.",
         "Runs tsc --noEmit across all packages — CI gate only, not part of local build loop.",
