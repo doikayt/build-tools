@@ -1,7 +1,7 @@
 // tooling-core/tests/cli/generateHelp.test.ts
 
-import { generateHelp } from "../../src";
-import type { PluginDescriptor } from "../../src";
+import { generateHelp } from "../../src/index.js";
+import type { PluginDescriptor } from "../../src/index.js";
 
 const descriptor: PluginDescriptor = {
   name: "my-plugin",

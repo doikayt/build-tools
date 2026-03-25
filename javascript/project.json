@@ -57,16 +57,17 @@
     },
     "check-types": {
       "//": [
-        "Aggregates per-package typecheck targets.",
-        "Runs tsc --noEmit across all packages — CI gate only, not part of local build loop.",
+        "Aggregates per-package check-types targets.",
+        "Each package's check-types covers both prod (src/) and test (tests/) type checking.",
+        "CI gate only — not part of the local build loop.",
         "Philosophy: developers fix type errors in the IDE (red = do not commit).",
-        "This target exists to catch the lazy commit. See per-package typecheck targets."
+        "This target exists to catch the lazy commit."
       ],
       "dependsOn": [
-        "@datalackey/tooling-core:typecheck",
-        "@datalackey/update-markdown-toc:typecheck",
-        "@datalackey/nx-graph-to-mermaid:typecheck",
-        "@datalackey/update-markdown-uml:typecheck"
+        "@datalackey/tooling-core:check-types",
+        "@datalackey/nx-graph-to-mermaid:check-types",
+        "@datalackey/update-markdown-uml:check-types",
+        "@datalackey/update-markdown-toc:check-types"
       ]
     }
   }

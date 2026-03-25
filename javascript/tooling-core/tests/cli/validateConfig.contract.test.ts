@@ -10,6 +10,8 @@ function base(): RunConfig {
     mode: "single",
     recursivePath: undefined,
     exclude: [],
+    validateExternalLinks: false,
+    linkTimeoutMs: 3000,
   };
 }
 

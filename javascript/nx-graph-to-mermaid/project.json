@@ -37,7 +37,7 @@
       "outputs": [],
       "dependsOn": ["@datalackey/tooling-core:build"]
     },
-    "typecheck": {
+    "check-prod-types": {
       "//": [
         "--noEmit: run the full type checker but write nothing to disk.",
         "This is the CI gate that catches what the IDE should have caught locally.",
@@ -46,6 +46,24 @@
       ],
       "command": "cd nx-graph-to-mermaid && npx tsc -p tsconfig.json --noEmit",
       "dependsOn": ["^build"]
+    },
+    "check-test-types": {
+      "//": [
+        "--noEmit: type-check test files without emitting.",
+        "Uses tsconfig.test.json which includes tests/ in addition to src/.",
+        "Kept separate from check-prod-types so test-only type errors",
+        "do not affect the production build path."
+      ],
+      "command": "cd nx-graph-to-mermaid && npx tsc -p tsconfig.test.json --noEmit",
+      "dependsOn": ["^build"]
+    },
+    "check-types": {
+      "//": [
+        "Aggregates prod and test type checking for this package.",
+        "check-prod-types covers src/ (published code).",
+        "check-test-types covers tests/ (not published but still type-checked)."
+      ],
+      "dependsOn": ["check-prod-types", "check-test-types"]
     }
   }
 }

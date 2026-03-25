@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
 
-import { createTransformProcessor } from "../src";
+import { createTransformProcessor } from "../src/index.js";
 
 const testConfig = {
   runMode: "update" as const,
@@ -11,6 +11,8 @@ const testConfig = {
   quiet: false,
   debug: false,
   exclude: [],
+  validateExternalLinks: false,
+  linkTimeoutMs: 3000,
 };
 
 test("processor updates file when content changes", () => {
@@ -19,7 +21,7 @@ test("processor updates file when content changes", () => {
 
   fs.writeFileSync(file, "hello", "utf8");
 
-  const processor = createTransformProcessor((content) => {
+  const processor = createTransformProcessor((content: string) => {
     return content + " world";
   });
   const result = processor.process(file, testConfig);

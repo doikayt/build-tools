@@ -1,14 +1,13 @@
 import {
   vi,
-  describe,
   test,
   expect,
   beforeEach,
   afterEach,
   type MockInstance,
 } from "vitest";
-import { runCli } from "../../src";
-import type { ProcessingStatus } from "../../src";
+import { runCli } from "../../src/index.js";
+import type { ProcessingStatus } from "../../src/index.js";
 import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";

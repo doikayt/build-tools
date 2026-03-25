@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
-import { listFilesToProcess } from "../../src/cli/listFilesToProcess";
-import type { RunConfig } from "../../src/repository/types";
+import { listFilesToProcess } from "../../src/index.js";
+import type { RunConfig } from "../../src/index.js";
 
 function base(): RunConfig {
   return {
@@ -13,6 +13,8 @@ function base(): RunConfig {
     mode: "single",
     recursivePath: undefined,
     exclude: [],
+    validateExternalLinks: false,
+    linkTimeoutMs: 3000,
   };
 }
 

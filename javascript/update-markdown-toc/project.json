@@ -24,7 +24,7 @@
       "outputs": [],
       "dependsOn": ["@datalackey/tooling-core:build"]
     },
-    "typecheck": {
+    "check-prod-types": {
       "//": [
         "--noEmit: run the full type checker but write nothing to disk.",
         "This is the CI gate that catches what the IDE should have caught locally.",
@@ -33,6 +33,14 @@
       ],
       "command": "cd update-markdown-toc && npx tsc -p tsconfig.json --noEmit",
       "dependsOn": ["^build"]
+    },
+    "check-types": {
+      "//": [
+        "Aggregates prod and test type checking for this package.",
+        "check-prod-types covers src/ (published code).",
+        "check-test-types will be added when tsconfig.test.json is created."
+      ],
+      "dependsOn": ["check-prod-types"]
     }
   }
 }
