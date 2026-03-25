@@ -28,8 +28,8 @@ let mockExit: MockInstance;
 
 beforeEach(() => {
   mockExit = vi
-      .spyOn(process, "exit")
-      .mockImplementation((() => {}) as () => never);
+    .spyOn(process, "exit")
+    .mockImplementation((() => {}) as () => never);
 });
 
 afterEach(() => {
@@ -88,7 +88,6 @@ async function assertCollidesWithStandardFlag(flag: string): Promise<void> {
 }
 
 describe("descriptor option flag collision detection", () => {
-
   test("exits 1 when plugin declares option colliding with --verbose", async () => {
     await assertCollidesWithStandardFlag("--verbose");
   });

@@ -28,32 +28,38 @@ function attempt<T>(fn: () => T): T {
   }
 }
 
-
 const STANDARD_FLAGS = new Set([
-  "-h", "--help",
+  "-h",
+  "--help",
   "--version",
-  "-v", "--verbose",
-  "-q", "--quiet",
-  "-d", "--debug",
-  "-c", "--check",
-  "-r", "--recursive",
-  "-e", "--exclude",
+  "-v",
+  "--verbose",
+  "-q",
+  "--quiet",
+  "-d",
+  "--debug",
+  "-c",
+  "--check",
+  "-r",
+  "--recursive",
+  "-e",
+  "--exclude",
 ]);
 
 function validateDescriptorOptions<TConfig extends RunConfig>(
-    descriptor: PluginDescriptor<TConfig>
+  descriptor: PluginDescriptor<TConfig>
 ): void {
   for (const option of descriptor.options) {
     if (STANDARD_FLAGS.has(option.flag)) {
       throw new Error(
-          `Plugin option "${option.flag}" collides with a standard tooling-core flag`
+        `Plugin option "${option.flag}" collides with a standard tooling-core flag`
       );
     }
   }
 }
 
 export async function runCli<TConfig extends RunConfig = RunConfig>(
-    options: RunCliOptions<TConfig>
+  options: RunCliOptions<TConfig>
 ): Promise<RepositoryStats> {
   attempt(() => validateDescriptorOptions(options.descriptor));
 
@@ -62,12 +68,12 @@ export async function runCli<TConfig extends RunConfig = RunConfig>(
   // Pass plugin-specific options into parseStandardCli so it knows which
   // unknown flags require values — avoids peek heuristics in the parser.
   const parsed = attempt(() =>
-      parseStandardCli(argv, options.descriptor.options)
+    parseStandardCli(argv, options.descriptor.options)
   );
   const positionals = parsed.positionals ?? [];
 
   const passthroughMap = attempt(() =>
-      buildPassthroughMap(options.descriptor.options, parsed.passthrough ?? [])
+    buildPassthroughMap(options.descriptor.options, parsed.passthrough ?? [])
   );
 
   if (parsed.help) {
@@ -76,11 +82,11 @@ export async function runCli<TConfig extends RunConfig = RunConfig>(
   }
 
   const config = attempt(() =>
-      buildConfig(parsed.config, passthroughMap, options.descriptor.parseOptions)
+    buildConfig(parsed.config, passthroughMap, options.descriptor.parseOptions)
   );
   debugLog(
-      config,
-      `runCli: argv=${JSON.stringify(argv)} | config=${JSON.stringify(config)}`
+    config,
+    `runCli: argv=${JSON.stringify(argv)} | config=${JSON.stringify(config)}`
   );
 
   attempt(() => options.descriptor.validate?.(config));
