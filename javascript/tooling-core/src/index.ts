@@ -51,7 +51,7 @@ export { validateFragmentLink } from "./markdown/validateFragmentLink.js";
 export { validateRelativeLink } from "./markdown/validateRelativeLink.js";
 export { validateExternalLink } from "./markdown/validateExternalLink.js";
 export { validateMarkdownLinks } from "./markdown/validateMarkdownLinks.js";
-export { debugLog } from "./logging/debugLog.js";
+export { debugLog } from "./util/debugLog.js";
 export { runLinkValidation } from "./cli/runLinkValidation.js";
 export type { RepositoryStats } from "./repository/RepositoryRunner.js";
 export { runWithConcurrency } from "./util/concurrency.js";

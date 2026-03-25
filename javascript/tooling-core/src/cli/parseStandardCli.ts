@@ -1,7 +1,7 @@
 import type { RunConfig } from "../repository/types.js";
 import type { PluginOption } from "./types.js";
 import type { ParsedCliResult } from "./types.js";
-import { debugLog } from "../logging/debugLog.js";
+import { debugLog } from "../util/debugLog.js";
 
 // Option B: PluginOption[] is passed into parseStandardCli so the parser
 // knows upfront which unknown flags require values. This eliminates the

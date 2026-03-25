@@ -1,6 +1,6 @@
 import type { RunnerPolicy, RunnerDecision } from "./RunnerPolicy.js";
 import type { RunConfig, ProcessingStatus } from "../repository/types.js";
-import { debugLog } from "../logging/debugLog.js";
+import { debugLog } from "../util/debugLog.js";
 
 export function createRunnerPolicy(config: RunConfig): RunnerPolicy {
   const isRecursiveRun = config.mode === "recursive";

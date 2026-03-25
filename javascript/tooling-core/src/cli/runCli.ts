@@ -9,7 +9,7 @@ import { listFilesToProcess } from "./listFilesToProcess.js";
 import { printHelp } from "./printHelp.js";
 import { runPlugin } from "./runPlugin.js";
 import { runLinkValidation } from "./runLinkValidation.js";
-import { debugLog } from "../logging/debugLog.js";
+import { debugLog } from "../util/debugLog.js";
 import type { RepositoryStats } from "../repository/RepositoryRunner.js";
 
 export interface RunCliOptions<TConfig extends RunConfig = RunConfig> {

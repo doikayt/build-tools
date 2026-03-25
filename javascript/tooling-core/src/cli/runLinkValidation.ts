@@ -1,6 +1,6 @@
 import type { RunConfig } from "../repository/types.js";
 import { validateMarkdownLinks } from "../markdown/validateMarkdownLinks.js";
-import { debugLog } from "../logging/debugLog.js";
+import { debugLog } from "../util/debugLog.js";
 
 export async function runLinkValidation(
   files: string[],

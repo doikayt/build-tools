@@ -1,6 +1,6 @@
 import type { RunConfig, ProcessingStatus } from "./types.js";
 import type { RunnerPolicy } from "../policy/RunnerPolicy.js";
-import { debugLog } from "../logging/debugLog.js";
+import { debugLog } from "../util/debugLog.js";
 
 export interface FileProcessor<TConfig extends RunConfig> {
   process(filePath: string, config: TConfig): ProcessingStatus;
