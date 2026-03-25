@@ -7,7 +7,7 @@
   "private": false,
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "bash scripts/run-all-tests.sh"
+    "test": "npx vitest run --config vitest.config.ts && bash scripts/run-all-tests.sh"
   },
   "bin": {
     "update-markdown-toc": "./bin/update-markdown-toc.js"
@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.19.130",
-    "jest": "^30.2.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^1.0.0"
   }
 }

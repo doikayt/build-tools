@@ -8,7 +8,7 @@
       "outputs": ["{projectRoot}/dist"]
     },
     "test": {
-      "command": "cd update-markdown-toc && bash scripts/run-all-tests.sh",
+      "command": "cd update-markdown-toc && npx vitest run --config vitest.config.ts && bash scripts/run-all-tests.sh",
       "dependsOn": ["build", "@datalackey/tooling-core:build"]
     },
     "lint": {
@@ -38,9 +38,19 @@
       "//": [
         "Aggregates prod and test type checking for this package.",
         "check-prod-types covers src/ (published code).",
-        "check-test-types will be added when tsconfig.test.json is created."
+        "check-test-types covers tests/ (not published but still type-checked)."
       ],
-      "dependsOn": ["check-prod-types"]
+      "dependsOn": ["check-prod-types", "check-test-types"]
+    },
+    "check-test-types": {
+      "//": [
+        "--noEmit: type-check test files without emitting.",
+        "Uses tsconfig.test.json which includes tests/ in addition to src/.",
+        "Kept separate from check-prod-types so test-only type errors",
+        "do not affect the production build path."
+      ],
+      "command": "cd update-markdown-toc && npx tsc -p tsconfig.test.json --noEmit",
+      "dependsOn": ["^build"]
     }
   }
 }
