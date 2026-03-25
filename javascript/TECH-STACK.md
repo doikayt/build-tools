@@ -31,7 +31,7 @@ This document describes the tools and technologies used across all packages in t
 
 ## Build Orchestration
 
-- **[NX](https://nx.dev/)** 22.x
+- **NX** (See: https://nx.dev/)  ≥ 22.x
   Manages build and test task execution across packages in the workspace.
   Dependency ordering is declared via `dependsOn` in each package's `project.json`.
   NX owns the full execution graph — npm workspace scripts are not used for orchestration.

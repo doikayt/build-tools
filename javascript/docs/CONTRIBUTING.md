@@ -75,7 +75,7 @@ This repo has three layers:
 
 ## Build Pipeline
 
-This workspace uses [NX](https://nx.dev/) to orchestrate builds and tests across packages.
+This workspace uses **NX** (See: https://nx.dev/) to orchestrate builds and tests across packages.
 NX owns the full execution graph — do not use `npm run build` or `npm test` at the workspace
 root to drive builds. Use NX directly:
 ```bash

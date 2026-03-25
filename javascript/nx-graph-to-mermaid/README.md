@@ -26,7 +26,7 @@
 
 > Deterministically generates Mermaid task flow diagrams from NX `project.json` config files.
 
-`NX-graph-to-mermaid` is an [NX](https://NX.dev/) plugin that generates deterministic [Mermaid](https://www.mermaid.ai/) task flow diagrams from an NX `project.json` file — with optional Markdown injection and CI drift detection support.
+`NX-graph-to-mermaid` is an **NX** (See: https://NX.dev/) plugin that generates deterministic [Mermaid](https://www.mermaid.ai/) task flow diagrams from an NX `project.json` file — with optional Markdown injection and CI drift detection support.
 
 It operates purely on the specified `project.json` and renders intra-project target dependencies only. It does not resolve cross-project or workspace-level graph relationships.
 
