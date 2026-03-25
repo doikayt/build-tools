@@ -28,8 +28,8 @@ let mockExit: MockInstance;
 
 beforeEach(() => {
   mockExit = vi
-    .spyOn(process, "exit")
-    .mockImplementation((() => {}) as () => never);
+      .spyOn(process, "exit")
+      .mockImplementation((() => {}) as () => never);
 });
 
 afterEach(() => {
@@ -70,4 +70,102 @@ test("processes a single file", () => {
   expect(mockExit).not.toHaveBeenCalled();
 
   fs.rmSync(dir, { recursive: true, force: true });
+});
+
+async function assertCollidesWithStandardFlag(flag: string): Promise<void> {
+  const collidingDescriptor = {
+    ...descriptor,
+    options: [{ flag: flag, description: "custom flag" }],
+  };
+
+  await runCli({
+    descriptor: collidingDescriptor,
+    processor: noopProcessor,
+    argv: [],
+  });
+
+  expect(mockExit).toHaveBeenCalledWith(1);
+}
+
+describe("descriptor option flag collision detection", () => {
+
+  test("exits 1 when plugin declares option colliding with --verbose", async () => {
+    await assertCollidesWithStandardFlag("--verbose");
+  });
+
+  test("exits 1 when plugin declares option colliding with -v", async () => {
+    await assertCollidesWithStandardFlag("-v");
+  });
+
+  test("exits 1 when plugin declares option colliding with --check", async () => {
+    await assertCollidesWithStandardFlag("--check");
+  });
+
+  test("exits 1 when plugin declares option colliding with -c", async () => {
+    await assertCollidesWithStandardFlag("-c");
+  });
+
+  test("exits 1 when plugin declares option colliding with --recursive", async () => {
+    await assertCollidesWithStandardFlag("--recursive");
+  });
+
+  test("exits 1 when plugin declares option colliding with -r", async () => {
+    await assertCollidesWithStandardFlag("-r");
+  });
+
+  test("exits 1 when plugin declares option colliding with --exclude", async () => {
+    await assertCollidesWithStandardFlag("--exclude");
+  });
+
+  test("exits 1 when plugin declares option colliding with -e", async () => {
+    await assertCollidesWithStandardFlag("-e");
+  });
+
+  test("exits 1 when plugin declares option colliding with --quiet", async () => {
+    await assertCollidesWithStandardFlag("--quiet");
+  });
+
+  test("exits 1 when plugin declares option colliding with -q", async () => {
+    await assertCollidesWithStandardFlag("-q");
+  });
+
+  test("exits 1 when plugin declares option colliding with --debug", async () => {
+    await assertCollidesWithStandardFlag("--debug");
+  });
+
+  test("exits 1 when plugin declares option colliding with -d", async () => {
+    await assertCollidesWithStandardFlag("-d");
+  });
+
+  test("exits 1 when plugin declares option colliding with --help", async () => {
+    await assertCollidesWithStandardFlag("--help");
+  });
+
+  test("exits 1 when plugin declares option colliding with -h", async () => {
+    await assertCollidesWithStandardFlag("-h");
+  });
+
+  test("does not exit 1 when plugin declares non-colliding options", async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "run-cli-no-collision-"));
+    const file = path.join(dir, "README.md");
+    fs.writeFileSync(file, "# Hello");
+
+    const safeDescriptor = {
+      ...descriptor,
+      options: [
+        { flag: "--output", description: "output path", requiresValue: true },
+        { flag: "-o", description: "output path short" },
+      ],
+    };
+
+    await runCli({
+      descriptor: safeDescriptor,
+      processor: noopProcessor,
+      argv: [file],
+    });
+
+    expect(mockExit).not.toHaveBeenCalledWith(1);
+
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
 });
