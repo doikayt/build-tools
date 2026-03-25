@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { walkFiles } from "../fs/walkFiles.js";
+import { walkFiles } from "../util/walkFiles.js";
 import type { RunConfig } from "../repository/types.js";
 
 export type ResolvedTargets =

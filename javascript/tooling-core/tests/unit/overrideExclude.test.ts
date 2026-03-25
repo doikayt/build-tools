@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-import { walkFiles } from "../../src/fs/walkFiles.js";
+import { walkFiles } from "../../src/util/walkFiles.js";
 
 describe("walkFiles exclusion override", () => {
   test("node_modules traversal allowed when override provided", () => {

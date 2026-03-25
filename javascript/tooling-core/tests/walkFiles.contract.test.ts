@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
 
-import { walkFiles, DEFAULT_EXCLUDE_DIRS } from "../src/fs/walkFiles";
+import { walkFiles, DEFAULT_EXCLUDE_DIRS } from "../src/util/walkFiles.js";
 
 function makeTmpDir(): string {
   return fs.mkdtempSync(path.join(os.tmpdir(), "walk-contract-"));
