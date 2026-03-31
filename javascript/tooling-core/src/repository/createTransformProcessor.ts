@@ -16,7 +16,7 @@ export function createTransformProcessor<
         return "unchanged";
       }
       if (config.check === true) {
-        return "stale";
+        return "needsUpdate";
       }
 
       fs.writeFileSync(filePath, updated, "utf8");

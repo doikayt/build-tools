@@ -78,8 +78,13 @@ export async function runCli<TConfig extends RunConfig = RunConfig>(
 
   if (parsed.help) {
     printHelp(options.descriptor);
-    process.exit(0);
-    return Promise.resolve({ updated: 0, unchanged: 0, stale: 0, skipped: 0 });
+    process.exit(0); // Sets process exit code for when we terminate, but does not itself cause termination
+    return Promise.resolve({
+      updated: 0,
+      unchanged: 0,
+      needsUpdate: 0,
+      skipped: 0,
+    });
   }
 
   const config = attempt(() =>

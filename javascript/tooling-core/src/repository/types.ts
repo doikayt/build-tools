@@ -16,4 +16,8 @@ export interface RunConfig {
   linkTimeoutMs: number;
 }
 
-export type ProcessingStatus = "updated" | "unchanged" | "stale" | "skipped";
+export type ProcessingStatus =
+  | "updated"
+  | "unchanged"
+  | "needsUpdate"
+  | "skipped";

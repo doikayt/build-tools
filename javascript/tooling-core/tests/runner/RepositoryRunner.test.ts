@@ -29,6 +29,6 @@ test("runner continues when policy returns continue", async () => {
   const stats = await runner.run(["a.md", "b.md"]);
   expect(stats.updated).toBe(0);
   expect(stats.unchanged).toBe(0);
-  expect(stats.stale).toBe(0);
+  expect(stats.needsUpdate).toBe(0);
   expect(stats.skipped).toBe(0);
 });

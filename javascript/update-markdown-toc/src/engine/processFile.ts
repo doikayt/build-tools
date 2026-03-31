@@ -48,8 +48,8 @@ export function processFile(
   }
 
   if (config.runMode === "check") {
-    debugLog(config, `processFile: stale filePath=${absolutePath}`);
-    return "stale";
+    debugLog(config, `processFile: needsUpdate filePath=${absolutePath}`);
+    return "needsUpdate";
   }
 
   fs.writeFileSync(filePath, updated, "utf8");

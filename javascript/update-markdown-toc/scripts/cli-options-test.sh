@@ -169,7 +169,7 @@ if [[ "$STATUS" -ne 1 ]]; then
   exit 1
 fi
 
-EXPECTED="Stale: $STALE_MD"
+EXPECTED="Needs update: $STALE_MD"
 ACTUAL="$(normalize_output "$OUTPUT")"
 
 if [[ "$ACTUAL" != "$EXPECTED" ]]; then

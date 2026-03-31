@@ -6,7 +6,7 @@
 - [2. Status Types](#2-status-types)
     - [Updated](#updated)
     - [Up-to-date](#up-to-date)
-    - [Stale](#stale)
+    - [Needs-update](#needs-update)
     - [Skipped](#skipped)
 - [3. Default Output Behavior](#3-default-output-behavior)
 - [4. Verbose Mode (`--verbose`)](#4-verbose-mode---verbose)
@@ -107,14 +107,14 @@ Example output:
 Up-to-date: docs/api.md
 ```
 
-### Stale
+### Needs-update
 
 The file would be modified, but the tool is running in `--check` mode.
 
 Example output:
 
 ```
-Stale: docs/guide.md
+Needs update: docs/guide.md
 ```
 
 ### Skipped
@@ -149,13 +149,13 @@ When `--verbose` is used:
 - All file statuses are printed:
     - Updated
     - Up-to-date
-    - Stale
+    - Needs update
     - Skipped
 
 In recursive mode, a summary line is printed at the end:
 
 ```
-Summary: 3 updated, 1 stale, 2 unchanged, 4 skipped
+Summary: 3 updated, 1 needs update, 2 unchanged, 4 skipped
 ```
 
 The summary appears only in recursive mode and only when `--verbose` is enabled.
@@ -191,8 +191,8 @@ When `--debug` is used:
 When `--check` is specified:
 
 - Files are not modified.
-- Files that would change are reported as `Stale`.
-- The tool exits with a non-zero status if any file is stale.
+- Files that would change are reported as `Needs update`.
+- The tool exits with a non-zero status if any file is needs update.
 
 For tools that support link validation, `--check` performs three tiers of validation
 in order:
@@ -200,8 +200,8 @@ in order:
 ### TOC Validation
 
 Verifies that the auto-generated TOC block is up to date with the document's
-headings. This is the baseline `--check` behavior. If the TOC is stale the file
-is reported as `Stale` and the run exits non-zero. Link validation continues to run
+headings. This is the baseline `--check` behavior. If the TOC is needs update the file
+is reported as `Needs update` and the run exits non-zero. Link validation continues to run
 even if TOC validation fails.
 
 ### Intra-document Link Validation
@@ -236,7 +236,7 @@ To disable external link validation entirely use `--no-external-link-check`.
 ### Exit Behavior
 
 - Exit code `0` → no changes required, no broken links.
-- Exit code `1` → at least one file is stale, or at least one broken link found.
+- Exit code `1` → at least one file is needs update, or at least one broken link found.
 - Non-zero exit codes also occur for structural errors.
 
 ---
@@ -246,7 +246,7 @@ To disable external link validation entirely use `--no-external-link-check`.
 Exit codes are consistent across tools:
 
 - `0` → success, no issues
-- `1` → stale files detected in `--check` mode
+- `1` → needs update files detected in `--check` mode
 - Non-zero → structural or fatal error
 
 

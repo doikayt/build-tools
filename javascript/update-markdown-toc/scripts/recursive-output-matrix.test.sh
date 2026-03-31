@@ -47,7 +47,7 @@ cat <<EOT
 Up-to-date: $TREE2/good.md
 Skipped (no markers): $TREE2/no-toc.md
 Updated: $TREE2/stale.md
-Summary: 1 updated, 0 stale, 1 unchanged, 1 skipped
+Summary: 1 updated, 0 needs update, 1 unchanged, 1 skipped
 EOT
 )
 

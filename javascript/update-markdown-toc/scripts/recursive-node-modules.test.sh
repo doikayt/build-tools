@@ -52,7 +52,7 @@ EXPECTED_ORDER=$(
 cat <<EOT
 Updated: $TREE/a.md
 Updated: $TREE/sub/b.md
-Summary: 2 updated, 0 stale, 0 unchanged, 0 skipped
+Summary: 2 updated, 0 needs update, 0 unchanged, 0 skipped
 EOT
 )
 

@@ -15,7 +15,7 @@ export interface RepositoryRunnerOptions<TConfig extends RunConfig> {
 export interface RepositoryStats {
   updated: number;
   unchanged: number;
-  stale: number;
+  needsUpdate: number;
   skipped: number;
 }
 
@@ -84,7 +84,7 @@ export class RepositoryRunner<TConfig extends RunConfig> {
 
     this.printSummary(stats);
 
-    if (this.config.runMode === "check" && stats.stale > 0) {
+    if (this.config.runMode === "check" && stats.needsUpdate > 0) {
       process.exitCode = 1;
     }
 
@@ -102,8 +102,8 @@ export class RepositoryRunner<TConfig extends RunConfig> {
       case "unchanged":
         stats.unchanged++;
         break;
-      case "stale":
-        stats.stale++;
+      case "needsUpdate":
+        stats.needsUpdate++;
         break;
       case "skipped":
         stats.skipped++;
@@ -119,8 +119,8 @@ export class RepositoryRunner<TConfig extends RunConfig> {
       case "unchanged":
         console.log(`Up-to-date: ${file}`);
         break;
-      case "stale":
-        console.log(`Stale: ${file}`);
+      case "needsUpdate":
+        console.log(`Needs update: ${file}`);
         break;
       case "skipped":
         console.log(`Skipped (no markers): ${file}`);
@@ -132,7 +132,7 @@ export class RepositoryRunner<TConfig extends RunConfig> {
     return {
       updated: 0,
       unchanged: 0,
-      stale: 0,
+      needsUpdate: 0,
       skipped: 0,
     };
   }
@@ -142,7 +142,7 @@ export class RepositoryRunner<TConfig extends RunConfig> {
       return;
     }
     console.log(
-      `Summary: ${stats.updated} updated, ${stats.stale} stale, ${stats.unchanged} unchanged, ${stats.skipped} skipped`
+      `Summary: ${stats.updated} updated, ${stats.needsUpdate} needs update, ${stats.unchanged} unchanged, ${stats.skipped} skipped`
     );
   }
 }

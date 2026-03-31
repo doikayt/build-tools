@@ -65,7 +65,7 @@ Updated: $TREE/a.md
 Updated: $TREE/sub/b.md
 Skipped (no markers): $TREE/sub/c.md
 Updated: $TREE/sub2/d.md
-Summary: 3 updated, 0 stale, 0 unchanged, 1 skipped
+Summary: 3 updated, 0 needs update, 0 unchanged, 1 skipped
 EOT
 )
 

@@ -11,7 +11,7 @@ export function createRunnerPolicy(config: RunConfig): RunnerPolicy {
         debugLog(config, `policy.shouldPrint: false (quiet) status=${status}`);
         return false;
       }
-      if (status === "updated" || status === "stale") {
+      if (status === "updated" || status === "needsUpdate") {
         debugLog(config, `policy.shouldPrint: true status=${status}`);
         return true;
       }

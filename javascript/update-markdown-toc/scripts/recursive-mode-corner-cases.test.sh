@@ -39,7 +39,7 @@ ACTUAL="$(printf '%s\n' "$OUTPUT" | filter_run_lines | normalize)"
 EXPECTED=$(
 cat <<EOT
 Updated: $TREE/file.md
-Summary: 1 updated, 0 stale, 0 unchanged, 0 skipped
+Summary: 1 updated, 0 needs update, 0 unchanged, 0 skipped
 EOT
 )
 
@@ -73,7 +73,7 @@ OUTPUT="$(
 
 ACTUAL="$(printf '%s\n' "$OUTPUT" | filter_run_lines | normalize)"
 
-EXPECTED="Summary: 0 updated, 0 stale, 0 unchanged, 0 skipped"
+EXPECTED="Summary: 0 updated, 0 needs update, 0 unchanged, 0 skipped"
 
 if [[ "$ACTUAL" != "$EXPECTED" ]]; then
   echo "ERROR: recursive mode with zero files behaved incorrectly"
