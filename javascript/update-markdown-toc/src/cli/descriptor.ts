@@ -50,12 +50,8 @@ export const descriptor: PluginDescriptor<TocRunConfig> = {
 
     return {
       ...standard,
-      // Force false so tooling-core's built-in call in runCli is a no-op.
-      // Link validation is handled exclusively via afterRun below.
-      validateExternalLinks: false,
-      linkTimeoutMs: DEFAULT_LINK_TIMEOUT_MS,
-      validateExternalLinksLocal: noExternalCheck ? false : true,
-      linkTimeoutMsLocal: timeoutMs,
+      validateExternalLinks: noExternalCheck ? false : true,
+      linkTimeoutMs: timeoutMs,
     };
   },
   async afterRun(
@@ -68,8 +64,8 @@ export const descriptor: PluginDescriptor<TocRunConfig> = {
     }
     await runLinkValidation(files, {
       ...config,
-      validateExternalLinks: config.validateExternalLinksLocal,
-      linkTimeoutMs: config.linkTimeoutMsLocal,
+      validateExternalLinks: config.validateExternalLinks,
+      linkTimeoutMs: config.linkTimeoutMs,
     });
   },
 };
