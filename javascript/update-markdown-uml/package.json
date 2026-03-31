@@ -45,10 +45,12 @@
   "dependencies": {
     "@datalackey/tooling-core": "*",
     "ts-morph": "^24.0.0",
-    "tsuml2": "^0.17.0"
+    "tsuml2": "^0.17.0",
+    "micromatch": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "^18.16.0",
+    "@types/micromatch": "^4.0.9",
     "typescript": "^5.4.0",
     "vitest": "^1.0.0"
   }
