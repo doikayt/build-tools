@@ -1,8 +1,9 @@
 import { describe, test, expect, vi, afterEach } from "vitest";
 
 vi.mock("@datalackey/tooling-core", async (importOriginal) => {
-  const actual =
-      await importOriginal<typeof import("@datalackey/tooling-core")>();
+  const actual = await importOriginal<
+    typeof import("@datalackey/tooling-core")
+  >();
   return {
     ...actual,
     runLinkValidation: vi.fn().mockResolvedValue(undefined),
@@ -13,9 +14,7 @@ import { runLinkValidation } from "@datalackey/tooling-core";
 import { descriptor } from "../../src/cli/descriptor.js";
 import type { TocRunConfig } from "../../src/cli/TocRunConfig.js";
 
-function makeCheckConfig(
-    overrides: Partial<TocRunConfig> = {}
-): TocRunConfig {
+function makeCheckConfig(overrides: Partial<TocRunConfig> = {}): TocRunConfig {
   return {
     runMode: "check",
     mode: "single",
@@ -29,9 +28,7 @@ function makeCheckConfig(
   };
 }
 
-function makeUpdateConfig(
-    overrides: Partial<TocRunConfig> = {}
-): TocRunConfig {
+function makeUpdateConfig(overrides: Partial<TocRunConfig> = {}): TocRunConfig {
   return { ...makeCheckConfig(), runMode: "update", ...overrides };
 }
 
@@ -69,8 +66,8 @@ describe("toc descriptor afterRun", () => {
     await (descriptor as any).afterRun(files, config);
 
     expect(vi.mocked(runLinkValidation)).toHaveBeenCalledWith(
-        files,
-        expect.objectContaining({ validateExternalLinks: false })
+      files,
+      expect.objectContaining({ validateExternalLinks: false })
     );
   });
 
@@ -81,8 +78,8 @@ describe("toc descriptor afterRun", () => {
     await (descriptor as any).afterRun(files, config);
 
     expect(vi.mocked(runLinkValidation)).toHaveBeenCalledWith(
-        files,
-        expect.objectContaining({ linkTimeoutMs: 9999 })
+      files,
+      expect.objectContaining({ linkTimeoutMs: 9999 })
     );
   });
 
