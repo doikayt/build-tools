@@ -8,7 +8,7 @@ import {
 import { listFilesToProcess } from "./listFilesToProcess.js";
 import { printHelp } from "./printHelp.js";
 import { runPlugin } from "./runPlugin.js";
-import { runLinkValidation } from "./runLinkValidation.js";
+
 import { debugLog } from "../util/debugLog.js";
 import type { RepositoryStats } from "../repository/RepositoryRunner.js";
 
@@ -79,6 +79,7 @@ export async function runCli<TConfig extends RunConfig = RunConfig>(
   if (parsed.help) {
     printHelp(options.descriptor);
     process.exit(0);
+    return Promise.resolve({ updated: 0, unchanged: 0, stale: 0, skipped: 0 });
   }
 
   const config = attempt(() =>
@@ -99,8 +100,8 @@ export async function runCli<TConfig extends RunConfig = RunConfig>(
 
   debugLog(config, `runCli: stats=${JSON.stringify(stats)}`);
 
-  if (config.runMode === "check") {
-    await runLinkValidation(targets.files, config);
+  if (options.descriptor.afterRun !== undefined) {
+    await options.descriptor.afterRun(targets.files, config);
   }
 
   return stats;

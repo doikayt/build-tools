@@ -4,6 +4,7 @@ import {
   expect,
   beforeEach,
   afterEach,
+  describe,
   type MockInstance,
 } from "vitest";
 import { runCli } from "../../src/index.js";
@@ -166,5 +167,81 @@ describe("descriptor option flag collision detection", () => {
     expect(mockExit).not.toHaveBeenCalledWith(1);
 
     fs.rmSync(dir, { recursive: true, force: true });
+  });
+});
+
+// ----------------------------------------------------------------
+// afterRun hook tests
+// FAIL until Step 5: afterRun added to PluginDescriptor + called from runCli.
+// ----------------------------------------------------------------
+
+describe("afterRun hook", () => {
+  test("afterRun is called when defined on descriptor", async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "run-cli-afterrun-"));
+    const file = path.join(dir, "README.md");
+    fs.writeFileSync(file, "# Hello");
+
+    const afterRunMock = vi.fn().mockResolvedValue(undefined);
+
+    await runCli({
+      descriptor: { ...descriptor, afterRun: afterRunMock } as any,
+      processor: noopProcessor,
+      argv: [file],
+    });
+
+    expect(afterRunMock).toHaveBeenCalledOnce();
+
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+
+  test("afterRun is not called when not defined on descriptor", async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "run-cli-no-afterrun-"));
+    const file = path.join(dir, "README.md");
+    fs.writeFileSync(file, "# Hello");
+
+    await runCli({
+      descriptor: descriptor,
+      processor: noopProcessor,
+      argv: [file],
+    });
+
+    expect(mockExit).not.toHaveBeenCalled();
+
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+
+  test("afterRun receives the files that were processed", async () => {
+    const dir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "run-cli-afterrun-files-")
+    );
+    const file = path.join(dir, "README.md");
+    fs.writeFileSync(file, "# Hello");
+
+    let capturedFiles: string[] = [];
+    const afterRunMock = vi.fn().mockImplementation(async (files: string[]) => {
+      capturedFiles = files;
+    });
+
+    await runCli({
+      descriptor: { ...descriptor, afterRun: afterRunMock } as any,
+      processor: noopProcessor,
+      argv: [file],
+    });
+
+    expect(capturedFiles).toEqual([file]);
+
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+
+  test("afterRun is not called when --help exits early", () => {
+    const afterRunMock = vi.fn().mockResolvedValue(undefined);
+
+    runCli({
+      descriptor: { ...descriptor, afterRun: afterRunMock } as any,
+      processor: noopProcessor,
+      argv: ["--help"],
+    });
+
+    expect(afterRunMock).not.toHaveBeenCalled();
   });
 });

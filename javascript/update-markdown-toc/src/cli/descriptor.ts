@@ -1,13 +1,14 @@
-import type { RunConfig } from "@datalackey/tooling-core";
-import type { PluginDescriptor } from "@datalackey/tooling-core";
+import type { RunConfig, PluginDescriptor } from "@datalackey/tooling-core";
 import {
   parseBooleanOption,
   parseNumberOption,
+  runLinkValidation,
 } from "@datalackey/tooling-core";
+import type { TocRunConfig } from "./TocRunConfig.js";
 
 const DEFAULT_LINK_TIMEOUT_MS = 3000;
 
-export const descriptor: PluginDescriptor<RunConfig> = {
+export const descriptor: PluginDescriptor<TocRunConfig> = {
   name: "update-markdown-toc",
   description: "Auto-generate Table of Contents for Markdown files",
   options: [
@@ -37,7 +38,7 @@ export const descriptor: PluginDescriptor<RunConfig> = {
   parseOptions(
     standard: RunConfig,
     passthrough: Map<string, string | boolean>
-  ): RunConfig {
+  ): TocRunConfig {
     const noExternalCheck =
       parseBooleanOption("--no-external-link-check", passthrough) ||
       parseBooleanOption("-n", passthrough);
@@ -49,10 +50,26 @@ export const descriptor: PluginDescriptor<RunConfig> = {
 
     return {
       ...standard,
-      validateExternalLinks: noExternalCheck
-        ? false
-        : standard.validateExternalLinks,
-      linkTimeoutMs: timeoutMs,
+      // Force false so tooling-core's built-in call in runCli is a no-op.
+      // Link validation is handled exclusively via afterRun below.
+      validateExternalLinks: false,
+      linkTimeoutMs: DEFAULT_LINK_TIMEOUT_MS,
+      validateExternalLinksLocal: noExternalCheck ? false : true,
+      linkTimeoutMsLocal: timeoutMs,
     };
+  },
+  async afterRun(
+    this: void,
+    files: string[],
+    config: TocRunConfig
+  ): Promise<void> {
+    if (config.runMode !== "check") {
+      return;
+    }
+    await runLinkValidation(files, {
+      ...config,
+      validateExternalLinks: config.validateExternalLinksLocal,
+      linkTimeoutMs: config.linkTimeoutMsLocal,
+    });
   },
 };

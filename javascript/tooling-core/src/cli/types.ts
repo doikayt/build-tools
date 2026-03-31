@@ -19,6 +19,7 @@ export interface PluginDescriptor<TConfig extends RunConfig = RunConfig> {
     passthrough: Map<string, string | boolean>
   ): TConfig;
   validate?(this: void, config: TConfig): void;
+  afterRun?(this: void, files: string[], config: TConfig): Promise<void>;
 }
 
 export interface ParsedCliResult<TConfig extends RunConfig = RunConfig> {

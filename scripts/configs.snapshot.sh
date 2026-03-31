@@ -16,6 +16,7 @@ find . \
     -o -name "tsconfig.json" \
     -o -name "tsconfig.*.json" \
     -o -name "nx.json" \
+    -o -name "*.mjs" \
     -o -name "vitest.config.ts" \
     -o -name "jest.config.js" \
     -o -name "jest.config.ts" \

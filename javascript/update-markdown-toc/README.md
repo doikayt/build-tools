@@ -40,14 +40,14 @@
 
 A Node.js command-line **documentation helper** which automatically:
 
-- generates Table of Contents (TOC) blocks for Markdown files
+- generates Table of Contents (TOC) blocks for Markdown files (using GitHub's Markdown renderer)
 - operates on either a single file, or recursively finds all `*.md` files from a root path
 - regenerates TOCs from headings, targeting only regions explicitly marked with [TOC markers](#toc-markers)
 - avoids gratuitous reformatting or changes of any kind outside of regions marked by the aforementioned [TOC markers](#toc-markers)
 - avoids updating files when the generated TOC is already correct
 - provides a `--check` mode which flags Markdown files with stale TOCs (intended for CI)
-- generates TOC links with GitHub’s Markdown renderer.
-
+  - validates intra-document links (i.e., those between Markdown docs in the repo (including #fragments, image paths) 
+  - validates external HTTP/HTTPS links, with configurable timeout 
 
 
 ## Why not Some Other Markdown TOC Generator ?
