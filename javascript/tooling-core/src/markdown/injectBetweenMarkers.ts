@@ -1,18 +1,19 @@
-export function injectBetweenMarkers(
-  markdown: string,
-  content: string,
-  startTag: string,
-  endTag: string
-): string {
-  const startIndex = markdown.indexOf(startTag);
-  const endIndex = markdown.indexOf(endTag);
+import { findMarker } from "./findMarker.js";
 
-  if (startIndex === -1 || endIndex === -1 || endIndex <= startIndex) {
+export function injectBetweenMarkers(
+    markdown: string,
+    content: string,
+    startTag: string,
+    endTag: string
+): string {
+  const location = findMarker(markdown, startTag, endTag);
+
+  if (location === null) {
     throw new Error(`Markers not found or invalid: ${startTag}`);
   }
 
-  const before = markdown.substring(0, startIndex + startTag.length);
-  const after = markdown.substring(endIndex);
+  const before = markdown.substring(0, location.startIndex);
+  const after = markdown.substring(location.endIndex);
 
   return `${before}\n${content}\n${after}`;
 }

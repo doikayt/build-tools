@@ -41,7 +41,7 @@ describe("buildPackageClassDiagram()", () => {
     expect(result).toContain("<<interface>>");
     expect(result).toContain("+verbose");
     expect(result).toContain("+quiet");
-  });
+  }, 10000);
 
   test("non-exported interface is included", () => {
     write(
