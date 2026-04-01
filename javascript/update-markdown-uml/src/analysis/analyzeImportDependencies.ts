@@ -87,7 +87,10 @@ export function collectDirectEdges(
 
 /**
  * Computes the transitive closure of a set of directed edges using
- * Floyd-Warshall style reachability. Self-edges are excluded.
+ * Floyd-Warshall style reachability (to calculate the shortest path between
+ * all pairs of nodes in a graph.)
+ *
+ * Self-edges are excluded.
  * Input edges are included in the output unchanged.
  * Returns deduplicated, sorted edges.
  */

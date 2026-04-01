@@ -4,6 +4,10 @@ import path from "node:path";
 import os from "node:os";
 import { collectDirectEdges } from "../../src/analysis/analyzeImportDependencies.js";
 
+const CLI = "cli";
+const REPOSITORY = "repository";
+const UTIL = "util";
+
 let tmpDir: string;
 
 beforeEach(() => {
@@ -27,62 +31,62 @@ function leafDir(name: string): string {
 
 describe("collectDirectEdges()", () => {
   test("no imports returns empty", () => {
-    write("cli/index.ts", "export const x = 1;");
-    const result = collectDirectEdges([leafDir("cli")], tmpDir);
+    write(`${CLI}/index.ts`, "export const x = 1;");
+    const result = collectDirectEdges([leafDir(CLI)], tmpDir);
     expect(result).toEqual([]);
   });
 
   test("import within same leaf dir is excluded", () => {
-    write("cli/a.ts", 'import { b } from "./b.js";');
-    write("cli/b.ts", "export const b = 1;");
-    const result = collectDirectEdges([leafDir("cli")], tmpDir);
+    write(`${CLI}/a.ts`, 'import { b } from "./b.js";');
+    write(`${CLI}/b.ts`, "export const b = 1;");
+    const result = collectDirectEdges([leafDir(CLI)], tmpDir);
     expect(result).toEqual([]);
   });
 
   test("import from another leaf dir produces one edge", () => {
-    write("cli/index.ts", 'import { x } from "../repository/types.js";');
-    write("repository/types.ts", "export const x = 1;");
+    write(`${CLI}/index.ts`, `import { x } from "../${REPOSITORY}/types.js";`);
+    write(`${REPOSITORY}/types.ts`, "export const x = 1;");
     const result = collectDirectEdges(
-      [leafDir("cli"), leafDir("repository")],
+      [leafDir(CLI), leafDir(REPOSITORY)],
       tmpDir
     );
-    expect(result).toEqual([{ from: "cli", to: "repository" }]);
+    expect(result).toEqual([{ from: CLI, to: REPOSITORY }]);
   });
 
   test("import from outside sourceRoot is excluded", () => {
-    write("cli/index.ts", 'import { x } from "some-external-package";');
-    const result = collectDirectEdges([leafDir("cli")], tmpDir);
+    write(`${CLI}/index.ts`, 'import { x } from "some-external-package";');
+    const result = collectDirectEdges([leafDir(CLI)], tmpDir);
     expect(result).toEqual([]);
   });
 
   test("two files in same leaf both importing same target produces one edge", () => {
-    write("cli/a.ts", 'import { x } from "../repository/types.js";');
-    write("cli/b.ts", 'import { x } from "../repository/types.js";');
-    write("repository/types.ts", "export const x = 1;");
+    write(`${CLI}/a.ts`, `import { x } from "../${REPOSITORY}/types.js";`);
+    write(`${CLI}/b.ts`, `import { x } from "../${REPOSITORY}/types.js";`);
+    write(`${REPOSITORY}/types.ts`, "export const x = 1;");
     const result = collectDirectEdges(
-      [leafDir("cli"), leafDir("repository")],
+      [leafDir(CLI), leafDir(REPOSITORY)],
       tmpDir
     );
-    expect(result).toEqual([{ from: "cli", to: "repository" }]);
+    expect(result).toEqual([{ from: CLI, to: REPOSITORY }]);
   });
 
   test("multiple distinct cross-leaf imports produce multiple edges", () => {
     write(
-      "cli/index.ts",
+      `${CLI}/index.ts`,
       [
-        'import { x } from "../repository/types.js";',
-        'import { y } from "../util/helpers.js";',
+        `import { x } from "../${REPOSITORY}/types.js";`,
+        `import { y } from "../${UTIL}/helpers.js";`,
       ].join("\n")
     );
-    write("repository/types.ts", "export const x = 1;");
-    write("util/helpers.ts", "export const y = 2;");
+    write(`${REPOSITORY}/types.ts`, "export const x = 1;");
+    write(`${UTIL}/helpers.ts`, "export const y = 2;");
     const result = collectDirectEdges(
-      [leafDir("cli"), leafDir("repository"), leafDir("util")],
+      [leafDir(CLI), leafDir(REPOSITORY), leafDir(UTIL)],
       tmpDir
     );
     expect(result).toEqual([
-      { from: "cli", to: "repository" },
-      { from: "cli", to: "util" },
+      { from: CLI, to: REPOSITORY },
+      { from: CLI, to: UTIL },
     ]);
   });
 });

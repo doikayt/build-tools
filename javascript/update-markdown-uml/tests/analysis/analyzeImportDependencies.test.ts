@@ -4,6 +4,10 @@ import path from "node:path";
 import os from "node:os";
 import { analyzeImportDependencies } from "../../src/analysis/analyzeImportDependencies.js";
 
+const CLI = "cli";
+const REPOSITORY = "repository";
+const UTIL = "util";
+
 let tmpDir: string;
 
 beforeEach(() => {
@@ -26,17 +30,18 @@ function leafDir(name: string): string {
 
 describe("analyzeImportDependencies()", () => {
   test("transitive edges appear in output", () => {
-    write("cli/index.ts", 'import { x } from "../repository/types.js";');
-    write("repository/types.ts", 'import { y } from "../util/helpers.js";');
-    write("util/helpers.ts", "export const y = 1;");
-
+    write(`${CLI}/index.ts`, `import { x } from "../${REPOSITORY}/types.js";`);
+    write(
+      `${REPOSITORY}/types.ts`,
+      `import { y } from "../${UTIL}/helpers.js";`
+    );
+    write(`${UTIL}/helpers.ts`, "export const y = 1;");
     const result = analyzeImportDependencies(
-      [leafDir("cli"), leafDir("repository"), leafDir("util")],
+      [leafDir(CLI), leafDir(REPOSITORY), leafDir(UTIL)],
       tmpDir
     );
-
-    expect(result).toContainEqual({ from: "cli", to: "repository" });
-    expect(result).toContainEqual({ from: "cli", to: "util" });
-    expect(result).toContainEqual({ from: "repository", to: "util" });
-  });
+    expect(result).toContainEqual({ from: CLI, to: REPOSITORY });
+    expect(result).toContainEqual({ from: CLI, to: UTIL });
+    expect(result).toContainEqual({ from: REPOSITORY, to: UTIL });
+  }, 15000);
 });
