@@ -1,10 +1,10 @@
 import { findMarker } from "./findMarker.js";
 
 export function injectBetweenMarkers(
-    markdown: string,
-    content: string,
-    startTag: string,
-    endTag: string
+  markdown: string,
+  content: string,
+  startTag: string,
+  endTag: string
 ): string {
   const location = findMarker(markdown, startTag, endTag);
 

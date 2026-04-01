@@ -24,6 +24,8 @@ export type {
 
 export { walkFiles } from "./util/walkFiles.js"; // TODO - only need for mermaid.. can remove when that plugin uses more of tooling core
 export { injectBetweenMarkers } from "./markdown/injectBetweenMarkers.js";
+export { findMarker, findMarkers } from "./markdown/findMarker.js";
+export type { MarkerLocation } from "./markdown/findMarker.js";
 export { createTransformProcessor } from "./repository/createTransformProcessor.js";
 
 export type { RunnerPolicy, RunnerDecision } from "./policy/RunnerPolicy.js";
