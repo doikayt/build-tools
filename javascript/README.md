@@ -22,14 +22,16 @@ For maintainer and contributor documentation see: [here](./docs/CONTRIBUTING.md)
 ## Packages
 
 - [`@datalackey/update-markdown-toc`](./update-markdown-toc/README.md)
-  - CLI tool that auto-generates and validates Tables of Contents in Markdown files and checks other types of links.
+  - CLI tool that auto-generates and validates Tables of Contents (TOCs) in Markdown files and checks other types of links.
 - [`@datalackey/nx-graph-to-mermaid`](./nx-graph-to-mermaid/README.md)
   - NX executor plugin that generates deterministic Mermaid task-flow diagrams from `project.json` target definitions
+- [`@datalackey/update-markdown-uml`](./update-markdown-uml/README.md)
+  - CLI tool that generates and validates UML class and package diagrams for TypeScript source trees, injecting them into Markdown documentation files
 - [`@datalackey/autogen-markdown-doc`](./autogen-markdown-doc/README.md)
-  - CLI tool that bundles the packages above with opinionated defaults, covering TOC and Mermaid diagram management across an entire repository in a single command
+  - CLI tool that bundles the above referenced packages with opinionated defaults -- enabling 
+    repository-wide gen/update of TOCs, and supported diagrams (build dependencies, and UML), all via a single command. 
 - [`@datalackey/tooling-core`](./tooling-core/README.md)
   - private, unpublished package containing shared logic and utilities used by the other packages in this workspace
-
 
 These packages are:
 
