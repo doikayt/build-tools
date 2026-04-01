@@ -38,7 +38,9 @@ describe("readPackageDescription()", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     const result = readPackageDescription(tmpDir);
     expect(result).toBeUndefined();
-    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("_PACKAGE_INFO.md"));
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining("_PACKAGE_INFO.md")
+    );
     expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("period"));
     warnSpy.mockRestore();
   });
