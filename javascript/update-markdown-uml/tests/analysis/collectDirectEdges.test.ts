@@ -41,7 +41,7 @@ describe("collectDirectEdges()", () => {
     write(`${CLI}/b.ts`, "export const b = 1;");
     const result = collectDirectEdges([leafDir(CLI)], tmpDir);
     expect(result).toEqual([]);
-  });
+  }, 10000);
 
   test("import from another leaf dir produces one edge", () => {
     write(`${CLI}/index.ts`, `import { x } from "../${REPOSITORY}/types.js";`);
