@@ -11,8 +11,11 @@
       "command": "cd autogen-markdown-doc && jest",
       "dependsOn": [
         "@datalackey/nx-graph-to-mermaid:build",
-        "@datalackey/update-markdown-toc:build"
+        "@datalackey/update-markdown-toc:build",
+        "@datalackey/update-markdown-uml:build"
       ]
     }
   }
 }
+
+
