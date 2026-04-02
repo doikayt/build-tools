@@ -45,6 +45,9 @@ model without adding value.
 The bin file should remain as thin as possible — typically just a `runCli`
 call and a descriptor import. All real logic belongs in `src/` as TypeScript.
 
+Implication: unfortunately, you can't click on a referenced type in the bin file and get your IDE to jump to
+the definition.
+
 ---
 
 ## ESM-Only, No CommonJS
