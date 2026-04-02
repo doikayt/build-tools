@@ -69,10 +69,11 @@ Two test runners exist for historical reasons. New packages should prefer Vitest
 @datalackey/autogen-markdown-doc
   ├── @datalackey/update-markdown-toc
   │     └── @datalackey/tooling-core
-  └── @datalackey/nx-graph-to-mermaid
+  ├── @datalackey/nx-graph-to-mermaid
+  │     └── @datalackey/tooling-core
+  └── @datalackey/update-markdown-uml
         └── @datalackey/tooling-core
 ```
-
 
 ### Type Resolution and the Lint Target
 
@@ -95,8 +96,9 @@ config — it includes all package source files directly via its own `include`
 globs, but it does not inherit from or compose the per-package `tsconfig.json`
 files, and therefore does not see their `paths` declarations.
 
-So when ESLint's parser encounters `import ... from '@datalackey/tooling-core'`
-in any package's source, it resolves that as a normal npm package — looking in
+Without `paths` aliases in `tsconfig.eslint.json`, when ESLint's parser
+encounters `import ... from '@datalackey/tooling-core'` it falls back to
+standard Node module resolution — looking in
 `node_modules/@datalackey/tooling-core/package.json` and following the
 `exports` field's `"types"` condition:
 ```json
@@ -108,21 +110,51 @@ in any package's source, it resolves that as a normal npm package — looking in
 }
 ```
 
-That points to `./dist/index.d.ts` — which only exists after a build. Without
-`dist`, resolution fails and everything imported from `tooling-core` becomes
-`any`, triggering widespread `@typescript-eslint/no-unsafe-*` violations across
-all packages that depend on it.
+This points to `node_modules/@datalackey/tooling-core/dist/index.d.ts` — a
+**static snapshot of the last published version**, installed by npm. This is
+not the same as `tooling-core/dist/` in the workspace. It is a self-contained
+copy inside `node_modules/` that reflects the last version that was published to npm, not 
+the latest version of the source code that you are currently working on.
+
+This causes one important failure mode during active development: if you add
+a field or type to `tooling-core` locally and reference it from another package
+before publishing, lint resolves through the published snapshot in `node_modules`
+which does not yet have that field. The field appears as `error` typed, and any
+access to it cascades into `no-unsafe-assignment`, `no-unsafe-member-access`,
+and `no-unsafe-argument` errors — even though the code is perfectly correct. 
+
+The fix is to declare `paths` aliases directly in `tsconfig.eslint.json`,
+pointing all `@datalackey/*` imports at their local TypeScript source:
+```json
+"compilerOptions": {
+  "paths": {
+    "@datalackey/tooling-core": ["./tooling-core/src/index.ts"],
+    "@datalackey/update-markdown-toc": ["./update-markdown-toc/src/index.ts"],
+    "@datalackey/nx-graph-to-mermaid": ["./nx-graph-to-mermaid/src/index.ts"],
+    "@datalackey/update-markdown-uml": ["./update-markdown-uml/src/index.ts"]
+  }
+}
+```
+
+This bypasses `node_modules` entirely for lint resolution — the parser reads
+live local source directly, with no `dist/` involved and no dependency on
+publish state.
+
+**Maintenance rule:** whenever a new package is added to this workspace, its
+`paths` entry must be added to `tsconfig.eslint.json`. Omitting it will cause
+lint failures as soon as that package's types are referenced from another
+package's source during active development.
 
 #### Automatic Build Ordering
 
-A full build of all packages must complete before lint is attempted. This is
-handled automatically: the lint target in
-[`project.json`](project.json) declares:
+The lint target in [`project.json`](project.json) declares:
 ```json
 "dependsOn": ["^build"]
 ```
 
-and `build-tools-workspace` declares
-[`implicitDependencies`](project.json) covering all packages in the
-workspace. NX resolves this into a full build of every package before the lint
-command runs. No manual build step is required.
+With `paths` aliases declared in `tsconfig.eslint.json`, all `@datalackey/*`
+imports resolve directly to TypeScript source at lint time — no `dist/`
+required. The `dependsOn` on the workspace-level lint aggregator is therefore
+redundant and could be removed. It is retained for now to avoid an unforced
+change, but should be cleaned up in a future pass.
+

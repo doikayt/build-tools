@@ -43,31 +43,40 @@ describe("extractTypeNames()", () => {
   });
 
   test("non-exported interface is included", () => {
-    write("types.ts", [
-      "interface Base { file: string; }",
-      "export interface Derived extends Base { link: string; }",
-    ].join("\n"));
+    write(
+      "types.ts",
+      [
+        "interface Base { file: string; }",
+        "export interface Derived extends Base { link: string; }",
+      ].join("\n")
+    );
     const result = extractTypeNames(tmpDir);
     expect(result).toContain("Base");
     expect(result).toContain("Derived");
   });
 
   test("standalone functions are excluded", () => {
-    write("utils.ts", [
-      "export function walkFiles(dir: string): string[] { return []; }",
-      "export function debugLog(msg: string): void {}",
-    ].join("\n"));
+    write(
+      "utils.ts",
+      [
+        "export function walkFiles(dir: string): string[] { return []; }",
+        "export function debugLog(msg: string): void {}",
+      ].join("\n")
+    );
     const result = extractTypeNames(tmpDir);
     expect(result).not.toContain("walkFiles");
     expect(result).not.toContain("debugLog");
   });
 
   test("result is sorted lexicographically", () => {
-    write("types.ts", [
-      "export class Zebra {}",
-      "export interface Alpha {}",
-      "export type Mango = string;",
-    ].join("\n"));
+    write(
+      "types.ts",
+      [
+        "export class Zebra {}",
+        "export interface Alpha {}",
+        "export type Mango = string;",
+      ].join("\n")
+    );
     const result = extractTypeNames(tmpDir);
     expect(result).toEqual(["Alpha", "Mango", "Zebra"]);
   });

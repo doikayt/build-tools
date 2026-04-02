@@ -17,6 +17,7 @@ function makeConfig(overrides: Partial<UmlRunConfig> = {}): UmlRunConfig {
     linkTimeoutMs: 3000,
     excludePackages: [],
     sourceRoot: undefined,
+    skipTestPatterns: [],
     ...overrides,
   };
 }

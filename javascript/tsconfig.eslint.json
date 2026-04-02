@@ -1,5 +1,15 @@
 {
   "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "moduleResolution": "node",
+    "paths": {
+      "@datalackey/tooling-core": ["./tooling-core/src/index.ts"],
+      "@datalackey/update-markdown-toc": ["./update-markdown-toc/src/index.ts"],
+      "@datalackey/nx-graph-to-mermaid": ["./nx-graph-to-mermaid/src/index.ts"],
+      "@datalackey/update-markdown-uml": ["./update-markdown-uml/src/index.ts"]
+    }
+  },
   "include": [
     "tooling-core/src/**/*.ts",
     "update-markdown-toc/src/**/*.ts",

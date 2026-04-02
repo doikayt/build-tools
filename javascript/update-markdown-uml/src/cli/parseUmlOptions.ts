@@ -18,9 +18,20 @@ export function parseUmlOptions(
   const sourceRoot: string | undefined =
     typeof rawSource === "string" ? rawSource : undefined;
 
+  const rawSkip =
+    passthrough.get("--test-patterns-to-skip") ?? passthrough.get("-t");
+  const skipTestPatterns: string[] =
+    typeof rawSkip === "string" && rawSkip.length > 0
+      ? rawSkip
+          .split(",")
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0)
+      : [];
+
   return {
     ...standard,
     excludePackages: excludePackages,
     sourceRoot: sourceRoot,
+    skipTestPatterns: skipTestPatterns,
   };
 }
