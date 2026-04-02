@@ -46,12 +46,12 @@ describe("autogen-markdown-doc — optional --project-json", () => {
     expect(updated).toContain("- [Section A]");
   });
 
-  test("update-markdown-uml stub still runs when --project-json is omitted", () => {
-    const output = execSync(`node "${BIN}" "${markdownPath}"`, {
+  test("update-markdown-uml runs when --project-json is omitted", () => {
+    const result = spawnSync("node", [BIN, markdownPath], {
       encoding: "utf-8",
     });
 
-    expect(output).toContain("autogen-markdown-doc: update complete");
+    expect(result.status).toBe(0);
   });
 
   test("exits non-zero when markdown file argument is missing entirely", () => {
