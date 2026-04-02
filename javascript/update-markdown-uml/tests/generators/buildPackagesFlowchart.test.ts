@@ -13,7 +13,7 @@ function edge(from: string, to: string): ImportEdge {
 describe("buildPackagesFlowchart()", () => {
   test("empty packages produces minimal header", () => {
     const result = buildPackagesFlowchart([], new Map(), []);
-    expect(result).toBe("flowchart TB");
+    expect(result).toBe("```mermaid\nflowchart TB\n```");
   });
 
   test("single package with types renders subgraph", () => {

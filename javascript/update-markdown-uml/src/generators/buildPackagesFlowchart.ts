@@ -48,5 +48,5 @@ export function buildPackagesFlowchart(
     }
   }
 
-  return lines.join("\n");
+  return "```mermaid\n" + lines.join("\n") + "\n```";
 }
