@@ -33,8 +33,9 @@ export interface UmlSections {
  * findMarkers).
  *
  * Warns via onWarn if any generated package heading anchor (#### <pkg>)
- * collides with an existing heading slug in the document — such a collision
- * would cause the packages-table link to navigate to the wrong section.
+ * collides with an existing heading slug OUTSIDE the package-details
+ * marker region. Headings inside the package-details region are ones we
+ * generated ourselves on a previous run and are not real collisions.
  */
 export function injectUmlSections(
   content: string,
@@ -56,9 +57,16 @@ export function injectUmlSections(
 
   const locations = findMarkers(content, pairs);
 
-  // Anchor collision check
+  // Anchor collision check — only check headings outside package-details region
   if (packageNames.length > 0 && onWarn !== undefined) {
-    const headings = parseHeadings(content);
+    const detailsLoc = locations.get(MARKER_PACKAGE_DETAILS_START);
+    const contentForHeadingCheck =
+      detailsLoc !== undefined
+        ? content.substring(0, detailsLoc.startIndex) +
+          content.substring(detailsLoc.endIndex)
+        : content;
+
+    const headings = parseHeadings(contentForHeadingCheck);
     const slugger = new GithubSlugger();
     const existingSlugs = new Set(headings.map((h) => slugger.slug(h.rawText)));
 

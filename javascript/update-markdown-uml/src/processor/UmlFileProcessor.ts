@@ -6,7 +6,6 @@ import type { UmlRunConfig } from "../cli/UmlRunConfig.js";
 import { discoverLeafPackages } from "../discovery/discoverLeafPackages.js";
 import { readPackageDescription } from "../discovery/readPackageDescription.js";
 import { analyzeImportDependencies } from "../analysis/analyzeImportDependencies.js";
-import { extractTypeNames } from "../analysis/extractTypeNames.js";
 import { buildPackagesFlowchart } from "../generators/buildPackagesFlowchart.js";
 import { buildPackagesTable } from "../generators/buildPackagesTable.js";
 import { buildPackageClassDiagram } from "../generators/buildPackageClassDiagram.js";
@@ -65,27 +64,16 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
     const edges = analyzeImportDependencies(activeLeafDirs, sourceRoot);
     debugLog(config, `UmlFileProcessor: edges=${JSON.stringify(edges)}`);
 
-    // 4. Extract type names per leaf
-    const typesByPackage = new Map<string, string[]>();
-    for (const leafDir of activeLeafDirs) {
-      const name = path.basename(leafDir);
-      typesByPackage.set(name, extractTypeNames(leafDir));
-    }
+    // 4. Build flowchart (compact — package names only, no type enumeration)
+    const packagesContent = buildPackagesFlowchart(activeLeafNames, edges);
 
-    // 5. Build flowchart
-    const packagesContent = buildPackagesFlowchart(
-      activeLeafNames,
-      typesByPackage,
-      edges
-    );
-
-    // 6. Build packages table
+    // 5. Build packages table
     const packagesTableContent = buildPackagesTable(
       activeLeafNames,
       descriptions
     );
 
-    // 7. Build per-package class diagrams
+    // 6. Build per-package class diagrams
     const detailSections = activeLeafDirs.map((leafDir) => {
       const name = path.basename(leafDir);
       const diagram = buildPackageClassDiagram(leafDir);
@@ -93,7 +81,7 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
     });
     const packageDetailsContent = detailSections.join("\n\n");
 
-    // 8. Inject into markdown file
+    // 7. Inject into markdown file
     const original = fs.readFileSync(filePath, "utf-8");
 
     const updated = injectUmlSections(
@@ -107,7 +95,7 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
       onWarn
     );
 
-    // 9. Compare and return status
+    // 8. Compare and return status
     if (updated === original) {
       debugLog(config, `UmlFileProcessor: unchanged filePath=${filePath}`);
       return "unchanged";

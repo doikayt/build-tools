@@ -1,19 +1,17 @@
 import type { ImportEdge } from "../analysis/analyzeImportDependencies.js";
 
 /**
- * Builds a Mermaid flowchart TB diagram showing leaf packages as subgraphs
- * and inter-package import dependencies as arrows.
+ * Builds a Mermaid flowchart TB diagram showing leaf packages as compact
+ * subgraphs with inter-package import dependency arrows.
  *
- * Each subgraph contains the type names exported by that package.
- * If a package has no types (e.g. all standalone functions, excluded by
- * design), a placeholder node is shown so the package remains visible
- * in the overview diagram.
+ * Each subgraph shows only the package name — type details are available
+ * in the per-package classDiagram sections below. This keeps the overview
+ * diagram readable regardless of how many types each package contains.
  *
  * Packages and edges are rendered in lexicographic order for determinism.
  */
 export function buildPackagesFlowchart(
   packages: string[],
-  typesByPackage: Map<string, string[]>,
   edges: ImportEdge[]
 ): string {
   const sortedPackages = [...packages].sort((a, b) => a.localeCompare(b));
@@ -25,19 +23,7 @@ export function buildPackagesFlowchart(
   lines.push("flowchart TB");
 
   for (const pkg of sortedPackages) {
-    const types = typesByPackage.get(pkg) ?? [];
-    const sortedTypes = [...types].sort((a, b) => a.localeCompare(b));
-
     lines.push(`  subgraph ${pkg}["${pkg}"]`);
-
-    if (sortedTypes.length === 0) {
-      lines.push(`    ${pkg}_no_types["(no types)"]`);
-    } else {
-      for (const typeName of sortedTypes) {
-        lines.push(`    ${typeName}`);
-      }
-    }
-
     lines.push(`  end`);
   }
 

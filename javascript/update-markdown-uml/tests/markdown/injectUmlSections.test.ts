@@ -96,6 +96,25 @@ describe("injectUmlSections()", () => {
     expect(warnings[0]).toContain("collides");
   });
 
+  test("no warning for package heading inside package-details region from prior run", () => {
+    const content = [
+      "## Overview",
+      "",
+      PKG_START,
+      PKG_END,
+      "",
+      DET_START,
+      "#### cli",
+      "```mermaid",
+      "classDiagram",
+      "```",
+      DET_END,
+    ].join("\n");
+    const warnings: string[] = [];
+    injectUmlSections(content, SECTIONS, ["cli"], (msg) => warnings.push(msg));
+    expect(warnings).toHaveLength(0);
+  });
+
   test("no warning when package name does not collide", () => {
     const content = ["## Overview", "", PKG_START, PKG_END].join("\n");
     const warnings: string[] = [];

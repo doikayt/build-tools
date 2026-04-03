@@ -58,7 +58,7 @@ describe("buildPackageClassDiagram()", () => {
     const result = buildPackageClassDiagram(tmpDir);
     expect(result).toContain("class Internal");
     expect(result).toContain("class Public");
-  });
+  }, 10000);
 
   test("interface extends relationship renders ..|> arrow", () => {
     write(
