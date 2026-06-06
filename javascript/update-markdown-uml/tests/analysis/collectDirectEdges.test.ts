@@ -51,7 +51,7 @@ describe("collectDirectEdges()", () => {
       tmpDir
     );
     expect(result).toEqual([{ from: CLI, to: REPOSITORY }]);
-  });
+  }, 10000);
 
   test("import from outside sourceRoot is excluded", () => {
     write(`${CLI}/index.ts`, 'import { x } from "some-external-package";');

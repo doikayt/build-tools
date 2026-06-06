@@ -131,39 +131,14 @@ For a complete real-world example see
 ```mermaid
 flowchart TB
   subgraph cli["cli"]
-    ParsedCliResult
-    PluginDescriptor
-    PluginOption
-    ResolvedTargets
-    RunCliOptions
-    RunMode
   end
   subgraph markdown["markdown"]
-    ExternalLinkStatus
-    FileLineRef
-    HeadingRecord
-    LinkKind
-    LinkRecord
-    LinkValidationError
-    LinkValidationOptions
-    LinkValidationResult
-    LinkValidationWarning
-    MarkerLocation
   end
   subgraph policy["policy"]
-    RunnerDecision
-    RunnerPolicy
   end
   subgraph repository["repository"]
-    FileProcessor
-    ProcessingStatus
-    RepositoryRunner
-    RepositoryRunnerOptions
-    RepositoryStats
-    RunConfig
   end
   subgraph util["util"]
-    WalkOptions
   end
 
   cli --> markdown

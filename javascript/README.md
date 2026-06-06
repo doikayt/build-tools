@@ -38,6 +38,11 @@ These packages are:
 - ESM-only (not dual-published for CommonJS)
 - Node >= 18
 
+## Build Targets
+<!-- NX_GRAPH:START -->
+<!-- NX_GRAPH:END -->
+
+
 ---
 
 ## Consistent CLI Behavior Across Tools
