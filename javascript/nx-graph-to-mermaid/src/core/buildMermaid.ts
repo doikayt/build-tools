@@ -134,6 +134,9 @@ function renderEdges(
       .sort((a, b) => a.localeCompare(b));
 
     for (const dep of deps) {
+      // Skip cross-project refs (project:target) and NX ^ shorthand — not renderable in a single-project diagram
+      if (dep.includes(":") || dep.startsWith("^")) continue;
+
       if (targets[dep] === undefined) {
         throw new Error(`Target "${name}" depends on missing target "${dep}"`);
       }

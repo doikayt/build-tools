@@ -2,6 +2,7 @@
 - [Tooling for JavaScript/TypeScript/Node Projects](#tooling-for-javascripttypescriptnode-projects)
   - [Overview](#overview)
   - [Packages](#packages)
+  - [Build Targets](#build-targets)
   - [Consistent CLI Behavior Across Tools](#consistent-cli-behavior-across-tools)
 <!-- TOC:END -->
 
@@ -40,6 +41,27 @@ These packages are:
 
 ## Build Targets
 <!-- NX_GRAPH:START -->
+```mermaid
+graph TD
+
+  check_all
+  check_docs
+  check_format
+  check_lint
+  check_mermaid
+  check_toc
+  check_types
+  check_uml
+  ci
+  format
+  update_all
+  update_docs
+  update_format
+  update_mermaid
+  update_toc
+  update_uml
+
+```
 <!-- NX_GRAPH:END -->
 
 

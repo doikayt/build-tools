@@ -54,15 +54,32 @@ function handleCheck(
   options: NormalizedOptions,
   mermaid: string
 ): { success: boolean } {
-  const existingContent = fs.readFileSync(
-    options.generatedMermaidPath!,
-    "utf-8"
-  );
-
-  if (existingContent !== mermaid) {
-    return fail("Mermaid output drift detected.");
+  if (options.generatedMermaidPath !== undefined) {
+    const existingContent = fs.readFileSync(
+      options.generatedMermaidPath,
+      "utf-8"
+    );
+    if (existingContent !== mermaid) {
+      return fail("Mermaid output drift detected.");
+    }
+    return { success: true };
   }
 
+  // markdownPath path: check that update would produce no change
+  const markdownContent = fs.readFileSync(options.markdownPath!, "utf-8");
+  try {
+    const expected = injectBetweenMarkers(
+      markdownContent,
+      mermaid,
+      NX_GRAPH_START,
+      NX_GRAPH_END
+    );
+    if (markdownContent !== expected) {
+      return fail("Mermaid output drift detected.");
+    }
+  } catch (error) {
+    return fail((error as Error).message);
+  }
   return { success: true };
 }
 

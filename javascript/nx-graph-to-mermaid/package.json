@@ -18,6 +18,7 @@
     "dist",
     "README.md",
     "executors.json",
+    "executor-bridge.cjs",
     "package.json"
   ],
   "engines": {

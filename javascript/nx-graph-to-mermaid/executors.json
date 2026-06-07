@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/nx-plugin",
   "executors": {
     "run": {
-      "implementation": "./dist/executors/generate/executor.js",
+      "implementation": "./executor-bridge.cjs",
       "schema": "./dist/executors/generate/schema.json",
       "description": "NX Graph to Mermaid executor (mode-driven)"
     }

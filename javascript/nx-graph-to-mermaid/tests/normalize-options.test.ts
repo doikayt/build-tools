@@ -44,16 +44,18 @@ describe("normalizeOptions()", () => {
   // CHECK MODE
   // ---------------------------
 
-  test("check mode requires generatedMermaidPath", () => {
+  test("check mode requires generatedMermaidPath or markdownPath", () => {
     expect(() =>
       normalizeOptions({
         projectJsonPath: "project.json",
         mode: "check",
       })
-    ).toThrow("generatedMermaidPath is required in check mode");
+    ).toThrow(
+      "Either generatedMermaidPath or markdownPath is required in check mode"
+    );
   });
 
-  test("check mode rejects markdownPath", () => {
+  test("check mode rejects both generatedMermaidPath and markdownPath", () => {
     expect(() =>
       normalizeOptions({
         projectJsonPath: "project.json",
@@ -61,6 +63,19 @@ describe("normalizeOptions()", () => {
         generatedMermaidPath: "out.md",
         markdownPath: "README.md",
       })
-    ).toThrow("markdownPath is invalid in check mode");
+    ).toThrow(
+      "Specify only one of generatedMermaidPath or markdownPath in check mode"
+    );
+  });
+
+  test("check mode accepts markdownPath alone", () => {
+    const result = normalizeOptions({
+      projectJsonPath: "project.json",
+      mode: "check",
+      markdownPath: "README.md",
+    });
+    expect(result.mode).toBe("check");
+    expect(result.markdownPath).toBe("README.md");
+    expect(result.generatedMermaidPath).toBeUndefined();
   });
 });

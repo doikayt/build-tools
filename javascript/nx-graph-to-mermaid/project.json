@@ -5,15 +5,15 @@
   "targets": {
     "copy-schemas": {
       "description": "Copy executor JSON schemas to dist so NX can locate them at runtime",
-      "command": "mkdir -p nx-graph-to-mermaid/dist/executors/generate && cp nx-graph-to-mermaid/src/executors/generate/schema.json nx-graph-to-mermaid/dist/executors/generate/schema.json",
+      "command": "mkdir -p nx-graph-to-mermaid/dist/executors/generate && cp nx-graph-to-mermaid/src/executors/generate/schema.json nx-graph-to-mermaid/dist/executors/generate/schema.json && cp nx-graph-to-mermaid/src/executors/generate/executor.cjs nx-graph-to-mermaid/dist/executors/generate/executor.cjs",
       "cwd": "nx-graph-to-mermaid",
       "dependsOn": []
     },
     "build": {
-      "command": "cd nx-graph-to-mermaid && rm -rf dist && tsc --noCheck",
+      "command": "cd nx-graph-to-mermaid && rm -rf dist && tsc --noCheck && mkdir -p dist/executors/generate && cp src/executors/generate/schema.json dist/executors/generate/schema.json",
       "cwd": "{projectRoot}",
       "outputs": ["{projectRoot}/dist"],
-      "dependsOn": ["^build", "copy-schemas"],
+      "dependsOn": ["^build"],
       "//": [
         "--noCheck (TS 5.5+): emit JS without type checking — fast transpile-only build.",
         "Type correctness is enforced by the developer's IDE and by check-types in CI.",

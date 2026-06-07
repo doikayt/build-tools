@@ -18,6 +18,7 @@ describe("check mode behavior", () => {
   const tmpDir = path.resolve(__dirname);
   const projectPath = path.resolve(tmpDir, "tmp-project.json");
   const generatedPath = path.resolve(tmpDir, "tmp-generated.md");
+  const markdownPath = path.resolve(tmpDir, "tmp-readme.md");
 
   let consoleSpy: MockInstance;
 
@@ -41,6 +42,7 @@ describe("check mode behavior", () => {
   afterEach(() => {
     safeUnlink(projectPath);
     safeUnlink(generatedPath);
+    safeUnlink(markdownPath);
     consoleSpy.mockRestore();
   });
 
@@ -81,6 +83,65 @@ describe("check mode behavior", () => {
       projectJsonPath: projectPath,
       mode: "check",
       generatedMermaidPath: generatedPath,
+    });
+
+    expect(result.success).toBe(true);
+    expect(consoleSpy).not.toHaveBeenCalled();
+  });
+
+  // ---- markdownPath workflow ----
+
+  test("fails if markdown file missing in check mode", async () => {
+    const result = await runExecutor({
+      projectJsonPath: projectPath,
+      mode: "check",
+      markdownPath: path.resolve(tmpDir, "nonexistent-readme.md"),
+    });
+
+    expect(result.success).toBe(false);
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining("Markdown file not found at:")
+    );
+  });
+
+  test("fails if drift detected in markdown check mode", async () => {
+    const NX_GRAPH_START = "<!-- NX_GRAPH:START -->";
+    const NX_GRAPH_END = "<!-- NX_GRAPH:END -->";
+    fs.writeFileSync(
+      markdownPath,
+      `# Title\n${NX_GRAPH_START}\nWRONG CONTENT\n${NX_GRAPH_END}\n`,
+      "utf-8"
+    );
+
+    const result = await runExecutor({
+      projectJsonPath: projectPath,
+      mode: "check",
+      markdownPath,
+    });
+
+    expect(result.success).toBe(false);
+    expect(consoleSpy).toHaveBeenCalledWith("Mermaid output drift detected.");
+  });
+
+  test("succeeds if no drift in markdown check mode", async () => {
+    const NX_GRAPH_START = "<!-- NX_GRAPH:START -->";
+    const NX_GRAPH_END = "<!-- NX_GRAPH:END -->";
+    fs.writeFileSync(
+      markdownPath,
+      `# Title\n${NX_GRAPH_START}\n${NX_GRAPH_END}\n`,
+      "utf-8"
+    );
+
+    await runExecutor({
+      projectJsonPath: projectPath,
+      mode: "update",
+      markdownPath,
+    });
+
+    const result = await runExecutor({
+      projectJsonPath: projectPath,
+      mode: "check",
+      markdownPath,
     });
 
     expect(result.success).toBe(true);
