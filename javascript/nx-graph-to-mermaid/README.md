@@ -327,33 +327,12 @@ Identical input → identical output.
 
 # Example
 
-Given:
+A six-stage pipeline: `lint` and `docs` are independent roots; `test` depends on `lint`; `build` depends on both `lint` and `test`; `package` depends on `build`; `release` converges both `package` and `docs`.
 
-```json
-{
-  "targets": {
-    "release": {
-      "dependsOn": ["package"],
-      "description": "Full release pipeline"
-    },
-    "package": {
-      "dependsOn": ["build"],
-      "description": "Runs npm pack"
-    }
-  }
-}
-```
+- Input: [`tests/fixtures/realistic-pipeline/project.json`](tests/fixtures/realistic-pipeline/project.json)
+- Golden output: [`tests/fixtures/realistic-pipeline/expected-readme.md`](tests/fixtures/realistic-pipeline/expected-readme.md)
 
-Generated output:
-
-```mermaid
-graph TD
-
-package["package<br/>Runs npm pack"]
-release["release<br/>Full release pipeline"]
-
-release --> package
-```
+The golden file is the CI assertion — `check` mode regenerates the diagram and diffs against it, so the output can never silently drift.
 
 ---
 ## Built With

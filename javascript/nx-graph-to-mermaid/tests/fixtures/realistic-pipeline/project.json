@@ -1,0 +1,26 @@
+{
+  "targets": {
+    "lint": {
+      "description": "Run ESLint"
+    },
+    "test": {
+      "dependsOn": ["lint"],
+      "description": "Run unit tests"
+    },
+    "build": {
+      "dependsOn": ["lint", "test"],
+      "description": "Compile TypeScript"
+    },
+    "docs": {
+      "description": "Generate API docs"
+    },
+    "package": {
+      "dependsOn": ["build"],
+      "description": "Bundle for distribution"
+    },
+    "release": {
+      "dependsOn": ["package", "docs"],
+      "description": "Publish to npm"
+    }
+  }
+}
