@@ -45,6 +45,10 @@
       "command": "cd update-markdown-uml && npx tsc -p tsconfig.test.json --noEmit",
       "dependsOn": ["^build"]
     },
+    "e2e": {
+      "command": "npx vitest run --config {projectRoot}/vitest.e2e.config.ts",
+      "dependsOn": ["build", "@datalackey/tooling-core:build"]
+    },
     "check-types": {
       "//": [
         "Aggregates prod and test type checking for this package.",
