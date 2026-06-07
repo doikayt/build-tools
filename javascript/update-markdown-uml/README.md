@@ -3,8 +3,6 @@
 Generates and validates UML class and package diagrams for TypeScript source
 trees, injecting them into Markdown documentation files.
 
-> Status: under development
-
 ---
 
 ## What It Does
@@ -208,11 +206,35 @@ classDiagram
   }
 ```
 
-> **Note on `unknown` property types:** Properties initialised with a
-> literal value and no explicit type annotation (e.g. `readonly name = "add"`)
-> are rendered as `unknown` because the tool reads TypeScript source without
-> full type resolution. Adding an explicit annotation
-> (`readonly name: string = "add"`) resolves this.
+
+### Running the Sample 
+
+Running the sample and reproducing the output you see above by actually installing and
+running the tool is a good way to get a feel for how it works. 
+
+```bash
+
+rm -rf /tmp/run-sample 
+mkdir /tmp/run-sample 
+cp -r javascript/update-markdown-uml/tests/e2e/fixtures/math-cli/* /tmp/run-sample/  
+cd /tmp/run-sample/  
+npm install
+npx update-markdown-uml README.md
+echo Load the README file into your favorite Markdown viewer. Then note the injected UML diagrams.
+
+```
+
+
+
+
+### Side Note on How to Correct Unknown Properties 
+
+
+Properties initialised with a
+literal value and no explicit type annotation (e.g. `readonly name = "add"`)
+are rendered as `unknown` because the tool reads TypeScript source without
+full type resolution. Adding an explicit annotation
+(`readonly name: string = "add"`) resolves this.
 
 ---
 
