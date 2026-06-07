@@ -1,0 +1,9 @@
+{
+  "name": "math-cli",
+  "version": "1.0.0",
+  "description": "Sample TypeScript project for update-markdown-uml demo",
+  "private": true,
+  "devDependencies": {
+    "@datalackey/update-markdown-uml": "latest"
+  }
+}
