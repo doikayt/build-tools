@@ -244,3 +244,11 @@ full type resolution. Adding an explicit annotation
 - [`ts-morph`](https://ts-morph.com/) — TypeScript compiler API for class and import analysis
 
 For the full workspace tech stack see: [TECH-STACK.md](../TECH-STACK.md)
+
+---
+
+## Contributing and Releasing
+
+For development setup, build workflow, and release procedures (including how to
+trigger a publish via Changesets), see
+[CONTRIBUTING.md](../docs/CONTRIBUTING.md).

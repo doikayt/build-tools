@@ -18,6 +18,7 @@
 - [Full Example](#full-example)
 - [Built With](#built-with)
 - [Packaging, Publishing, and Inter-relationship with Other Plugins](#packaging-publishing-and-inter-relationship-with-other-plugins)
+  - [Contributing and Releasing](#contributing-and-releasing)
 - [License](#license)
 <!-- TOC:END -->
 
@@ -384,6 +385,14 @@ This package is one component of a small ecosystem of JavaScript tooling plugins
 ---
 
 
+
+## Contributing and Releasing
+
+For development setup, build workflow, and release procedures (including how to
+trigger a publish via Changesets), see
+[CONTRIBUTING.md](../docs/CONTRIBUTING.md).
+
+---
 
 # License
 

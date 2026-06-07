@@ -32,7 +32,7 @@
   - [Design Goals and Philosophy](#design-goals-and-philosophy)
   - [Packaging, Publishing, and Inter-relationship with Other Plugins](#packaging-publishing-and-inter-relationship-with-other-plugins)
   - [Known Limitations](#known-limitations)
-  - [Guidelines For Project Contributors](#guidelines-for-project-contributors)
+  - [Contributing and Releasing](#contributing-and-releasing)
 <!-- TOC:END -->
 
 
@@ -369,7 +369,9 @@ In practice this affects only headings with inline code, bold, or italic syntax.
 Plain-text headings are unaffected. A fix to unify both paths is planned for a
 future release.
 
-## Guidelines For Project Contributors
+## Contributing and Releasing
 
-Contributors to the project should consult [this document](docs/CONTRIBUTING.md)
+For development setup, build workflow, and release procedures (including how to
+trigger a publish via Changesets), see
+[CONTRIBUTING.md](../docs/CONTRIBUTING.md).
 

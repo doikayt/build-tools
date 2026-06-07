@@ -142,6 +142,14 @@ that are more completely described [here](../README.md).
 
 ---
 
+## Contributing and Releasing
+
+For development setup, build workflow, and release procedures (including how to
+trigger a publish via Changesets), see
+[CONTRIBUTING.md](../docs/CONTRIBUTING.md).
+
+---
+
 ## License
 
 MIT
