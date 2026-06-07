@@ -15,7 +15,7 @@
   - [Check Mode (CI Drift Detection)](#check-mode-ci-drift-detection)
 - [Recursively Traversing a Folder Hierarchy to Process all files vs. Single File Processing](#recursively-traversing-a-folder-hierarchy-to-process-all-files-vs-single-file-processing)
 - [Determinism](#determinism)
-- [Example](#example)
+- [Full Example](#full-example)
   - [Built With](#built-with)
   - [Packaging, Publishing, and Inter-relationship with Other Plugins](#packaging-publishing-and-inter-relationship-with-other-plugins)
 - [License](#license)
@@ -359,7 +359,7 @@ Identical input → identical output.
 
 ---
 
-# Example
+# Full Example
 
 A six-stage pipeline: `lint` and `docs` are independent roots; `test` depends on `lint`; `build` depends on both `lint` and `test`; `package` depends on `build`; `release` converges both `package` and `docs`.
 
