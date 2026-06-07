@@ -17,13 +17,11 @@ const __dirname = path.dirname(new URL(import.meta.url).pathname);
 describe("check mode behavior", () => {
   const tmpDir = path.resolve(__dirname);
   const projectPath = path.resolve(tmpDir, "tmp-project.json");
-  const generatedPath = path.resolve(tmpDir, "tmp-generated.md");
   const markdownPath = path.resolve(tmpDir, "tmp-readme.md");
 
   let consoleSpy: MockInstance;
 
   beforeEach(() => {
-    safeUnlink(generatedPath);
     fs.writeFileSync(
       projectPath,
       JSON.stringify({
@@ -41,55 +39,9 @@ describe("check mode behavior", () => {
 
   afterEach(() => {
     safeUnlink(projectPath);
-    safeUnlink(generatedPath);
     safeUnlink(markdownPath);
     consoleSpy.mockRestore();
   });
-
-  test("fails if generated file missing in check mode", async () => {
-    const result = await runExecutor({
-      projectJsonPath: projectPath,
-      mode: "check",
-      generatedMermaidPath: generatedPath,
-    });
-
-    expect(result.success).toBe(false);
-    expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining("Generated file not found at:")
-    );
-  });
-
-  test("fails if drift detected", async () => {
-    fs.writeFileSync(generatedPath, "WRONG CONTENT", "utf-8");
-
-    const result = await runExecutor({
-      projectJsonPath: projectPath,
-      mode: "check",
-      generatedMermaidPath: generatedPath,
-    });
-
-    expect(result.success).toBe(false);
-    expect(consoleSpy).toHaveBeenCalledWith("Mermaid output drift detected.");
-  });
-
-  test("succeeds if no drift", async () => {
-    await runExecutor({
-      projectJsonPath: projectPath,
-      mode: "generate",
-      generatedMermaidPath: generatedPath,
-    });
-
-    const result = await runExecutor({
-      projectJsonPath: projectPath,
-      mode: "check",
-      generatedMermaidPath: generatedPath,
-    });
-
-    expect(result.success).toBe(true);
-    expect(consoleSpy).not.toHaveBeenCalled();
-  });
-
-  // ---- markdownPath workflow ----
 
   test("fails if markdown file missing in check mode", async () => {
     const result = await runExecutor({

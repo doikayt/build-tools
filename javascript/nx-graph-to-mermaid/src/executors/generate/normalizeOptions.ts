@@ -55,20 +55,11 @@ export function resolveExecutionContext(
     return { success: true, options: options };
   }
 
-  // CHECK mode: the check target (file or markdown) must exist before rebuild
+  // CHECK mode: the markdown file must exist before rebuild
   if (options.mode === "check") {
-    if (options.generatedMermaidPath !== undefined) {
-      if (!fs.existsSync(options.generatedMermaidPath)) {
-        console.error(
-          `Generated file not found at: ${options.generatedMermaidPath}`
-        );
-        return { success: false };
-      }
-    } else {
-      if (!fs.existsSync(options.markdownPath!)) {
-        console.error(`Markdown file not found at: ${options.markdownPath}`);
-        return { success: false };
-      }
+    if (!fs.existsSync(options.markdownPath!)) {
+      console.error(`Markdown file not found at: ${options.markdownPath}`);
+      return { success: false };
     }
   }
 
@@ -110,28 +101,17 @@ export function normalizeOptions(raw: RawOptions): NormalizedOptions {
     }
 
     case "check": {
-      if (
-        raw.generatedMermaidPath === undefined &&
-        raw.markdownPath === undefined
-      ) {
-        throw new Error(
-          "Either generatedMermaidPath or markdownPath is required in check mode"
-        );
+      if (raw.markdownPath === undefined) {
+        throw new Error("markdownPath is required in check mode");
       }
 
-      if (
-        raw.generatedMermaidPath !== undefined &&
-        raw.markdownPath !== undefined
-      ) {
-        throw new Error(
-          "Specify only one of generatedMermaidPath or markdownPath in check mode"
-        );
+      if (raw.generatedMermaidPath !== undefined) {
+        throw new Error("generatedMermaidPath is invalid in check mode");
       }
 
       return {
         projectJsonPath: raw.projectJsonPath,
         mode: mode,
-        generatedMermaidPath: raw.generatedMermaidPath,
         markdownPath: raw.markdownPath,
       };
     }

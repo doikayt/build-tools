@@ -269,14 +269,14 @@ Add a target:
     "options": {
       "mode": "check",
       "projectJsonPath": "project.json",
-      "generatedMermaidPath": "docs/task-graph.md"
+      "markdownPath": "README.md"
     }
   }
 }
 ```
 
 **This mode:**  
-Regenerates the diagram in memory and compares it against the committed Mermaid artifact. If any difference is detected, it returns `{ success: false }`, making it suitable for CI enforcement.
+Regenerates the diagram in memory and compares it against the content currently between the `NX_GRAPH` markers in the specified Markdown file. If any difference is detected, it returns `{ success: false }`, making it suitable for CI enforcement.
 
 Run:
 
