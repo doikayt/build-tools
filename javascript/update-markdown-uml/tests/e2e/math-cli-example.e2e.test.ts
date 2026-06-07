@@ -59,11 +59,10 @@ beforeAll(() => {
     "utf-8"
   );
 
-  const install = spawnSync(
-    "npm",
-    ["install", coreTarball, umlTarball],
-    { cwd: workDir, encoding: "utf-8" }
-  );
+  const install = spawnSync("npm", ["install", coreTarball, umlTarball], {
+    cwd: workDir,
+    encoding: "utf-8",
+  });
   if (install.status !== 0) {
     throw new Error(`npm install failed:\n${install.stderr}`);
   }
@@ -83,9 +82,11 @@ function writeReadme(): void {
   );
 }
 
-function runBinary(
-  args: string[]
-): { exitCode: number; stdout: string; stderr: string } {
+function runBinary(args: string[]): {
+  exitCode: number;
+  stdout: string;
+  stderr: string;
+} {
   const bin = path.join(workDir, UML_BIN_REL);
   const result = spawnSync("node", [bin, ...args], {
     cwd: workDir,

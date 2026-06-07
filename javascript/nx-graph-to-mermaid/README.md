@@ -16,8 +16,8 @@
 - [Recursively Traversing a Folder Hierarchy to Process all files vs. Single File Processing](#recursively-traversing-a-folder-hierarchy-to-process-all-files-vs-single-file-processing)
 - [Determinism](#determinism)
 - [Full Example](#full-example)
-  - [Built With](#built-with)
-  - [Packaging, Publishing, and Inter-relationship with Other Plugins](#packaging-publishing-and-inter-relationship-with-other-plugins)
+- [Built With](#built-with)
+- [Packaging, Publishing, and Inter-relationship with Other Plugins](#packaging-publishing-and-inter-relationship-with-other-plugins)
 - [License](#license)
 <!-- TOC:END -->
 
