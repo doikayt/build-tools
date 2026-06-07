@@ -1,5 +1,21 @@
 # @datalackey/autogen-markdown-doc
 
+## 1.2.0
+
+### Minor Changes
+
+- update-markdown-uml going from stub to real implementation
+
+### Patch Changes
+
+- all functionality to date is being published
+- Updated dependencies [812c547]
+- Updated dependencies
+- Updated dependencies
+  - @datalackey/nx-graph-to-mermaid@1.2.0
+  - @datalackey/update-markdown-uml@1.2.0
+  - @datalackey/update-markdown-toc@1.2.0
+
 ## 1.1.13
 
 ### Patch Changes

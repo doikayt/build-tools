@@ -1,5 +1,18 @@
 # @datalackey/update-markdown-toc
 
+## 1.2.0
+
+### Minor Changes
+
+- update-markdown-uml going from stub to real implementation
+
+### Patch Changes
+
+- all functionality to date is being published
+- Updated dependencies
+- Updated dependencies
+  - @datalackey/tooling-core@1.2.0
+
 ## 1.1.13
 
 ### Patch Changes
