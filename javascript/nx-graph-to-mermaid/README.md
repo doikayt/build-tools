@@ -15,7 +15,7 @@
   - [Check Mode (CI Drift Detection)](#check-mode-ci-drift-detection)
 - [Recursively Traversing a Folder Hierarchy to Process all files vs. Single File Processing](#recursively-traversing-a-folder-hierarchy-to-process-all-files-vs-single-file-processing)
 - [Determinism](#determinism)
-- [Example](#example)
+- [Full Example](#full-example)
   - [Built With](#built-with)
   - [Packaging, Publishing, and Inter-relationship with Other Plugins](#packaging-publishing-and-inter-relationship-with-other-plugins)
 - [License](#license)
@@ -55,7 +55,41 @@ In the above quick demo, we use the `nx-graph-to-mermaid` plugin to update this 
 
 ```
 
-This image will be generated from the `project.json` file in the root of this repository:
+Between the START and END markers we inject a Mermaid diagram generated from a `project.json` file
+with contents like this:
+
+```aiignore
+{
+  "name": "sample",
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "description": "Run unit tests",
+      "options": {
+        "command": "echo Running tests"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "description": "Build the project",
+      "dependsOn": ["test"],
+      "options": {
+        "command": "echo Building project"
+      }
+    },
+    "task-graph:inject": {
+      "executor": "@datalackey/nx-graph-to-mermaid:run",
+      "options": {
+        "mode": "update",
+        "projectJsonPath": "apps/sample/project.json",
+        "markdownPath": "apps/sample/README.md"
+      }
+    }
+  }
+}
+```
+
+This image will be generated as a result
 
 ```mermaid
 graph TD
@@ -68,8 +102,8 @@ graph TD
 ```
 
 
-See [Example](#example) for how project.json relates to the corresponding generated Mermaid diagram.
-
+See [Full Example](#full-example) for a more extensive
+example of how project.json relates to the corresponding generated Mermaid diagram.
 
 ---
 
