@@ -1,5 +1,13 @@
 import path from "path";
-import { vi, describe, test, expect, beforeEach, afterEach, type MockInstance } from "vitest";
+import {
+  vi,
+  describe,
+  test,
+  expect,
+  beforeEach,
+  afterEach,
+  type MockInstance,
+} from "vitest";
 import runExecutor from "../src/executors/generate/executor.js";
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
