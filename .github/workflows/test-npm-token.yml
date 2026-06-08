@@ -13,7 +13,19 @@ jobs:
           node-version: 20
           registry-url: https://registry.npmjs.org
 
-      - name: Verify npm token
-        run: npm whoami && echo "SUCCESS - token is valid"
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install deps
+        run: npm ci
+        working-directory: javascript
+
+      - name: Build
+        run: npx nx run update-markdown-uml:build --skip-nx-cache
+        working-directory: javascript
+
+      - name: Verify npm token can publish (dry run)
+        run: npm publish --dry-run
+        working-directory: javascript/update-markdown-uml
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
