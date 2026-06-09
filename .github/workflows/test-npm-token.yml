@@ -24,6 +24,19 @@ jobs:
         run: npx nx run update-markdown-uml:build --skip-nx-cache
         working-directory: javascript
 
+      - name: Debug auth setup
+        run: |
+          echo "=== ~/.npmrc ==="
+          cat ~/.npmrc || echo "(no ~/.npmrc)"
+          echo "=== project .npmrc ==="
+          cat .npmrc || echo "(no project .npmrc)"
+          echo "=== npm whoami ==="
+          npm whoami
+          echo "=== npm access list packages ==="
+          npm access list packages datalackey || true
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish update-markdown-uml directly
         run: npm publish --access public
         working-directory: javascript/update-markdown-uml
