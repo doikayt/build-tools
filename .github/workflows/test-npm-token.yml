@@ -24,8 +24,8 @@ jobs:
         run: npx nx run update-markdown-uml:build --skip-nx-cache
         working-directory: javascript
 
-      - name: Verify npm token can publish (dry run)
-        run: npm publish --dry-run
+      - name: Publish update-markdown-uml directly
+        run: npm publish --access public
         working-directory: javascript/update-markdown-uml
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

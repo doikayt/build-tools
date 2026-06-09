@@ -1,9 +1,8 @@
 # @datalackey/autogen-markdown-doc
 
 
-A simplified entry point, intentionally opinionated, repository-wide documentation auto-generator and consistency checker.
-
-NOTE:  this plugin not currently stable as of 3/2024.  getting there...
+An intentionally opinionated, repository-wide documentation auto-generator and consistency checker -- 
+serves as a simplified entry point for all other plugins in this repository.
 
 ---
 
@@ -17,14 +16,16 @@ This package is an uber-bundle comprising the following npm packages:
 - [`@datalackey/tooling-core`](../tooling-core/README.md)
 
 
-each of which (except the last) can be used to independently, or via the following simplified pre-configured entrypoints 
-which apply 'sensible defaults' to the configuration options of the bundled plugins:
+each of which (except the last) can be used independently upon installation of this uber-plugin. 
+Alternatively, all plugins can be actiavated at once by activating the uber-plugin and selecting
+one of the following simplified pre-configured entrypoints:
 
 - `update` 
   - auto-generate Tables of Contents (TOCs) for all
     [Markdown](https://en.wikipedia.org/wiki/Markdown) (*.md) documents, anywhere in your repository.
   - auto-generate [Mermaid](https://mermaid.ai/web/) graphical diagrams that document
     dependencies between build pipeline tasks. 
+  - auto-generate UML package diagrams for TypeScript code in the repo.
 
 OR:
 - `check`   
@@ -32,8 +33,10 @@ OR:
       - TOC entry links are complete and link validly to corresponding sections of their Markdown documents 
       - up-to-date'ness of all Markdown documents with a Mermaid diagram injected into position 
         marked via [start and end tags](../nx-graph-to-mermaid/README.md#diagram-injection-targets-special-startend-markers).
+      - UML package diagrams are in sync with TypeScript code in the repo.
 
 
+These apply 'sensible defaults' to the configuration options of the bundled plugins.
 In a nutshell: 
   - `update` reconciles repo to canonical documentation state (writes)
   - `check` verifies repo's auto generated documentation is already canonical (no writes; exits non-zero on drift)
