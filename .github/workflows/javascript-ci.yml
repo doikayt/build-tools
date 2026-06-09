@@ -46,7 +46,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write
     defaults:
       run:
         working-directory: javascript
@@ -73,6 +72,8 @@ jobs:
       - name: Publish with Changesets
         id: publish
         run: npx changeset publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Wait for npm registry propagation
         run: sleep 15

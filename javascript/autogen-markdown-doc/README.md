@@ -12,10 +12,12 @@ NOTE:  this plugin not currently stable as of 3/2024.  getting there...
 This package is an uber-bundle comprising the following npm packages:
 
 - [`@datalackey/update-markdown-toc`](../update-markdown-toc/README.md)
+- [`@datalackey/update-markdown-uml`](../update-markdown-uml/README.md)
 - [`@datalackey/nx-graph-to-mermaid`](../nx-graph-to-mermaid/README.md)
+- [`@datalackey/tooling-core`](../tooling-core/README.md)
 
 
-each of which can be used to independently, or via the following simplified pre-configured entrypoints 
+each of which (except the last) can be used to independently, or via the following simplified pre-configured entrypoints 
 which apply 'sensible defaults' to the configuration options of the bundled plugins:
 
 - `update` 
@@ -36,6 +38,9 @@ In a nutshell:
   - `update` reconciles repo to canonical documentation state (writes)
   - `check` verifies repo's auto generated documentation is already canonical (no writes; exits non-zero on drift)
 
+
+The last included package (`@datalackey/tooling-core`) is a dependency of all other packages, 
+and is a framework for developing CLI utilities (not intended to be used directly.)
 
 ---
 
