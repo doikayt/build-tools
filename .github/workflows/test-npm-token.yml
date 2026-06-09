@@ -26,14 +26,14 @@ jobs:
 
       - name: Debug auth setup
         run: |
-          echo "=== ~/.npmrc ==="
-          cat ~/.npmrc || echo "(no ~/.npmrc)"
-          echo "=== project .npmrc ==="
-          cat .npmrc || echo "(no project .npmrc)"
+          echo "=== NPM_CONFIG_USERCONFIG ==="
+          echo "$NPM_CONFIG_USERCONFIG"
+          echo "=== contents of NPM_CONFIG_USERCONFIG ==="
+          cat "$NPM_CONFIG_USERCONFIG" || echo "(file not found)"
+          echo "=== TOKEN length ==="
+          echo -n "$NODE_AUTH_TOKEN" | wc -c
           echo "=== npm whoami ==="
-          npm whoami
-          echo "=== npm access list packages ==="
-          npm access list packages datalackey || true
+          npm whoami || true
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
