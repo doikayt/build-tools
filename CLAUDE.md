@@ -1,5 +1,7 @@
 # CLAUDE.md — build-tools
 
+## Active role:  DEV
+
 ## Read these files first
 
 Before doing anything, read:
@@ -30,6 +32,4 @@ Before doing anything, read:
 ---
 
 ## Current work
-
-(update this section as work progresses)
 

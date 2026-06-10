@@ -2,8 +2,18 @@
   "permissions": {
     "allow": [
       "Bash(npx nx *)",
-      "Bash(git *)",
-      "Bash(node *)"
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git stash*)",
+      "Bash(git fetch*)",
+      "Bash(git branch)",
+      "Bash(git branch -a)",
+      "Bash(node ./*)","Bash(node -p *)",
+      "Bash(python ./*)","Bash(python3 ./*)","Bash(python -m *)","Bash(python3 -m *)",
+      "Skill(claude-api)"
     ]
   }
 }

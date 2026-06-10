@@ -21,19 +21,19 @@ Alternatively, all plugins can be actiavated at once by activating the uber-plug
 one of the following simplified pre-configured entrypoints:
 
 - `update` 
-  - auto-generate Tables of Contents (TOCs) for all
+  - auto-generates Tables of Contents (TOCs) for all
     [Markdown](https://en.wikipedia.org/wiki/Markdown) (*.md) documents, anywhere in your repository.
-  - auto-generate [Mermaid](https://mermaid.ai/web/) graphical diagrams that document
+  - auto-generates [Mermaid](https://mermaid.ai/web/) graphical diagrams that document
     dependencies between build pipeline tasks. 
-  - auto-generate UML package diagrams for TypeScript code in the repo.
+  - auto-generates UML package diagrams for TypeScript code in the repo.
 
 OR:
 - `check`   
   - verify that the latest checked-in documentation matches the configuration source, i.e.:
-      - TOC entry links are complete and link validly to corresponding sections of their Markdown documents 
-      - up-to-date'ness of all Markdown documents with a Mermaid diagram injected into position 
-        marked via [start and end tags](../nx-graph-to-mermaid/README.md#diagram-injection-targets-special-startend-markers).
-      - UML package diagrams are in sync with TypeScript code in the repo.
+      - that all TOC entry links are correctly linked to 
+        corresponding sections of their Markdown documents.
+      - that all Markdown documents with injected Mermaid diagrams reflect the build task flow encoded in underlying configuration (`project.json`).
+      - that all injected UML package diagrams are in sync with latest TypeScript code in the repo.
 
 
 These apply 'sensible defaults' to the configuration options of the bundled plugins.
@@ -134,15 +134,14 @@ Use the underlying packages if you need:
 
 ## Built With
 
-- [`@datalackey/update-markdown-toc`](../update-markdown-toc/README.md) — Markdown TOC generation
-- [`@datalackey/nx-graph-to-mermaid`](../nx-graph-to-mermaid/README.md) — Mermaid diagram generation
 
 For the full workspace tech stack see: [TECH-STACK.md](../TECH-STACK.md)
 
 
 ## Packaging, Publishing, and Inter-relationship with Other Plugins
 
-This package is one component of a small ecosystem of JavaScript tooling plugins maintained as individual npm packages in this repository.
+This package is one component of a small ecosystem of JavaScript tooling plugins maintained 
+as individual npm packages in this repository.
 The versioning and release of these packages is governed by a coordinated release policy, and
 the packages adhere to common design and architectural principles policies
 that are more completely described [here](../README.md).
