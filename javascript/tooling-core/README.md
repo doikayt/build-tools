@@ -145,9 +145,6 @@ flowchart TB
   cli --> policy
   cli --> repository
   cli --> util
-  markdown --> cli
-  markdown --> policy
-  markdown --> repository
   markdown --> util
   policy --> cli
   policy --> markdown
@@ -157,10 +154,6 @@ flowchart TB
   repository --> markdown
   repository --> policy
   repository --> util
-  util --> cli
-  util --> markdown
-  util --> policy
-  util --> repository
 ```
 <!-- UML:components:END -->
 

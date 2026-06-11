@@ -25,7 +25,8 @@
   "targets": {
     "update-toc": {
       "command": "node update-markdown-toc/bin/update-markdown-toc.js --recursive . -e node_modules,test,test-fixtures,tests",
-      "cwd": "{workspaceRoot}"
+      "cwd": "{workspaceRoot}",
+      "dependsOn": ["@datalackey/update-markdown-toc:build"]
     },
     "update-uml": {
       "command": "node update-markdown-uml/bin/update-markdown-uml.js --source tooling-core/src tooling-core/README.md",

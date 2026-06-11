@@ -1,4 +1,17 @@
 <!-- TOC:START -->
+- [@datalackey/autogen-markdown-doc](#datalackeyautogen-markdown-doc)
+  - [Overview](#overview)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Update Mode](#update-mode)
+    - [Check Mode (CI Drift Detection)](#check-mode-ci-drift-detection)
+  - [Determinism Gurantees](#determinism-gurantees)
+  - [When to Use the Underlying Tools Directly](#when-to-use-the-underlying-tools-directly)
+  - [Built With](#built-with)
+  - [Packaging, Publishing, and Inter-relationship with Other Plugins](#packaging-publishing-and-inter-relationship-with-other-plugins)
+  - [Contributing and Releasing](#contributing-and-releasing)
+  - [License](#license)
+  - [Misc](#misc)
 <!-- TOC:END -->
 
 # @datalackey/autogen-markdown-doc
