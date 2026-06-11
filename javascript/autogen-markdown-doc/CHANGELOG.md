@@ -1,5 +1,15 @@
 # @datalackey/autogen-markdown-doc
 
+## 1.2.1
+
+### Patch Changes
+
+- 141c71e: test of local publish
+- Updated dependencies [141c71e]
+  - @datalackey/nx-graph-to-mermaid@1.2.1
+  - @datalackey/update-markdown-toc@1.2.1
+  - @datalackey/update-markdown-uml@1.2.1
+
 ## 1.2.0
 
 ### Minor Changes

@@ -42,7 +42,7 @@ jobs:
 
   release:
     needs: build
-    if: github.event_name != 'pull_request'
+    if: false  # provisionally disabled — NPM token issues unresolved; publish locally instead
     runs-on: ubuntu-latest
     permissions:
       contents: write

@@ -1,3 +1,8 @@
+
+
+<!-- TOC:START -->
+<!-- TOC:END -->
+
 # @datalackey/update-markdown-uml
 
 Generates and validates UML class and package diagrams for TypeScript source
@@ -83,6 +88,15 @@ For full documentation of shared CLI behavior (`--check`, `--verbose`,
 ---
 
 ## Example
+
+[This folder](./tests/e2e/fixtures/math-cli) contains a 
+sample project that demonstrates the tool's output. Run the commands 
+below to clone this sample, install dependencies, and run the tool. 
+
+
+
+
+
 
 ### Source tree
 
@@ -220,7 +234,7 @@ cp -r javascript/update-markdown-uml/tests/e2e/fixtures/math-cli/* /tmp/run-samp
 cd /tmp/run-sample/  
 npm install
 npx update-markdown-uml README.md
-echo Load the README file into your favorite Markdown viewer. Then note the injected UML diagrams.
+echo Load the README file into your favorite Markdown viewer. Enjoy the injected UML diagrams.
 
 ```
 

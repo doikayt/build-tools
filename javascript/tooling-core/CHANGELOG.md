@@ -1,5 +1,11 @@
 # @datalackey/tooling-core
 
+## 1.2.1
+
+### Patch Changes
+
+- 141c71e: test of local publish
+
 ## 1.2.0
 
 ### Minor Changes
