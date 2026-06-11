@@ -12,7 +12,7 @@
     - [2. Run All Tests](#2-run-all-tests)
     - [3. Create a Changeset](#3-create-a-changeset)
     - [4. Apply Version Bumps](#4-apply-version-bumps)
-    - [5. Publish (Push + Tags + CI)](#5-publish-push--tags--ci)
+    - [5. Publish](#5-publish)
     - [6. Verify Release](#6-verify-release)
   - [Handling `changeset status` Errors](#handling-changeset-status-errors)
     - [What this means](#what-this-means)
