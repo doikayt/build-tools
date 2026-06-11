@@ -9,12 +9,15 @@ import { vi, describe, test, expect, afterEach } from "vitest";
 // a context whose mode is not in the known union, bypassing normalizeOptions.
 // ---------------------------------------------------------------------------
 
-vi.mock("../src/executors/generate/normalizeOptions.js", async (importOriginal) => {
-  const actual = await importOriginal<
-    typeof import("../src/executors/generate/normalizeOptions.js")
-  >();
-  return { ...actual, resolveExecutionContext: vi.fn() };
-});
+vi.mock(
+  "../src/executors/generate/normalizeOptions.js",
+  async (importOriginal) => {
+    const actual = await importOriginal<
+      typeof import("../src/executors/generate/normalizeOptions.js")
+    >();
+    return { ...actual, resolveExecutionContext: vi.fn() };
+  }
+);
 
 import runExecutor from "../src/executors/generate/executor.js";
 import { resolveExecutionContext } from "../src/executors/generate/normalizeOptions.js";
@@ -37,11 +40,18 @@ describe("unsupported mode — switch default branch", () => {
   test("returns { success: false } when the switch default fires", () => {
     vi.mocked(resolveExecutionContext).mockReturnValue({
       success: true,
-      options: { projectJsonPath: "x.json", mode: "never-land" as any, debug: false },
+      options: {
+        projectJsonPath: "x.json",
+        mode: "never-land" as any,
+        debug: false,
+      },
       project: { targets: {} },
     });
 
-    const result = runExecutor({ projectJsonPath: "x.json", mode: "never-land" as any });
+    const result = runExecutor({
+      projectJsonPath: "x.json",
+      mode: "never-land" as any,
+    });
 
     expect(result.success).toBe(false);
   });
@@ -51,11 +61,19 @@ describe("unsupported mode — switch default branch", () => {
 
     vi.mocked(resolveExecutionContext).mockReturnValue({
       success: true,
-      options: { projectJsonPath: "x.json", mode: "never-land" as any, debug: true },
+      options: {
+        projectJsonPath: "x.json",
+        mode: "never-land" as any,
+        debug: true,
+      },
       project: { targets: {} },
     });
 
-    runExecutor({ projectJsonPath: "x.json", mode: "never-land" as any, debug: true });
+    runExecutor({
+      projectJsonPath: "x.json",
+      mode: "never-land" as any,
+      debug: true,
+    });
 
     // dispatching + result lines should both appear
     const debugLines = writes.filter((line) => line.startsWith("[debug]"));
@@ -68,7 +86,11 @@ describe("unsupported mode — switch default branch", () => {
 
     vi.mocked(resolveExecutionContext).mockReturnValue({
       success: true,
-      options: { projectJsonPath: "x.json", mode: "never-land" as any, debug: false },
+      options: {
+        projectJsonPath: "x.json",
+        mode: "never-land" as any,
+        debug: false,
+      },
       project: { targets: {} },
     });
 

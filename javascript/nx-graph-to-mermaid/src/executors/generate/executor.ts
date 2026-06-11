@@ -32,13 +32,22 @@ function runExecutor(rawOptions: RawOptions): { success: boolean } {
       result = handleInject(options);
       break;
     case "check":
-      result = handleCheck(options, buildMermaid(project as NxProjectJson, dbg.debug));
+      result = handleCheck(
+        options,
+        buildMermaid(project as NxProjectJson, dbg.debug)
+      );
       break;
     case "generate":
-      result = handleGenerate(options, buildMermaid(project as NxProjectJson, dbg.debug));
+      result = handleGenerate(
+        options,
+        buildMermaid(project as NxProjectJson, dbg.debug)
+      );
       break;
     case "update":
-      result = handleUpdate(options, buildMermaid(project as NxProjectJson, dbg.debug));
+      result = handleUpdate(
+        options,
+        buildMermaid(project as NxProjectJson, dbg.debug)
+      );
       break;
     default: {
       const _exhaustive: never = options.mode;
