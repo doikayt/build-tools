@@ -160,3 +160,6 @@ trigger a publish via Changesets), see
 ## License
 
 MIT
+
+
+## Misc
