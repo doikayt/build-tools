@@ -1,3 +1,6 @@
+<!-- TOC:START -->
+<!-- TOC:END -->
+
 # @datalackey/autogen-markdown-doc
 
 

@@ -13,7 +13,8 @@
   - [Inject Mode](#inject-mode)
   - [Update Mode (Generate + Inject)](#update-mode-generate--inject)
   - [Check Mode (CI Drift Detection)](#check-mode-ci-drift-detection)
-- [Recursively Traversing a Folder Hierarchy to Process all files vs. Single File Processing](#recursively-traversing-a-folder-hierarchy-to-process-all-files-vs-single-file-processing)
+  - [Debug Mode](#debug-mode)
+- [Single-File Operation Only](#single-file-operation-only)
 - [Determinism](#determinism)
 - [Full Example](#full-example)
 - [Built With](#built-with)
@@ -329,18 +330,41 @@ This prevents stale diagrams from being merged.
 
 ---
 
-# Recursively Traversing a Folder Hierarchy to Process all files vs. Single File Processing
+## Debug Mode
 
-The tool supports two distinct operating modes with intentionally different error-handling semantics:
+Add `"debug": true` to any executor target's options to emit diagnostic messages
+to `stderr`. Each message is prefixed with `[debug]`, keeping it separate from
+normal stdout output and safe to ignore in CI logs.
 
-- Single-file mode (--recursive not specified)
-- Recursive folder traversal mode (--recursive specified)
+```json
+{
+  "task-graph:update": {
+    "executor": "@datalackey/nx-graph-to-mermaid",
+    "options": {
+      "mode": "update",
+      "projectJsonPath": "project.json",
+      "markdownPath": "README.md",
+      "debug": true
+    }
+  }
+}
+```
 
-These modes are designed to support both strict validation and incremental adoption across real-world repositories.
-In the case of the latter mode, we assume some files may not yet have TOC markers, and that this is acceptable.
+Each run logs:
 
-Refer to [this document](../CLI-BEHAVIOR.md) for information on these processing modes and a discussion of other behavioral
-commonalities that all focused-use plugins in this repository share.
+- Raw and normalized options (mode, resolved file paths)
+- Number of targets loaded from `project.json`
+- Length of the generated Mermaid output
+- Final `{ success }` result
+
+---
+
+# Single-File Operation Only
+
+This tool operates on an explicit (`projectJsonPath`, `markdownPath`) pair and does not 
+support recursive folder traversal. Each `NX_GRAPH` marker block is tied to a 
+specific `project.json`, so the association must be declared explicitly 
+via the aforementioned executor options pair. 
 
 ---
 

@@ -6,7 +6,7 @@ import {
   NormalizedOptions,
   resolveExecutionContext,
 } from "./normalizeOptions.js";
-import { injectBetweenMarkers } from "@datalackey/tooling-core";
+import { injectBetweenMarkers, debugLog } from "@datalackey/tooling-core";
 
 const NX_GRAPH_START = "<!-- NX_GRAPH:START -->";
 const NX_GRAPH_END = "<!-- NX_GRAPH:END -->";
@@ -22,24 +22,44 @@ function runExecutor(rawOptions: RawOptions): { success: boolean } {
 
   const { options, project } = ctx;
 
+  debugLog({ debug: options.debug ?? false }, `runExecutor: dispatching mode=${options.mode}`);
+
+  let result: { success: boolean };
+
   switch (options.mode) {
     case "inject":
-      return handleInject(options);
+      result = handleInject(options);
+      break;
 
-    case "check":
-      return handleCheck(options, buildMermaid(project as NxProjectJson));
+    case "check": {
+      const mermaid = buildMermaid(project as NxProjectJson);
+      debugLog({ debug: options.debug ?? false }, `runExecutor: mermaid generated, length=${mermaid.length}`);
+      result = handleCheck(options, mermaid);
+      break;
+    }
 
-    case "generate":
-      return handleGenerate(options, buildMermaid(project as NxProjectJson));
+    case "generate": {
+      const mermaid = buildMermaid(project as NxProjectJson);
+      debugLog({ debug: options.debug ?? false }, `runExecutor: mermaid generated, length=${mermaid.length}`);
+      result = handleGenerate(options, mermaid);
+      break;
+    }
 
-    case "update":
-      return handleUpdate(options, buildMermaid(project as NxProjectJson));
+    case "update": {
+      const mermaid = buildMermaid(project as NxProjectJson);
+      debugLog({ debug: options.debug ?? false }, `runExecutor: mermaid generated, length=${mermaid.length}`);
+      result = handleUpdate(options, mermaid);
+      break;
+    }
 
     default: {
       const _exhaustive: never = options.mode;
-      return fail(`Unsupported mode: ${String(_exhaustive)}`);
+      result = fail(`Unsupported mode: ${String(_exhaustive)}`);
     }
   }
+
+  debugLog({ debug: options.debug ?? false }, `runExecutor: result=${JSON.stringify(result)}`);
+  return result;
 }
 
 function handleGenerate(

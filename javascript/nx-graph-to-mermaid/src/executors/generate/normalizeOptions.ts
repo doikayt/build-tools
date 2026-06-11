@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { debugLog } from "@datalackey/tooling-core";
 
 export type Mode = "generate" | "check" | "inject" | "update";
 
@@ -7,6 +8,7 @@ export interface RawOptions {
   mode?: Mode;
   generatedMermaidPath?: string;
   markdownPath?: string;
+  debug?: boolean;
 }
 
 export interface NormalizedOptions {
@@ -14,7 +16,9 @@ export interface NormalizedOptions {
   mode: Mode;
   generatedMermaidPath?: string;
   markdownPath?: string;
+  debug?: boolean;
 }
+
 
 export type ExecutionContext =
   | { success: true; options: NormalizedOptions; project?: unknown }
@@ -29,6 +33,8 @@ export type ExecutionContext =
 export function resolveExecutionContext(
   rawOptions: RawOptions
 ): ExecutionContext {
+  debugLog({ debug: rawOptions.debug ?? false }, `resolveExecutionContext: rawOptions=${JSON.stringify(rawOptions)}`);
+
   let options: NormalizedOptions;
 
   try {
@@ -37,6 +43,8 @@ export function resolveExecutionContext(
     console.error((error as Error).message);
     return { success: false };
   }
+
+  debugLog({ debug: options.debug ?? false }, `resolveExecutionContext: mode=${options.mode} projectJsonPath=${options.projectJsonPath} markdownPath=${options.markdownPath ?? "(none)"} generatedMermaidPath=${options.generatedMermaidPath ?? "(none)"}`);
 
   // INJECT mode: no project loading
   if (options.mode === "inject") {
@@ -69,6 +77,9 @@ export function resolveExecutionContext(
     return { success: false };
   }
 
+  const targetCount = Object.keys((project as { targets?: Record<string, unknown> }).targets ?? {}).length;
+  debugLog({ debug: options.debug ?? false }, `resolveExecutionContext: project.json loaded, targetCount=${targetCount}`);
+
   return { success: true, options: options, project: project };
 }
 
@@ -97,6 +108,7 @@ export function normalizeOptions(raw: RawOptions): NormalizedOptions {
         projectJsonPath: raw.projectJsonPath,
         mode: mode,
         generatedMermaidPath: raw.generatedMermaidPath,
+        debug: raw.debug,
       };
     }
 
@@ -113,6 +125,7 @@ export function normalizeOptions(raw: RawOptions): NormalizedOptions {
         projectJsonPath: raw.projectJsonPath,
         mode: mode,
         markdownPath: raw.markdownPath,
+        debug: raw.debug,
       };
     }
 
@@ -130,6 +143,7 @@ export function normalizeOptions(raw: RawOptions): NormalizedOptions {
         mode: mode,
         generatedMermaidPath: raw.generatedMermaidPath,
         markdownPath: raw.markdownPath,
+        debug: raw.debug,
       };
     }
 
@@ -143,6 +157,7 @@ export function normalizeOptions(raw: RawOptions): NormalizedOptions {
         mode: mode,
         generatedMermaidPath: raw.generatedMermaidPath,
         markdownPath: raw.markdownPath,
+        debug: raw.debug,
       };
     }
 

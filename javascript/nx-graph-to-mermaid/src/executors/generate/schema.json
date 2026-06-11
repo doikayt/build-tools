@@ -19,6 +19,11 @@
     "markdownPath": {
       "type": "string",
       "description": "Markdown file for injection"
+    },
+    "debug": {
+      "type": "boolean",
+      "description": "Print debug diagnostics to stderr",
+      "default": false
     }
   },
   "required": ["projectJsonPath"],

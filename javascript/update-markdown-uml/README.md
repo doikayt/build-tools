@@ -104,8 +104,13 @@ Options:
   --help                            Show this help message and exit
 ```
 
+This tool processes a single Markdown file per invocation. Recursive folder
+traversal is not supported — each UML diagram is tied to a specific source
+tree, so the association must be declared explicitly. For workspace-wide runs
+use [`autogen-markdown-doc`](../autogen-markdown-doc/README.md).
+
 For full documentation of shared CLI behavior (`--check`, `--verbose`,
-`--quiet`, exit codes, recursive mode) see
+`--quiet`, exit codes) see
 [Common CLI Behavior](../CLI-BEHAVIOR.md).
 
 ---
