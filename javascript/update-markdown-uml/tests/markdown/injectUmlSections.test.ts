@@ -4,17 +4,17 @@ import {
   UML_MARKERS,
 } from "../../src/markdown/injectUmlSections.js";
 
-const PKG_START = UML_MARKERS.PACKAGES_START;
-const PKG_END = UML_MARKERS.PACKAGES_END;
-const TBL_START = UML_MARKERS.PACKAGES_TABLE_START;
-const TBL_END = UML_MARKERS.PACKAGES_TABLE_END;
-const DET_START = UML_MARKERS.PACKAGE_DETAILS_START;
-const DET_END = UML_MARKERS.PACKAGE_DETAILS_END;
+const PKG_START = UML_MARKERS.COMPONENTS_START;
+const PKG_END = UML_MARKERS.COMPONENTS_END;
+const TBL_START = UML_MARKERS.COMPONENTS_TABLE_START;
+const TBL_END = UML_MARKERS.COMPONENTS_TABLE_END;
+const DET_START = UML_MARKERS.COMPONENT_DETAILS_START;
+const DET_END = UML_MARKERS.COMPONENT_DETAILS_END;
 
 const SECTIONS = {
-  packages: "flowchart TB",
-  packagesTable: "| Package | Description |",
-  packageDetails: "#### cli",
+  components: "flowchart TB",
+  componentsTable: "| Package | Description |",
+  componentDetails: "#### cli",
 };
 
 function makeDoc(...markers: string[]): string {
@@ -37,7 +37,7 @@ describe("injectUmlSections()", () => {
     expect(result).toContain("#### cli");
   });
 
-  test("missing packages marker pair is silently skipped", () => {
+  test("missing components marker pair is silently skipped", () => {
     const content = makeDoc(TBL_START, TBL_END, DET_START, DET_END);
     const result = injectUmlSections(content, SECTIONS, []);
     expect(result).toContain("| Package | Description |");
@@ -45,7 +45,7 @@ describe("injectUmlSections()", () => {
     expect(result).not.toContain("flowchart TB");
   });
 
-  test("missing packages-table marker pair is silently skipped", () => {
+  test("missing components-table marker pair is silently skipped", () => {
     const content = makeDoc(PKG_START, PKG_END, DET_START, DET_END);
     const result = injectUmlSections(content, SECTIONS, []);
     expect(result).toContain("flowchart TB");
@@ -53,7 +53,7 @@ describe("injectUmlSections()", () => {
     expect(result).not.toContain("| Package | Description |");
   });
 
-  test("missing package-details marker pair is silently skipped", () => {
+  test("missing component-details marker pair is silently skipped", () => {
     const content = makeDoc(PKG_START, PKG_END, TBL_START, TBL_END);
     const result = injectUmlSections(content, SECTIONS, []);
     expect(result).toContain("flowchart TB");
@@ -87,7 +87,7 @@ describe("injectUmlSections()", () => {
     expect(() => injectUmlSections(content, SECTIONS, [])).toThrow("Duplicate");
   });
 
-  test("warns when package name collides with existing heading", () => {
+  test("warns when component name collides with existing heading", () => {
     const content = ["## cli", "", PKG_START, PKG_END].join("\n");
     const warnings: string[] = [];
     injectUmlSections(content, SECTIONS, ["cli"], (msg) => warnings.push(msg));
@@ -96,7 +96,7 @@ describe("injectUmlSections()", () => {
     expect(warnings[0]).toContain("collides");
   });
 
-  test("no warning for package heading inside package-details region from prior run", () => {
+  test("no warning for component heading inside component-details region from prior run", () => {
     const content = [
       "## Overview",
       "",
@@ -115,7 +115,7 @@ describe("injectUmlSections()", () => {
     expect(warnings).toHaveLength(0);
   });
 
-  test("no warning when package name does not collide", () => {
+  test("no warning when component name does not collide", () => {
     const content = ["## Overview", "", PKG_START, PKG_END].join("\n");
     const warnings: string[] = [];
     injectUmlSections(content, SECTIONS, ["cli"], (msg) => warnings.push(msg));

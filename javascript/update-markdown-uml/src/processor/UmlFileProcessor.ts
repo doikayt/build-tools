@@ -27,7 +27,7 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
         ? rawPatterns
         : DEFAULT_SKIP_TEST_PATTERNS;
 
-    // 1. Discover leaf packages
+    // 1. Discover leaf components
     const leafDirs = discoverLeafPackages(sourceRoot, skipPatterns);
     debugLog(config, `UmlFileProcessor: leafDirs=${JSON.stringify(leafDirs)}`);
 
@@ -49,7 +49,7 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
     );
     const activeLeafNames = activeLeafDirs.map((d) => path.basename(d));
 
-    // 2. Read package descriptions
+    // 2. Read component descriptions
     const onWarn = config.quiet
       ? undefined
       : (msg: string) => console.warn(msg);
@@ -64,22 +64,22 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
     const edges = analyzeImportDependencies(activeLeafDirs, sourceRoot);
     debugLog(config, `UmlFileProcessor: edges=${JSON.stringify(edges)}`);
 
-    // 4. Build flowchart (compact — package names only, no type enumeration)
-    const packagesContent = buildPackagesFlowchart(activeLeafNames, edges);
+    // 4. Build flowchart (compact — component names only, no type enumeration)
+    const componentsContent = buildPackagesFlowchart(activeLeafNames, edges);
 
-    // 5. Build packages table
-    const packagesTableContent = buildPackagesTable(
+    // 5. Build components table
+    const componentsTableContent = buildPackagesTable(
       activeLeafNames,
       descriptions
     );
 
-    // 6. Build per-package class diagrams
+    // 6. Build per-component class diagrams
     const detailSections = activeLeafDirs.map((leafDir) => {
       const name = path.basename(leafDir);
       const diagram = buildPackageClassDiagram(leafDir);
       return `#### ${name}\n${diagram}`;
     });
-    const packageDetailsContent = detailSections.join("\n\n");
+    const componentDetailsContent = detailSections.join("\n\n");
 
     // 7. Inject into markdown file
     const original = fs.readFileSync(filePath, "utf-8");
@@ -87,9 +87,9 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
     const updated = injectUmlSections(
       original,
       {
-        packages: packagesContent,
-        packagesTable: packagesTableContent,
-        packageDetails: packageDetailsContent,
+        components: componentsContent,
+        componentsTable: componentsTableContent,
+        componentDetails: componentDetailsContent,
       },
       activeLeafNames,
       onWarn

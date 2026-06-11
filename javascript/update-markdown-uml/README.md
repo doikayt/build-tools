@@ -1,24 +1,37 @@
 
 
 <!-- TOC:START -->
+- [@datalackey/update-markdown-uml](#datalackeyupdate-markdown-uml)
+  - [What It Does](#what-it-does)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Options](#options)
+  - [Example](#example)
+    - [Source tree](#source-tree)
+    - [Generated output](#generated-output)
+      - [cli](#cli)
+      - [math-engine](#math-engine)
+    - [Side Note on How to Correct Unknown Properties](#side-note-on-how-to-correct-unknown-properties)
+  - [Built With](#built-with)
+  - [Contributing and Releasing](#contributing-and-releasing)
 <!-- TOC:END -->
 
 # @datalackey/update-markdown-uml
 
-Generates and validates UML class and package diagrams for TypeScript source
+Generates and validates UML class and component diagrams for TypeScript source
 trees, injecting them into Markdown documentation files.
 
 ---
 
 ## What It Does
 
-Given a TypeScript project organised into packages (one directory per
-package under `src/`), this tool:
+Given a TypeScript project organised into components (one directory per
+component under `src/`), this tool:
 
-- generates a **package overview flowchart** showing cross-package
+- generates a **component overview flowchart** showing cross-component
   import dependencies
-- generates a **packages table** with one row per package
-- generates **per-package class diagrams** showing classes, interfaces,
+- generates a **components table** with one row per component
+- generates **per-component class diagrams** showing classes, interfaces,
   and type aliases
 
 All three sections are injected into a single Markdown file between
@@ -40,14 +53,14 @@ npm install --save-dev @datalackey/update-markdown-uml
 Place three marker pairs in the Markdown file where you want the diagrams
 to appear:
 
-&nbsp;&nbsp;&lt;!-- UML:packages:START --&gt;<br>
-&nbsp;&nbsp;&lt;!-- UML:packages:END --&gt;
+&nbsp;&nbsp;&lt;!-- UML:components:START --&gt;<br>
+&nbsp;&nbsp;&lt;!-- UML:components:END --&gt;
 
-&nbsp;&nbsp;&lt;!-- UML:packages-table:START --&gt;<br>
-&nbsp;&nbsp;&lt;!-- UML:packages-table:END --&gt;
+&nbsp;&nbsp;&lt;!-- UML:components-table:START --&gt;<br>
+&nbsp;&nbsp;&lt;!-- UML:components-table:END --&gt;
 
-&nbsp;&nbsp;&lt;!-- UML:package-details:START --&gt;<br>
-&nbsp;&nbsp;&lt;!-- UML:package-details:END --&gt;
+&nbsp;&nbsp;&lt;!-- UML:component-details:START --&gt;<br>
+&nbsp;&nbsp;&lt;!-- UML:component-details:END --&gt;
 
 Then run:
 
@@ -75,7 +88,7 @@ Options:
   --source <path>                   Override source root discovery (default: src/)
   --exclude-packages <pkg1,pkg2>    Leaf directory names to exclude from all output
   --check                           Do not write; exit non-zero if content is stale
-  --verbose                         Print per-package type counts
+  --verbose                         Print per-component type counts
   --quiet                           Suppress all non-error output
   --debug                           Print debug diagnostics to stderr
   --help                            Show this help message and exit
@@ -89,10 +102,28 @@ For full documentation of shared CLI behavior (`--check`, `--verbose`,
 
 ## Example
 
-[This folder](./tests/e2e/fixtures/math-cli) contains a 
-sample project that demonstrates the tool's output. Run the commands 
-below to clone this sample, install dependencies, and run the tool. 
+[This folder](./tests/e2e/fixtures/math-cli) contains a sample project that demonstrates 
+the tool's output. 
 
+Running the sample and reproducing the output you see above by 
+actually installing and running the tool is a good way to get a feel for how it works.
+Copy/paste the code below to clone the sample, install dependencies, and run the tool. 
+
+To view the rendered mermaid graph you could use VSCode's built-in markdown preview, or push 
+it to github and view it in the browser.
+
+
+```bash
+
+rm -rf /tmp/run-sample 
+mkdir /tmp/run-sample 
+cp -r javascript/update-markdown-uml/tests/e2e/fixtures/math-cli/* /tmp/run-sample/  
+cd /tmp/run-sample/  
+npm install
+npx update-markdown-uml README.md
+echo Load the README file into your favorite Markdown viewer. Enjoy the injected UML diagrams.
+
+```
 
 
 
@@ -100,7 +131,7 @@ below to clone this sample, install dependencies, and run the tool.
 
 ### Source tree
 
-A simple two-package project: a `cli` layer that delegates computation to
+A simple two-component project: a `cli` layer that delegates computation to
 a `math-engine` layer.
 
 ```
@@ -124,7 +155,7 @@ src/
 
 ### Generated output
 
-**Package overview** — one subgraph per package, arrows show import direction:
+**Component overview** — one subgraph per component, arrows show import direction:
 
 ```mermaid
 flowchart TB
@@ -136,16 +167,16 @@ flowchart TB
   cli --> math-engine
 ```
 
-**Packages table** — names link to the class diagram section below.
+**Components table** — names link to the class diagram section below.
 Descriptions are read from an optional `_PACKAGE_INFO.md` file in each
-package directory; `TBD` appears when the file is absent.
+component directory; `TBD` appears when the file is absent.
 
 | Package | Description |
 |---------|-------------|
-| [cli](#cli) | TBD |
-| [math-engine](#math-engine) | TBD |
+| [cli](#cli) | Command-line interface layer that parses arguments and dispatches math operations to the math-engine component |
+| [math-engine](#math-engine) | Code for System Backend -- which enables CLI front-end access to a suite of sophisticated math functions |
 
-**Class diagrams** — one per package, showing classes, interfaces, type
+**Class diagrams** — one per component, showing classes, interfaces, type
 aliases, and relationships:
 
 #### cli
@@ -220,23 +251,6 @@ classDiagram
   }
 ```
 
-
-### Running the Sample 
-
-Running the sample and reproducing the output you see above by actually installing and
-running the tool is a good way to get a feel for how it works. 
-
-```bash
-
-rm -rf /tmp/run-sample 
-mkdir /tmp/run-sample 
-cp -r javascript/update-markdown-uml/tests/e2e/fixtures/math-cli/* /tmp/run-sample/  
-cd /tmp/run-sample/  
-npm install
-npx update-markdown-uml README.md
-echo Load the README file into your favorite Markdown viewer. Enjoy the injected UML diagrams.
-
-```
 
 
 

@@ -4,11 +4,11 @@ A simple two-package TypeScript project demonstrating UML generation.
 
 ## Package Diagram
 
-<!-- UML:packages:START -->
-<!-- UML:packages:END -->
+<!-- UML:components:START -->
+<!-- UML:components:END -->
 
-<!-- UML:packages-table:START -->
-<!-- UML:packages-table:END -->
+<!-- UML:components-table:START -->
+<!-- UML:components-table:END -->
 
-<!-- UML:package-details:START -->
-<!-- UML:package-details:END -->
+<!-- UML:component-details:START -->
+<!-- UML:component-details:END -->

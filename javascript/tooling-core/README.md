@@ -127,7 +127,7 @@ For a complete real-world example see
 ---
 ## Package Structure
 
-<!-- UML:packages:START -->
+<!-- UML:components:START -->
 ```mermaid
 flowchart TB
   subgraph cli["cli"]
@@ -162,9 +162,9 @@ flowchart TB
   util --> policy
   util --> repository
 ```
-<!-- UML:packages:END -->
+<!-- UML:components:END -->
 
-<!-- UML:packages-table:START -->
+<!-- UML:components-table:START -->
 | Package | Description |
 |---------|-------------|
 | [cli](#cli) | TBD |
@@ -172,9 +172,9 @@ flowchart TB
 | [policy](#policy) | TBD |
 | [repository](#repository) | TBD |
 | [util](#util) | TBD |
-<!-- UML:packages-table:END -->
+<!-- UML:components-table:END -->
 
-<!-- UML:package-details:START -->
+<!-- UML:component-details:START -->
 #### cli
 ```mermaid
 classDiagram
@@ -364,7 +364,7 @@ classDiagram
     +excludeDirs? string[]
   }
 ```
-<!-- UML:package-details:END -->
+<!-- UML:component-details:END -->
 
 
 
