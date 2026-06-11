@@ -2,6 +2,7 @@
 
 <!-- TOC:START -->
 - [@datalackey/update-markdown-uml](#datalackeyupdate-markdown-uml)
+  - [Terminology](#terminology)
   - [What It Does](#what-it-does)
   - [Installation](#installation)
   - [Usage](#usage)
@@ -22,6 +23,15 @@ Generates and validates UML class and component diagrams for TypeScript source
 trees, injecting them into Markdown documentation files.
 
 ---
+
+## Terminology
+
+This tool uses **component** to denote a cohesive group of TypeScript source files
+that live in a single directory under `src/`. This is the same concept Java
+developers know as a *package* — a named namespace boundary that groups related
+types and controls visibility. The word "package" is avoided here because in a
+Node/npm workspace it already means something else (a publishable npm artifact),
+which would create ambiguity.
 
 ## What It Does
 
@@ -171,8 +181,8 @@ flowchart TB
 Descriptions are read from an optional `_PACKAGE_INFO.md` file in each
 component directory; `TBD` appears when the file is absent.
 
-| Package | Description |
-|---------|-------------|
+| Component | Description |
+|-----------|-------------|
 | [cli](#cli) | Command-line interface layer that parses arguments and dispatches math operations to the math-engine component |
 | [math-engine](#math-engine) | Code for System Backend -- which enables CLI front-end access to a suite of sophisticated math functions |
 
