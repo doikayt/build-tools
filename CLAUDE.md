@@ -1,6 +1,6 @@
 # CLAUDE.md — build-tools
 
-## Active role:  DEV
+## ACTIVE ROLE:  DEV
 
 ## Read these files first
 
