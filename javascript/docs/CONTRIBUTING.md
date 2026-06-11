@@ -216,32 +216,28 @@ git tag -a "v${VERSION}" -m "Release v${VERSION}"
 
 ---
 
-### 5. Publish (Push + Tags + CI)
+### 5. Publish
 
-Publishing is performed automatically by GitHub Actions when release
-commits are pushed to `main`.
+> **CI publishing is provisionally disabled** while npm token issues are being resolved.
+> Until further notice, publish locally using the steps below.
 
-Maintainers should **not** normally run `npx changeset publish` locally.
+From `javascript/`, with a valid npm token set:
 
-After applying version bumps, perform a single push that includes tags:
+```sh
+export NODE_AUTH_TOKEN=<your-npm-token>
+npx changeset publish
+```
 
-    git push origin main --follow-tags
+Then push commits and tags:
 
-This single command:
+```sh
+git push origin main --follow-tags
+```
 
-- pushes the release commits
-- pushes the version tags created by Changesets
-- triggers the release workflow
-- results in packages being published to npm
-
-The configuration for the release workflow is specified as a job in the workflow yml referenced above
-You can monitor publish results [here](https://github.com/datalackey/build-tools/actions/workflows/javascript-ci.yml).
-
-The release workflow will:
-
-- install dependencies
-- run `npx changeset publish`
-- publish packages to npm using the configured `NODE_AUTH_TOKEN`
+Once token issues are resolved, publishing will return to the automated CI path:
+the push above will trigger the release workflow in
+[GitHub Actions](https://github.com/datalackey/build-tools/actions/workflows/javascript-ci.yml),
+which installs dependencies, runs `npx changeset publish`, and publishes to npm.
 
 ---
 
@@ -354,6 +350,7 @@ RELEASE FLOW
 cd javascript
 
   DEVELOPER                              CI  (https://github.com/datalackey/build-tools/actions)
+                                         ⚠ Currently inactive — token issues pending resolution
 
   npx changeset
   git commit .
@@ -361,8 +358,9 @@ cd javascript
 
   npx changeset version
   git commit
+  NODE_AUTH_TOKEN=<token> npx changeset publish   ← local publish (temporary)
   git push --follow-tags
-                                         Runs release workflow
+                                         (Runs release workflow once CI publishing is restored)
 ```
 
 ---
