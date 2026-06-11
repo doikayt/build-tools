@@ -32,10 +32,9 @@ export type ExecutionContext =
 export function resolveExecutionContext(
   rawOptions: RawOptions
 ): ExecutionContext {
-  debugLog(
-    { debug: rawOptions.debug ?? false },
-    `resolveExecutionContext: rawOptions=${JSON.stringify(rawOptions)}`
-  );
+  const dbg = { debug: rawOptions.debug ?? false };
+
+  debugLog(dbg, `resolveExecutionContext: rawOptions=${JSON.stringify(rawOptions)}`);
 
   let options: NormalizedOptions;
 
@@ -47,7 +46,7 @@ export function resolveExecutionContext(
   }
 
   debugLog(
-    { debug: options.debug ?? false },
+    dbg,
     `resolveExecutionContext: mode=${options.mode} projectJsonPath=${
       options.projectJsonPath
     } markdownPath=${options.markdownPath ?? "(none)"} generatedMermaidPath=${
@@ -55,7 +54,7 @@ export function resolveExecutionContext(
     }`
   );
 
-  // INJECT mode: no project loading
+  // INJECT mode: no project loading -- since we already loaded the project in order to create file to be injected
   if (options.mode === "inject") {
     if (!fs.existsSync(options.generatedMermaidPath!)) {
       console.error(
@@ -89,10 +88,7 @@ export function resolveExecutionContext(
   const targetCount = Object.keys(
     (project as { targets?: Record<string, unknown> }).targets ?? {}
   ).length;
-  debugLog(
-    { debug: options.debug ?? false },
-    `resolveExecutionContext: project.json loaded, targetCount=${targetCount}`
-  );
+  debugLog(dbg, `resolveExecutionContext: project.json loaded, targetCount=${targetCount}`);
 
   return { success: true, options: options, project: project };
 }

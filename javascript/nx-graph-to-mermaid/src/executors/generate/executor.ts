@@ -21,11 +21,9 @@ function runExecutor(rawOptions: RawOptions): { success: boolean } {
   }
 
   const { options, project } = ctx;
+  const dbg = { debug: options.debug ?? false };
 
-  debugLog(
-    { debug: options.debug ?? false },
-    `runExecutor: dispatching mode=${options.mode}`
-  );
+  debugLog(dbg, `runExecutor: dispatching mode=${options.mode}`);
 
   let result: { success: boolean };
 
@@ -33,47 +31,22 @@ function runExecutor(rawOptions: RawOptions): { success: boolean } {
     case "inject":
       result = handleInject(options);
       break;
-
-    case "check": {
-      const mermaid = buildMermaid(project as NxProjectJson);
-      debugLog(
-        { debug: options.debug ?? false },
-        `runExecutor: mermaid generated, length=${mermaid.length}`
-      );
-      result = handleCheck(options, mermaid);
+    case "check":
+      result = handleCheck(options, buildMermaid(project as NxProjectJson, dbg.debug));
       break;
-    }
-
-    case "generate": {
-      const mermaid = buildMermaid(project as NxProjectJson);
-      debugLog(
-        { debug: options.debug ?? false },
-        `runExecutor: mermaid generated, length=${mermaid.length}`
-      );
-      result = handleGenerate(options, mermaid);
+    case "generate":
+      result = handleGenerate(options, buildMermaid(project as NxProjectJson, dbg.debug));
       break;
-    }
-
-    case "update": {
-      const mermaid = buildMermaid(project as NxProjectJson);
-      debugLog(
-        { debug: options.debug ?? false },
-        `runExecutor: mermaid generated, length=${mermaid.length}`
-      );
-      result = handleUpdate(options, mermaid);
+    case "update":
+      result = handleUpdate(options, buildMermaid(project as NxProjectJson, dbg.debug));
       break;
-    }
-
     default: {
       const _exhaustive: never = options.mode;
       result = fail(`Unsupported mode: ${String(_exhaustive)}`);
     }
   }
 
-  debugLog(
-    { debug: options.debug ?? false },
-    `runExecutor: result=${JSON.stringify(result)}`
-  );
+  debugLog(dbg, `runExecutor: result=${JSON.stringify(result)}`);
   return result;
 }
 

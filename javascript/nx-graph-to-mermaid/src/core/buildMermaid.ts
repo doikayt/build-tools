@@ -1,3 +1,5 @@
+import { debugLog } from "@datalackey/tooling-core";
+
 interface NxTarget {
   dependsOn?: string[];
   description?: string;
@@ -7,8 +9,11 @@ export interface NxProjectJson {
   targets?: Record<string, NxTarget>;
 }
 
-export function buildMermaid(project: NxProjectJson): string {
+export function buildMermaid(project: NxProjectJson, debug = false): string {
+  const dbg = { debug };
   const targets = validateProjectStructure(project);
+  debugLog(dbg, `buildMermaid: targetCount=${Object.keys(targets).length}`);
+
   const sortedTargetNames = Object.keys(targets).sort((a, b) =>
     a.localeCompare(b)
   );
@@ -23,6 +28,7 @@ export function buildMermaid(project: NxProjectJson): string {
   renderEdges(lines, sortedTargetNames, targets, nodeIdMap);
 
   const body = lines.join("\n");
+  debugLog(dbg, `buildMermaid: generated length=${body.length}`);
 
   return `\`\`\`mermaid
 ${body}
