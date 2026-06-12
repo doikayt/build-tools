@@ -121,8 +121,12 @@ const PROJECT_JSON = JSON.stringify({
 
 describe("--help flag", () => {
   let tmpDir;
-  beforeEach(() => { tmpDir = makeTmpDir(); });
-  afterEach(() => { fs.rmSync(tmpDir, { recursive: true, force: true }); });
+  beforeEach(() => {
+    tmpDir = makeTmpDir();
+  });
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  });
 
   test("prints usage to stdout and exits 0", () => {
     const result = runBin(["--help"], tmpDir);
@@ -137,8 +141,12 @@ describe("--help flag", () => {
 
 describe("--debug flag", () => {
   let tmpDir;
-  beforeEach(() => { tmpDir = makeTmpDir(); });
-  afterEach(() => { fs.rmSync(tmpDir, { recursive: true, force: true }); });
+  beforeEach(() => {
+    tmpDir = makeTmpDir();
+  });
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  });
 
   test("emits [autogen] plugin-selection lines on stderr", () => {
     const mdPath = writeFile(tmpDir, "README.md", TOC_ONLY_MD);
@@ -154,8 +162,12 @@ describe("--debug flag", () => {
 
 describe("no markers", () => {
   let tmpDir;
-  beforeEach(() => { tmpDir = makeTmpDir(); });
-  afterEach(() => { fs.rmSync(tmpDir, { recursive: true, force: true }); });
+  beforeEach(() => {
+    tmpDir = makeTmpDir();
+  });
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  });
 
   test("emits warning on stderr and exits 0 without --quiet", () => {
     const mdPath = writeFile(tmpDir, "README.md", NO_MARKERS_MD);
@@ -179,8 +191,12 @@ describe("no markers", () => {
 
 describe("file resolution", () => {
   let tmpDir;
-  beforeEach(() => { tmpDir = makeTmpDir(); });
-  afterEach(() => { fs.rmSync(tmpDir, { recursive: true, force: true }); });
+  beforeEach(() => {
+    tmpDir = makeTmpDir();
+  });
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  });
 
   test("uses README.md in cwd when no file positional provided", () => {
     writeFile(tmpDir, "README.md", TOC_ONLY_MD);
@@ -207,8 +223,12 @@ describe("file resolution", () => {
 
 describe("malformed markers", () => {
   let tmpDir;
-  beforeEach(() => { tmpDir = makeTmpDir(); });
-  afterEach(() => { fs.rmSync(tmpDir, { recursive: true, force: true }); });
+  beforeEach(() => {
+    tmpDir = makeTmpDir();
+  });
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  });
 
   test("exits 1 when START is present without matching END", () => {
     const mdPath = writeFile(tmpDir, "README.md", MALFORMED_TOC_MD);
@@ -231,8 +251,12 @@ describe("malformed markers", () => {
 
 describe("NX_GRAPH markers", () => {
   let tmpDir;
-  beforeEach(() => { tmpDir = makeTmpDir(); });
-  afterEach(() => { fs.rmSync(tmpDir, { recursive: true, force: true }); });
+  beforeEach(() => {
+    tmpDir = makeTmpDir();
+  });
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  });
 
   test("exits 1 with error when NX_GRAPH markers present but no project.json in file directory", () => {
     const mdPath = writeFile(tmpDir, "README.md", NX_ONLY_MD);
@@ -269,8 +293,12 @@ describe("NX_GRAPH markers", () => {
 
 describe("TOC-only update", () => {
   let tmpDir;
-  beforeEach(() => { tmpDir = makeTmpDir(); });
-  afterEach(() => { fs.rmSync(tmpDir, { recursive: true, force: true }); });
+  beforeEach(() => {
+    tmpDir = makeTmpDir();
+  });
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  });
 
   test("updates TOC when only TOC markers are present (no project.json needed)", () => {
     const mdPath = writeFile(tmpDir, "README.md", TOC_ONLY_MD);
@@ -288,8 +316,12 @@ describe("TOC-only update", () => {
 
 describe("check subcommand", () => {
   let tmpDir;
-  beforeEach(() => { tmpDir = makeTmpDir(); });
-  afterEach(() => { fs.rmSync(tmpDir, { recursive: true, force: true }); });
+  beforeEach(() => {
+    tmpDir = makeTmpDir();
+  });
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  });
 
   test("exits 0 on a file that is already up to date", () => {
     const mdPath = writeFile(tmpDir, "README.md", CORRECT_TOC_MD);
@@ -317,8 +349,12 @@ describe("check subcommand", () => {
 
 describe("--exclude-packages", () => {
   let tmpDir;
-  beforeEach(() => { tmpDir = makeTmpDir(); });
-  afterEach(() => { fs.rmSync(tmpDir, { recursive: true, force: true }); });
+  beforeEach(() => {
+    tmpDir = makeTmpDir();
+  });
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  });
 
   test("is accepted without error and TOC still succeeds (not forwarded to TOC)", () => {
     // The TOC plugin would fail with "Unknown option" if it received --exclude-packages.
