@@ -3,63 +3,45 @@
   - [Overview](#overview)
   - [Installation](#installation)
   - [Usage](#usage)
-    - [Update Mode](#update-mode)
+    - [Update Mode (default)](#update-mode-default)
     - [Check Mode (CI Drift Detection)](#check-mode-ci-drift-detection)
-  - [Determinism Gurantees](#determinism-gurantees)
-  - [When to Use the Underlying Tools Directly](#when-to-use-the-underlying-tools-directly)
+  - [Tag Families](#tag-families)
+  - [File Co-location Constraint](#file-co-location-constraint)
+  - [Options](#options)
+  - [Using Bundled Plugins Independently](#using-bundled-plugins-independently)
+  - [Determinism Guarantees](#determinism-guarantees)
   - [Built With](#built-with)
   - [Packaging, Publishing, and Inter-relationship with Other Plugins](#packaging-publishing-and-inter-relationship-with-other-plugins)
   - [Contributing and Releasing](#contributing-and-releasing)
   - [License](#license)
-  - [Misc](#misc)
 <!-- TOC:END -->
 
 # @datalackey/autogen-markdown-doc
 
-
-An intentionally opinionated, repository-wide documentation auto-generator and consistency checker -- 
-serves as a simplified entry point for all other plugins in this repository.
+A zero-config, single-file orchestrator — the _"just make it work"_ entry point for projects
+with one Markdown file (typically `README.md`) that may contain any combination of TOC, UML,
+and Mermaid injection markers. It bundles three focused plugins and activates each one only
+when its markers are present in the target file.
 
 ---
 
 ## Overview
 
-This package is an uber-bundle comprising the following npm packages:
+This package orchestrates three focused plugins:
 
-- [`@datalackey/update-markdown-toc`](../update-markdown-toc/README.md)
-- [`@datalackey/update-markdown-uml`](../update-markdown-uml/README.md)
-- [`@datalackey/nx-graph-to-mermaid`](../nx-graph-to-mermaid/README.md)
-- [`@datalackey/tooling-core`](../tooling-core/README.md)
+- [`@datalackey/update-markdown-toc`](../update-markdown-toc/README.md) — generates Tables of Contents
+- [`@datalackey/update-markdown-uml`](../update-markdown-uml/README.md) — generates UML component diagrams from TypeScript source
+- [`@datalackey/nx-graph-to-mermaid`](../nx-graph-to-mermaid/README.md) — generates Mermaid task-graph diagrams from `project.json`
 
+Each plugin is activated only when its tag family is present in the target file:
 
-each of which (except the last) can be used independently upon installation of this uber-plugin. 
-Alternatively, all plugins can be actiavated at once by activating the uber-plugin and selecting
-one of the following simplified pre-configured entrypoints:
+| Plugin | Activates when… |
+|---|---|
+| `update-markdown-toc` | Always (when any markers are found at all) |
+| `nx-graph-to-mermaid` | `NX_GRAPH:START` / `NX_GRAPH:END` markers present **and** `project.json` exists in the same directory |
+| `update-markdown-uml` | Any of the three `UML:*` marker pairs are present |
 
-- `update` 
-  - auto-generates Tables of Contents (TOCs) for all
-    [Markdown](https://en.wikipedia.org/wiki/Markdown) (*.md) documents, anywhere in your repository.
-  - auto-generates [Mermaid](https://mermaid.ai/web/) graphical diagrams that document
-    dependencies between build pipeline tasks. 
-  - auto-generates UML package diagrams for TypeScript code in the repo.
-
-OR:
-- `check`   
-  - verify that the latest checked-in documentation matches the configuration source, i.e.:
-      - that all TOC entry links are correctly linked to 
-        corresponding sections of their Markdown documents.
-      - that all Markdown documents with injected Mermaid diagrams reflect the build task flow encoded in underlying configuration (`project.json`).
-      - that all injected UML package diagrams are in sync with latest TypeScript code in the repo.
-
-
-These apply 'sensible defaults' to the configuration options of the bundled plugins.
-In a nutshell: 
-  - `update` reconciles repo to canonical documentation state (writes)
-  - `check` verifies repo's auto generated documentation is already canonical (no writes; exits non-zero on drift)
-
-
-The last included package (`@datalackey/tooling-core`) is a dependency of all other packages, 
-and is a framework for developing CLI utilities (not intended to be used directly.)
+If the target file contains none of the three tag families, the tool warns and exits cleanly.
 
 ---
 
@@ -73,58 +55,108 @@ npm i -D @datalackey/autogen-markdown-doc
 
 ## Usage
 
-### Update Mode
+### Update Mode (default)
 
-`update` mutates files to bring the repository into the expected documentation state.
-
-Behavior:
-
-- Recursively scans the repository
-- Uses default exclusion list:
-    - `node_modules` (only)
-- Processes **all Markdown (`.md`) files**
-- Updates Table of Contents content (via `@datalackey/update-markdown-toc`)
-- Generates Mermaid graph output (via `@datalackey/nx-graph-to-mermaid`)
-- Updates Mermaid blocks **only where existing Mermaid injection markers are present**
-- Writes changes to disk
-
-Run via:
+Applies all tag transformations in-place:
 
 ```bash
+# Target README.md in the current directory (default)
+npx autogen-markdown-doc
+
+# Explicit subcommand
 npx autogen-markdown-doc update
+
+# Specify a different file
+npx autogen-markdown-doc update docs/OVERVIEW.md
+
+# Skip specific UML source packages
+npx autogen-markdown-doc update --exclude-packages legacy,deprecated
 ```
 
 ---
 
 ### Check Mode (CI Drift Detection)
 
-`check` performs a full repository validation pass without mutating any files.
-
-Behavior:
-
-- Recursively scans the repository
-- Uses default exclusion list:
-    - `node_modules` (only)
-- Processes **all Markdown (`.md`) files**
-- Validates Table of Contents drift 
-- Validates Mermaid drift for **all existing Mermaid injection markers**
-- Reports:
-    - list of files out of date
-    - type of drift (TOC / Mermaid / both)
-- Exits with status code `1` if any drift is detected
-- Exits with status code `0` if no drift is detected
-
-Run via:
+Validates all tags without writing any files. Exits non-zero if any drift is detected:
 
 ```bash
+# Check README.md in current directory
+npx autogen-markdown-doc check
+
+# Check a specific file
+npx autogen-markdown-doc check docs/OVERVIEW.md
+```
+
+---
+
+## Tag Families
+
+| Plugin | Marker pair(s) |
+|---|---|
+| `update-markdown-toc` | `<!-- TOC:START -->` … `<!-- TOC:END -->` |
+| `update-markdown-uml` | `<!-- UML:components:START -->` … `<!-- UML:components:END -->`<br>`<!-- UML:components-table:START -->` … `<!-- UML:components-table:END -->`<br>`<!-- UML:component-details:START -->` … `<!-- UML:component-details:END -->` |
+| `nx-graph-to-mermaid` | `<!-- NX_GRAPH:START -->` … `<!-- NX_GRAPH:END -->` |
+
+---
+
+## File Co-location Constraint
+
+The target Markdown file must reside in the same directory as any required plugin inputs:
+
+| Plugin | Required co-resident |
+|---|---|
+| `nx-graph-to-mermaid` | `project.json` |
+| `update-markdown-uml` | `src/` directory |
+
+If your layout differs — recursive traversal, custom source paths, or per-plugin flags — invoke
+the underlying packages directly (see [Using Bundled Plugins Independently](#using-bundled-plugins-independently)).
+
+---
+
+## Options
+
+| Option | Description |
+|---|---|
+| `--exclude-packages <pkg1,pkg2>` | Forwarded to UML generation only; leaf directory names under `src/` to skip |
+| `--quiet` | Suppress all non-error output, including the "no markers" warning |
+| `--debug` | Print debug diagnostics to stderr |
+| `--help` | Show this help message and exit (exit 0) |
+
+---
+
+## Using Bundled Plugins Independently
+
+_When your project outgrows the defaults — recursive traversal, custom source paths,
+per-plugin flags — invoke the underlying packages directly:_
+
+```bash
+# TOC only — single file
+npx update-markdown-toc README.md
+
+# TOC — recursive (all .md files under a folder)
+npx update-markdown-toc --recursive docs/
+
+# UML diagrams only
+npx update-markdown-uml README.md
+
+# UML with exclusions
+npx update-markdown-uml --exclude-packages legacy,deprecated README.md
+
+# NX task graph only
+npx nx-graph-to-mermaid --project-json project.json README.md
+
+# CI drift check — single plugin
+npx update-markdown-toc --check README.md
+npx update-markdown-uml --check README.md
+npx nx-graph-to-mermaid --check --project-json project.json README.md
+
+# CI drift check — uber-bundle
 npx autogen-markdown-doc check
 ```
 
 ---
 
-## Determinism Gurantees
-
-The intended invariant:
+## Determinism Guarantees
 
 - Running `update` twice produces no changes on the second run.
 - `check` passes immediately after `update`.
@@ -132,36 +164,23 @@ The intended invariant:
 Conceptually:
 
 ```
-check(repo) === no-op(update(repo))
+check(file) === no-op(update(file))
 ```
-
----
-
-## When to Use the Underlying Tools Directly
-
-Use the underlying packages if you need:
-
-- Custom exclusion lists beyond `node_modules`
-- File- or directory-specific operations
-- Mermaid-only or TOC-only workflows
-- Advanced or non-default configuration
 
 ---
 
 ## Built With
 
-
 For the full workspace tech stack see: [TECH-STACK.md](../TECH-STACK.md)
 
+---
 
 ## Packaging, Publishing, and Inter-relationship with Other Plugins
 
-This package is one component of a small ecosystem of JavaScript tooling plugins maintained 
+This package is one component of a small ecosystem of JavaScript tooling plugins maintained
 as individual npm packages in this repository.
 The versioning and release of these packages is governed by a coordinated release policy, and
-the packages adhere to common design and architectural principles policies
-that are more completely described [here](../README.md).
-
+the packages adhere to common design and architectural principles described [here](../README.md).
 
 ---
 
@@ -176,6 +195,3 @@ trigger a publish via Changesets), see
 ## License
 
 MIT
-
-
-## Misc
