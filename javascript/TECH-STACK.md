@@ -59,8 +59,7 @@ Two test runners exist for historical reasons. New packages should prefer Vitest
 ## Internal Packages
 
 - **[`@datalackey/tooling-core`](./tooling-core/README.md)**
-  Private, unpublished package containing shared logic used by other packages in
-  this workspace. Not available on npm.
+  Contains shared core (framework) logic used by other packages in this workspace. 
 
 ---
 

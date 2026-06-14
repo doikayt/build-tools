@@ -26,13 +26,6 @@
     - [Default Output](#default-output)
     - [Verbose Output](#verbose-output)
     - [Quiet Output](#quiet-output)
-  - [Planned Tooling Core Contributions](#planned-tooling-core-contributions)
-    - [`findMarker` and `findMarkers`](#findmarker-and-findmarkers)
-    - [`injectSections`](#injectsections)
-  - [Refactor Candidates](#refactor-candidates)
-  - [Dependencies](#dependencies)
-  - [Out of Scope (v1)](#out-of-scope-v1)
-  - [Open Questions](#open-questions)
 <!-- TOC:END -->
 
 ## Overview
