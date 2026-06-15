@@ -64,7 +64,6 @@ graph TD
 ```
 <!-- NX_GRAPH:END -->
 
-
 ---
 
 ## Consistent CLI Behavior Across Tools
