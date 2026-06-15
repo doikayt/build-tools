@@ -14,8 +14,6 @@
     - [Component Overview Diagram](#component-overview-diagram)
     - [Component Details Table](#component-details-table)
     - [Component Details Section](#component-details-section)
-      - [cli](#cli)
-      - [repository](#repository)
   - [Source Discovery](#source-discovery)
   - [Component Description Convention](#component-description-convention)
   - [CLI Interface](#cli-interface)

@@ -9,6 +9,20 @@ type Heading = {
   anchor: string;
 };
 
+function stripFencedLines(lines: string[]): string[] {
+  let inFence = false;
+  const result: string[] = [];
+  for (const line of lines) {
+    if (line.startsWith("```")) {
+      inFence = !inFence;
+      continue;
+    }
+    if (!inFence) result.push(line);
+  }
+  if (inFence) throw new Error("Unclosed code fence (```) in document");
+  return result;
+}
+
 function detectLineEnding(text: string): "\r\n" | "\n" {
   return text.includes("\r\n") ? "\r\n" : "\n";
 }
@@ -39,7 +53,7 @@ export function generateTOC(content: string): string {
   const headings: Heading[] = [];
   const slugger = new GithubSlugger();
 
-  for (const line of lines) {
+  for (const line of stripFencedLines(lines)) {
     const m = /^(#{1,6})\s+(.*)$/.exec(line);
     if (!m) continue;
 
