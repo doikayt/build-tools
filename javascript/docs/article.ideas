@@ -1,3 +1,4 @@
+ONE:
 compare Typescript/NX w/  gradle/JVM builds:
 
     Me 
@@ -11,3 +12,9 @@ compare Typescript/NX w/  gradle/JVM builds:
         - JVM startup + compilation adds 30-60s before a single test runs
         - Gradle/Maven dependency resolution can add another 30-60s on a cold cache
         - TypeScript tsc is dramatically faster than javac / kotlinc for equivalent LOC
+
+
+
+TWO:
+    look at design principles explanation in update-markdown-uml design doc.
+    good fodder for article?
