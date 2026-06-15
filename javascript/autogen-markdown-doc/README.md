@@ -31,14 +31,27 @@
 
 # @datalackey/autogen-markdown-doc
 
-A zero-config, single-file orchestrator — the _"just make it work"_ entry point for projects
-with one Markdown file (typically `README.md`) that may contain any combination of TOC, UML,
-and Mermaid injection markers. It bundles three focused plugins and activates each one only
-when its markers are present in the target file.
+This plugin keeps documentation in sync with code. It is an 
+uber-plugin that serves as a minimal-config orchestrator of the [plugins](#bundled-plugins) that it bundles.
+Use this plugin directly for simple projects with a single Markdown file — typically README.md — that may 
+contain any combination of auto-generated Table of Contents, UML component diagrams, and 
+NX build task-graph diagrams. 
+
+Place the relevant injection markers in your file and run the tool. 
+Each bundled plugin activates only when its markers are present; 
+sections without markers are left untouched. 
+
+For CI, check mode detects drift: any generated section that has fallen out of sync 
+with its source causes a non-zero exit, making it straightforward to gate a 
+PR pipeline that requires documentation correctness.
+
+When your project outgrows these defaults and needs features such as recursive traversal through 
+your repo, custom source paths, or per-plugin flags — invoke the bundled plugins directly.
+
 
 ---
 
-## Overview
+## Bundled Plugins
 
 This package orchestrates three focused plugins:
 
@@ -197,11 +210,10 @@ the packages adhere to common design and architectural principles described [her
 
 ---
 
-## Contributing and Releasing
+## Contributing 
 
 For development setup, build workflow, and release procedures (including how to
-trigger a publish via Changesets), see
-[CONTRIBUTING.md](../docs/CONTRIBUTING.md).
+trigger a publish via Changesets), see [CONTRIBUTING.md](../docs/CONTRIBUTING.md).
 
 ---
 
