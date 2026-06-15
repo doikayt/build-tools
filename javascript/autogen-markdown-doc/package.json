@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "test": "jest"
+    "test": "npx vitest run --config vitest.e2e.config.ts"
   },
   "bin": {
     "autogen-markdown-doc": "./bin/autogen-markdown-doc.js"
@@ -35,7 +35,6 @@
     "@datalackey/update-markdown-uml": "1.2.1"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
     "vitest": "^1.0.0"
   }
 }

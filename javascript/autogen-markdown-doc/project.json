@@ -8,15 +8,7 @@
       "outputs": []
     },
     "test": {
-      "command": "cd autogen-markdown-doc && jest",
-      "dependsOn": [
-        "@datalackey/nx-graph-to-mermaid:build",
-        "@datalackey/update-markdown-toc:build",
-        "@datalackey/update-markdown-uml:build"
-      ]
-    },
-    "e2e": {
-      "command": "npx vitest run --config {projectRoot}/vitest.e2e.config.ts",
+      "command": "cd autogen-markdown-doc && npx vitest run --config vitest.e2e.config.ts",
       "dependsOn": [
         "@datalackey/tooling-core:build",
         "@datalackey/update-markdown-toc:build",

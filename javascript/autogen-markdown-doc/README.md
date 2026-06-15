@@ -197,7 +197,7 @@ declaring a six-target NX build pipeline with parallelism and branching.
 Running the sample is a good way to see the full output. Copy/paste the code
 below to clone it, install the published plugin, and run it.
 
-To view the rendered mermaid diagrams use VSCode's built-in Markdown preview, or
+To view the rendered mermaid diagrams, use VSCode's built-in Markdown preview, or
 push to GitHub and view in the browser.
 
 ```bash
