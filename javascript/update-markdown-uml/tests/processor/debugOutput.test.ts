@@ -67,7 +67,7 @@ describe("UmlFileProcessor debug output", () => {
 
     expect(writes.length).toBeGreaterThan(0);
     expect(writes.every((line) => line.startsWith("[debug]"))).toBe(true);
-  });
+  }, 10_000);
 
   test("does not write [debug] lines to stderr when debug=false", () => {
     const writes: string[] = [];

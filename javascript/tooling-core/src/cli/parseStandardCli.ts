@@ -43,12 +43,8 @@ export function parseStandardCli(
   let recursivePath: string | undefined = undefined;
   let exclude: string[] = [];
 
-  // validateExternalLinks and linkTimeoutMs remain in RunConfig with their
-  // defaults so that runLinkValidation always has sensible values.
-  // Plugins that expose these flags (e.g. update-markdown-toc) override
-  // them via their own parseOptions implementation.
-  const validateExternalLinks = true;
-  const linkTimeoutMs = DEFAULT_LINK_TIMEOUT_MS;
+  let validateExternalLinks = true;
+  let linkTimeoutMs = DEFAULT_LINK_TIMEOUT_MS;
 
   const positionals: string[] = [];
   const passthrough: string[] = [];
@@ -94,6 +90,30 @@ export function parseStandardCli(
         }
         mode = "recursive";
         recursivePath = next;
+        i++;
+        continue;
+      }
+
+      case "-n":
+      case "--no-external-link-check":
+        validateExternalLinks = false;
+        continue;
+
+      case "-l":
+      case "--link-timeout-ms": {
+        const next = args[i + 1];
+        if (next === undefined || next.startsWith("-")) {
+          throw new Error(
+            "--link-timeout-ms requires a numeric value in milliseconds"
+          );
+        }
+        const n = Number(next);
+        if (isNaN(n)) {
+          throw new Error(
+            "--link-timeout-ms requires a numeric value in milliseconds"
+          );
+        }
+        linkTimeoutMs = n;
         i++;
         continue;
       }
@@ -166,6 +186,7 @@ export function parseStandardCli(
     help: help,
     version: version,
   };
+  // Same caveat as runCli: if RunConfig gains credential fields, redact before logging.
   debugLog(config, `parseStandardCli: result=${JSON.stringify(retval)}`);
   return retval;
 }

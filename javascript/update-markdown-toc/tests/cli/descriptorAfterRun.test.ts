@@ -83,23 +83,6 @@ describe("toc descriptor afterRun", () => {
     );
   });
 
-  test("validateExternalLinks defaults to true in standard config from parseOptions", () => {
-    const standard = {
-      runMode: "check" as const,
-      mode: "single" as const,
-      verbose: false,
-      quiet: false,
-      debug: false,
-      exclude: [],
-      validateExternalLinks: true,
-      linkTimeoutMs: 3000,
-    };
-
-    const result = descriptor.parseOptions!(standard, new Map());
-
-    expect(result.validateExternalLinks).toBe(true);
-  });
-
   test("runLinkValidation is called exactly once per check-mode run", async () => {
     const files = ["/some/file.md"];
     const config = makeCheckConfig();

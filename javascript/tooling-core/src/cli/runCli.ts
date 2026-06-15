@@ -44,6 +44,10 @@ const STANDARD_FLAGS = new Set([
   "--recursive",
   "-e",
   "--exclude",
+  "-n",
+  "--no-external-link-check",
+  "-l",
+  "--link-timeout-ms",
 ]);
 
 function validateDescriptorOptions<TConfig extends RunConfig>(
@@ -90,6 +94,8 @@ export async function runCli<TConfig extends RunConfig = RunConfig>(
   const config = attempt(() =>
     buildConfig(parsed.config, passthroughMap, options.descriptor.parseOptions)
   );
+  // If RunConfig ever holds credentials (tokens, auth headers, etc.), redact them here
+  // before logging — JSON.stringify(config) would expose them to stderr in --debug mode.
   debugLog(
     config,
     `runCli: argv=${JSON.stringify(argv)} | config=${JSON.stringify(config)}`

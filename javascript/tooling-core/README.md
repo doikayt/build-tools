@@ -105,11 +105,10 @@ const descriptor: PluginDescriptor<MyPluginConfig> = {
 const processor: FileProcessor<MyPluginConfig> = {
   process(filePath: string, config: MyPluginConfig): ProcessingStatus {
     if (config.skipJs) {
-      console.log(`Skipped: ${filePath}`);
-      return "skipped -- lucky you !";
+      return "skipped";
     }
-    console.log(`Processed: ${filePath}`);
-    return "did something awful with your file";
+    // ... transform filePath content here ...
+    return "updated";
   },
 };
 
