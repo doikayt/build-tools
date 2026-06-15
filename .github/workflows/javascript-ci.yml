@@ -33,9 +33,6 @@ jobs:
       - name: CI
         run: npx nx run build-tools-workspace:ci --skip-nx-cache
 
-      - name: Run tests
-        run: npx nx run-many -t test
-
       - name: Check Changesets (PR only)
         if: github.event_name == 'pull_request'
         run: npx changeset status
