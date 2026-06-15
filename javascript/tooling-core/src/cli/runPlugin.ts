@@ -1,6 +1,5 @@
 import { RepositoryRunner } from "../repository/RepositoryRunner.js";
-import type { RunConfig } from "../repository/types.js";
-import type { FileProcessor } from "../repository/RepositoryRunner.js";
+import type { RunConfig, FileProcessor } from "../repository/types.js";
 import { createRunnerPolicy } from "../policy/createRunnerPolicy.js";
 import { debugLog } from "../util/debugLog.js";
 import type { RepositoryStats } from "../repository/RepositoryRunner.js";

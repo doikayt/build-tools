@@ -307,10 +307,6 @@ classDiagram
     -getInitCounterState() RepositoryStats
     -printSummary(stats) void
   }
-  class FileProcessor {
-    <<interface>>
-    +process(filePath, config) ProcessingStatus
-  }
   class RepositoryRunnerOptions {
     <<interface>>
     +processor FileProcessor<TConfig>
