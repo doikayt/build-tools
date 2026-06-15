@@ -1,5 +1,16 @@
 # @datalackey/nx-graph-to-mermaid
 
+## 1.3.0
+
+### Minor Changes
+
+- a92fa19: runnable example of uber plugin
+
+### Patch Changes
+
+- Updated dependencies [a92fa19]
+  - @datalackey/tooling-core@1.3.0
+
 ## 1.2.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @datalackey/tooling-core
 
+## 1.3.0
+
+### Minor Changes
+
+- a92fa19: runnable example of uber plugin
+
 ## 1.2.1
 
 ### Patch Changes
