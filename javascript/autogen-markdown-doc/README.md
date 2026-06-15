@@ -1,6 +1,6 @@
 <!-- TOC:START -->
 - [@datalackey/autogen-markdown-doc](#datalackeyautogen-markdown-doc)
-  - [Overview](#overview)
+  - [Bundled Plugins](#bundled-plugins)
   - [Installation](#installation)
   - [Usage](#usage)
     - [Update Mode (default)](#update-mode-default)
@@ -25,7 +25,7 @@
   - [Determinism Guarantees](#determinism-guarantees)
   - [Built With](#built-with)
   - [Packaging, Publishing, and Inter-relationship with Other Plugins](#packaging-publishing-and-inter-relationship-with-other-plugins)
-  - [Contributing and Releasing](#contributing-and-releasing)
+  - [Contributing](#contributing)
   - [License](#license)
 <!-- TOC:END -->
 
