@@ -318,11 +318,6 @@ When combined with `--verbose`, skipped files (Markdown files without start/end 
 
 ```bash
 update-markdown-toc --recursive docs/ --verbose
-
-
-
-```bash
-update-markdown-toc --recursive docs/ --verbose
 ```
 
 yields example output:
