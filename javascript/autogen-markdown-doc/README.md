@@ -27,7 +27,7 @@ Use this plugin directly for simple projects with a single Markdown file — typ
 contain any combination of auto-generated Table of Contents, UML component diagrams, and 
 NX build task-graph diagrams. 
 
-Place the relevant injection markers in your file and run the tool. 
+Place the relevant [injection markers](#tag-families) in your file and run the tool. 
 Each bundled plugin activates only when its markers are present; 
 sections without markers are left untouched. 
 
