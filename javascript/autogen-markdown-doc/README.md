@@ -287,8 +287,8 @@ markers. Descriptions are read from `_PACKAGE_INFO.md` files in each component d
 
 | Component | Description |
 |-----------|-------------|
-| [cli](#cli) | Command-line interface layer that parses arguments and dispatches math operations to the math-engine component |
-| [math-engine](#math-engine) | Code for System Backend -- which enables CLI front-end access to a suite of sophisticated math functions |
+| cli | Command-line interface layer that parses arguments and dispatches math operations to the math-engine component |
+| math-engine | Code for System Backend -- which enables CLI front-end access to a suite of sophisticated math functions |
 
 **Class diagrams** — one per component, injected between `UML:component-details:START` /
 `UML:component-details:END` markers. See
