@@ -10,6 +10,9 @@
   - [Options](#options)
   - [Using Bundled Plugins Independently](#using-bundled-plugins-independently)
   - [Determinism Guarantees](#determinism-guarantees)
+  - [Example](#example)
+    - [Source tree](#source-tree)
+    - [Generated output](#generated-output)
   - [Built With](#built-with)
   - [Packaging, Publishing, and Inter-relationship with Other Plugins](#packaging-publishing-and-inter-relationship-with-other-plugins)
   - [Contributing](#contributing)
@@ -179,6 +182,118 @@ Conceptually:
 ```
 check(file) === no-op(update(file))
 ```
+
+---
+
+## Example
+
+[This folder](./tests/e2e/fixtures/math-cli-nx) contains a sample project that
+demonstrates the tool's output with all three content-generation features active.
+
+The sample project is a simple two-component TypeScript app: a `cli` layer that
+delegates computation to a `math-engine` layer. It also ships a `project.json`
+declaring a six-target NX build pipeline with parallelism and branching.
+
+Running the sample is a good way to see the full output. Copy/paste the code
+below to clone it, install the published plugin, and run it.
+
+To view the rendered mermaid diagrams use VSCode's built-in Markdown preview, or
+push to GitHub and view in the browser.
+
+```bash
+rm -rf /tmp/run-autogen-sample
+mkdir /tmp/run-autogen-sample
+cp -r javascript/autogen-markdown-doc/tests/e2e/fixtures/math-cli-nx/* /tmp/run-autogen-sample/
+cd /tmp/run-autogen-sample/
+npm install
+npx autogen-markdown-doc
+echo Load the README file into your favorite Markdown viewer. Enjoy the injected content.
+```
+
+### Source tree
+
+A two-component project with a six-target build pipeline:
+
+```
+src/
+  cli/
+    AddCommand.ts
+    ArgParser.ts
+    CliCommand.ts
+    CliRunner.ts
+    CommandRegistry.ts
+    ParsedArgs.ts
+    SubtractCommand.ts
+  math-engine/
+    MathEngine.ts
+    MathError.ts
+    MathResult.ts
+    Operation.ts
+project.json          ← NX build pipeline (install → build/lint → type-check/test → e2e)
+README.md             ← target file with all three tag families
+```
+
+`cli` imports from `math-engine`. `math-engine` has no dependency on `cli`.
+
+### Generated output
+
+**Table of contents** — injected between `TOC:START` / `TOC:END` markers:
+
+```
+- [Math CLI](#math-cli)
+  - [Build Pipeline](#build-pipeline)
+  - [Component Diagram](#component-diagram)
+  - [Components Table](#components-table)
+  - [Component Details](#component-details)
+  - [Usage](#usage)
+```
+
+**NX task-graph** — injected between `NX_GRAPH:START` / `NX_GRAPH:END` markers.
+The `project.json` declares six targets with `install → build/lint → type-check/test → e2e`
+dependencies, producing a branching pipeline diagram:
+
+```mermaid
+graph TD
+  install["install"]
+  build["build"]
+  lint["lint"]
+  type-check["type-check"]
+  test["test"]
+  e2e["e2e"]
+
+  build --> install
+  lint --> install
+  type-check --> build
+  test --> build
+  e2e --> test
+  e2e --> lint
+```
+
+**Component overview** — injected between `UML:components:START` / `UML:components:END` markers.
+One subgraph per component; arrows show import direction:
+
+```mermaid
+flowchart TB
+  subgraph cli["cli"]
+  end
+  subgraph math-engine["math-engine"]
+  end
+
+  cli --> math-engine
+```
+
+**Components table** — injected between `UML:components-table:START` / `UML:components-table:END`
+markers. Descriptions are read from `_PACKAGE_INFO.md` files in each component directory:
+
+| Component | Description |
+|-----------|-------------|
+| [cli](#cli) | Command-line interface layer that parses arguments and dispatches math operations to the math-engine component |
+| [math-engine](#math-engine) | Code for System Backend -- which enables CLI front-end access to a suite of sophisticated math functions |
+
+**Class diagrams** — one per component, injected between `UML:component-details:START` /
+`UML:component-details:END` markers. See
+[update-markdown-uml README](../update-markdown-uml/README.md#generated-output) for the
+full class-diagram output.
 
 ---
 

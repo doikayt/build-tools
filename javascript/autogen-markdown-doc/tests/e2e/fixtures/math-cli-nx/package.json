@@ -1,0 +1,9 @@
+{
+  "name": "math-cli",
+  "version": "1.0.0",
+  "description": "Sample TypeScript project for autogen-markdown-doc demo",
+  "private": true,
+  "devDependencies": {
+    "@datalackey/autogen-markdown-doc": "latest"
+  }
+}
