@@ -4,7 +4,7 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "command": "cd update-markdown-toc && rm -rf dist && npm run build",
+      "command": "cd update-markdown-toc && rm -rf dist && tsc -p tsconfig.json",
       "outputs": ["{projectRoot}/dist"]
     },
     "test": {

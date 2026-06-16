@@ -6,8 +6,7 @@
   "type": "module",
   "private": false,
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "test": "npx vitest run --config vitest.config.ts && bash scripts/run-all-tests.sh"
+    "prepack": "npx nx build @datalackey/update-markdown-toc 1>&2"
   },
   "bin": {
     "update-markdown-toc": "./bin/update-markdown-toc.js"

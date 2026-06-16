@@ -34,9 +34,13 @@ let workDir: string;
 let packDir: string;
 
 function npmPack(packageDir: string, dest: string): string {
+  // --ignore-scripts: skip the package's `prepack` hook. NX's `dependsOn` already
+  // guarantees a fresh dist/ before this test runs; without --ignore-scripts, prepack
+  // would redundantly `rm -rf dist` + rebuild here, racing against sibling tasks reading
+  // that same dist/ via the npm workspace symlink.
   const result = spawnSync(
     "npm",
-    ["pack", "--json", "--pack-destination", dest],
+    ["pack", "--json", "--ignore-scripts", "--pack-destination", dest],
     { cwd: packageDir, encoding: "utf-8" }
   );
   if (result.status !== 0) {

@@ -25,17 +25,8 @@
     "url": "https://github.com/datalackey/build-tools/issues"
   },
   "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/tooling-core",
-  "scripts": {},
-  "nx": {
-    "targets": {
-      "test": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "npm test",
-          "cwd": "tooling-core"
-        }
-      }
-    }
+  "scripts": {
+    "prepack": "npx nx build @datalackey/tooling-core 1>&2"
   },
   "devDependencies": {
     "@types/mdast": "^4.0.4",
