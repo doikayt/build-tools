@@ -1,10 +1,10 @@
 {
-  "name": "autogen-markdown-doc",
+  "name": "@datalackey/autogen-markdown-doc",
   "sourceRoot": "autogen-markdown-doc",
   "projectType": "library",
   "targets": {
     "build": {
-      "command": "echo 'no build step'",
+      "command": "echo no build step since this is not a Typescript project - just bundle raw .js files",
       "outputs": []
     },
     "test": {

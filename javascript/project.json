@@ -125,7 +125,7 @@
         "@datalackey/nx-graph-to-mermaid:check-types",
         "@datalackey/update-markdown-uml:check-types",
         "@datalackey/update-markdown-toc:check-types",
-        "autogen-markdown-doc:check-test-types"
+        "@datalackey/autogen-markdown-doc:check-test-types"
       ]
     },
     "check-all": {

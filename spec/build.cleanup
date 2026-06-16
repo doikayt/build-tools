@@ -1,0 +1,43 @@
+TASK: eliminate redundant / dead package.json script targets -- favor project.json (nx)
+
+EXECUTION MODE: lights-out — you have pre-approval to create and edit files without asking for confirmation. Proceed directly with implementation.
+
+
+CONTEXT:
+  Repo: ~/build-tools
+  Platform workspace: javascript/ (NX monorepo, run all NX commands from there)
+
+DETAILS:
+
+Goal: Clean up the build-mechanism split across the workspace so NX (project.json/nx.json) is the sole owner of build/test mechanism, and package.json scripts only ever contains the prepack lifecycle hook (which delegates to npx nx build <pkg>), nothing else.
+
+Phase 1 — Done.
+
+Phase 2 — Done.
+
+Phase 3 — nx-graph-to-mermaid: remove build/test/copy-schemas from package.json scripts; delete the dead/broken copy-schemas target in project.json (references nonexistent executor.cjs); keep the working inline copy already in the build target; add prepack.
+
+Phase 4 — autogen-markdown-doc:
+  - Rename project.json's "name" from "autogen-markdown-doc" to "@datalackey/autogen-markdown-doc"
+    so it matches the package.json name, same as the other 4 packages (DONE — also update the one
+    caller in javascript/project.json's check-types dependsOn list to the scoped name).
+  - Remove the duplicate "test" script from package.json (NX project.json:test already owns this).
+  - Add "dependsOn": ["^build"] to the build target in project.json (forces the 4 dependencies to
+    rebuild-if-stale before this package's own no-op build runs).
+  - Add "prepack": "npx nx build @datalackey/autogen-markdown-doc 1>&2" to package.json — now that
+    project.json's name matches the npm package name (see rename above), this can use the scoped
+    name, consistent with the prepack hooks in the other 4 packages.
+
+Phase 5 — docs: update DESIGN-PRINCIPLES.md's prepack-contract boilerplate from "npm run build" to the npx nx build form with rationale; update CONTRIBUTING.md's day-to-day workflow + activity diagram from npm run build/npm test to npx nx build <project>/npx nx test <project>.
+
+
+
+UPDATE FORMATTING BEFORE VALIDATION:
+  cd ~/build-tools/javascript
+  npx nx run build-tools-workspace:update-all
+
+VALIDATION:
+  cd ~/build-tools/javascript
+  npx nx run build-tools-workspace:check-format             # must exit 0
+  npx nx run-many -t build,test --skip-nx-cache             # must exit 0
+

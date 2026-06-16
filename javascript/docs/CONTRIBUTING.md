@@ -3,6 +3,7 @@
   - [First-Time Setup](#first-time-setup)
   - [Overall Repo Structure Model](#overall-repo-structure-model)
   - [Build Pipeline](#build-pipeline)
+  - [Package Naming Policy](#package-naming-policy)
   - [Development and Release Engineering Workflows](#development-and-release-engineering-workflows)
     - [Day to Day Development (Package Level) Overview](#day-to-day-development-package-level-overview)
     - [Integration Testing Overview (Via Combined All-in-One Plugin)](#integration-testing-overview-via-combined-all-in-one-plugin)
@@ -83,6 +84,29 @@ npx nx run-many -t build,test --skip-nx-cache
 ```
 
 Dependency ordering is declared in each package's `project.json` via `dependsOn`.
+
+---
+
+## Package Naming Policy
+
+Every publishable package under `javascript/` must use the `@datalackey/` scope as its name —
+consistently in **both** `package.json` (`name`) and `project.json` (`name`). For example:
+`@datalackey/update-markdown-toc`.
+
+**Exception:** the top-level orchestrating workspace (`javascript/` itself) is unscoped:
+- `package.json` name: `build-tools`
+- `project.json` name: `build-tools-workspace`
+
+Rationale:
+
+- The `@datalackey/` scope identifies packages that are actually published to npm. The workspace
+  root is never published — it only orchestrates builds, tests, and releases for the packages
+  beneath it — so giving it a scoped name would misleadingly imply it's a consumable artifact.
+- Keeping `package.json` and `project.json` names identical for each package avoids ambiguity
+  in NX target references (e.g. `dependsOn` entries, `prepack` scripts). A mismatch between the
+  two means some commands must reference the package by its unscoped NX project name while
+  others must use the scoped npm name — an easy source of broken `dependsOn` graphs and
+  copy-paste errors when authoring new targets.
 
 ---
 
