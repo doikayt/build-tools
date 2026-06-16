@@ -158,17 +158,18 @@ npx update-markdown-uml README.md
 # UML with exclusions
 npx update-markdown-uml --exclude-packages legacy,deprecated README.md
 
-# NX task graph only
-npx nx-graph-to-mermaid --project-json project.json README.md
-
 # CI drift check — single plugin
 npx update-markdown-toc --check README.md
 npx update-markdown-uml --check README.md
-npx nx-graph-to-mermaid --check --project-json project.json README.md
 
 # CI drift check — uber-bundle
 npx autogen-markdown-doc check
 ```
+
+> **Note:** `nx-graph-to-mermaid` is an NX executor and has no standalone CLI.
+> To invoke it independently, configure a target in your `project.json` using the
+> `@datalackey/nx-graph-to-mermaid:run` executor. See the
+> [nx-graph-to-mermaid README](../nx-graph-to-mermaid/README.md) for details.
 
 ---
 
@@ -182,6 +183,10 @@ Conceptually:
 ```
 check(file) === no-op(update(file))
 ```
+
+UML runs before TOC in the orchestrator, so component headings it injects
+(e.g. `#### cli`, `#### math-engine`) are already present by the time TOC scans
+the file — convergence happens in a single `update` pass.
 
 ---
 

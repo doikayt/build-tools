@@ -15,6 +15,10 @@
         "@datalackey/nx-graph-to-mermaid:build",
         "@datalackey/update-markdown-uml:build"
       ]
+    },
+    "check-test-types": {
+      "command": "cd autogen-markdown-doc && npx tsc -p tsconfig.test.json --noEmit",
+      "dependsOn": ["^build"]
     }
   }
 }

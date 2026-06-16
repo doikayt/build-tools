@@ -197,14 +197,9 @@ async function main() {
     dbg(debug, "no NX_GRAPH markers — skipping nx-graph-to-mermaid");
   }
 
-  // TOC — always invoked
-  dbg(debug, "activating update-markdown-toc");
-  const tocBin = require.resolve(
-    "@datalackey/update-markdown-toc/bin/update-markdown-toc.js"
-  );
-  spawnPlugin(tocBin, [...commonFlags, resolvedFilePath]);
-
-  // UML — only when UML markers present
+  // UML — only when UML markers present. Runs before TOC so that any
+  // headings UML injects (e.g. component names) are present in the file
+  // by the time TOC scans for headings, avoiding a second convergence pass.
   if (hasUmlMarkers) {
     dbg(debug, "UML markers detected — activating update-markdown-uml");
     const umlBin = require.resolve(
@@ -217,6 +212,13 @@ async function main() {
   } else {
     dbg(debug, "no UML markers — skipping update-markdown-uml");
   }
+
+  // TOC — always invoked
+  dbg(debug, "activating update-markdown-toc");
+  const tocBin = require.resolve(
+    "@datalackey/update-markdown-toc/bin/update-markdown-toc.js"
+  );
+  spawnPlugin(tocBin, [...commonFlags, resolvedFilePath]);
 
   if (!quiet && !isCheck) {
     console.log("autogen-markdown-doc: update complete");

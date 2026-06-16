@@ -40,10 +40,7 @@ This document describes the tools and technologies used across all packages in t
 
 ## Test Runners
 
-- **Jest** (See: https://jestjs.io/) — used by `tooling-core` and `update-markdown-toc`
-- **Vitest** (See: https://vitest.dev/) — used by `nx-graph-to-mermaid`
-
-Two test runners exist for historical reasons. New packages should prefer Vitest.
+- **[Vitest](https://vitest.dev/)** — used by every package in the workspace.
 
 ---
 

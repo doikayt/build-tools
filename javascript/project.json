@@ -124,7 +124,8 @@
         "@datalackey/tooling-core:check-types",
         "@datalackey/nx-graph-to-mermaid:check-types",
         "@datalackey/update-markdown-uml:check-types",
-        "@datalackey/update-markdown-toc:check-types"
+        "@datalackey/update-markdown-toc:check-types",
+        "autogen-markdown-doc:check-test-types"
       ]
     },
     "check-all": {

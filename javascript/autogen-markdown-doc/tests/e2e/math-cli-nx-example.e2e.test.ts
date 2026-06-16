@@ -125,7 +125,7 @@ function runBinary(args: string[]): {
   };
 }
 
-describe("math-cli-nx uber e2e", () => {
+describe("Math CLI example from README: invoke both Uber plugin and bundled plugin scenarios", () => {
   test("update mode injects TOC, NX graph, and UML content", () => {
     writeReadme();
 
@@ -143,6 +143,12 @@ describe("math-cli-nx uber e2e", () => {
     expect(content).toContain("- [Math CLI](#math-cli)");
     expect(content).toContain("- [Build Pipeline](#build-pipeline)");
     expect(content).toContain("- [Usage](#usage)");
+
+    // TOC: UML runs before TOC, so component headings it injects
+    // (#### cli, #### math-engine) are already present for TOC to pick up
+    // on this single pass — no second update is needed for convergence.
+    expect(content).toContain("- [cli](#cli)");
+    expect(content).toContain("- [math-engine](#math-engine)");
 
     // NX graph: mermaid block with pipeline targets
     expect(content).toContain("```mermaid");
@@ -171,10 +177,9 @@ describe("math-cli-nx uber e2e", () => {
     expect(content).toContain("CliRunner");
   });
 
-  test("check mode exits 0 after two updates (UML injects headings that TOC must pick up on second pass)", () => {
+  test("check mode exits 0 after a single update (UML runs before TOC, so TOC converges in one pass)", () => {
     writeReadme();
-    runBinary(["README.md"]); // first pass: TOC, NX graph, UML injected
-    runBinary(["README.md"]); // second pass: TOC picks up headings injected by UML
+    runBinary(["README.md"]); // single pass: UML injects headings, then TOC picks them up
 
     const { exitCode } = runBinary(["check", "README.md"]);
     expect(exitCode).toBe(0);
@@ -185,5 +190,126 @@ describe("math-cli-nx uber e2e", () => {
 
     const { exitCode } = runBinary(["check", "README.md"]);
     expect(exitCode).toBe(1);
+  });
+});
+
+function pluginBin(packageName: string, binName: string): string {
+  return path.join(
+    workDir,
+    "node_modules",
+    "@datalackey",
+    packageName,
+    "bin",
+    binName
+  );
+}
+
+function runPlugin(
+  bin: string,
+  args: string[]
+): { exitCode: number; stdout: string; stderr: string } {
+  const result = spawnSync("node", [bin, ...args], {
+    cwd: workDir,
+    encoding: "utf-8",
+  });
+  return {
+    exitCode: result.status ?? 1,
+    stdout: result.stdout ?? "",
+    stderr: result.stderr ?? "",
+  };
+}
+
+describe("Using Bundled Plugins Independently (README scenarios)", () => {
+  test("update-markdown-toc standalone — single file", () => {
+    writeReadme();
+    const tocBin = pluginBin("update-markdown-toc", "update-markdown-toc.js");
+
+    const { exitCode } = runPlugin(tocBin, ["README.md"]);
+    expect(exitCode).toBe(0);
+
+    const content = fs.readFileSync(path.join(workDir, "README.md"), "utf-8");
+    expect(content).toContain("- [Math CLI](#math-cli)");
+    expect(content).toContain("- [Usage](#usage)");
+  });
+
+  test("update-markdown-toc standalone — recursive over a folder", () => {
+    const docsDir = path.join(workDir, "docs");
+    fs.mkdirSync(docsDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(docsDir, "guide.md"),
+      "<!-- TOC:START -->\n<!-- TOC:END -->\n\n## Installation\n\n## Usage\n",
+      "utf-8"
+    );
+    const tocBin = pluginBin("update-markdown-toc", "update-markdown-toc.js");
+
+    const { exitCode } = runPlugin(tocBin, ["--recursive", "docs/"]);
+    expect(exitCode).toBe(0);
+
+    const content = fs.readFileSync(path.join(docsDir, "guide.md"), "utf-8");
+    expect(content).toContain("- [Installation](#installation)");
+    expect(content).toContain("- [Usage](#usage)");
+  });
+
+  test("update-markdown-uml standalone — single file", () => {
+    writeReadme();
+    const umlBin = pluginBin("update-markdown-uml", "update-markdown-uml.js");
+
+    const { exitCode } = runPlugin(umlBin, ["README.md"]);
+    expect(exitCode).toBe(0);
+
+    const content = fs.readFileSync(path.join(workDir, "README.md"), "utf-8");
+    expect(content).toContain('subgraph cli["cli"]');
+    expect(content).toContain('subgraph math-engine["math-engine"]');
+    expect(content).toContain("classDiagram");
+  });
+
+  test("update-markdown-uml standalone — with --exclude-packages", () => {
+    writeReadme();
+    const umlBin = pluginBin("update-markdown-uml", "update-markdown-uml.js");
+
+    const { exitCode } = runPlugin(umlBin, [
+      "--exclude-packages",
+      "math-engine",
+      "README.md",
+    ]);
+    expect(exitCode).toBe(0);
+
+    const content = fs.readFileSync(path.join(workDir, "README.md"), "utf-8");
+    expect(content).toContain('subgraph cli["cli"]');
+    expect(content).not.toContain('subgraph math-engine["math-engine"]');
+  });
+
+  test("update-markdown-uml via uber plugin — with --exclude-packages forwarded from autogen-markdown-doc", () => {
+    writeReadme();
+
+    const { exitCode } = runBinary([
+      "update",
+      "--exclude-packages",
+      "math-engine",
+      "README.md",
+    ]);
+    expect(exitCode).toBe(0);
+
+    const content = fs.readFileSync(path.join(workDir, "README.md"), "utf-8");
+    expect(content).toContain('subgraph cli["cli"]');
+    expect(content).not.toContain('subgraph math-engine["math-engine"]');
+  });
+
+  test("CI drift check — update-markdown-toc standalone", () => {
+    writeReadme();
+    const tocBin = pluginBin("update-markdown-toc", "update-markdown-toc.js");
+
+    runPlugin(tocBin, ["README.md"]);
+    const { exitCode } = runPlugin(tocBin, ["--check", "README.md"]);
+    expect(exitCode).toBe(0);
+  });
+
+  test("CI drift check — update-markdown-uml standalone", () => {
+    writeReadme();
+    const umlBin = pluginBin("update-markdown-uml", "update-markdown-uml.js");
+
+    runPlugin(umlBin, ["README.md"]);
+    const { exitCode } = runPlugin(umlBin, ["--check", "README.md"]);
+    expect(exitCode).toBe(0);
   });
 });

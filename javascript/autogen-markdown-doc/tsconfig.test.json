@@ -1,0 +1,16 @@
+{
+  "//": [
+    "autogen-markdown-doc has no src/ (bin/ is plain JS, no build step),",
+    "so this extends the workspace base directly rather than a package tsconfig.json.",
+    "Exists solely so tests/**/*.ts (e2e tests) resolve correctly in the IDE and CI."
+  ],
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmit": true,
+    "types": ["vitest/globals"]
+  },
+  "include": ["tests/**/*.ts"]
+}
