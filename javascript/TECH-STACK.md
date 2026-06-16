@@ -40,7 +40,7 @@ This document describes the tools and technologies used across all packages in t
 
 ## Test Runners
 
-- **[Vitest](https://vitest.dev/)** — used by every package in the workspace.
+- **Vitest** — used by every package in the workspace.
 
 ---
 
