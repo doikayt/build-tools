@@ -3,3 +3,4 @@ dist
 test/**/dist
 
 .nx/
+.lights-out-logs/

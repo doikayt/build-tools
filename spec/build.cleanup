@@ -11,6 +11,11 @@ DETAILS:
 
 Goal: Clean up the build-mechanism split across the workspace so NX (project.json/nx.json) is the sole owner of build/test mechanism, and package.json scripts only ever contains the prepack lifecycle hook (which delegates to npx nx build <pkg>), nothing else.
 
+PROGRESS REPORTING: after finishing and validating each phase below (its own build/test passes),
+commit with message "phase N: <short phase name> — validated" before starting the next phase.
+This makes `git log --oneline` in the worktree the source of truth for which phase is in flight —
+useful for an outside observer tailing the lights-out log to see exactly how far the session got.
+
 Phase 1 — Done.
 
 Phase 2 — Done.

@@ -24,4 +24,12 @@ managed as a single npm workspace.
 
 ---
 
+## Repo Scripts
+
+Cross-platform utility scripts (not tied to a single `javascript/` package) live under
+[`scripts/`](./scripts/README.md), including `lights-out.mjs` for running unattended Claude
+Code sessions against a spec file.
+
+---
+
 *Note: package-level contributing guides are stubs pending full documentation migration.*
