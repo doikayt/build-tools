@@ -64,6 +64,19 @@ graph TD
   _caret_build(["^build"])
   _caret_test(["^test"])
 
+  _xref_datalackey_autogen_markdown_doc_check_test_types{{"@datalackey/autogen-markdown-doc:check-test-types"}}
+  _xref_datalackey_nx_graph_to_mermaid_build{{"@datalackey/nx-graph-to-mermaid:build"}}
+  _xref_datalackey_nx_graph_to_mermaid_check_types{{"@datalackey/nx-graph-to-mermaid:check-types"}}
+  _xref_datalackey_nx_graph_to_mermaid_lint{{"@datalackey/nx-graph-to-mermaid:lint"}}
+  _xref_datalackey_tooling_core_check_types{{"@datalackey/tooling-core:check-types"}}
+  _xref_datalackey_tooling_core_lint{{"@datalackey/tooling-core:lint"}}
+  _xref_datalackey_update_markdown_toc_build{{"@datalackey/update-markdown-toc:build"}}
+  _xref_datalackey_update_markdown_toc_check_types{{"@datalackey/update-markdown-toc:check-types"}}
+  _xref_datalackey_update_markdown_toc_lint{{"@datalackey/update-markdown-toc:lint"}}
+  _xref_datalackey_update_markdown_uml_build{{"@datalackey/update-markdown-uml:build"}}
+  _xref_datalackey_update_markdown_uml_check_types{{"@datalackey/update-markdown-uml:check-types"}}
+  _xref_datalackey_update_markdown_uml_lint{{"@datalackey/update-markdown-uml:lint"}}
+
   check_all --> check_docs
   check_all --> check_format
   check_all --> check_lint
@@ -71,7 +84,18 @@ graph TD
   check_docs --> check_mermaid
   check_docs --> check_toc
   check_docs --> check_uml
+  check_lint --> _xref_datalackey_nx_graph_to_mermaid_lint
+  check_lint --> _xref_datalackey_tooling_core_lint
+  check_lint --> _xref_datalackey_update_markdown_toc_lint
+  check_lint --> _xref_datalackey_update_markdown_uml_lint
+  check_mermaid --> _xref_datalackey_nx_graph_to_mermaid_build
   check_toc --> _caret_build
+  check_types --> _xref_datalackey_autogen_markdown_doc_check_test_types
+  check_types --> _xref_datalackey_nx_graph_to_mermaid_check_types
+  check_types --> _xref_datalackey_tooling_core_check_types
+  check_types --> _xref_datalackey_update_markdown_toc_check_types
+  check_types --> _xref_datalackey_update_markdown_uml_check_types
+  check_uml --> _xref_datalackey_update_markdown_uml_build
   ci --> _caret_build
   ci --> _caret_test
   ci --> check_all
@@ -81,6 +105,9 @@ graph TD
   update_docs --> update_mermaid
   update_docs --> update_toc
   update_docs --> update_uml
+  update_mermaid --> _xref_datalackey_nx_graph_to_mermaid_build
+  update_toc --> _xref_datalackey_update_markdown_toc_build
+  update_uml --> _xref_datalackey_update_markdown_uml_build
 ```
 <!-- NX_GRAPH:END -->
 

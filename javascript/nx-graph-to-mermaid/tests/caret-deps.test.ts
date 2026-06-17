@@ -70,7 +70,7 @@ ${"```"}`
     );
   });
 
-  test("^ dep renders alongside same-project and cross-project deps; cross-project is still skipped", () => {
+  test("^ dep renders alongside same-project and cross-project deps; cross-project renders as hexagon", () => {
     const output = buildMermaid({
       name: "my-proj",
       targets: {
@@ -90,6 +90,9 @@ graph TD
 
   _caret_build(["^build"])
 
+  _xref_other_pkg_build{{"@other/pkg:build"}}
+
+  ci --> _xref_other_pkg_build
   ci --> _caret_build
   ci --> check
 ${"```"}`

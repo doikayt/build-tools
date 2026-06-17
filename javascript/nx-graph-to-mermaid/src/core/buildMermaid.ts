@@ -20,6 +20,11 @@ export function buildMermaid(project: NxProjectJson, debug = false): string {
   );
   const nodeIdMap = prepareNodeIds(sortedTargetNames);
   const caretTargets = collectCaretDeps(sortedTargetNames, targets);
+  const crossProjectDeps = collectCrossProjectDeps(
+    sortedTargetNames,
+    targets,
+    project.name
+  );
   const lines: string[] = [];
 
   lines.push("graph TD");
@@ -29,6 +34,10 @@ export function buildMermaid(project: NxProjectJson, debug = false): string {
   if (caretTargets.length > 0) {
     lines.push("");
     renderCaretNodes(lines, caretTargets);
+  }
+  if (crossProjectDeps.length > 0) {
+    lines.push("");
+    renderCrossProjectNodes(lines, crossProjectDeps);
   }
   lines.push("");
   renderEdges(lines, sortedTargetNames, targets, nodeIdMap, project.name);
@@ -164,6 +173,10 @@ function renderEdges(
           lines.push(
             `  ${nodeIdMap.get(name)!} --> ${nodeIdMap.get(refTarget)!}`
           );
+        } else if (refProject !== projectName) {
+          lines.push(
+            `  ${nodeIdMap.get(name)!} --> ${crossProjectNodeId(dep)}`
+          );
         }
         continue;
       }
@@ -206,6 +219,49 @@ function renderCaretNodes(lines: string[], caretTargets: string[]): void {
 
 function caretNodeId(target: string): string {
   return `_caret_${sanitizeNodeId(target)}`;
+}
+
+// --------------------------------------------------
+// Cross-project dep handling
+// --------------------------------------------------
+
+// Collects unique cross-project dep strings (e.g. "@scope/pkg:build").
+// Same-project qualified refs and ^ deps are excluded. Sorted for
+// deterministic output.
+function collectCrossProjectDeps(
+  names: string[],
+  targets: Record<string, NxTarget>,
+  projectName?: string
+): string[] {
+  const seen = new Set<string>();
+  for (const name of names) {
+    for (const dep of targets[name].dependsOn ?? []) {
+      if (dep.startsWith("^") || !dep.includes(":")) continue;
+      const refProject = dep.slice(0, dep.indexOf(":"));
+      if (refProject !== projectName) seen.add(dep);
+    }
+  }
+  return [...seen].sort((a, b) => a.localeCompare(b));
+}
+
+// Renders synthetic hexagon nodes for cross-project refs.
+// Hexagon shape visually distinguishes them from local targets (rectangles)
+// and ^ fan-out nodes (stadium pills).
+function renderCrossProjectNodes(
+  lines: string[],
+  crossProjectDeps: string[]
+): void {
+  for (const dep of crossProjectDeps) {
+    lines.push(`  ${crossProjectNodeId(dep)}{{"${dep}"}}`);
+  }
+}
+
+// Strip any leading underscores that sanitizeNodeId adds for non-alpha
+// characters (e.g. "@" → "_") before prepending the _xref_ prefix, so
+// the resulting ID stays readable without a double underscore.
+function crossProjectNodeId(dep: string): string {
+  const sanitized = sanitizeNodeId(dep).replace(/^_+/, "") || "x";
+  return `_xref_${sanitized}`;
 }
 
 // --------------------------------------------------

@@ -31,9 +31,9 @@
 
 `NX-graph-to-mermaid` is an **NX** (See: https://NX.dev/) plugin that generates deterministic [Mermaid](https://www.mermaid.ai/) task flow diagrams from an NX `project.json` file — with optional Markdown injection and CI drift detection support.
 
-It operates purely on the specified `project.json` and renders intra-project target dependencies only. It does not resolve cross-project or workspace-level graph relationships.
+It operates purely on the specified `project.json`. Cross-project dependencies are named in the diagram but not expanded — their internal target graphs are not followed.
 
-So, basically: no monorepo support (but contributions are always welcome!)
+So, basically: no monorepo recursion (but contributions are always welcome!)
 
 
 
@@ -179,11 +179,13 @@ Each string in a `dependsOn` array is classified and rendered as follows:
 | Plain local target name | `"lint"` | Arrow to that target node |
 | Same-project qualified ref | `"my-project:check-all"` | Arrow to the local target (prefix stripped) |
 | `^` upstream fan-out | `"^build"` | Arrow to a synthetic `^build` stadium node |
-| Cross-project ref | `"@scope/pkg:build"` | Skipped — not renderable in a single-project diagram |
+| Cross-project ref | `"@scope/pkg:build"` | Arrow to a synthetic `@scope/pkg:build` hexagon node |
 
 **`^` fan-out deps** deserve special mention. NX's `^target` shorthand means "before running this target, run `target` across every project in the upstream dependency closure." For example, `^build` on a `ci` task triggers a `build` run on all packages listed in `implicitDependencies` — and transitively on their dependencies — before `ci` is allowed to start. It is a graph-wide fan-out, not a reference to any single local target.
 
 The diagram renders `^target` entries as synthetic pill-shaped (stadium) nodes — e.g. `([^build])` — so the dependency is visible without implying a local target exists. Multiple targets that share the same `^dep` all point to the same synthetic node.
+
+**Cross-project refs** (e.g. `@scope/pkg:build`) are rendered as hexagon nodes. The ref is named but not expanded — the internal dependency graph of the referenced project is not followed. This keeps the diagram bounded to the current `project.json` while still making the external dependency visible.
 
 ---
 
