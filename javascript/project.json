@@ -142,11 +142,6 @@
     },
     "ci": {
       "dependsOn": ["^build", "^test", "build-tools-workspace:check-all"]
-    },
-    "format": {
-      "//": "Kept for backwards compatibility — prefer update-format.",
-      "command": "npx prettier --write .",
-      "cwd": "{workspaceRoot}"
     }
   }
 }
