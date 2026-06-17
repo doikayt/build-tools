@@ -27,7 +27,10 @@ export function readPackageDescription(
     return undefined;
   }
 
-  const dotIndex = collapsed.indexOf(".");
+  const strippedForSearch = collapsed.replace(/`[^`\n]*`/g, (m) =>
+    " ".repeat(m.length)
+  );
+  const dotIndex = strippedForSearch.indexOf(".");
   if (dotIndex === -1) {
     const warn = onWarn ?? ((msg) => console.warn(msg));
     warn(

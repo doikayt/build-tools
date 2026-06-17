@@ -78,6 +78,16 @@ describe("readPackageDescription()", () => {
     expect(result).toBeUndefined();
   });
 
+  test("period inside inline code span is not treated as sentence end", () => {
+    write(
+      "Leaf package discovery: locates subdirectories that contain qualifying `.ts` files, and reads their `_PACKAGE_INFO.md` descriptions."
+    );
+    const result = readPackageDescription(tmpDir);
+    expect(result).toBe(
+      "Leaf package discovery: locates subdirectories that contain qualifying `.ts` files, and reads their `_PACKAGE_INFO.md` descriptions"
+    );
+  });
+
   test("warning includes file path", () => {
     write("no period here");
     const warnings: string[] = [];

@@ -9,9 +9,10 @@ type Heading = {
   anchor: string;
 };
 
-function stripInlineCode(text: string): string {
+export function stripInlineCode(text: string): string {
   // [^`\n]* — any char except backtick or newline (inline spans can't cross lines)
-  return text.replace(/`[^`\n]*`/g, "``");
+  // Replace with "" not "``" — substituting backticks reintroduces spans that eat surrounding text
+  return text.replace(/`[^`\n]*`/g, "");
 }
 
 function stripFencedLines(lines: string[]): string[] {

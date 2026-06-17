@@ -24,7 +24,7 @@ flowchart TB
 <!-- UML:components-table:START -->
 | Package | Description |
 |---------|-------------|
-| [core](#core) | Mermaid diagram builder: validates an NX `project |
+| [core](#core) | Mermaid diagram builder: validates an NX `project.json` targets map and emits a deterministic `graph TD` diagram with sanitized node IDs and sorted dependency edges |
 | [generate](#generate) | NX executor entry point: resolves options, dispatches to `generate`, `inject`, `update`, or `check` mode, and writes the Mermaid diagram into a target Markdown file between `<!-- NX_GRAPH:START -->` / `<!-- NX_GRAPH:END -->` markers |
 <!-- UML:components-table:END -->
 

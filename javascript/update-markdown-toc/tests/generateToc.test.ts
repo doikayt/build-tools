@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { generateTOC } from "../src/engine/generateToc.js";
+import { generateTOC, stripInlineCode } from "../src/engine/generateToc.js";
 
 const wrap = (body: string) => `<!-- TOC:START -->\n<!-- TOC:END -->\n${body}`;
 
@@ -8,6 +8,29 @@ function extractToc(result: string): string {
   const end = result.indexOf("<!-- TOC:END -->") + "<!-- TOC:END -->".length;
   return result.slice(start, end);
 }
+
+describe("stripInlineCode", () => {
+  test("removes single inline code span", () => {
+    expect(stripInlineCode("qualifying `.ts` files")).toBe("qualifying  files");
+  });
+
+  test("multiple spans leave no backticks behind", () => {
+    const result = stripInlineCode(
+      "qualifying `.ts` files and `_PACKAGE_INFO.md` descriptions"
+    );
+    expect(result).not.toContain("`");
+    expect(result).toBe("qualifying  files and  descriptions");
+  });
+
+  test("does not remove content outside spans", () => {
+    expect(stripInlineCode("before `code` after")).toBe("before  after");
+  });
+
+  test("span cannot cross a newline", () => {
+    const result = stripInlineCode("open `start\nend` close");
+    expect(result).toContain("`");
+  });
+});
 
 describe("generateTOC — inline code span filtering", () => {
   test("TOC markers inside inline code spans are not treated as real markers", () => {
