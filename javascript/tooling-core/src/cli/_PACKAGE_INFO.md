@@ -1,0 +1,1 @@
+CLI framework for tooling-core plugins: parses arguments via `parseStandardCli`, validates and wires plugin-declared flags, generates help output, resolves target file lists, and drives the full CLI lifecycle through `runCli`.

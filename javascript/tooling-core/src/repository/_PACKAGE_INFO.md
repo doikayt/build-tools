@@ -1,0 +1,1 @@
+Repository orchestration layer: `RepositoryRunner` drives a `FileProcessor` over a list of files, accumulates `RepositoryStats`, and delegates per-file output and error decisions to a `RunnerPolicy`. Also owns the core shared types `RunConfig`, `FileProcessor`, and `ProcessingStatus`.

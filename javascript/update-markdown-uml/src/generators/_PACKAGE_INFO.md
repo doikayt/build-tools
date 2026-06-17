@@ -1,0 +1,1 @@
+Diagram and table generators: builds the Mermaid flowchart (component overview with dependency arrows), per-package Mermaid class diagrams, and the Markdown summary table from discovered packages and import edges.

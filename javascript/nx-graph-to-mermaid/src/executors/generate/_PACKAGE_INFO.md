@@ -1,0 +1,1 @@
+NX executor entry point: resolves options, dispatches to `generate`, `inject`, `update`, or `check` mode, and writes the Mermaid diagram into a target Markdown file between `<!-- NX_GRAPH:START -->` / `<!-- NX_GRAPH:END -->` markers.

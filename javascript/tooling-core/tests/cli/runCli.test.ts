@@ -47,6 +47,23 @@ test("calls process.exit(0) for --help", () => {
   expect(mockExit).toHaveBeenCalledWith(0);
 });
 
+test("--version prints '<name> <semver>' and exits 0", async () => {
+  const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+
+  await runCli({
+    descriptor: descriptor,
+    processor: noopProcessor,
+    argv: ["--version"],
+  });
+
+  expect(mockExit).toHaveBeenCalledWith(0);
+  expect(consoleSpy).toHaveBeenCalledWith(
+    expect.stringMatching(/^test-plugin \d+\.\d+\.\d+/)
+  );
+
+  consoleSpy.mockRestore();
+});
+
 test("calls process.exit(1) on unknown option", () => {
   runCli({
     descriptor: descriptor,

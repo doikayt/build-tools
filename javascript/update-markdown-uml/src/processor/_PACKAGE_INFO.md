@@ -1,0 +1,1 @@
+Top-level `UmlFileProcessor`: orchestrates the full UML update pipeline — source root resolution, leaf discovery, import analysis, diagram generation, and Markdown injection — for a single target file.

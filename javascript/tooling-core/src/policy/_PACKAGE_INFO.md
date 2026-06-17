@@ -1,0 +1,1 @@
+Execution policy interface (`RunnerPolicy`) that controls per-file output decisions and error-handling strategy (abort vs. continue) for `RepositoryRunner`, shaped by CLI flags such as `--recursive`, `--verbose`, and `--quiet`.

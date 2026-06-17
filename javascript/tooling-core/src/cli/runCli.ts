@@ -11,6 +11,9 @@ import { runPlugin } from "./runPlugin.js";
 
 import { debugLog } from "../util/debugLog.js";
 import type { RepositoryStats } from "../repository/RepositoryRunner.js";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 
 export interface RunCliOptions<TConfig extends RunConfig = RunConfig> {
   descriptor: PluginDescriptor<TConfig>;
@@ -83,6 +86,26 @@ export async function runCli<TConfig extends RunConfig = RunConfig>(
   if (parsed.help) {
     printHelp(options.descriptor);
     process.exit(0); // Sets process exit code for when we terminate, but does not itself cause termination
+    return Promise.resolve({
+      updated: 0,
+      unchanged: 0,
+      needsUpdate: 0,
+      skipped: 0,
+    });
+  }
+
+  if (parsed.version) {
+    // All packages in this workspace are co-versioned via Changesets, so
+    // tooling-core's package.json version is authoritative for every plugin.
+    const pkgPath = join(
+      dirname(fileURLToPath(import.meta.url)),
+      "../../package.json"
+    );
+    const { version } = JSON.parse(readFileSync(pkgPath, "utf-8")) as {
+      version: string;
+    };
+    console.log(`${options.descriptor.name} ${version}`);
+    process.exit(0);
     return Promise.resolve({
       updated: 0,
       unchanged: 0,

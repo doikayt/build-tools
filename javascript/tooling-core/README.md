@@ -159,11 +159,11 @@ flowchart TB
 <!-- UML:components-table:START -->
 | Package | Description |
 |---------|-------------|
-| [cli](#cli) | TBD |
-| [markdown](#markdown) | TBD |
-| [policy](#policy) | TBD |
-| [repository](#repository) | TBD |
-| [util](#util) | TBD |
+| [cli](#cli) | CLI framework for tooling-core plugins: parses arguments via `parseStandardCli`, validates and wires plugin-declared flags, generates help output, resolves target file lists, and drives the full CLI lifecycle through `runCli` |
+| [markdown](#markdown) | Markdown utilities: marker-based content injection (`injectBetweenMarkers`), heading extraction, link extraction, fragment/relative/external link validation, and GitHub-compatible slug generation |
+| [policy](#policy) | Execution policy interface (`RunnerPolicy`) that controls per-file output decisions and error-handling strategy (abort vs |
+| [repository](#repository) | Repository orchestration layer: `RepositoryRunner` drives a `FileProcessor` over a list of files, accumulates `RepositoryStats`, and delegates per-file output and error decisions to a `RunnerPolicy` |
+| [util](#util) | Low-level utilities: deterministic lexicographic filesystem walker (`walkFiles`), `debugLog` helper, and concurrency primitives |
 <!-- UML:components-table:END -->
 
 <!-- UML:component-details:START -->
