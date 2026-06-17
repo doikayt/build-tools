@@ -19,12 +19,17 @@ export function buildMermaid(project: NxProjectJson, debug = false): string {
     a.localeCompare(b)
   );
   const nodeIdMap = prepareNodeIds(sortedTargetNames);
+  const caretTargets = collectCaretDeps(sortedTargetNames, targets);
   const lines: string[] = [];
 
   lines.push("graph TD");
   lines.push("");
 
   renderNodes(lines, sortedTargetNames, targets, nodeIdMap);
+  if (caretTargets.length > 0) {
+    lines.push("");
+    renderCaretNodes(lines, caretTargets);
+  }
   lines.push("");
   renderEdges(lines, sortedTargetNames, targets, nodeIdMap, project.name);
 
@@ -142,7 +147,12 @@ function renderEdges(
       .sort((a, b) => a.localeCompare(b));
 
     for (const dep of deps) {
-      if (dep.startsWith("^")) continue;
+      if (dep.startsWith("^")) {
+        lines.push(
+          `  ${nodeIdMap.get(name)!} --> ${caretNodeId(dep.slice(1))}`
+        );
+        continue;
+      }
 
       if (dep.includes(":")) {
         // Resolve same-project qualified refs (e.g. "my-project:some-target");
@@ -165,6 +175,37 @@ function renderEdges(
       lines.push(`  ${nodeIdMap.get(name)!} --> ${nodeIdMap.get(dep)!}`);
     }
   }
+}
+
+// --------------------------------------------------
+// Caret (upstream fan-out) dep handling
+// --------------------------------------------------
+
+// Collects the unique stripped names from all `^target` deps across every
+// target (e.g. "^build" → "build"). Sorted for deterministic output.
+function collectCaretDeps(
+  names: string[],
+  targets: Record<string, NxTarget>
+): string[] {
+  const seen = new Set<string>();
+  for (const name of names) {
+    for (const dep of targets[name].dependsOn ?? []) {
+      if (dep.startsWith("^")) seen.add(dep.slice(1));
+    }
+  }
+  return [...seen].sort((a, b) => a.localeCompare(b));
+}
+
+// Renders synthetic stadium-shaped nodes for each ^ fan-out dep.
+// Stadium shape visually distinguishes them from real local targets.
+function renderCaretNodes(lines: string[], caretTargets: string[]): void {
+  for (const target of caretTargets) {
+    lines.push(`  ${caretNodeId(target)}(["^${target}"])`);
+  }
+}
+
+function caretNodeId(target: string): string {
+  return `_caret_${sanitizeNodeId(target)}`;
 }
 
 // --------------------------------------------------

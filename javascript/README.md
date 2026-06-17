@@ -61,6 +61,9 @@ graph TD
   update_toc
   update_uml
 
+  _caret_build(["^build"])
+  _caret_test(["^test"])
+
   check_all --> check_docs
   check_all --> check_format
   check_all --> check_lint
@@ -68,6 +71,9 @@ graph TD
   check_docs --> check_mermaid
   check_docs --> check_toc
   check_docs --> check_uml
+  check_toc --> _caret_build
+  ci --> _caret_build
+  ci --> _caret_test
   ci --> check_all
   update_all --> format
   update_all --> update_docs
