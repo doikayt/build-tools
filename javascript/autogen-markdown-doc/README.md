@@ -181,12 +181,13 @@ npx autogen-markdown-doc check
 Conceptually:
 
 ```
-check(file) === no-op(update(file))
+check(update(file)) === TRUE     # check should always pass after one update cycle
 ```
 
-UML runs before TOC in the orchestrator, so component headings it injects
+Pro Tip: UML runs before TOC in the orchestrator, so component headings it injects
 (e.g. `#### cli`, `#### math-engine`) are already present by the time TOC scans
-the file — convergence happens in a single `update` pass.
+the file — convergence happens in a single `update` pass. 
+(Don't worry if this doesn't make sense yet!)
 
 ---
 

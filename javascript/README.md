@@ -40,6 +40,7 @@ These packages are:
 - Node >= 18
 
 ## Build Targets
+The visualization below is based on [this](./project.json) NX build configuration.
 <!-- NX_GRAPH:START -->
 ```mermaid
 graph TD

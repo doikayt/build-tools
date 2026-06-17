@@ -104,7 +104,7 @@ const descriptor: PluginDescriptor<MyPluginConfig> = {
 // 3. Implement your file processor.
 const processor: FileProcessor<MyPluginConfig> = {
   process(filePath: string, config: MyPluginConfig): ProcessingStatus {
-    if (config.skipJs) {
+    if (config.skipJs && filePath.endsWith(".js")) {
       return "skipped";
     }
     // ... transform filePath content here ...
