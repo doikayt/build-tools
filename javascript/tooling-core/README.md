@@ -157,8 +157,8 @@ flowchart TB
 <!-- UML:components:END -->
 
 <!-- UML:components-table:START -->
-| Package | Description |
-|---------|-------------|
+| Component | Description |
+|-----------|-------------|
 | [cli](#cli) | CLI framework for tooling-core plugins: parses arguments via `parseStandardCli`, validates and wires plugin-declared flags, generates help output, resolves target file lists, and drives the full CLI lifecycle through `runCli` |
 | [markdown](#markdown) | Markdown utilities: marker-based content injection (`injectBetweenMarkers`), heading extraction, link extraction, fragment/relative/external link validation, and GitHub-compatible slug generation |
 | [policy](#policy) | Execution policy interface (`RunnerPolicy`) that controls per-file output decisions and error-handling strategy (abort vs |

@@ -44,8 +44,8 @@ flowchart TB
 ### Components Table
 
 <!-- UML:components-table:START -->
-| Package | Description |
-|---------|-------------|
+| Component | Description |
+|-----------|-------------|
 | [cli](#cli) | Plugin wiring for `update-markdown-toc`: declares the `PluginDescriptor` (no custom flags) and the `afterRun` hook that triggers link validation when running in `--check` mode |
 | [engine](#engine) | TOC generation engine: parses Markdown headings (skipping fenced code blocks), generates GitHub-slugged anchor links, and injects the result between `<!-- TOC:START -->` / `<!-- TOC:END -->` markers |
 <!-- UML:components-table:END -->
