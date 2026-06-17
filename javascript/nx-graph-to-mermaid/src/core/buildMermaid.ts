@@ -252,8 +252,16 @@ function renderCrossProjectNodes(
   crossProjectDeps: string[]
 ): void {
   for (const dep of crossProjectDeps) {
-    lines.push(`  ${crossProjectNodeId(dep)}{{"${dep}"}}`);
+    lines.push(`  ${crossProjectNodeId(dep)}{{"${crossProjectLabel(dep)}"}}`);
   }
+}
+
+// Strip the org scope (everything up to and including the first "/") from
+// the display label so long scoped names fit inside hex nodes without
+// truncation. The full dep string is still encoded in the node ID.
+function crossProjectLabel(dep: string): string {
+  const slash = dep.indexOf("/");
+  return slash === -1 ? dep : dep.slice(slash + 1);
 }
 
 // Strip any leading underscores that sanitizeNodeId adds for non-alpha

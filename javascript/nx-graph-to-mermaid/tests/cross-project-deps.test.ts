@@ -16,7 +16,7 @@ graph TD
 
   ci
 
-  _xref_scope_pkg_build{{"@scope/pkg:build"}}
+  _xref_scope_pkg_build{{"pkg:build"}}
 
   ci --> _xref_scope_pkg_build
 ${"```"}`
@@ -39,7 +39,7 @@ graph TD
   ci
   deploy
 
-  _xref_scope_pkg_build{{"@scope/pkg:build"}}
+  _xref_scope_pkg_build{{"pkg:build"}}
 
   ci --> _xref_scope_pkg_build
   deploy --> _xref_scope_pkg_build
@@ -61,8 +61,8 @@ graph TD
 
   ci
 
-  _xref_scope_pkg_a_build{{"@scope/pkg-a:build"}}
-  _xref_scope_pkg_b_build{{"@scope/pkg-b:build"}}
+  _xref_scope_pkg_a_build{{"pkg-a:build"}}
+  _xref_scope_pkg_b_build{{"pkg-b:build"}}
 
   ci --> _xref_scope_pkg_a_build
   ci --> _xref_scope_pkg_b_build

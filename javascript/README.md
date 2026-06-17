@@ -53,7 +53,6 @@ graph TD
   check_types
   check_uml
   ci
-  format
   update_all
   update_docs
   update_format
@@ -64,18 +63,18 @@ graph TD
   _caret_build(["^build"])
   _caret_test(["^test"])
 
-  _xref_datalackey_autogen_markdown_doc_check_test_types{{"@datalackey/autogen-markdown-doc:check-test-types"}}
-  _xref_datalackey_nx_graph_to_mermaid_build{{"@datalackey/nx-graph-to-mermaid:build"}}
-  _xref_datalackey_nx_graph_to_mermaid_check_types{{"@datalackey/nx-graph-to-mermaid:check-types"}}
-  _xref_datalackey_nx_graph_to_mermaid_lint{{"@datalackey/nx-graph-to-mermaid:lint"}}
-  _xref_datalackey_tooling_core_check_types{{"@datalackey/tooling-core:check-types"}}
-  _xref_datalackey_tooling_core_lint{{"@datalackey/tooling-core:lint"}}
-  _xref_datalackey_update_markdown_toc_build{{"@datalackey/update-markdown-toc:build"}}
-  _xref_datalackey_update_markdown_toc_check_types{{"@datalackey/update-markdown-toc:check-types"}}
-  _xref_datalackey_update_markdown_toc_lint{{"@datalackey/update-markdown-toc:lint"}}
-  _xref_datalackey_update_markdown_uml_build{{"@datalackey/update-markdown-uml:build"}}
-  _xref_datalackey_update_markdown_uml_check_types{{"@datalackey/update-markdown-uml:check-types"}}
-  _xref_datalackey_update_markdown_uml_lint{{"@datalackey/update-markdown-uml:lint"}}
+  _xref_datalackey_autogen_markdown_doc_check_test_types{{"autogen-markdown-doc:check-test-types"}}
+  _xref_datalackey_nx_graph_to_mermaid_build{{"nx-graph-to-mermaid:build"}}
+  _xref_datalackey_nx_graph_to_mermaid_check_types{{"nx-graph-to-mermaid:check-types"}}
+  _xref_datalackey_nx_graph_to_mermaid_lint{{"nx-graph-to-mermaid:lint"}}
+  _xref_datalackey_tooling_core_check_types{{"tooling-core:check-types"}}
+  _xref_datalackey_tooling_core_lint{{"tooling-core:lint"}}
+  _xref_datalackey_update_markdown_toc_build{{"update-markdown-toc:build"}}
+  _xref_datalackey_update_markdown_toc_check_types{{"update-markdown-toc:check-types"}}
+  _xref_datalackey_update_markdown_toc_lint{{"update-markdown-toc:lint"}}
+  _xref_datalackey_update_markdown_uml_build{{"update-markdown-uml:build"}}
+  _xref_datalackey_update_markdown_uml_check_types{{"update-markdown-uml:check-types"}}
+  _xref_datalackey_update_markdown_uml_lint{{"update-markdown-uml:lint"}}
 
   check_all --> check_docs
   check_all --> check_format
@@ -99,7 +98,6 @@ graph TD
   ci --> _caret_build
   ci --> _caret_test
   ci --> check_all
-  update_all --> format
   update_all --> update_docs
   update_all --> update_format
   update_docs --> update_mermaid

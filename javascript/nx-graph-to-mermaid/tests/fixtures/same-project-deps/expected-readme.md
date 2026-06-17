@@ -13,7 +13,7 @@ graph TD
 
   _caret_build(["^build"])
 
-  _xref_datalackey_some_package_build{{"@datalackey/some-package:build"}}
+  _xref_datalackey_some_package_build{{"some-package:build"}}
 
   check_docs --> check_lint
   check_docs --> check_toc

@@ -90,7 +90,7 @@ graph TD
 
   _caret_build(["^build"])
 
-  _xref_other_pkg_build{{"@other/pkg:build"}}
+  _xref_other_pkg_build{{"pkg:build"}}
 
   ci --> _xref_other_pkg_build
   ci --> _caret_build
