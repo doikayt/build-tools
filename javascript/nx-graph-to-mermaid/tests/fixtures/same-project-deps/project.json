@@ -1,0 +1,17 @@
+{
+  "name": "my-workspace",
+  "targets": {
+    "check-toc": {},
+    "check-lint": {},
+    "check-docs": {
+      "dependsOn": ["my-workspace:check-lint", "my-workspace:check-toc"]
+    },
+    "ci": {
+      "dependsOn": [
+        "my-workspace:check-docs",
+        "^build",
+        "@datalackey/some-package:build"
+      ]
+    }
+  }
+}

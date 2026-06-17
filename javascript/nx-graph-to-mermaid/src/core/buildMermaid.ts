@@ -6,6 +6,7 @@ interface NxTarget {
 }
 
 export interface NxProjectJson {
+  name?: string;
   targets?: Record<string, NxTarget>;
 }
 
@@ -25,7 +26,7 @@ export function buildMermaid(project: NxProjectJson, debug = false): string {
 
   renderNodes(lines, sortedTargetNames, targets, nodeIdMap);
   lines.push("");
-  renderEdges(lines, sortedTargetNames, targets, nodeIdMap);
+  renderEdges(lines, sortedTargetNames, targets, nodeIdMap, project.name);
 
   const body = lines.join("\n");
   debugLog(dbg, `buildMermaid: generated length=${body.length}`);
@@ -132,7 +133,8 @@ function renderEdges(
   lines: string[],
   names: string[],
   targets: Record<string, NxTarget>,
-  nodeIdMap: Map<string, string>
+  nodeIdMap: Map<string, string>,
+  projectName?: string
 ): void {
   for (const name of names) {
     const deps = (targets[name].dependsOn ?? [])
@@ -140,16 +142,27 @@ function renderEdges(
       .sort((a, b) => a.localeCompare(b));
 
     for (const dep of deps) {
-      // Skip cross-project refs (project:target) and NX ^ shorthand — not renderable in a single-project diagram
-      if (dep.includes(":") || dep.startsWith("^")) continue;
+      if (dep.startsWith("^")) continue;
+
+      if (dep.includes(":")) {
+        // Resolve same-project qualified refs (e.g. "my-project:some-target");
+        // skip cross-project refs and unresolvable refs when project name is unknown.
+        const colon = dep.indexOf(":");
+        const refProject = dep.slice(0, colon);
+        const refTarget = dep.slice(colon + 1);
+        if (refProject === projectName && targets[refTarget] !== undefined) {
+          lines.push(
+            `  ${nodeIdMap.get(name)!} --> ${nodeIdMap.get(refTarget)!}`
+          );
+        }
+        continue;
+      }
 
       if (targets[dep] === undefined) {
         throw new Error(`Target "${name}" depends on missing target "${dep}"`);
       }
 
-      const fromId = nodeIdMap.get(name)!;
-      const toId = nodeIdMap.get(dep)!;
-      lines.push(`  ${fromId} --> ${toId}`);
+      lines.push(`  ${nodeIdMap.get(name)!} --> ${nodeIdMap.get(dep)!}`);
     }
   }
 }

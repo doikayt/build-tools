@@ -61,6 +61,20 @@ graph TD
   update_toc
   update_uml
 
+  check_all --> check_docs
+  check_all --> check_format
+  check_all --> check_lint
+  check_all --> check_types
+  check_docs --> check_mermaid
+  check_docs --> check_toc
+  check_docs --> check_uml
+  ci --> check_all
+  update_all --> format
+  update_all --> update_docs
+  update_all --> update_format
+  update_docs --> update_mermaid
+  update_docs --> update_toc
+  update_docs --> update_uml
 ```
 <!-- NX_GRAPH:END -->
 
