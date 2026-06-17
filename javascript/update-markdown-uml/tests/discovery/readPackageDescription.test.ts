@@ -15,11 +15,11 @@ afterEach(() => {
 });
 
 function write(content: string): void {
-  fs.writeFileSync(path.join(tmpDir, "_PACKAGE_INFO.md"), content, "utf-8");
+  fs.writeFileSync(path.join(tmpDir, "_COMPONENT_INFO.md"), content, "utf-8");
 }
 
 describe("readPackageDescription()", () => {
-  test("no _PACKAGE_INFO.md returns undefined", () => {
+  test("no _COMPONENT_INFO.md returns undefined", () => {
     const result = readPackageDescription(tmpDir);
     expect(result).toBeUndefined();
   });
@@ -39,7 +39,7 @@ describe("readPackageDescription()", () => {
     const result = readPackageDescription(tmpDir);
     expect(result).toBeUndefined();
     expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining("_PACKAGE_INFO.md")
+      expect.stringContaining("_COMPONENT_INFO.md")
     );
     expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("period"));
     warnSpy.mockRestore();
@@ -80,11 +80,11 @@ describe("readPackageDescription()", () => {
 
   test("period inside inline code span is not treated as sentence end", () => {
     write(
-      "Leaf package discovery: locates subdirectories that contain qualifying `.ts` files, and reads their `_PACKAGE_INFO.md` descriptions."
+      "Leaf package discovery: locates subdirectories that contain qualifying `.ts` files, and reads their `_COMPONENT_INFO.md` descriptions."
     );
     const result = readPackageDescription(tmpDir);
     expect(result).toBe(
-      "Leaf package discovery: locates subdirectories that contain qualifying `.ts` files, and reads their `_PACKAGE_INFO.md` descriptions"
+      "Leaf package discovery: locates subdirectories that contain qualifying `.ts` files, and reads their `_COMPONENT_INFO.md` descriptions"
     );
   });
 

@@ -60,7 +60,7 @@ Consistent with the rest of this plugin ecosystem:
 ### Convention Over Configuration
 
 - Source root is discovered by convention (`src/` if present, else package root)
-- Package descriptions are read from `_PACKAGE_INFO.md` in each leaf directory
+- Package descriptions are read from `_COMPONENT_INFO.md` in each leaf directory
 - No config file required for the common case
 
 ---
@@ -140,11 +140,11 @@ A Markdown table immediately below the overview diagram:
 | repository | File traversal, processing orchestration, and stats |
 
 Component names are clickable links to the corresponding component details section.
-Description sourced from the first line of `_PACKAGE_INFO.md` in each leaf
+Description sourced from the first line of `_COMPONENT_INFO.md` in each leaf
 directory. If absent or blank, the table shows `TBD` in the description column.
 This is intentional — a visible `TBD` signals that a description is missing.
 To suppress `TBD` without providing a description, create an empty
-`_PACKAGE_INFO.md` with a blank first line.
+`_COMPONENT_INFO.md` with a blank first line.
 
 ### Component Details Section
 
@@ -183,7 +183,7 @@ at least one `.ts` file (excluding `*.spec.ts` and `*.test.ts`).
 
 ## Component Description Convention
 
-Each leaf directory may contain `_PACKAGE_INFO.md`. The underscore prefix:
+Each leaf directory may contain `_COMPONENT_INFO.md`. The underscore prefix:
 
 - Forces lexicographic sort to top of directory listing in IDEs
 - Clearly signals metadata rather than source
@@ -194,9 +194,9 @@ or known limitations — preserved for human readers, ignored by the plugin.
 
 Priority order:
 
-1. First line of `_PACKAGE_INFO.md` in leaf directory
+1. First line of `_COMPONENT_INFO.md` in leaf directory
 2. `TBD` — visible signal that a description is missing. Plugin documentation will mention that in order  to suppress 
-   this message an empty `_PACKAGE_INFO.md` file must be created with a blank first line.
+   this message an empty `_COMPONENT_INFO.md` file must be created with a blank first line.
 
 ---
 

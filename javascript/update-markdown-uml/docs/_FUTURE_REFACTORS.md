@@ -105,7 +105,7 @@ Benefits of consolidation:
 - `autogen-markdown-doc` integration — deferred to a subsequent release
 - Cross-package type-level relationship arrows in the overview diagram
 - Recursive repository traversal — one source tree and one injection target per invocation
-- Auto-generation of `_PACKAGE_INFO.md` files
+- Auto-generation of `_COMPONENT_INFO.md` files
 - Per-type exclusion in `autogen-markdown-doc` integration
 - Diagram caching or incremental regeneration
 

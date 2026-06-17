@@ -16,7 +16,7 @@ describe("stripInlineCode", () => {
 
   test("multiple spans leave no backticks behind", () => {
     const result = stripInlineCode(
-      "qualifying `.ts` files and `_PACKAGE_INFO.md` descriptions"
+      "qualifying `.ts` files and `_COMPONENT_INFO.md` descriptions"
     );
     expect(result).not.toContain("`");
     expect(result).toBe("qualifying  files and  descriptions");

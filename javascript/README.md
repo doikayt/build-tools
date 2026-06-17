@@ -27,7 +27,7 @@ For maintainer and contributor documentation see: [here](./docs/CONTRIBUTING.md)
 - [`@datalackey/nx-graph-to-mermaid`](./nx-graph-to-mermaid/README.md)
   - NX executor plugin that generates deterministic Mermaid task-flow diagrams from `project.json` target definitions
 - [`@datalackey/update-markdown-uml`](./update-markdown-uml/README.md)
-  - CLI tool that generates and validates UML class and package diagrams for TypeScript source trees, injecting them into Markdown documentation files
+  - CLI tool that generates and validates UML class and component diagrams for TypeScript source trees, injecting them into Markdown documentation files
 - [`@datalackey/autogen-markdown-doc`](./autogen-markdown-doc/README.md)
   - CLI tool that bundles the above referenced packages with opinionated defaults -- enabling 
     repository-wide gen/update of TOCs, and supported diagrams (build dependencies, and UML), all via a single command. 

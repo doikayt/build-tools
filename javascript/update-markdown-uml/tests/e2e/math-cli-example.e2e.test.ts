@@ -118,7 +118,7 @@ describe("math-cli-example e2e", () => {
     // cross-package dependency arrow
     expect(content).toContain("cli --> math-engine");
 
-    // packages table with clickable links and descriptions from _PACKAGE_INFO.md
+    // components table with clickable links and descriptions from _COMPONENT_INFO.md
     expect(content).toContain("| [cli](#cli) | Command-line interface layer");
     expect(content).toContain(
       "| [math-engine](#math-engine) | Code for System Backend"

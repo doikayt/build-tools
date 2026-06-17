@@ -1,10 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const PACKAGE_INFO_FILE = "_PACKAGE_INFO.md";
+const PACKAGE_INFO_FILE = "_COMPONENT_INFO.md";
 
 /**
- * Reads the first sentence (ending with '.') from _PACKAGE_INFO.md in leafDir.
+ * Reads the first sentence (ending with '.') from _COMPONENT_INFO.md in leafDir.
  * Collapses whitespace and newlines before extracting the sentence so
  * descriptions that wrap across lines are handled correctly.
  * Returns undefined if the file is absent, empty, or contains no period.

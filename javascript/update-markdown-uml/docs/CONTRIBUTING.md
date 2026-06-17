@@ -44,8 +44,8 @@ flowchart TB
 |---------|-------------|
 | [analysis](#analysis) | TypeScript import analysis: uses `ts-morph` to walk source files across leaf directories and collect directed cross-leaf import edges, which become the dependency arrows in generated component diagrams |
 | [cli](#cli) | Plugin wiring for `update-markdown-uml`: declares the `PluginDescriptor` with `--source` and `--exclude-packages` flags, `UmlRunConfig` type, option parsing, and config validation |
-| [discovery](#discovery) | Leaf package discovery: locates subdirectories under a source root that contain qualifying `.ts` files, and reads their `_PACKAGE_INFO.md` descriptions for use in diagram table rows |
-| [generators](#generators) | Diagram and table generators: builds the Mermaid flowchart (component overview with dependency arrows), per-package Mermaid class diagrams, and the Markdown summary table from discovered packages and import edges |
+| [discovery](#discovery) | Leaf component discovery: locates subdirectories under a source root that contain qualifying `.ts` files, and reads their `_COMPONENT_INFO.md` descriptions for use in diagram table rows |
+| [generators](#generators) | Diagram and table generators: builds the Mermaid flowchart (component overview with dependency arrows), per-component Mermaid class diagrams, and the Markdown summary table from discovered components and import edges |
 | [markdown](#markdown) | UML section injection: locates and replaces the three managed UML marker blocks (`UML:components`, `UML:components-table`, `UML:component-details`) within a target Markdown file |
 | [processor](#processor) | Top-level `UmlFileProcessor`: orchestrates the full UML update pipeline — source root resolution, leaf discovery, import analysis, diagram generation, and Markdown injection — for a single target file |
 <!-- UML:components-table:END -->

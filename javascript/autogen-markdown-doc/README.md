@@ -288,7 +288,7 @@ flowchart TB
 ```
 
 **Components table** — injected between `UML:components-table:START` / `UML:components-table:END`
-markers. Descriptions are read from `_PACKAGE_INFO.md` files in each component directory:
+markers. Descriptions are read from `_COMPONENT_INFO.md` files in each component directory:
 
 | Component | Description |
 |-----------|-------------|

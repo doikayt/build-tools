@@ -183,7 +183,7 @@ flowchart TB
 ```
 
 **Components table** — names link to the class diagram section below.
-Descriptions are read from an optional `_PACKAGE_INFO.md` file in each
+Descriptions are read from an optional `_COMPONENT_INFO.md` file in each
 component directory; `TBD` appears when the file is absent.
 
 | Component | Description |
