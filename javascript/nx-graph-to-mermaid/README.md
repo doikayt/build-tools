@@ -446,9 +446,9 @@ This package is one component of a small ecosystem of JavaScript tooling plugins
 
 ## Contributing and Releasing
 
-For development setup, build workflow, and release procedures (including how to
+For code overview, development setup, build workflow, and release procedures (including how to
 trigger a publish via Changesets), see
-[CONTRIBUTING.md](../docs/CONTRIBUTING.md).
+[CONTRIBUTING.md](./docs/CONTRIBUTING.md).
 
 ---
 

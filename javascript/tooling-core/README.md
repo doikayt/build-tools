@@ -364,8 +364,10 @@ For the full workspace tech stack see: [TECH-STACK.md](../TECH-STACK.md)
 
 ## Contributing
 
-See [javascript/docs/CONTRIBUTING.md](../docs/CONTRIBUTING.md) for workspace-level
-setup, build pipeline, and release workflow.
+For code overview, development setup, build workflow, and release procedures (including how to
+trigger a publish via Changesets), see
+[CONTRIBUTING.md](./docs/CONTRIBUTING.md).
+
 
 ---
 
