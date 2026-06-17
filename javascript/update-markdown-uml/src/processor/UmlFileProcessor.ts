@@ -34,7 +34,7 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
     const leafNames = leafDirs.map((d) => path.basename(d));
 
     // Warn about excluded components not found
-    for (const excluded of config.excludePackages) {
+    for (const excluded of config.excludeComponents) {
       if (!leafNames.includes(excluded)) {
         if (!config.quiet) {
           console.warn(
@@ -45,7 +45,7 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
     }
 
     const activeLeafDirs = leafDirs.filter(
-      (d) => !config.excludePackages.includes(path.basename(d))
+      (d) => !config.excludeComponents.includes(path.basename(d))
     );
     const activeLeafNames = activeLeafDirs.map((d) => path.basename(d));
 

@@ -17,7 +17,7 @@
   - [Source Discovery](#source-discovery)
   - [Component Description Convention](#component-description-convention)
   - [CLI Interface](#cli-interface)
-    - [`--exclude-packages` / `-x`](#--exclude-packages---x)
+    - [`--exclude-components` / `-x`](#--exclude-components---x)
   - [Check Mode](#check-mode)
   - [Recursive Mode](#recursive-mode)
   - [Output and Summary](#output-and-summary)
@@ -213,14 +213,14 @@ Plugin-specific options:
 | Flag | Short | Description |
 |------|-------|-------------|
 | `--source <path>` | `-s` | Override source root discovery |
-| `--exclude-packages <names>` | `-x` | Comma-separated leaf directory names to exclude from all diagram output |
+| `--exclude-components <names>` | `-x` | Comma-separated leaf directory names to exclude from all diagram output |
 | `--no-properties` | | Omit property types from class diagrams |
 | `--no-modifiers` | | Omit visibility modifiers from class diagrams |
 
 Short flags are provided for options used in everyday invocation (`-s`, `-x`).
 Cosmetic toggles (`--no-properties`, `--no-modifiers`) are long-form only.
 
-### `--exclude-packages` / `-x`
+### `--exclude-components` / `-x`
 
 Accepts a comma-separated list of component names (directory names, not paths).
 Excluded components are omitted from the overview diagram, the details table,

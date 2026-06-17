@@ -267,12 +267,12 @@ describe("Using Bundled Plugins Independently (README scenarios)", () => {
     expect(content).toContain("classDiagram");
   });
 
-  test("update-markdown-uml standalone — with --exclude-packages", () => {
+  test("update-markdown-uml standalone — with --exclude-components", () => {
     writeReadme();
     const umlBin = pluginBin("update-markdown-uml", "update-markdown-uml.js");
 
     const { exitCode } = runPlugin(umlBin, [
-      "--exclude-packages",
+      "--exclude-components",
       "math-engine",
       "README.md",
     ]);
@@ -283,12 +283,12 @@ describe("Using Bundled Plugins Independently (README scenarios)", () => {
     expect(content).not.toContain('subgraph math-engine["math-engine"]');
   });
 
-  test("update-markdown-uml via uber plugin — with --exclude-packages forwarded from autogen-markdown-doc", () => {
+  test("update-markdown-uml via uber plugin — with --exclude-components forwarded from autogen-markdown-doc", () => {
     writeReadme();
 
     const { exitCode } = runBinary([
       "update",
-      "--exclude-packages",
+      "--exclude-components",
       "math-engine",
       "README.md",
     ]);

@@ -5,7 +5,7 @@ import type { UmlRunConfig } from "./UmlRunConfig.js";
 const DEFAULT_SOURCE_ROOT = "src";
 
 export function validateUmlConfig(config: UmlRunConfig): void {
-  if (config.excludePackages.length === 0) {
+  if (config.excludeComponents.length === 0) {
     return;
   }
 
@@ -25,7 +25,7 @@ export function validateUmlConfig(config: UmlRunConfig): void {
       .map((entry) => entry.name)
   );
 
-  for (const excluded of config.excludePackages) {
+  for (const excluded of config.excludeComponents) {
     if (!leafDirs.has(excluded)) {
       if (!config.quiet) {
         console.log(

@@ -26,7 +26,7 @@ function makeConfig(overrides: Partial<UmlRunConfig> = {}): UmlRunConfig {
     exclude: [],
     validateExternalLinks: false,
     linkTimeoutMs: 3000,
-    excludePackages: [],
+    excludeComponents: [],
     sourceRoot: undefined,
     skipTestPatterns: [],
     ...overrides,

@@ -43,7 +43,7 @@ flowchart TB
 | Component | Description |
 |-----------|-------------|
 | [analysis](#analysis) | TypeScript import analysis: uses `ts-morph` to walk source files across leaf directories and collect directed cross-leaf import edges, which become the dependency arrows in generated component diagrams |
-| [cli](#cli) | Plugin wiring for `update-markdown-uml`: declares the `PluginDescriptor` with `--source` and `--exclude-packages` flags, `UmlRunConfig` type, option parsing, and config validation |
+| [cli](#cli) | Plugin wiring for `update-markdown-uml`: declares the `PluginDescriptor` with `--source` and `--exclude-components` flags, `UmlRunConfig` type, option parsing, and config validation |
 | [discovery](#discovery) | Leaf component discovery: locates subdirectories under a source root that contain qualifying `.ts` files, and reads their `_COMPONENT_INFO.md` descriptions for use in diagram table rows |
 | [generators](#generators) | Diagram and table generators: builds the Mermaid flowchart (component overview with dependency arrows), per-component Mermaid class diagrams, and the Markdown summary table from discovered components and import edges |
 | [markdown](#markdown) | UML section injection: locates and replaces the three managed UML marker blocks (`UML:components`, `UML:components-table`, `UML:component-details`) within a target Markdown file |
@@ -70,7 +70,7 @@ classDiagram
   direction TB
   class UmlRunConfig {
     <<interface>>
-    +excludePackages string[]
+    +excludeComponents string[]
     +sourceRoot string | undefined
     +skipTestPatterns string[]
   }

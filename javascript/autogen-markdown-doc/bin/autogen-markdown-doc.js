@@ -18,7 +18,7 @@ Positional:
   file                Target Markdown file  (default: README.md in cwd)
 
 Options:
-  --exclude-packages <pkg1,pkg2>  Forwarded to UML generation only
+  --exclude-components <pkg1,pkg2>  Forwarded to UML generation only
                                   (leaf directory names under src/ to skip)
   --quiet                         Suppress all non-error output,
                                   including the "no markers" warning
@@ -50,7 +50,7 @@ const UML_MARKER_PAIRS = [
 
 function parseArgs(argv) {
   const args = argv.slice(2);
-  let excludePackages = undefined;
+  let excludeComponents = undefined;
   let quiet = false;
   let debug = false;
   let help = false;
@@ -64,13 +64,13 @@ function parseArgs(argv) {
       quiet = true;
     } else if (arg === "--debug" || arg === "-d") {
       debug = true;
-    } else if (arg === "--exclude-packages") {
+    } else if (arg === "--exclude-components") {
       const next = args[i + 1];
       if (next === undefined || next.startsWith("-")) {
-        console.error("ERROR: --exclude-packages requires a value");
+        console.error("ERROR: --exclude-components requires a value");
         process.exit(1);
       }
-      excludePackages = next;
+      excludeComponents = next;
       i++;
     } else if (arg.startsWith("-")) {
       console.error(`ERROR: Unknown option: ${arg}`);
@@ -90,7 +90,7 @@ function parseArgs(argv) {
     filePath = positionals[0];
   }
 
-  return { subcommand, filePath, excludePackages, quiet, debug, help };
+  return { subcommand, filePath, excludeComponents, quiet, debug, help };
 }
 
 function dbg(enabled, message) {
@@ -125,7 +125,7 @@ async function main() {
   const {
     subcommand,
     filePath: rawFilePath,
-    excludePackages,
+    excludeComponents,
     quiet,
     debug,
     help,
@@ -205,8 +205,8 @@ async function main() {
     const umlBin = require.resolve(
       "@datalackey/update-markdown-uml/bin/update-markdown-uml.js"
     );
-    const excludeArgs = excludePackages
-      ? ["--exclude-packages", excludePackages]
+    const excludeArgs = excludeComponents
+      ? ["--exclude-components", excludeComponents]
       : [];
     spawnPlugin(umlBin, [...commonFlags, ...excludeArgs, resolvedFilePath]);
   } else {

@@ -15,7 +15,7 @@ function makeConfig(overrides: Partial<UmlRunConfig> = {}): UmlRunConfig {
     exclude: [],
     validateExternalLinks: false,
     linkTimeoutMs: 3000,
-    excludePackages: [],
+    excludeComponents: [],
     sourceRoot: undefined,
     skipTestPatterns: [],
     ...overrides,
@@ -35,13 +35,13 @@ afterEach(() => {
 });
 
 describe("validateUmlConfig()", () => {
-  test("no warning when excludePackages is empty", () => {
+  test("no warning when excludeComponents list is empty", () => {
     const spy = vi.spyOn(console, "log").mockImplementation(() => {});
     const tmpRoot = makeTmpSourceRoot(["cli", "repository"]);
 
     validateUmlConfig(
       makeConfig({
-        excludePackages: [],
+        excludeComponents: [],
         sourceRoot: tmpRoot,
       })
     );
@@ -50,13 +50,13 @@ describe("validateUmlConfig()", () => {
     fs.rmSync(tmpRoot, { recursive: true, force: true });
   });
 
-  test("no warning when all excluded packages exist in source root", () => {
+  test("no warning when all excluded components exist in source root", () => {
     const spy = vi.spyOn(console, "log").mockImplementation(() => {});
     const tmpRoot = makeTmpSourceRoot(["cli", "repository", "policy"]);
 
     validateUmlConfig(
       makeConfig({
-        excludePackages: ["cli", "policy"],
+        excludeComponents: ["cli", "policy"],
         sourceRoot: tmpRoot,
       })
     );
@@ -65,13 +65,13 @@ describe("validateUmlConfig()", () => {
     fs.rmSync(tmpRoot, { recursive: true, force: true });
   });
 
-  test("warns when excluded package not found in source root", () => {
+  test("warns when excluded component not found in source root", () => {
     const spy = vi.spyOn(console, "log").mockImplementation(() => {});
     const tmpRoot = makeTmpSourceRoot(["cli", "repository"]);
 
     validateUmlConfig(
       makeConfig({
-        excludePackages: ["nonexistent"],
+        excludeComponents: ["nonexistent"],
         sourceRoot: tmpRoot,
       })
     );
@@ -81,13 +81,13 @@ describe("validateUmlConfig()", () => {
     fs.rmSync(tmpRoot, { recursive: true, force: true });
   });
 
-  test("warns once per missing package", () => {
+  test("warns once per missing component", () => {
     const spy = vi.spyOn(console, "log").mockImplementation(() => {});
     const tmpRoot = makeTmpSourceRoot(["cli"]);
 
     validateUmlConfig(
       makeConfig({
-        excludePackages: ["missing-a", "missing-b"],
+        excludeComponents: ["missing-a", "missing-b"],
         sourceRoot: tmpRoot,
       })
     );
@@ -102,7 +102,7 @@ describe("validateUmlConfig()", () => {
 
     validateUmlConfig(
       makeConfig({
-        excludePackages: ["nonexistent"],
+        excludeComponents: ["nonexistent"],
         sourceRoot: tmpRoot,
         quiet: true,
       })
@@ -117,7 +117,7 @@ describe("validateUmlConfig()", () => {
 
     validateUmlConfig(
       makeConfig({
-        excludePackages: ["cli"],
+        excludeComponents: ["cli"],
         sourceRoot: "/definitely/does/not/exist",
       })
     );
@@ -131,7 +131,7 @@ describe("validateUmlConfig()", () => {
 
     validateUmlConfig(
       makeConfig({
-        excludePackages: ["nonexistent"],
+        excludeComponents: ["nonexistent"],
         sourceRoot: tmpRoot,
       })
     );

@@ -9,7 +9,7 @@ export const descriptor: PluginDescriptor<UmlRunConfig> = {
     "Generate and validate UML class and component diagrams for TypeScript source trees",
   options: [
     {
-      flag: "--exclude-packages",
+      flag: "--exclude-components",
       description:
         "Leaf component directory names to exclude from diagram generation",
       requiresValue: true,

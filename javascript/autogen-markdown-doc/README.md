@@ -86,7 +86,7 @@ npx autogen-markdown-doc update
 npx autogen-markdown-doc update docs/OVERVIEW.md
 
 # Skip specific UML source packages
-npx autogen-markdown-doc update --exclude-packages legacy,deprecated
+npx autogen-markdown-doc update --exclude-components legacy,deprecated
 ```
 
 ---
@@ -133,7 +133,7 @@ the underlying packages directly (see [Using Bundled Plugins Independently](#usi
 
 | Option | Description |
 |---|---|
-| `--exclude-packages <pkg1,pkg2>` | Forwarded to UML generation only; leaf directory names under `src/` to skip |
+| `--exclude-components <pkg1,pkg2>` | Forwarded to UML generation only; leaf directory names under `src/` to skip |
 | `--quiet` | Suppress all non-error output, including the "no markers" warning |
 | `--debug` | Print debug diagnostics to stderr |
 | `--help` | Show this help message and exit (exit 0) |
@@ -156,7 +156,7 @@ npx update-markdown-toc --recursive docs/
 npx update-markdown-uml README.md
 
 # UML with exclusions
-npx update-markdown-uml --exclude-packages legacy,deprecated README.md
+npx update-markdown-uml --exclude-components legacy,deprecated README.md
 
 # CI drift check — single plugin
 npx update-markdown-toc --check README.md

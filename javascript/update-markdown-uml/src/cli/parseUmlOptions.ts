@@ -5,8 +5,8 @@ export function parseUmlOptions(
   standard: RunConfig,
   passthrough: Map<string, string | boolean>
 ): UmlRunConfig {
-  const rawExclude = passthrough.get("--exclude-packages");
-  const excludePackages: string[] =
+  const rawExclude = passthrough.get("--exclude-components");
+  const excludeComponents: string[] =
     typeof rawExclude === "string" && rawExclude.length > 0
       ? rawExclude
           .split(",")
@@ -30,7 +30,7 @@ export function parseUmlOptions(
 
   return {
     ...standard,
-    excludePackages: excludePackages,
+    excludeComponents: excludeComponents,
     sourceRoot: sourceRoot,
     skipTestPatterns: skipTestPatterns,
   };

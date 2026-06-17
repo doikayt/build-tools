@@ -96,7 +96,7 @@ update-markdown-uml [options] <file>
 
 Options:
   --source <path>                   Override source root discovery (default: src/)
-  --exclude-packages <pkg1,pkg2>    Leaf directory names to exclude from all output
+  --exclude-components <cmp1,cmp2>  Leaf directory names to exclude from all output
   --check                           Do not write; exit non-zero if content is stale
   --verbose                         Print per-component type counts
   --quiet                           Suppress all non-error output
