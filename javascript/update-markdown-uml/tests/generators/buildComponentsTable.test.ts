@@ -1,18 +1,20 @@
 import { describe, test, expect } from "vitest";
-import { buildPackagesTable } from "../../src/generators/buildPackagesTable.js";
+import { buildComponentsTable } from "../../src/generators/buildComponentsTable.js";
 
 const CLI = "cli";
 const REPOSITORY = "repository";
 const UTIL = "util";
 
-describe("buildPackagesTable()", () => {
-  test("empty packages produces header only", () => {
-    const result = buildPackagesTable([], new Map());
-    expect(result).toBe("| Package | Description |\n|---------|-------------|");
+describe("buildComponentsTable()", () => {
+  test("empty components produces header only", () => {
+    const result = buildComponentsTable([], new Map());
+    expect(result).toBe(
+      "| Component | Description |\n|-----------|-------------|"
+    );
   });
 
-  test("single package with description renders row", () => {
-    const result = buildPackagesTable(
+  test("single component with description renders row", () => {
+    const result = buildComponentsTable(
       [CLI],
       new Map([[CLI, "CLI parsing and option wiring"]])
     );
@@ -21,22 +23,22 @@ describe("buildPackagesTable()", () => {
   });
 
   test("missing description renders TBD", () => {
-    const result = buildPackagesTable([CLI], new Map([[CLI, undefined]]));
+    const result = buildComponentsTable([CLI], new Map([[CLI, undefined]]));
     expect(result).toContain("TBD");
   });
 
-  test("package absent from descriptions map renders TBD", () => {
-    const result = buildPackagesTable([CLI], new Map());
+  test("component absent from descriptions map renders TBD", () => {
+    const result = buildComponentsTable([CLI], new Map());
     expect(result).toContain("TBD");
   });
 
-  test("package name is a clickable link", () => {
-    const result = buildPackagesTable([CLI], new Map([[CLI, "desc"]]));
+  test("component name is a clickable link", () => {
+    const result = buildComponentsTable([CLI], new Map([[CLI, "desc"]]));
     expect(result).toContain(`[${CLI}](#${CLI})`);
   });
 
-  test("packages rendered in lexicographic order", () => {
-    const result = buildPackagesTable(
+  test("components rendered in lexicographic order", () => {
+    const result = buildComponentsTable(
       [UTIL, CLI, REPOSITORY],
       new Map([
         [CLI, "cli desc"],
@@ -52,8 +54,8 @@ describe("buildPackagesTable()", () => {
     console.log(result);
   });
 
-  test("multiple packages all appear in output", () => {
-    const result = buildPackagesTable(
+  test("multiple components all appear in output", () => {
+    const result = buildComponentsTable(
       [CLI, REPOSITORY, UTIL],
       new Map([
         [CLI, "cli desc"],
@@ -71,8 +73,8 @@ describe("buildPackagesTable()", () => {
       [CLI, "cli desc"],
       [UTIL, "util desc"],
     ]);
-    const first = buildPackagesTable([CLI, UTIL], descriptions);
-    const second = buildPackagesTable([CLI, UTIL], descriptions);
+    const first = buildComponentsTable([CLI, UTIL], descriptions);
+    const second = buildComponentsTable([CLI, UTIL], descriptions);
     expect(first).toBe(second);
   });
 });

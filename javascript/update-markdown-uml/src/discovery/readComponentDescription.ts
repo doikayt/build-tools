@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const PACKAGE_INFO_FILE = "_COMPONENT_INFO.md";
+const COMPONENT_INFO_FILE = "_COMPONENT_INFO.md";
 
 /**
  * Reads the first sentence (ending with '.') from _COMPONENT_INFO.md in leafDir.
@@ -10,11 +10,11 @@ const PACKAGE_INFO_FILE = "_COMPONENT_INFO.md";
  * Returns undefined if the file is absent, empty, or contains no period.
  * Warns if content is present but no period is found.
  */
-export function readPackageDescription(
+export function readComponentDescription(
   leafDir: string,
   onWarn?: (message: string) => void
 ): string | undefined {
-  const filePath = path.join(leafDir, PACKAGE_INFO_FILE);
+  const filePath = path.join(leafDir, COMPONENT_INFO_FILE);
 
   if (!fs.existsSync(filePath)) {
     return undefined;

@@ -3,7 +3,7 @@ import path from "node:path";
 
 /**
  * Extracts the names of all classes, interfaces, and type aliases from a
- * leaf package directory. Standalone functions are excluded by design.
+ * leaf component directory. Standalone functions are excluded by design.
  * Both exported and non-exported declarations are included.
  * Returns a sorted list of unique names.
  */

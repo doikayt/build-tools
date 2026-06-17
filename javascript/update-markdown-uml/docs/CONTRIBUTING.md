@@ -40,8 +40,8 @@ flowchart TB
 ### Components Table
 
 <!-- UML:components-table:START -->
-| Package | Description |
-|---------|-------------|
+| Component | Description |
+|-----------|-------------|
 | [analysis](#analysis) | TypeScript import analysis: uses `ts-morph` to walk source files across leaf directories and collect directed cross-leaf import edges, which become the dependency arrows in generated component diagrams |
 | [cli](#cli) | Plugin wiring for `update-markdown-uml`: declares the `PluginDescriptor` with `--source` and `--exclude-packages` flags, `UmlRunConfig` type, option parsing, and config validation |
 | [discovery](#discovery) | Leaf component discovery: locates subdirectories under a source root that contain qualifying `.ts` files, and reads their `_COMPONENT_INFO.md` descriptions for use in diagram table rows |

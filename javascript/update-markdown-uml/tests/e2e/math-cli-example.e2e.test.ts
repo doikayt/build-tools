@@ -104,7 +104,7 @@ function runBinary(args: string[]): {
 }
 
 describe("math-cli-example e2e", () => {
-  test("update mode injects mermaid content for both packages", () => {
+  test("update mode injects mermaid content for both components", () => {
     writeReadme();
 
     const { exitCode } = runBinary(["README.md"]);
@@ -112,10 +112,10 @@ describe("math-cli-example e2e", () => {
 
     const content = fs.readFileSync(path.join(workDir, "README.md"), "utf-8");
 
-    // flowchart overview with both packages present
+    // flowchart overview with both components present
     expect(content).toContain('subgraph cli["cli"]');
     expect(content).toContain('subgraph math-engine["math-engine"]');
-    // cross-package dependency arrow
+    // cross-component dependency arrow
     expect(content).toContain("cli --> math-engine");
 
     // components table with clickable links and descriptions from _COMPONENT_INFO.md
@@ -124,7 +124,7 @@ describe("math-cli-example e2e", () => {
       "| [math-engine](#math-engine) | Code for System Backend"
     );
 
-    // class diagrams with representative types from each package
+    // class diagrams with representative types from each component
     expect(content).toContain("classDiagram");
     expect(content).toContain("MathEngine");
     expect(content).toContain("MathError");

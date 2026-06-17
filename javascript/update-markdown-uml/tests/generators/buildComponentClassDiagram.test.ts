@@ -2,7 +2,7 @@ import { describe, test, expect, beforeEach, afterEach } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
-import { buildPackageClassDiagram } from "../../src/generators/buildPackageClassDiagram.js";
+import { buildComponentClassDiagram } from "../../src/generators/buildComponentClassDiagram.js";
 
 let tmpDir: string;
 
@@ -18,9 +18,9 @@ function write(name: string, content: string): void {
   fs.writeFileSync(path.join(tmpDir, name), content, "utf-8");
 }
 
-describe("buildPackageClassDiagram()", () => {
+describe("buildComponentClassDiagram()", () => {
   test("empty directory produces minimal diagram", () => {
-    const result = buildPackageClassDiagram(tmpDir);
+    const result = buildComponentClassDiagram(tmpDir);
     expect(result).toContain("```mermaid");
     expect(result).toContain("classDiagram");
     expect(result).toContain("```");
@@ -36,7 +36,7 @@ describe("buildPackageClassDiagram()", () => {
         "}",
       ].join("\n")
     );
-    const result = buildPackageClassDiagram(tmpDir);
+    const result = buildComponentClassDiagram(tmpDir);
     expect(result).toContain("class RunConfig");
     expect(result).toContain("<<interface>>");
     expect(result).toContain("+verbose");
@@ -55,7 +55,7 @@ describe("buildPackageClassDiagram()", () => {
         "}",
       ].join("\n")
     );
-    const result = buildPackageClassDiagram(tmpDir);
+    const result = buildComponentClassDiagram(tmpDir);
     expect(result).toContain("class Internal");
     expect(result).toContain("class Public");
   }, 10000);
@@ -72,7 +72,7 @@ describe("buildPackageClassDiagram()", () => {
         "}",
       ].join("\n")
     );
-    const result = buildPackageClassDiagram(tmpDir);
+    const result = buildComponentClassDiagram(tmpDir);
     expect(result).toContain("Derived ..|> Base");
   });
 
@@ -86,7 +86,7 @@ describe("buildPackageClassDiagram()", () => {
         "}",
       ].join("\n")
     );
-    const result = buildPackageClassDiagram(tmpDir);
+    const result = buildComponentClassDiagram(tmpDir);
     expect(result).toContain("class Runner");
     expect(result).toContain("-name");
     expect(result).toContain("+run");
@@ -104,7 +104,7 @@ describe("buildPackageClassDiagram()", () => {
         "}",
       ].join("\n")
     );
-    const result = buildPackageClassDiagram(tmpDir);
+    const result = buildComponentClassDiagram(tmpDir);
     expect(result).toContain("Runner ..|> Processor");
     console.log(result);
   });
@@ -114,7 +114,7 @@ describe("buildPackageClassDiagram()", () => {
       "types.ts",
       ['export type Status = "updated" | "unchanged" | "skipped";'].join("\n")
     );
-    const result = buildPackageClassDiagram(tmpDir);
+    const result = buildComponentClassDiagram(tmpDir);
     expect(result).toContain("class Status");
     expect(result).toContain("<<type>>");
     expect(result).not.toContain("updated");
@@ -126,7 +126,7 @@ describe("buildPackageClassDiagram()", () => {
       "types.ts",
       ["export interface Options {", "  timeout?: number;", "}"].join("\n")
     );
-    const result = buildPackageClassDiagram(tmpDir);
+    const result = buildComponentClassDiagram(tmpDir);
     expect(result).toContain("+timeout?");
   });
 
@@ -135,8 +135,8 @@ describe("buildPackageClassDiagram()", () => {
       "types.ts",
       ["export interface Config {", "  verbose: boolean;", "}"].join("\n")
     );
-    const first = buildPackageClassDiagram(tmpDir);
-    const second = buildPackageClassDiagram(tmpDir);
+    const first = buildComponentClassDiagram(tmpDir);
+    const second = buildComponentClassDiagram(tmpDir);
     expect(first).toBe(second);
   });
 
@@ -148,7 +148,7 @@ describe("buildPackageClassDiagram()", () => {
         "export function debugLog(msg: string): void {}",
       ].join("\n")
     );
-    const result = buildPackageClassDiagram(tmpDir);
+    const result = buildComponentClassDiagram(tmpDir);
     expect(result).not.toContain("class walkFiles");
     expect(result).not.toContain("class debugLog");
   });

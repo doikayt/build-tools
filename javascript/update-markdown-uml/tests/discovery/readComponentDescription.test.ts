@@ -2,7 +2,7 @@ import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
-import { readPackageDescription } from "../../src/discovery/readPackageDescription.js";
+import { readComponentDescription } from "../../src/discovery/readComponentDescription.js";
 
 let tmpDir: string;
 
@@ -18,16 +18,16 @@ function write(content: string): void {
   fs.writeFileSync(path.join(tmpDir, "_COMPONENT_INFO.md"), content, "utf-8");
 }
 
-describe("readPackageDescription()", () => {
+describe("readComponentDescription()", () => {
   test("no _COMPONENT_INFO.md returns undefined", () => {
-    const result = readPackageDescription(tmpDir);
+    const result = readComponentDescription(tmpDir);
     expect(result).toBeUndefined();
   });
 
   test("empty file returns undefined without warning", () => {
     write("");
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const result = readPackageDescription(tmpDir);
+    const result = readComponentDescription(tmpDir);
     expect(result).toBeUndefined();
     expect(warnSpy).not.toHaveBeenCalled();
     warnSpy.mockRestore();
@@ -36,7 +36,7 @@ describe("readPackageDescription()", () => {
   test("content with no period returns undefined and warns", () => {
     write("CLI parsing and option wiring");
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const result = readPackageDescription(tmpDir);
+    const result = readComponentDescription(tmpDir);
     expect(result).toBeUndefined();
     expect(warnSpy).toHaveBeenCalledWith(
       expect.stringContaining("_COMPONENT_INFO.md")
@@ -48,7 +48,9 @@ describe("readPackageDescription()", () => {
   test("onWarn callback used instead of console.warn when provided", () => {
     write("CLI parsing and option wiring");
     const warnings: string[] = [];
-    const result = readPackageDescription(tmpDir, (msg) => warnings.push(msg));
+    const result = readComponentDescription(tmpDir, (msg) =>
+      warnings.push(msg)
+    );
     expect(result).toBeUndefined();
     expect(warnings).toHaveLength(1);
     expect(warnings[0]).toContain("period");
@@ -56,42 +58,42 @@ describe("readPackageDescription()", () => {
 
   test("first sentence returned when period present", () => {
     write("CLI parsing and option wiring. More detail here.");
-    const result = readPackageDescription(tmpDir);
+    const result = readComponentDescription(tmpDir);
     expect(result).toBe("CLI parsing and option wiring");
   });
 
   test("sentence spanning multiple lines is collapsed", () => {
     write("CLI parsing\nand option wiring. More detail.");
-    const result = readPackageDescription(tmpDir);
+    const result = readComponentDescription(tmpDir);
     expect(result).toBe("CLI parsing and option wiring");
   });
 
   test("leading and trailing whitespace trimmed", () => {
     write("  CLI parsing and option wiring.  ");
-    const result = readPackageDescription(tmpDir);
+    const result = readComponentDescription(tmpDir);
     expect(result).toBe("CLI parsing and option wiring");
   });
 
   test("only period with no preceding text returns undefined", () => {
     write(". something after");
-    const result = readPackageDescription(tmpDir);
+    const result = readComponentDescription(tmpDir);
     expect(result).toBeUndefined();
   });
 
   test("period inside inline code span is not treated as sentence end", () => {
     write(
-      "Leaf package discovery: locates subdirectories that contain qualifying `.ts` files, and reads their `_COMPONENT_INFO.md` descriptions."
+      "Leaf component discovery: locates subdirectories that contain qualifying `.ts` files, and reads their `_COMPONENT_INFO.md` descriptions."
     );
-    const result = readPackageDescription(tmpDir);
+    const result = readComponentDescription(tmpDir);
     expect(result).toBe(
-      "Leaf package discovery: locates subdirectories that contain qualifying `.ts` files, and reads their `_COMPONENT_INFO.md` descriptions"
+      "Leaf component discovery: locates subdirectories that contain qualifying `.ts` files, and reads their `_COMPONENT_INFO.md` descriptions"
     );
   });
 
   test("warning includes file path", () => {
     write("no period here");
     const warnings: string[] = [];
-    readPackageDescription(tmpDir, (msg) => warnings.push(msg));
+    readComponentDescription(tmpDir, (msg) => warnings.push(msg));
     expect(warnings[0]).toContain(tmpDir);
   });
 });

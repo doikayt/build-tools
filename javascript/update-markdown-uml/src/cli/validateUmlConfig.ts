@@ -29,7 +29,7 @@ export function validateUmlConfig(config: UmlRunConfig): void {
     if (!leafDirs.has(excluded)) {
       if (!config.quiet) {
         console.log(
-          `Warning: excluded package "${excluded}" not found under source root "${resolvedSourceRoot}"`
+          `Warning: excluded component "${excluded}" not found under source root "${resolvedSourceRoot}"`
         );
       }
     }

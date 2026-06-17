@@ -3,7 +3,7 @@ import path from "node:path";
 import micromatch from "micromatch";
 
 /**
- * Discovers leaf package directories under sourceRoot.
+ * Discovers leaf component directories under sourceRoot.
  * A leaf is a directory that contains at least one qualifying .ts file
  * (after filtering skipTestPatterns) at any depth under sourceRoot.
  * Root-level files are ignored — only subdirectories are considered.
@@ -12,7 +12,7 @@ import micromatch from "micromatch";
  * included — a warning is emitted to surface the mixed-concern smell.
  * Returns sorted absolute paths.
  */
-export function discoverLeafPackages(
+export function discoverLeafComponents(
   sourceRoot: string,
   skipTestPatterns: string[]
 ): string[] {

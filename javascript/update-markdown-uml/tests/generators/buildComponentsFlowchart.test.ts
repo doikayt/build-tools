@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { buildPackagesFlowchart } from "../../src/generators/buildPackagesFlowchart.js";
+import { buildComponentsFlowchart } from "../../src/generators/buildComponentsFlowchart.js";
 import type { ImportEdge } from "../../src/analysis/analyzeImportDependencies.js";
 
 const CLI = "cli";
@@ -10,27 +10,27 @@ function edge(from: string, to: string): ImportEdge {
   return { from: from, to: to };
 }
 
-describe("buildPackagesFlowchart()", () => {
-  test("empty packages produces minimal header", () => {
-    const result = buildPackagesFlowchart([], []);
+describe("buildComponentsFlowchart()", () => {
+  test("empty components produces minimal header", () => {
+    const result = buildComponentsFlowchart([], []);
     expect(result).toBe("```mermaid\nflowchart TB\n```");
   });
 
-  test("single package renders subgraph", () => {
-    const result = buildPackagesFlowchart([CLI], []);
+  test("single component renders subgraph", () => {
+    const result = buildComponentsFlowchart([CLI], []);
     expect(result).toContain(`subgraph ${CLI}["${CLI}"]`);
     expect(result).toContain("end");
   });
 
-  test("multiple packages rendered in lexicographic order", () => {
-    const result = buildPackagesFlowchart([UTIL, CLI], []);
+  test("multiple components rendered in lexicographic order", () => {
+    const result = buildComponentsFlowchart([UTIL, CLI], []);
     const cliPos = result.indexOf(`subgraph ${CLI}`);
     const utilPos = result.indexOf(`subgraph ${UTIL}`);
     expect(cliPos).toBeLessThan(utilPos);
   });
 
-  test("edge produces arrow between packages", () => {
-    const result = buildPackagesFlowchart(
+  test("edge produces arrow between components", () => {
+    const result = buildComponentsFlowchart(
       [CLI, REPOSITORY],
       [edge(CLI, REPOSITORY)]
     );
@@ -38,12 +38,12 @@ describe("buildPackagesFlowchart()", () => {
   });
 
   test("no edges produces no arrow lines", () => {
-    const result = buildPackagesFlowchart([CLI], []);
+    const result = buildComponentsFlowchart([CLI], []);
     expect(result).not.toContain("-->");
   });
 
   test("multiple edges rendered in lexicographic order", () => {
-    const result = buildPackagesFlowchart(
+    const result = buildComponentsFlowchart(
       [CLI, REPOSITORY, UTIL],
       [edge(REPOSITORY, UTIL), edge(CLI, REPOSITORY), edge(CLI, UTIL)]
     );
@@ -56,13 +56,13 @@ describe("buildPackagesFlowchart()", () => {
 
   test("output is deterministic across repeated calls", () => {
     const edgeList = [edge(CLI, UTIL)];
-    const first = buildPackagesFlowchart([CLI, UTIL], edgeList);
-    const second = buildPackagesFlowchart([CLI, UTIL], edgeList);
+    const first = buildComponentsFlowchart([CLI, UTIL], edgeList);
+    const second = buildComponentsFlowchart([CLI, UTIL], edgeList);
     expect(first).toBe(second);
   });
 
   test("output is wrapped in mermaid fences", () => {
-    const result = buildPackagesFlowchart([CLI], []);
+    const result = buildComponentsFlowchart([CLI], []);
     expect(result).toContain("```mermaid");
     expect(result).toContain("```");
   });

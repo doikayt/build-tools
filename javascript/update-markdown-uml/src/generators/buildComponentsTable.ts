@@ -6,19 +6,19 @@
  * a visible signal that the component description is missing.
  * Components are rendered in lexicographic order for determinism.
  */
-export function buildPackagesTable(
-  packages: string[],
+export function buildComponentsTable(
+  components: string[],
   descriptions: Map<string, string | undefined>
 ): string {
-  const sortedPackages = [...packages].sort((a, b) => a.localeCompare(b));
+  const sortedComponents = [...components].sort((a, b) => a.localeCompare(b));
 
   const lines: string[] = [];
-  lines.push("| Package | Description |");
-  lines.push("|---------|-------------|");
+  lines.push("| Component | Description |");
+  lines.push("|-----------|-------------|");
 
-  for (const pkg of sortedPackages) {
-    const description = descriptions.get(pkg) ?? "TBD";
-    lines.push(`| [${pkg}](#${pkg}) | ${description} |`);
+  for (const component of sortedComponents) {
+    const description = descriptions.get(component) ?? "TBD";
+    lines.push(`| [${component}](#${component}) | ${description} |`);
   }
 
   return lines.join("\n");

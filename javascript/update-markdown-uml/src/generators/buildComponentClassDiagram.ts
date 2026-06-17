@@ -2,10 +2,10 @@ import { Project } from "ts-morph";
 import path from "node:path";
 
 /**
- * Builds a Mermaid classDiagram block for a single leaf package directory.
+ * Builds a Mermaid classDiagram block for a single leaf component directory.
  * Uses ts-morph to extract classes, interfaces (exported and non-exported),
  * and type aliases. Standalone functions are excluded by design — their
- * presence in a package is surfaced via the placeholder node in the
+ * presence in a component is surfaced via the placeholder node in the
  * flowchart overview diagram.
  *
  * Arrow styles:
@@ -17,9 +17,9 @@ import path from "node:path";
  * since their values (often union types) are implementation detail.
  *
  * Non-exported declarations are included — a non-exported base type is
- * often the most architecturally significant abstraction in a package.
+ * often the most architecturally significant abstraction in a component.
  */
-export function buildPackageClassDiagram(leafDir: string): string {
+export function buildComponentClassDiagram(leafDir: string): string {
   const project = new Project({
     skipAddingFilesFromTsConfig: true,
     compilerOptions: {

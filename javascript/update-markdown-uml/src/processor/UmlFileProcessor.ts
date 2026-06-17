@@ -3,12 +3,12 @@ import path from "node:path";
 import type { FileProcessor, ProcessingStatus } from "@datalackey/tooling-core";
 import { debugLog } from "@datalackey/tooling-core";
 import type { UmlRunConfig } from "../cli/UmlRunConfig.js";
-import { discoverLeafPackages } from "../discovery/discoverLeafPackages.js";
-import { readPackageDescription } from "../discovery/readPackageDescription.js";
+import { discoverLeafComponents } from "../discovery/discoverLeafComponents.js";
+import { readComponentDescription } from "../discovery/readComponentDescription.js";
 import { analyzeImportDependencies } from "../analysis/analyzeImportDependencies.js";
-import { buildPackagesFlowchart } from "../generators/buildPackagesFlowchart.js";
-import { buildPackagesTable } from "../generators/buildPackagesTable.js";
-import { buildPackageClassDiagram } from "../generators/buildPackageClassDiagram.js";
+import { buildComponentsFlowchart } from "../generators/buildComponentsFlowchart.js";
+import { buildComponentsTable } from "../generators/buildComponentsTable.js";
+import { buildComponentClassDiagram } from "../generators/buildComponentClassDiagram.js";
 import { injectUmlSections } from "../markdown/injectUmlSections.js";
 import { resolveSourceRoot } from "./resolveSourceRoot.js";
 
@@ -28,17 +28,17 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
         : DEFAULT_SKIP_TEST_PATTERNS;
 
     // 1. Discover leaf components
-    const leafDirs = discoverLeafPackages(sourceRoot, skipPatterns);
+    const leafDirs = discoverLeafComponents(sourceRoot, skipPatterns);
     debugLog(config, `UmlFileProcessor: leafDirs=${JSON.stringify(leafDirs)}`);
 
     const leafNames = leafDirs.map((d) => path.basename(d));
 
-    // Warn about excluded packages not found
+    // Warn about excluded components not found
     for (const excluded of config.excludePackages) {
       if (!leafNames.includes(excluded)) {
         if (!config.quiet) {
           console.warn(
-            `Warning: excluded package "${excluded}" not found under source root "${sourceRoot}"`
+            `Warning: excluded component "${excluded}" not found under source root "${sourceRoot}"`
           );
         }
       }
@@ -57,7 +57,7 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
     const descriptions = new Map<string, string | undefined>();
     for (const leafDir of activeLeafDirs) {
       const name = path.basename(leafDir);
-      descriptions.set(name, readPackageDescription(leafDir, onWarn));
+      descriptions.set(name, readComponentDescription(leafDir, onWarn));
     }
 
     // 3. Analyze import dependencies
@@ -65,10 +65,10 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
     debugLog(config, `UmlFileProcessor: edges=${JSON.stringify(edges)}`);
 
     // 4. Build flowchart (compact — component names only, no type enumeration)
-    const componentsContent = buildPackagesFlowchart(activeLeafNames, edges);
+    const componentsContent = buildComponentsFlowchart(activeLeafNames, edges);
 
     // 5. Build components table
-    const componentsTableContent = buildPackagesTable(
+    const componentsTableContent = buildComponentsTable(
       activeLeafNames,
       descriptions
     );
@@ -76,7 +76,7 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
     // 6. Build per-component class diagrams
     const detailSections = activeLeafDirs.map((leafDir) => {
       const name = path.basename(leafDir);
-      const diagram = buildPackageClassDiagram(leafDir);
+      const diagram = buildComponentClassDiagram(leafDir);
       return `#### ${name}\n${diagram}`;
     });
     const componentDetailsContent = detailSections.join("\n\n");
