@@ -8,6 +8,8 @@
     - [Component Diagram](#component-diagram)
     - [Components Table](#components-table)
     - [Component Details](#component-details)
+      - [cli](#cli)
+      - [engine](#engine)
   - [Running Tests](#running-tests)
     - [Run the full test suite](#run-the-full-test-suite)
     - [Run a single test suite](#run-a-single-test-suite)
@@ -26,6 +28,8 @@ For workspace-level setup, build pipeline, and release workflow see: [javascript
 
 
 ### Component Diagram
+
+`cli` and `engine` are independent — neither imports the other. `bin/update-markdown-toc.js` is the composition root that wires them together via `runCli()` from `tooling-core`.
 
 <!-- UML:components:START -->
 ```mermaid

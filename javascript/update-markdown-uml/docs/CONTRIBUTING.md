@@ -5,4 +5,24 @@ For workspace-level setup, build pipeline, and release workflow see:
 
 ---
 
-*Package-specific contributor documentation coming soon.*
+
+## Code Structure Diagrams
+
+
+### Component Diagram
+
+
+<!-- UML:components:START -->
+<!-- UML:components:END -->
+
+### Components Table
+
+<!-- UML:components-table:START -->
+<!-- UML:components-table:END -->
+
+### Component Details
+
+<!-- UML:component-details:START -->
+<!-- UML:component-details:END -->
+
+

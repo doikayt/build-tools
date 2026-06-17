@@ -292,6 +292,7 @@ For the full workspace tech stack see: [TECH-STACK.md](../TECH-STACK.md)
 
 ## Contributing and Releasing
 
-For development setup, build workflow, and release procedures (including how to
+For code overview, development setup, build workflow, and release procedures (including how to
 trigger a publish via Changesets), see
-[CONTRIBUTING.md](../docs/CONTRIBUTING.md).
+[CONTRIBUTING.md](./docs/CONTRIBUTING.md).
+
