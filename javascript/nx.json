@@ -30,6 +30,7 @@
       "inputs": ["default", "^default"]
     },
     "test": {
+      "dependsOn": ["build"],
       "cache": true,
       "inputs": ["default", "^default"]
     }
