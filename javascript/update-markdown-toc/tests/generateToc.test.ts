@@ -9,6 +9,20 @@ function extractToc(result: string): string {
   return result.slice(start, end);
 }
 
+describe("generateTOC — inline code span filtering", () => {
+  test("TOC markers inside inline code spans are not treated as real markers", () => {
+    const content =
+      "Use `<!-- TOC:START -->` and `<!-- TOC:END -->` as delimiters.";
+    expect(() => generateTOC(content)).toThrow("TOC delimiters not found");
+  });
+
+  test("real markers still work when inline code spans are present", () => {
+    const content =
+      "See `<!-- TOC:START -->` docs.\n<!-- TOC:START -->\n<!-- TOC:END -->\n## Heading\n";
+    expect(() => generateTOC(content)).not.toThrow();
+  });
+});
+
 describe("generateTOC — code fence filtering", () => {
   test("bash comment inside fence is not treated as heading", () => {
     const toc = extractToc(

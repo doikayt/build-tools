@@ -9,6 +9,11 @@ type Heading = {
   anchor: string;
 };
 
+function stripInlineCode(text: string): string {
+  // [^`\n]* — any char except backtick or newline (inline spans can't cross lines)
+  return text.replace(/`[^`\n]*`/g, "``");
+}
+
 function stripFencedLines(lines: string[]): string[] {
   let inFence = false;
   const result: string[] = [];
@@ -30,8 +35,9 @@ function detectLineEnding(text: string): "\r\n" | "\n" {
 export function generateTOC(content: string): string {
   const lineEnding = detectLineEnding(content);
 
-  const hasStart = content.includes(START);
-  const hasEnd = content.includes(END);
+  const stripped = stripInlineCode(content);
+  const hasStart = stripped.includes(START);
+  const hasEnd = stripped.includes(END);
 
   if (!hasStart && !hasEnd) throw new Error("TOC delimiters not found");
   if (hasStart && !hasEnd)

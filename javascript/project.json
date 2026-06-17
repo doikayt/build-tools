@@ -29,7 +29,8 @@
       "dependsOn": ["@datalackey/update-markdown-toc:build"]
     },
     "update-uml": {
-      "command": "sh -c 'node update-markdown-uml/bin/update-markdown-uml.js --source tooling-core/src tooling-core/README.md && node update-markdown-uml/bin/update-markdown-uml.js --source nx-graph-to-mermaid/src nx-graph-to-mermaid/docs/CONTRIBUTING.md && node update-markdown-uml/bin/update-markdown-uml.js --source update-markdown-toc/src update-markdown-toc/docs/CONTRIBUTING.md'",
+      "command": "sh -c 'node update-markdown-uml/bin/update-markdown-uml.js --source tooling-core/src tooling-core/README.md && node update-markdown-uml/bin/update-markdown-uml.js --source nx-graph-to-mermaid/src nx-graph-to-mermaid/docs/CONTRIBUTING.md && node update-markdown-uml/bin/update-markdown-uml.js --source update-markdown-toc/src update-markdown-toc/docs/CONTRIBUTING.md  && node update-markdown-uml/bin/update-markdown-uml.js --update --source update-markdown-uml/src update-markdown-uml/docs/CONTRIBUTING.md'",
+
       "cwd": "{workspaceRoot}",
       "dependsOn": ["@datalackey/update-markdown-uml:build"]
     },
@@ -84,7 +85,7 @@
       "dependsOn": ["^build"]
     },
     "check-uml": {
-      "command": "sh -c 'node update-markdown-uml/bin/update-markdown-uml.js --check --source tooling-core/src tooling-core/README.md && node update-markdown-uml/bin/update-markdown-uml.js --check --source nx-graph-to-mermaid/src nx-graph-to-mermaid/docs/CONTRIBUTING.md && node update-markdown-uml/bin/update-markdown-uml.js --check --source update-markdown-toc/src update-markdown-toc/docs/CONTRIBUTING.md'",
+      "command": "sh -c 'node update-markdown-uml/bin/update-markdown-uml.js --check --source tooling-core/src tooling-core/README.md && node update-markdown-uml/bin/update-markdown-uml.js --check --source nx-graph-to-mermaid/src nx-graph-to-mermaid/docs/CONTRIBUTING.md && node update-markdown-uml/bin/update-markdown-uml.js --check --source update-markdown-toc/src update-markdown-toc/docs/CONTRIBUTING.md && node update-markdown-uml/bin/update-markdown-uml.js --check --source update-markdown-uml/src update-markdown-uml/docs/CONTRIBUTING.md'",
       "cwd": "{workspaceRoot}",
       "dependsOn": ["@datalackey/update-markdown-uml:build"]
     },
