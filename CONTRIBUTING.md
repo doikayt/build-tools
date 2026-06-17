@@ -32,4 +32,3 @@ Code sessions against a spec file.
 
 ---
 
-*Note: package-level contributing guides are stubs pending full documentation migration.*

@@ -2,22 +2,78 @@
 
 
 
-# Design and Code Organization Overview
+# Code Structure Diagrams
 
 
 ## Component Diagram
 
 <!-- UML:components:START -->
+```mermaid
+flowchart TB
+  subgraph core["core"]
+  end
+  subgraph generate["generate"]
+  end
+
+  generate --> core
+```
 <!-- UML:components:END -->
 
 ## Components Table
 
 <!-- UML:components-table:START -->
+| Package | Description |
+|---------|-------------|
+| [core](#core) | Mermaid diagram builder: validates an NX `project |
+| [generate](#generate) | NX executor entry point: resolves options, dispatches to `generate`, `inject`, `update`, or `check` mode, and writes the Mermaid diagram into a target Markdown file between `<!-- NX_GRAPH:START -->` / `<!-- NX_GRAPH:END -->` markers |
 <!-- UML:components-table:END -->
 
 ## Component Details
 
 <!-- UML:component-details:START -->
+#### core
+```mermaid
+classDiagram
+  direction TB
+  class NxTarget {
+    <<interface>>
+    +dependsOn? string[]
+    +description? string
+  }
+  class NxProjectJson {
+    <<interface>>
+    +name? string
+    +targets? Record<string, NxTarget>
+  }
+```
+
+#### generate
+```mermaid
+classDiagram
+  direction TB
+  class RawOptions {
+    <<interface>>
+    +projectJsonPath string
+    +mode? Mode
+    +generatedMermaidPath? string
+    +markdownPath? string
+    +debug? boolean
+  }
+  class NormalizedOptions {
+    <<interface>>
+    +projectJsonPath string
+    +mode Mode
+    +generatedMermaidPath? string
+    +markdownPath? string
+    +debug? boolean
+  }
+  class Mode {
+    <<type>>
+  }
+  class ExecutionContext {
+    <<type>>
+  }
+```
 <!-- UML:component-details:END -->
 
 

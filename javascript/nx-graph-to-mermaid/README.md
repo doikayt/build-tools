@@ -181,11 +181,25 @@ Each string in a `dependsOn` array is classified and rendered as follows:
 | `^` upstream fan-out | `"^build"` | Arrow to a synthetic `^build` stadium node |
 | Cross-project ref | `"@scope/pkg:build"` | Arrow to a synthetic `pkg:build` hexagon node (scope stripped from label) |
 
-**`^` fan-out deps** deserve special mention. NX's `^target` shorthand means "before running this target, run `target` across every project in the upstream dependency closure." For example, `^build` on a `ci` task triggers a `build` run on all packages listed in `implicitDependencies` — and transitively on their dependencies — before `ci` is allowed to start. It is a graph-wide fan-out, not a reference to any single local target.
+**`^` fan-out deps** deserve special mention. NX's `^target` shorthand means "before running this target, 
+run `target` across every project in the upstream dependency closure." For example, `^build` on a `ci` task 
+triggers a `build` run on all packages listed in `implicitDependencies` — and transitively 
+on their dependencies — before `ci` is allowed to start. It is a graph-wide fan-out, 
+not a reference to any single local target.
 
-The diagram renders `^target` entries as synthetic pill-shaped (stadium) nodes — e.g. `([^build])` — so the dependency is visible without implying a local target exists. Multiple targets that share the same `^dep` all point to the same synthetic node.
+The diagram renders `^target` entries as synthetic pill-shaped (stadium) nodes — e.g. `([^build])` — so 
+the dependency is visible without implying a local target exists. Multiple targets that share the same `^dep` 
+all point to the same synthetic node.
 
-**Cross-project refs** (e.g. `@scope/pkg:build`) are rendered as **hexagon** nodes. The org scope (`@scope/`) is stripped from the display label for readability — so `@datalackey/tooling-core:lint` appears as `tooling-core:lint` inside the hex. The full dep string is still encoded in the node ID in the Mermaid source. The ref is named but not expanded — the internal dependency graph of the referenced project is not followed.
+**Cross-project refs** (e.g. `@scope/pkg:build`) are rendered as **hexagon** nodes. The org 
+scope (`@scope/`) is stripped from the display label for readability — so 
+`@datalackey/tooling-core:lint` appears as `tooling-core:lint` inside the hex. 
+The full dep string is still encoded in the node ID in the Mermaid source. The 
+ref is named but not expanded — the internal dependency graph of the referenced project is not followed.
+
+For an example of how all this appears together in a diagram, refer to the 
+[Build Targets](../README.md#build-targets) section  of the README
+for  the orchestrating workspace.
 
 ---
 
