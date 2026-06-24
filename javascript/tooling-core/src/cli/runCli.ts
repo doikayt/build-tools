@@ -10,6 +10,7 @@ import { printHelp } from "./printHelp.js";
 import { runPlugin } from "./runPlugin.js";
 
 import { debugLog } from "../util/debugLog.js";
+import { toErrorMessage } from "../util/toErrorMessage.js";
 import type { RepositoryStats } from "../repository/RepositoryRunner.js";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -25,7 +26,7 @@ function attempt<T>(fn: () => T): T {
   try {
     return fn();
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
+    const message = toErrorMessage(err);
     console.error(`ERROR: ${message}`);
     process.exit(1);
   }

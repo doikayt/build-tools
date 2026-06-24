@@ -1,6 +1,7 @@
 import type { RunnerPolicy, RunnerDecision } from "./RunnerPolicy.js";
 import type { RunConfig, ProcessingStatus } from "../repository/types.js";
 import { debugLog } from "../util/debugLog.js";
+import { toErrorMessage } from "../util/toErrorMessage.js";
 
 export function createRunnerPolicy(config: RunConfig): RunnerPolicy {
   const isRecursiveRun = config.mode === "recursive";
@@ -30,7 +31,7 @@ export function createRunnerPolicy(config: RunConfig): RunnerPolicy {
     },
 
     handleProcessorError(_file: string, error: unknown): RunnerDecision {
-      const message = error instanceof Error ? error.message : String(error);
+      const message = toErrorMessage(error);
       console.error(`ERROR: ${message}`);
       const decision: RunnerDecision = isRecursiveRun ? "continue" : "abort";
       debugLog(

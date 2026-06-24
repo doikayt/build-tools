@@ -1,6 +1,7 @@
 import type { RunConfig, ProcessingStatus, FileProcessor } from "./types.js";
 import type { RunnerPolicy } from "../policy/RunnerPolicy.js";
 import { debugLog } from "../util/debugLog.js";
+import { toErrorMessage } from "../util/toErrorMessage.js";
 
 export interface RepositoryRunnerOptions<TConfig extends RunConfig> {
   processor: FileProcessor<TConfig>;
@@ -51,9 +52,9 @@ export class RepositoryRunner<TConfig extends RunConfig> {
       } catch (err) {
         debugLog(
           this.config,
-          `RepositoryRunner.runAsync: processor error file=${file} err=${
-            err instanceof Error ? err.message : String(err)
-          }`
+          `RepositoryRunner.runAsync: processor error file=${file} err=${toErrorMessage(
+            err
+          )}`
         );
         if (this.policy.handleProcessorError(file, err) === "continue") {
           continue;

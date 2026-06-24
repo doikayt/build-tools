@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { generateTOC } from "./generateToc.js";
 import type { RunConfig, ProcessingStatus } from "@datalackey/tooling-core";
-import { debugLog } from "@datalackey/tooling-core";
+import { debugLog, toErrorMessage } from "@datalackey/tooling-core";
 
 export function processFile(
   filePath: string,
@@ -29,7 +29,7 @@ export function processFile(
   try {
     updated = generateTOC(content);
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err);
+    const message = toErrorMessage(err);
 
     if (message === "TOC delimiters not found" && config.mode === "recursive") {
       debugLog(
