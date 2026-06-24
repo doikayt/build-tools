@@ -10,6 +10,8 @@ export interface HeadingRecord {
   line: number;
   rawText: string;
   slug: string;
+  /** Heading depth 1–6 (number of # characters). Used by consumers such as TOC generators to compute indentation. */
+  level: number;
 }
 
 interface FileLineRef {

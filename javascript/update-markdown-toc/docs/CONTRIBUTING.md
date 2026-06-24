@@ -66,9 +66,6 @@ classDiagram
 ```mermaid
 classDiagram
   direction TB
-  class Heading {
-    <<type>>
-  }
   class TocFileProcessor {
     +process(filePath, config) ProcessingStatus
   }

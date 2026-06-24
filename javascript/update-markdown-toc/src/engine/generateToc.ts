@@ -1,32 +1,12 @@
-import GithubSlugger from "github-slugger";
+import { parseHeadings } from "@datalackey/tooling-core";
 
 const START = "<!-- TOC:START -->";
 const END = "<!-- TOC:END -->";
-
-type Heading = {
-  level: number;
-  title: string;
-  anchor: string;
-};
 
 export function stripInlineCode(text: string): string {
   // [^`\n]* — any char except backtick or newline (inline spans can't cross lines)
   // Replace with "" not "``" — substituting backticks reintroduces spans that eat surrounding text
   return text.replace(/`[^`\n]*`/g, "");
-}
-
-function stripFencedLines(lines: string[]): string[] {
-  let inFence = false;
-  const result: string[] = [];
-  for (const line of lines) {
-    if (line.startsWith("```")) {
-      inFence = !inFence;
-      continue;
-    }
-    if (!inFence) result.push(line);
-  }
-  if (inFence) throw new Error("Unclosed code fence (```) in document");
-  return result;
 }
 
 function detectLineEnding(text: string): "\r\n" | "\n" {
@@ -55,21 +35,16 @@ export function generateTOC(content: string): string {
   const contentWithoutTOC =
     before.replace(/\s*$/, "") + lineEnding + after.replace(/^\s*/, "");
 
-  const lines = contentWithoutTOC.split(lineEnding);
-
-  const headings: Heading[] = [];
-  const slugger = new GithubSlugger();
-
-  for (const line of stripFencedLines(lines)) {
-    const m = /^(#{1,6})\s+(.*)$/.exec(line);
-    if (!m) continue;
-
-    const level = m[1].length;
-    const title = m[2].trim();
-    const anchor = slugger.slug(title);
-
-    headings.push({ level: level, title: title, anchor: anchor });
-  }
+  // parseHeadings (remark/CommonMark) also returns setext-style headings — text
+  // immediately followed by `---` or `===` on the next line. This is valid
+  // CommonMark but users writing `paragraph\n---` as a paragraph + horizontal
+  // rule (a very common pattern) will unintentionally produce TOC entries.
+  // We restrict to ATX-style headings (lines starting with `#`) which are the
+  // only form a user would deliberately put in a TOC.
+  const sourceLines = contentWithoutTOC.split(lineEnding);
+  const headings = parseHeadings(contentWithoutTOC).filter(
+    (h) => h.line > 0 && /^#{1,6}\s/.test(sourceLines[h.line - 1] ?? "")
+  );
 
   if (headings.length === 0) {
     throw new Error("No headings found to generate TOC");
@@ -79,7 +54,7 @@ export function generateTOC(content: string): string {
 
   const tocLines = headings.map((h) => {
     const indent = "  ".repeat(h.level - minLevel);
-    return `${indent}- [${h.title}](#${h.anchor})`;
+    return `${indent}- [${h.rawText}](#${h.slug})`;
   });
 
   const tocBlock = lineEnding + tocLines.join(lineEnding) + lineEnding;

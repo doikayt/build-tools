@@ -233,6 +233,7 @@ classDiagram
     +line number
     +rawText string
     +slug string
+    +level number
   }
   class FileLineRef {
     <<interface>>

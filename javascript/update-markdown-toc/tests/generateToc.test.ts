@@ -46,6 +46,35 @@ describe("generateTOC — inline code span filtering", () => {
   });
 });
 
+describe("generateTOC — inline code in headings", () => {
+  test("heading with inline code preserves backtick formatting in TOC entry", () => {
+    const toc = extractToc(
+      generateTOC(wrap("## Why `dist/` Must Be Present\n"))
+    );
+    expect(toc).toContain("Why `dist/` Must Be Present");
+  });
+});
+
+describe("generateTOC — setext heading exclusion", () => {
+  test("paragraph followed immediately by --- is not treated as a TOC heading", () => {
+    const toc = extractToc(
+      generateTOC(
+        wrap(`
+## Real Heading
+
+A note for users.
+---
+
+## Another Real Heading
+`)
+      )
+    );
+    expect(toc).toContain("Real Heading");
+    expect(toc).toContain("Another Real Heading");
+    expect(toc).not.toContain("A note for users");
+  });
+});
+
 describe("generateTOC — code fence filtering", () => {
   test("bash comment inside fence is not treated as heading", () => {
     const toc = extractToc(
@@ -103,8 +132,8 @@ describe("generateTOC — code fence filtering", () => {
     expect(toc).not.toContain("second");
   });
 
-  test("dangling code fence throws", () => {
-    expect(() =>
+  test("dangling code fence: heading before fence included, content inside excluded", () => {
+    const toc = extractToc(
       generateTOC(
         wrap(`
 ## Heading
@@ -113,6 +142,8 @@ describe("generateTOC — code fence filtering", () => {
 # unclosed
 `)
       )
-    ).toThrow("Unclosed code fence");
+    );
+    expect(toc).toContain("Heading");
+    expect(toc).not.toContain("unclosed");
   });
 });

@@ -102,6 +102,7 @@ that conflict with the workspace setup.
 
 For JVM developers: this is roughly analogous to a single `gradle.lockfile`
 at the root of a multi-module Gradle build rather than one per submodule.
+
 ---
 
 ## The CLI Framework Pattern
