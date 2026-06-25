@@ -12,19 +12,22 @@
     - [1. Ensure a Clean Working Tree](#1-ensure-a-clean-working-tree)
     - [2. Run All Tests](#2-run-all-tests)
     - [3. Create a Changeset](#3-create-a-changeset)
-    - [4. Apply Version Bumps](#4-apply-version-bumps)
-    - [5. Publish](#5-publish)
-    - [6. Verify Release](#6-verify-release)
+    - [4. Push — CI does the rest](#4-push--ci-does-the-rest)
+    - [5. Verify Release](#5-verify-release)
+  - [Versioning Tiers](#versioning-tiers)
+    - [Bump levels](#bump-levels)
+    - [Commit prefix → bump mapping](#commit-prefix--bump-mapping)
+    - [Forcing a specific bump level](#forcing-a-specific-bump-level)
+    - [Suppressing a release](#suppressing-a-release)
   - [Handling `changeset status` Errors](#handling-changeset-status-errors)
     - [What this means](#what-this-means)
     - [When you will see this](#when-you-will-see-this)
     - [How to resolve](#how-to-resolve)
       - [Option A — This change SHOULD trigger a release](#option-a--this-change-should-trigger-a-release)
       - [Option B — This change should NOT trigger a release](#option-b--this-change-should-not-trigger-a-release)
-    - [rules](#rules)
     - [Maintainer rules](#maintainer-rules)
   - [Activity Diagram](#activity-diagram)
-  - [Rules](#rules-1)
+  - [Rules](#rules)
   - [Publishing as NPM Packages](#publishing-as-npm-packages)
   - [Sideways Version Bump Policy](#sideways-version-bump-policy)
   - [Design Principles](#design-principles)
@@ -209,15 +212,16 @@ git commit -m "chore: add changeset" .
 
 ### 4. Push — CI does the rest
 
-Commit the changeset and push:
+Commit your changes and push:
 ```sh
-git add .changeset
-git commit -m "chore: add changeset"
+git add .
+git commit -m "fix(my-package): description of what changed"
 git push origin main
 ```
 
 CI will automatically:
-- Run `npx changeset version` (bumps all package versions, updates changelogs, removes the changeset file)
+- Inspect the git log since the last release tag and derive the semver bump from your commit prefix (see [Versioning tiers](#versioning-tiers) below)
+- Run `npx changeset version` (bumps all package versions, updates changelogs)
 - Commit the version bumps back to main with `[skip ci]`
 - Run `npx changeset publish` to publish all packages to npm
 
@@ -233,6 +237,68 @@ After the workflow completes, confirm:
 - GitHub Actions run succeeded
 - Packages appear on npm
 - Versions match expected coordinated bump
+
+---
+
+## Versioning Tiers
+
+All packages in this workspace are versioned together as a single unit (see [Sideways Version Bump Policy](#sideways-version-bump-policy)).
+The semver bump level is derived automatically from your commit message prefixes via `scripts/auto-changeset.sh`.
+
+### Bump levels
+
+Semver version numbers follow the format **MAJOR.MINOR.PATCH** (e.g. `1.4.2`):
+
+| Tier | Version change | When to use |
+|---|---|---|
+| **PATCH** | `1.4.0 → 1.4.1` | Bug fixes, performance improvements — no new API surface |
+| **MINOR** | `1.4.0 → 1.5.0` | New features that are backwards-compatible |
+| **MAJOR** | `1.4.0 → 2.0.0` | Breaking changes — existing callers must update their code |
+
+### Commit prefix → bump mapping
+
+| Commit prefix | Bump | Example |
+|---|---|---|
+| `fix:` or `fix(scope):` | patch | `fix(toc): handle headings after HTML blocks` |
+| `perf:` or `perf(scope):` | patch | `perf: cache slugger across files` |
+| `feat:` or `feat(scope):` | minor | `feat: add --quiet flag to all plugins` |
+| `feat!:` or `feat(scope)!:` | **major** | `feat!: remove deprecated --output flag` |
+| `BREAKING CHANGE` in commit body | **major** | any prefix + `BREAKING CHANGE: ...` in body |
+| `chore:`, `ci:`, `docs:`, `refactor:`, `style:`, `test:` | none | no release triggered |
+
+The highest bump level found across all commits since the last release tag wins.
+
+### Forcing a specific bump level
+
+If the commit prefix convention doesn't reflect the true impact of a change — for example,
+a `refactor:` that silently breaks a public API — run `npx changeset` manually before pushing:
+
+```sh
+cd javascript
+npx changeset
+# select bump level and write a description at the prompt
+git add .changeset
+git commit -m "chore: add changeset"
+git push origin main
+```
+
+The auto-generation script skips when a handwritten changeset file already exists, so
+the manual changeset takes full precedence.
+
+### Suppressing a release
+
+If your commits touch publishable package files but should not trigger a release
+(e.g. a documentation-only change committed with `docs:` that somehow needs no version bump):
+
+```sh
+cd javascript
+npx changeset add --empty
+git add .changeset
+git commit -m "chore: skip release"
+git push origin main
+```
+
+The empty changeset satisfies the pipeline without bumping any version.
 
 ---
 
