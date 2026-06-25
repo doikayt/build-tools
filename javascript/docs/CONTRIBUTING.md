@@ -207,73 +207,32 @@ git commit -m "chore: add changeset" .
 
 ---
 
-### 4. Apply Version Bumps
+### 4. Push — CI does the rest
 
-From this folder (`javascript/`), run commands below to update versions, changelogs, and package metadata.
-```
-npx changeset version
-```
-
-This command:
-
-- Updates package.json versions
-- Applies sideways bumps
-- Updates dependency ranges
-- Updates all CHANGELOG.md files
-- Removes processed changeset files
-
-After running this command if you want to see the version bumps, type: `git diff` from `javascript/` folder.
-
-Next, commit the version bump metadata and create an annotated tag for the new version:
-
-Capture the VERSION:
+Commit the changeset and push:
 ```sh
-VERSION="$(node -p "require('./update-markdown-toc/package.json').version")"
+git add .changeset
+git commit -m "chore: add changeset"
+git push origin main
 ```
 
-And add the tag:
-```sh
-git add . && \
-git commit -m "chore: release v${VERSION}" && \
-git tag -a "v${VERSION}" -m "Release v${VERSION}"
-```
+CI will automatically:
+- Run `npx changeset version` (bumps all package versions, updates changelogs, removes the changeset file)
+- Commit the version bumps back to main with `[skip ci]`
+- Run `npx changeset publish` to publish all packages to npm
+
+You can follow progress in
+[GitHub Actions](https://github.com/datalackey/build-tools/actions/workflows/javascript-ci.yml).
 
 ---
 
-### 5. Publish
-
-> **CI publishing is provisionally disabled** while npm token issues are being resolved.
-> Until further notice, publish locally using the steps below.
-
-From `javascript/`, with a valid npm token set:
-
-```sh
-export NODE_AUTH_TOKEN=<your-npm-token>
-npx changeset publish
-```
-
-Then push commits and tags:
-
-```sh
-git push origin main --follow-tags
-```
-
-Once token issues are resolved, publishing will return to the automated CI path:
-the push above will trigger the release workflow in
-[GitHub Actions](https://github.com/datalackey/build-tools/actions/workflows/javascript-ci.yml),
-which installs dependencies, runs `npx changeset publish`, and publishes to npm.
-
----
-
-### 6. Verify Release
+### 5. Verify Release
 
 After the workflow completes, confirm:
 
 - GitHub Actions run succeeded
 - Packages appear on npm
 - Versions match expected coordinated bump
-
-No additional manual tag push step is required when using the `--follow-tags` push above.
 
 ---
 
@@ -374,17 +333,12 @@ RELEASE FLOW
 cd javascript
 
   DEVELOPER                              CI  (https://github.com/datalackey/build-tools/actions)
-                                         ⚠ Currently inactive — token issues pending resolution
 
   npx changeset
   git commit .
-  git push
-
-  npx changeset version
-  git commit
-  NODE_AUTH_TOKEN=<token> npx changeset publish   ← local publish (temporary)
-  git push --follow-tags
-                                         (Runs release workflow once CI publishing is restored)
+  git push          ───────────────────► build job passes
+                                         changeset version  (bumps versions, commits [skip ci])
+                                         changeset publish  (publishes to npm)
 ```
 
 ---
