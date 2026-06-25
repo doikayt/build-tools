@@ -23,11 +23,11 @@
 
 This plugin keeps documentation in sync with code. It is an 
 uber-plugin that serves as a minimal-config orchestrator of the [plugins](#bundled-plugins) that it bundles.
-Use this plugin directly for simple projects with a single Markdown file — typically README.md — that may 
-contain any combination of auto-generated Table of Contents, UML component diagrams, and 
-NX build task-graph diagrams. 
+Use this plugin directly for simple projects with a single Markdown file — typically README.md.  
+The Markdown file may contain any combination of auto-generated Table of Contents, UML component diagrams, and 
+NX build task-graph diagrams (where each auto-generated block has corresponding [injection markers](#tag-families).) 
 
-Place the relevant [injection markers](#tag-families) in your file and run the tool. 
+Place the relevant injection markers where you want them in your Markdown file, then run the tool. 
 Each bundled plugin activates only when its markers are present; 
 sections without markers are left untouched. 
 
