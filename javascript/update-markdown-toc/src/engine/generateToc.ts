@@ -32,8 +32,15 @@ export function generateTOC(content: string): string {
   const before = content.slice(0, startIndex);
   const after = content.slice(endIndex + END.length);
 
+  // Two line endings (a blank line) are required between before and after so
+  // that any open HTML block in `before` (e.g. a closing </p> tag with no
+  // trailing blank line) is closed before remark parses `after`. A single \n
+  // is not enough — CommonMark only closes an HTML block at a blank line.
   const contentWithoutTOC =
-    before.replace(/\s*$/, "") + lineEnding + after.replace(/^\s*/, "");
+    before.replace(/\s*$/, "") +
+    lineEnding +
+    lineEnding +
+    after.replace(/^\s*/, "");
 
   // parseHeadings (remark/CommonMark) also returns setext-style headings — text
   // immediately followed by `---` or `===` on the next line. This is valid

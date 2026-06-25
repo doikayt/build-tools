@@ -55,6 +55,34 @@ describe("generateTOC — inline code in headings", () => {
   });
 });
 
+describe("generateTOC — heading after HTML block", () => {
+  test("heading after TOC is not swallowed by HTML block that appears before TOC", () => {
+    // Pattern: HTML block sits before the TOC markers; heading sits after them.
+    // When contentWithoutTOC is assembled, the blank lines between </p> and
+    // <!-- TOC:START --> (stripped from `before`) and between <!-- TOC:END -->
+    // and the heading (stripped from `after`) are removed, leaving </p>
+    // immediately adjacent to the heading. Without a blank line at the
+    // junction the CommonMark HTML block rule swallows the heading.
+    const content = [
+      "<p>",
+      "  <img src='demo.gif'>",
+      "</p>",
+      "",
+      "",
+      "<!-- TOC:START -->",
+      "<!-- TOC:END -->",
+      "",
+      "",
+      "## Introduction",
+      "",
+      "Some content.",
+      "",
+    ].join("\n");
+    const toc = extractToc(generateTOC(content));
+    expect(toc).toContain("Introduction");
+  });
+});
+
 describe("generateTOC — setext heading exclusion", () => {
   test("paragraph followed immediately by --- is not treated as a TOC heading", () => {
     const toc = extractToc(

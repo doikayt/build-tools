@@ -11,6 +11,7 @@
 
 <!-- TOC:START -->
 - [@datalackey/update-markdown-toc](#datalackeyupdate-markdown-toc)
+  - [Introduction](#introduction)
   - [Why not Some Other Markdown TOC Generator ?](#why-not-some-other-markdown-toc-generator-)
   - [Installation](#installation)
   - [Usage](#usage)
