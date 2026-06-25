@@ -22,7 +22,6 @@ Running in `update` mode writes correct documentation,
 running in `check` mode verifies it, and the two are guaranteed to agree.
 
 
-
 ---
 
 ## Design Principles
