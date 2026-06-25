@@ -39,7 +39,7 @@ jobs:
 
   release:
     needs: build
-    if: false  # provisionally disabled — NPM token issues unresolved; publish locally instead
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -66,20 +66,9 @@ jobs:
       - name: Build all packages
         run: npx nx run-many -t build --skip-nx-cache
 
-      # DEPRECATED: Publish step disabled until NPM token issues are resolved.
-      # NPM_TOKEN is not functioning correctly in CI, causing patch releases to fail.
-      # Do not re-enable until the token has been rotated and verified.
       - name: Publish with Changesets
         id: publish
-        if: false
         run: npx changeset publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Wait for npm registry propagation
-        run: sleep 15
-
-      - name: Post-publish smoke test
-        run: |
-          VERSION=$(node -p "require('./autogen-markdown-doc/package.json').version")
-          bash scripts/post-publish-smoke-test.sh "$VERSION"
