@@ -6,9 +6,9 @@ import {
 } from "../../src/index.js";
 
 const headings: HeadingRecord[] = [
-  { line: 1, rawText: "Introduction", slug: "introduction" },
-  { line: 5, rawText: "Install", slug: "install" },
-  { line: 9, rawText: "Install", slug: "install-1" },
+  { line: 1, rawText: "Introduction", slug: "introduction", level: 2 },
+  { line: 5, rawText: "Install", slug: "install", level: 2 },
+  { line: 9, rawText: "Install", slug: "install-1", level: 3 },
 ];
 
 function makeLink(href: string, line = 10): LinkRecord {

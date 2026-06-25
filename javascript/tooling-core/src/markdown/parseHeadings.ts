@@ -2,15 +2,14 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import { visit } from "unist-util-visit";
 import GithubSlugger from "github-slugger";
-import type { Heading, Text, InlineCode } from "mdast";
+import type { Heading } from "mdast";
 import type { HeadingRecord } from "./types.js";
 
 function extractHeadingText(node: Heading): string {
   const parts: string[] = [];
   visit(node, (child) => {
-    if (child.type === "text") parts.push((child as Text).value);
-    if (child.type === "inlineCode")
-      parts.push(`\`${(child as InlineCode).value}\``);
+    if (child.type === "text") parts.push(child.value);
+    if (child.type === "inlineCode") parts.push(`\`${child.value}\``);
   });
   return parts.join("");
 }
