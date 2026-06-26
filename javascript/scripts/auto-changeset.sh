@@ -2,12 +2,12 @@
 # Auto-generate a changeset from conventional commit messages when none exists.
 # Run in CI before `npx changeset version`.
 #
-# Bump mapping (Conventional Commits spec):
-#   fix:, perf:           → patch
-#   feat:                 → minor
+# Bump mapping (intentionally conservative — automated releases are always patch):
+#   fix:, feat:, perf:    → patch
 #   feat!: / BREAKING CHANGE → major
 #   chore:, ci:, docs:, refactor:, style:, test:, build: → no release
 #
+# Minor bumps must be declared explicitly via `npx changeset` before pushing.
 # If no releasable commits are found, exits cleanly — changeset version
 # then has nothing to consume and publish is a no-op.
 set -euo pipefail
@@ -56,11 +56,7 @@ while IFS= read -r line; do
     BUMP="major"
   fi
 
-  if echo "$line" | grep -qE "^feat(\([^)]+\))?:" && [ "$BUMP" != "major" ]; then
-    BUMP="minor"
-  fi
-
-  if echo "$line" | grep -qE "^(fix|perf)(\([^)]+\))?:" && [ -z "$BUMP" ]; then
+  if echo "$line" | grep -qE "^(fix|feat|perf)(\([^)]+\))?:" && [ -z "$BUMP" ]; then
     BUMP="patch"
   fi
 done <<< "$FULL_LOG"

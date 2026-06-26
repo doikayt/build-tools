@@ -262,10 +262,13 @@ Semver version numbers follow the format **MAJOR.MINOR.PATCH** (e.g. `1.4.2`):
 |---|---|---|
 | `fix:` or `fix(scope):` | patch | `fix(toc): handle headings after HTML blocks` |
 | `perf:` or `perf(scope):` | patch | `perf: cache slugger across files` |
-| `feat:` or `feat(scope):` | minor | `feat: add --quiet flag to all plugins` |
+| `feat:` or `feat(scope):` | patch | `feat: add --quiet flag to all plugins` |
 | `feat!:` or `feat(scope)!:` | **major** | `feat!: remove deprecated --output flag` |
 | `BREAKING CHANGE` in commit body | **major** | any prefix + `BREAKING CHANGE: ...` in body |
 | `chore:`, `ci:`, `docs:`, `refactor:`, `style:`, `test:` | none | no release triggered |
+
+> **Note:** Automated releases are intentionally conservative — `feat:` maps to patch, not minor.
+> Use `npx changeset` before pushing to explicitly declare a minor or major bump.
 
 The highest bump level found across all commits since the last release tag wins.
 
