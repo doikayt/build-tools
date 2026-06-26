@@ -45,6 +45,9 @@ jobs:
   release:
     needs: build
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    concurrency:
+      group: release
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     defaults:
       run:
