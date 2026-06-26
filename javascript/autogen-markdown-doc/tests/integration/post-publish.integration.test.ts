@@ -6,10 +6,7 @@ import os from "node:os";
 import { fileURLToPath } from "node:url";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
-const FIXTURE_DIR = path.resolve(
-  __dirname,
-  "../e2e/fixtures/math-cli-nx"
-);
+const FIXTURE_DIR = path.resolve(__dirname, "../e2e/fixtures/math-cli-nx");
 
 const PUBLISHED_VERSION = process.env.PUBLISHED_VERSION;
 
@@ -108,10 +105,7 @@ describe(`Post-publish smoke test — @datalackey/autogen-markdown-doc`, () => {
   test("TOC, NX graph, and UML content are all injected", () => {
     if (!PUBLISHED_VERSION) return;
 
-    const content = fs.readFileSync(
-      path.join(workDir, "README.md"),
-      "utf-8"
-    );
+    const content = fs.readFileSync(path.join(workDir, "README.md"), "utf-8");
 
     // TOC
     expect(content).toContain("- [Math CLI](#math-cli)");
