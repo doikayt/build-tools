@@ -1,5 +1,24 @@
 # @datalackey/update-markdown-toc
 
+## 1.4.2
+
+### Patch Changes
+
+- - feat(autogen-markdown-doc): add post-publish smoke test against npm registry
+  - fix(ci): auto-changeset always generates patch bumps
+  - fix(ci): add .github/workflows/\*\* to path triggers
+  - fix(ci): move permissions to workflow level to fix checkout auth failure
+  - fix(ci): remove explicit token from checkout — actions/checkout handles it
+  - fix(ci): use GITHUB_TOKEN for checkout, not NPM token
+  - fix(update-markdown-toc): heading after HTML block no longer missing from TOC
+  - fix: ignore inline code spans when parsing periods and TOC markers
+  - fix: add dependsOn build to test targetDefaults in nx.json
+  - fix: strip org scope from cross-project hex node labels to prevent truncation
+  - feat: render cross-project deps as synthetic hexagon nodes in mermaid diagram
+  - fix: render same-project qualified dep refs as edges in mermaid diagram
+- Updated dependencies
+  - @datalackey/tooling-core@1.4.2
+
 ## 1.4.1
 
 ### Patch Changes
