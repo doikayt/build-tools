@@ -28,6 +28,11 @@
     - [rules](#rules)
     - [Maintainer rules](#maintainer-rules)
   - [Activity Diagram](#activity-diagram)
+  - [How the Automated Release Pipeline Works](#how-the-automated-release-pipeline-works)
+    - [1. Auto-changeset (`scripts/auto-changeset.sh`)](#1-auto-changeset-scriptsauto-changesetsh)
+    - [2. Version bump + publish](#2-version-bump--publish)
+    - [3. Post-publish smoke test](#3-post-publish-smoke-test)
+  - [Verifying a Release](#verifying-a-release)
   - [Rules](#rules-1)
   - [Publishing as NPM Packages](#publishing-as-npm-packages)
   - [Sideways Version Bump Policy](#sideways-version-bump-policy)
@@ -118,21 +123,45 @@ Rationale:
 
 ### Day to Day Development (Package Level) Overview
 
-When working on a specific plugin:
-```
-cd javascript/nx-graph-to-mermaid
+Work from inside the individual package folder:
+```bash
+cd javascript/nx-graph-to-mermaid   # or whichever package you're working on
 ```
 
 Typical workflow:
+```bash
+# 1. Edit source files, then build and test — only changed projects rebuild
+npx nx run-many -t build,test
 
-- Edit source files
-- npm run build
-- npm test
-- git add .
-- git commit
-- git push
+# Force a full rebuild of everything (e.g. after a branch switch):
+npx nx run-many -t build,test --skip-nx-cache
 
-Day-to-day development lives inside the individual package folder.
+# 2. Regenerate docs and reformat code before committing
+cd javascript   # must run from workspace root
+npx nx run build-tools-workspace:update-all
+
+# 3. Stage and commit
+git add .
+git commit -m "fix(my-package): what changed and why"
+
+# 4. Verify everything passes before pushing (catches lint, types, format drift)
+npx nx run build-tools-workspace:check-all
+
+# 5. Pull any CI-generated version bump commits before pushing
+git pull --rebase
+
+git push
+```
+
+> **Why `git pull --rebase` before push?**
+> The release pipeline commits version bumps back to `main` (`chore: release [skip ci]`).
+> If a release ran since your last pull, your local branch is behind and git will reject
+> the push. `--rebase` keeps history linear and avoids noisy merge commits.
+
+> **`update-all` vs `check-all`:**
+> `update-all` auto-fixes docs and formatting — run it before committing.
+> `check-all` validates everything including lint (which cannot be auto-fixed) — run it
+> before pushing. Lint errors must be fixed manually.
 
 ---
 
@@ -392,10 +421,11 @@ DEVELOPMENT FLOW
 cd javascript/nx-graph-to-mermaid
 
   edit files
-  npm run build
-  npm test
-  git commit
-  git push
+  npx nx run-many -t build,test
+  cd javascript && npx nx run build-tools-workspace:update-all
+  git add . && git commit -m "fix(scope): ..."
+  npx nx run build-tools-workspace:check-all
+  git pull --rebase && git push
 ```
 
 RELEASE FLOW
@@ -410,6 +440,55 @@ cd javascript
                                          changeset version  (bumps versions, commits [skip ci])
                                          changeset publish  (publishes to npm)
 ```
+
+---
+
+## How the Automated Release Pipeline Works
+
+On every push to `main` that passes the build, the release job runs three steps:
+
+### 1. Auto-changeset (`scripts/auto-changeset.sh`)
+
+If no handwritten `.changeset/*.md` file exists, the script scans `git log` since
+the last release tag and derives a semver bump from conventional commit prefixes
+(see [Versioning Tiers](#versioning-tiers)). It writes a changeset file that
+`changeset version` then consumes. If no releasable commits are found (`fix:`,
+`feat:`, `perf:`), the script exits cleanly and no release is produced.
+
+### 2. Version bump + publish
+
+`changeset version` reads the changeset file, bumps all package versions in
+lockstep (see [Sideways Version Bump Policy](#sideways-version-bump-policy)),
+updates each package's `CHANGELOG.md`, and deletes the changeset file. The
+version bump is committed back to `main` with `[skip ci]` to prevent a recursive
+CI trigger. `changeset publish` then publishes all packages to npm and creates
+a `v<x.y.z>` git tag.
+
+### 3. Post-publish smoke test
+
+After a 30-second registry propagation wait, the smoke test installs
+`@datalackey/autogen-markdown-doc` at the just-published version **from the npm
+registry** (not local tarballs) and verifies the binary runs end-to-end against
+the `math-cli-nx` fixture. This proves the published artifact is correct, not
+just the local build.
+
+---
+
+## Verifying a Release
+
+After a release completes, evidence appears in several places:
+
+| Where | What to look for |
+|---|---|
+| **GitHub Actions** | Release job green; `Publishing "@datalackey/*" at "x.y.z"` in the publish step log |
+| **`git log`** | A `chore: release [skip ci]` commit with bumped versions, followed by your original commit |
+| **`git tag`** | New `v<x.y.z>` tag created by `changeset publish` — run `git pull --tags` to fetch it locally |
+| **Each package's `CHANGELOG.md`** | e.g. `javascript/autogen-markdown-doc/CHANGELOG.md` — one entry per release with the commit summaries that drove it |
+| **npm registry** | `npm view @datalackey/autogen-markdown-doc versions` — the new version appears in the list |
+
+The `CHANGELOG.md` files are the canonical human-readable record of what changed in each
+release and why. They are generated automatically from the conventional commit subjects
+that drove the bump.
 
 ---
 
