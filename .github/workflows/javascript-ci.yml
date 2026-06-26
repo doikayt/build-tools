@@ -9,9 +9,11 @@ on:
     branches: [ main ]
     paths:
       - 'javascript/**'
+      - '.github/workflows/**'
   pull_request:
     paths:
       - 'javascript/**'
+      - '.github/workflows/**'
 
 jobs:
   build:
