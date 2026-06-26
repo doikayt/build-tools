@@ -1,5 +1,8 @@
 name: CI - JavaScript/Typescript/Node Projects
 
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
   push:
@@ -41,8 +44,6 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     defaults:
       run:
         working-directory: javascript
