@@ -41,7 +41,7 @@ export function parseStandardCli(
   let runMode: "update" | "check" = "update";
   let mode: "single" | "recursive" = "single";
   let recursivePath: string | undefined = undefined;
-  let exclude: string[] = [];
+  let exclude: string[] | undefined = undefined;
 
   let validateExternalLinks = true;
   let linkTimeoutMs = DEFAULT_LINK_TIMEOUT_MS;

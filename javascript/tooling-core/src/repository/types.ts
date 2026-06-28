@@ -8,7 +8,7 @@ export interface RunConfig {
   runMode: RunMode;
   mode: "single" | "recursive";
   recursivePath?: string;
-  exclude: string[];
+  exclude?: string[];
   verbose: boolean;
   quiet: boolean;
   debug: boolean;

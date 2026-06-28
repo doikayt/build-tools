@@ -12,7 +12,7 @@ function base(): RunConfig {
     debug: false,
     mode: "single",
     recursivePath: undefined,
-    exclude: [],
+    exclude: undefined,
     validateExternalLinks: false,
     linkTimeoutMs: 3000,
   };
@@ -52,6 +52,48 @@ describe("listFilesToProcess — resolution behavior", () => {
     expect(() => listFilesToProcess(base(), [])).toThrow();
 
     process.chdir(cwd);
+    cleanup(dir);
+  });
+
+  test("recursive mode excludes node_modules by default (no --exclude flag)", () => {
+    const dir = tmpDir();
+    const nm = path.join(dir, "node_modules");
+    fs.mkdirSync(nm);
+    fs.writeFileSync(path.join(nm, "pkg.md"), "x");
+    fs.writeFileSync(path.join(dir, "README.md"), "x");
+
+    const config: RunConfig = {
+      ...base(),
+      mode: "recursive",
+      recursivePath: dir,
+    };
+
+    const result = listFilesToProcess(config, []);
+
+    expect(result.files.some((f) => f.includes("node_modules"))).toBe(false);
+    expect(result.files.some((f) => f.endsWith("README.md"))).toBe(true);
+
+    cleanup(dir);
+  });
+
+  test("recursive mode with --exclude \"\" traverses node_modules", () => {
+    const dir = tmpDir();
+    const nm = path.join(dir, "node_modules");
+    fs.mkdirSync(nm);
+    fs.writeFileSync(path.join(nm, "pkg.md"), "x");
+    fs.writeFileSync(path.join(dir, "README.md"), "x");
+
+    const config: RunConfig = {
+      ...base(),
+      mode: "recursive",
+      recursivePath: dir,
+      exclude: [],
+    };
+
+    const result = listFilesToProcess(config, []);
+
+    expect(result.files.some((f) => f.includes("node_modules"))).toBe(true);
+
     cleanup(dir);
   });
 

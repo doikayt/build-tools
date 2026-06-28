@@ -54,7 +54,7 @@ export function listFilesToProcess(
   const files = walkFiles({
     rootDir: resolvedRoot,
     extensions: [".md"],
-    excludeDirs: config.exclude.length > 0 ? config.exclude : undefined,
+    excludeDirs: config.exclude,
   });
 
   return {
