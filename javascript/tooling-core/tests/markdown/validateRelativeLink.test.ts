@@ -68,6 +68,16 @@ describe("validateRelativeLink()", () => {
     expect(result!.reason).toBe("file not found");
   });
 
+  test("returns error for trailing '#' with empty fragment", () => {
+    const source = path.join(tmpDir, "source.md");
+    const result = validateRelativeLink(source, makeLink("./target.md#"));
+    expect(result).not.toBeNull();
+    expect(result!.reason).toBe(
+      "empty anchor fragment — trailing '#' with no slug"
+    );
+    expect(result!.link).toBe("./target.md#");
+  });
+
   test("file and line are reported correctly", () => {
     const source = path.join(tmpDir, "source.md");
     const result = validateRelativeLink(source, makeLink("./missing.md", 42));

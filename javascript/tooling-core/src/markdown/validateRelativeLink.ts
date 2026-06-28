@@ -30,8 +30,17 @@ export function validateRelativeLink(
     };
   }
 
-  if (fragment === undefined || fragment === "") {
+  if (fragment === undefined) {
     return null;
+  }
+
+  if (fragment === "") {
+    return {
+      file: sourceFilePath,
+      line: link.line,
+      link: link.href,
+      reason: "empty anchor fragment — trailing '#' with no slug",
+    };
   }
 
   let targetContent: string;
