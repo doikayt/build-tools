@@ -41,7 +41,7 @@ if [[ "$STATUS" -eq 0 ]]; then
   exit 1
 fi
 
-if ! echo "$OUTPUT" | grep -q "ERROR: Recursive path does not exist"; then
+if ! echo "$OUTPUT" | grep -q "ERROR: Directory does not exist"; then
   echo "ERROR: expected missing-path error message"
   echo "Actual output:"
   echo "$OUTPUT"
@@ -68,7 +68,7 @@ if [[ "$STATUS" -eq 0 ]]; then
   exit 1
 fi
 
-if ! echo "$OUTPUT" | grep -q "ERROR: --recursive requires a directory"; then
+if ! echo "$OUTPUT" | grep -q "ERROR: Not a directory"; then
   echo "ERROR: expected directory-required error message"
   echo "Actual output:"
   echo "$OUTPUT"
@@ -119,7 +119,7 @@ if [[ "$STATUS" -eq 0 ]]; then
   exit 1
 fi
 
-if ! echo "$OUTPUT" | grep -q "ERROR: Cannot use --recursive with a file argument"; then
+if ! echo "$OUTPUT" | grep -q "ERROR: Cannot use positional file arguments with --recursive"; then
   echo "ERROR: expected recursive/file conflict error"
   echo "Actual output:"
   echo "$OUTPUT"

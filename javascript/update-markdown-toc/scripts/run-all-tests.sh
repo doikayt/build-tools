@@ -33,6 +33,10 @@ echo "→ Running CLI contract tests"
 bash "$SCRIPTS/cli-options-test.sh" $TEST_TRACE_FLAG
 echo
 
+echo "→ Running recursive error contract tests"
+bash "$SCRIPTS/recursive-error-contracts.test.sh" $TEST_TRACE_FLAG
+echo
+
 echo "→ Running recursive traversal tests"
 bash "$SCRIPTS/recursive-traversal-test.sh" $TEST_TRACE_FLAG
 echo

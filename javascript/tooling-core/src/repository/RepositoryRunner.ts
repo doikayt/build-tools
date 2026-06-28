@@ -39,6 +39,8 @@ export class RepositoryRunner<TConfig extends RunConfig> {
       `RepositoryRunner.runAsync: starting, fileCount=${files.length}, runMode=${this.config.runMode}, mode=${this.config.mode}`
     );
 
+    let hadErrors = false;
+
     for (const file of files) {
       let result: ProcessingStatus;
 
@@ -57,6 +59,7 @@ export class RepositoryRunner<TConfig extends RunConfig> {
           )}`
         );
         if (this.policy.handleProcessorError(file, err) === "continue") {
+          hadErrors = true;
           continue;
         }
         throw err;
@@ -81,7 +84,7 @@ export class RepositoryRunner<TConfig extends RunConfig> {
 
     this.printSummary(stats);
 
-    if (this.config.runMode === "check" && stats.needsUpdate > 0) {
+    if (hadErrors || (this.config.runMode === "check" && stats.needsUpdate > 0)) {
       process.exitCode = 1;
     }
 

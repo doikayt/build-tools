@@ -51,6 +51,12 @@ export function listFilesToProcess(
     throw new Error(`Not a directory: ${resolvedRoot}`);
   }
 
+  if (positionals.length > 0) {
+    throw new Error(
+      `Cannot use positional file arguments with --recursive: ${positionals.join(", ")}`
+    );
+  }
+
   const files = walkFiles({
     rootDir: resolvedRoot,
     extensions: [".md"],
