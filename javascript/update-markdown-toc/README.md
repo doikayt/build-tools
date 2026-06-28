@@ -414,10 +414,6 @@ In practice this affects only headings with inline code, bold, or italic syntax.
 Plain-text headings are unaffected. A fix to unify both paths is planned for a
 future release.
 
-**`stripInlineCode` is an internal helper**
-
-`stripInlineCode` is exported for testing purposes only. It is not part of the
-public API and may change or be removed in any release without notice.
 
 ## Contributing and Releasing
 
