@@ -307,14 +307,14 @@ In this mode:
 Recursive mode is designed for gradual adoption across larger repositories, where not every Markdown file may yet contain TOC markers.
 Unlike single-file mode, recursive mode does **not** treat missing TOC markers as an error. This allows incremental rollout of TOC enforcement.
 
-However, structural or filesystem errors still abort the run immediately. These include:
+However, structural or filesystem errors are always reported and cause a non-zero exit. These include:
 
 - unreadable files (e.g., permission errors),
 - mismatched TOC delimiters,
 - malformed TOC marker pairs,
 - files containing TOC markers but no Markdown headings.
 
-When such errors occur, the tool prints an error message and exits non-zero without continuing further traversal.
+When such errors occur, the tool prints an error message for each affected file and continues processing the remaining files. All errors are surfaced in a single pass; the process exits non-zero once traversal is complete.
 
 When combined with `--verbose`, skipped files (Markdown files without start/end region markers) are reported explicitly. For example:
 
