@@ -31,6 +31,10 @@
       - [Recursive Folder Traversal (Lenient Mode)](#recursive-folder-traversal-lenient-mode)
   - [Design Goals and Philosophy](#design-goals-and-philosophy)
   - [Packaging, Publishing, and Inter-relationship with Other Plugins](#packaging-publishing-and-inter-relationship-with-other-plugins)
+  - [Heading Extraction Behavior](#heading-extraction-behavior)
+    - [Code fences are excluded](#code-fences-are-excluded)
+    - [Only ATX-style headings are included](#only-atx-style-headings-are-included)
+    - [Inline code spans are stripped before marker detection](#inline-code-spans-are-stripped-before-marker-detection)
   - [Known Limitations](#known-limitations)
   - [Contributing and Releasing](#contributing-and-releasing)
 <!-- TOC:END -->
@@ -350,6 +354,54 @@ The versioning and release of these packages is governed by a coordinated releas
 the packages adhere to common design and architectural principles policies
 that are more completely described [here](../../README.md).
 
+## Heading Extraction Behavior
+
+### Code fences are excluded
+
+Lines inside fenced code blocks are not treated as headings. A `#` character
+that appears inside a ` ``` ` block is code, not a heading, and will not appear
+in the generated TOC.
+
+If a code fence is opened but never closed, everything from the opening fence
+to the end of the document is treated as inside the fence and excluded from
+heading extraction. No error is thrown — the headings that appear before the
+unclosed fence are still included.
+
+### Only ATX-style headings are included
+
+Only headings written with leading `#` characters (ATX style) are included in
+the TOC:
+
+```markdown
+## This is included
+```
+
+Setext-style headings — a paragraph immediately followed by `---` or `===` on
+the next line — are excluded. This avoids accidentally treating a paragraph
+followed by a horizontal rule as a heading, which is a common Markdown pattern:
+
+```markdown
+A note for users.
+---
+```
+
+The line above is a paragraph + horizontal rule, not a heading, and will not
+appear in the TOC.
+
+### Inline code spans are stripped before marker detection
+
+Before checking for `<!-- TOC:START -->` and `<!-- TOC:END -->` markers, the
+document is preprocessed to remove inline code spans. This means a marker
+written inside backticks is treated as literal text and will not trigger marker
+detection:
+
+```markdown
+Use `<!-- TOC:START -->` and `<!-- TOC:END -->` as delimiters.
+```
+
+The above line is documentation about the markers, not the markers themselves.
+Only bare (unquoted) marker strings activate the TOC region.
+
 ## Known Limitations
 
 **Fragment link validation with formatted headings**
@@ -361,6 +413,12 @@ such as code spans or bold text (e.g. `## Install \`foo\``).
 In practice this affects only headings with inline code, bold, or italic syntax.
 Plain-text headings are unaffected. A fix to unify both paths is planned for a
 future release.
+
+**`stripInlineCode` is not public API**
+
+`stripInlineCode` is a named export of the internal `generateToc` module and is
+used in tests, but it has no documented contract and may change or be removed
+without notice. Do not import it from outside this package.
 
 ## Contributing and Releasing
 
