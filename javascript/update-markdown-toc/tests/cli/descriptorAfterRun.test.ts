@@ -11,10 +11,10 @@ vi.mock("@datalackey/tooling-core", async (importOriginal) => {
 });
 
 import { runLinkValidation } from "@datalackey/tooling-core";
+import type { RunConfig } from "@datalackey/tooling-core";
 import { descriptor } from "../../src/cli/descriptor.js";
-import type { TocRunConfig } from "../../src/cli/TocRunConfig.js";
 
-function makeCheckConfig(overrides: Partial<TocRunConfig> = {}): TocRunConfig {
+function makeCheckConfig(overrides: Partial<RunConfig> = {}): RunConfig {
   return {
     runMode: "check",
     mode: "single",
@@ -28,7 +28,7 @@ function makeCheckConfig(overrides: Partial<TocRunConfig> = {}): TocRunConfig {
   };
 }
 
-function makeUpdateConfig(overrides: Partial<TocRunConfig> = {}): TocRunConfig {
+function makeUpdateConfig(overrides: Partial<RunConfig> = {}): RunConfig {
   return { ...makeCheckConfig(), runMode: "update", ...overrides };
 }
 

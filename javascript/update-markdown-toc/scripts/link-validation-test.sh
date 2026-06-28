@@ -309,23 +309,3 @@ echo "========================================"
 echo " ✅ LINK VALIDATION INTEGRATION TESTS PASSED"
 echo "========================================"
 
-
-
-echo "→ broken external link (404) exits 1"
-
-FILE="$(make_fixture broken-external.md)"
-
-echo "DEBUG FILE: $FILE"
-echo "DEBUG FILE CONTENTS:"
-cat "$FILE"
-echo "DEBUG RUNNING:"
-echo "  node $CLI --check $FILE"
-
-set +e
-OUTPUT="$(node "$CLI" --check "$FILE")"
-STATUS=$?
-set -e
-
-echo "DEBUG STATUS: $STATUS"
-echo "DEBUG OUTPUT: $OUTPUT"
-

@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/update-markdown-toc",
   "dependencies": {
-    "@datalackey/tooling-core": "*",
+    "@datalackey/tooling-core": "^1.0.0",
     "github-slugger": "^2.0.0",
     "ts-dedent": "^2.2.0"
   },

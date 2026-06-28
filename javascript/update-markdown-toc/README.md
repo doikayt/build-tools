@@ -124,7 +124,7 @@ or another method that resolves the local `update-markdown-toc` binary.
 update-markdown-toc [options] [file]
 
 Options:
-  -c, --check     <path-to-file-or-folder>  Do not write files; exit non-zero if TOC is stale
+  -c, --check                               Do not write files; exit non-zero if TOC is stale
   -n, --no-external-link-check              Skip external HTTP/HTTPS link validation during --check
   -l, --link-timeout-ms <ms>                Per-request timeout for external link checks (default: 3000)
   -r, --recursive <path-to-folder>          Recursively process all .md files under the given folder
@@ -215,11 +215,9 @@ Your `package.json` might look like this:
     "clean": "rm -rf dist",
     "compile": "tsc -p tsconfig.json",
     "pretest": "npm run compile",
-    "test": "jest",
+    "test": "vitest run",
     "docs:toc": "update-markdown-toc --recursive docs/",
-    "bundle": "esbuild src/index.ts --bundle --platform=node --outdir=dist",
-    "package": "npm run clean && npm run compile && npm run bundle",
-    "build": "npm run docs:toc && npm run test && npm run package"
+    "build": "npm run docs:toc && npm run test && npm run compile"
   }
 }
 ```
@@ -249,7 +247,7 @@ When running with `--check`, the tool performs three tiers of link validation in
   - external links.
 
 For full details on behavior, failure output, and performance considerations
-see [Common CLI Behavior — Check Mode](../CLI-BEHAVIOR.md#
+see [Common CLI Behavior — Check Mode](../CLI-BEHAVIOR.md#6-check-mode---check)
 
 
 To skip external link validation:
