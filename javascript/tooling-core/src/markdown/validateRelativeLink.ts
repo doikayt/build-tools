@@ -10,6 +10,9 @@ import type { LinkRecord, LinkValidationError } from "./types.js";
  * Resolves the target path relative to the source file's directory.
  * If a fragment is present, reads the target file and validates the anchor
  * against its headings.
+ *
+ * Returns null if the link is valid; otherwise returns a LinkValidationError
+ * object describing the file, line, href, and reason for failure.
  */
 export function validateRelativeLink(
   sourceFilePath: string,
