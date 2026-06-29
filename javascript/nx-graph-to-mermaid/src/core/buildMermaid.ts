@@ -10,10 +10,12 @@ export interface NxProjectJson {
   targets?: Record<string, NxTarget>;
 }
 
-export function buildMermaid(project: NxProjectJson, debug = false): string {
-  const dbg = { debug };
+export function buildMermaid(
+  project: NxProjectJson,
+  config: { debug?: boolean } = {}
+): string {
   const targets = validateProjectStructure(project);
-  debugLog(dbg, `buildMermaid: targetCount=${Object.keys(targets).length}`);
+  debugLog(config, `buildMermaid: targetCount=${Object.keys(targets).length}`);
 
   const sortedTargetNames = Object.keys(targets).sort((a, b) =>
     a.localeCompare(b)
@@ -43,7 +45,7 @@ export function buildMermaid(project: NxProjectJson, debug = false): string {
   renderEdges(lines, sortedTargetNames, targets, nodeIdMap, project.name);
 
   const body = lines.join("\n");
-  debugLog(dbg, `buildMermaid: generated length=${body.length}`);
+  debugLog(config, `buildMermaid: generated length=${body.length}`);
 
   return `\`\`\`mermaid
 ${body}

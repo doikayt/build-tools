@@ -19,6 +19,12 @@ This document describes the tools and technologies used across all packages in t
   declare `"type": "module"` in `package.json`. CommonJS `require()` is not supported.
   Consumers must use Node.js 18+ and an ESM-compatible toolchain.
 
+  **Exception — NX executor bridge:** `nx-graph-to-mermaid` includes a
+  `executor-bridge.cjs` shim at the package root. NX loads executors via
+  `require()`, so a thin CJS wrapper is necessary to bridge into the ESM
+  implementation. The shim contains no logic — it is a single `require`/dynamic
+  `import` trampoline. All real code remains ESM in `src/`.
+
 ---
 
 ## Language

@@ -364,6 +364,8 @@ If drift is detected:
 
 This prevents stale diagrams from being merged.
 
+> **Setup requirement:** check mode compares the current marker content byte-for-byte against the freshly generated diagram. A file with empty markers (no injected content yet) will always fail. Run `update` mode once first to populate the markers, then commit the result before enabling check mode in CI.
+
 ---
 
 ## Debug Mode

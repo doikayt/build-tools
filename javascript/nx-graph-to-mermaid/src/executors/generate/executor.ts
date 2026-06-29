@@ -21,9 +21,8 @@ function runExecutor(rawOptions: RawOptions): { success: boolean } {
   }
 
   const { options, project } = ctx;
-  const dbg = { debug: options.debug ?? false };
 
-  debugLog(dbg, `runExecutor: dispatching mode=${options.mode}`);
+  debugLog(options, `runExecutor: dispatching mode=${options.mode}`);
 
   let result: { success: boolean };
 
@@ -32,22 +31,13 @@ function runExecutor(rawOptions: RawOptions): { success: boolean } {
       result = handleInject(options);
       break;
     case "check":
-      result = handleCheck(
-        options,
-        buildMermaid(project as NxProjectJson, dbg.debug)
-      );
+      result = handleCheck(options, buildMermaid(project as NxProjectJson, options));
       break;
     case "generate":
-      result = handleGenerate(
-        options,
-        buildMermaid(project as NxProjectJson, dbg.debug)
-      );
+      result = handleGenerate(options, buildMermaid(project as NxProjectJson, options));
       break;
     case "update":
-      result = handleUpdate(
-        options,
-        buildMermaid(project as NxProjectJson, dbg.debug)
-      );
+      result = handleUpdate(options, buildMermaid(project as NxProjectJson, options));
       break;
     default: {
       const _exhaustive: never = options.mode;
@@ -55,7 +45,7 @@ function runExecutor(rawOptions: RawOptions): { success: boolean } {
     }
   }
 
-  debugLog(dbg, `runExecutor: result=${JSON.stringify(result)}`);
+  debugLog(options, `runExecutor: result=${JSON.stringify(result)}`);
   return result;
 }
 

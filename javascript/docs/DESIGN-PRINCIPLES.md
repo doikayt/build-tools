@@ -107,7 +107,13 @@ at the root of a multi-module Gradle build rather than one per submodule.
 
 ## The CLI Framework Pattern
 
-All CLI plugins are built on a common framework provided by
+> **NX executor exception:** `nx-graph-to-mermaid` is an NX executor, not a
+> standalone CLI tool. It does not use `runCli`, `PluginDescriptor`, or
+> `FileProcessor` — NX controls orchestration and invokes `runExecutor()`
+> directly via `executor-bridge.cjs`. This is correct by design and is not a
+> conformance gap.
+
+All other CLI plugins are built on a common framework provided by
 `@datalackey/tooling-core`. The key concepts are:
 
 - **`PluginDescriptor`** — declarative metadata describing the plugin's name,

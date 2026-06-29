@@ -90,14 +90,17 @@ jobs:
             (git commit -m "chore: release [skip ci]" && git push)
 
       - name: Publish with Changesets
+        id: publish
         run: npx changeset publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM }}
 
       - name: Wait for npm registry propagation
+        if: steps.publish.outcome == 'success'
         run: sleep 30
 
       - name: Post-publish smoke test
+        if: steps.publish.outcome == 'success'
         run: |
           VERSION=$(node -p "require('./autogen-markdown-doc/package.json').version")
           cd autogen-markdown-doc && PUBLISHED_VERSION=$VERSION npx vitest run --config vitest.integration.config.ts

@@ -32,10 +32,8 @@ export type ExecutionContext =
 export function resolveExecutionContext(
   rawOptions: RawOptions
 ): ExecutionContext {
-  const dbg = { debug: rawOptions.debug ?? false };
-
   debugLog(
-    dbg,
+    rawOptions,
     `resolveExecutionContext: rawOptions=${JSON.stringify(rawOptions)}`
   );
 
@@ -49,7 +47,7 @@ export function resolveExecutionContext(
   }
 
   debugLog(
-    dbg,
+    rawOptions,
     `resolveExecutionContext: mode=${options.mode} projectJsonPath=${
       options.projectJsonPath
     } markdownPath=${options.markdownPath ?? "(none)"} generatedMermaidPath=${
@@ -92,7 +90,7 @@ export function resolveExecutionContext(
     (project as { targets?: Record<string, unknown> }).targets ?? {}
   ).length;
   debugLog(
-    dbg,
+    rawOptions,
     `resolveExecutionContext: project.json loaded, targetCount=${targetCount}`
   );
 
