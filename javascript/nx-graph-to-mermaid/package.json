@@ -54,6 +54,6 @@
     "vitest": "^1.0.0"
   },
   "dependencies": {
-    "@datalackey/tooling-core": "*"
+    "@datalackey/tooling-core": "^1.0.0"
   }
 }

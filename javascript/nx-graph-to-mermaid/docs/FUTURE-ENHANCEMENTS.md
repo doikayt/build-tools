@@ -1,11 +1,5 @@
 
-# Hi priority TODOS 
-
-Inject mode does not regenerate the diagram. It reads the existing generated Mermaid file and injects it into the Markdown file.
-
-
-
-## Future Directions
+# Future Directions
 
 ### Decoupling the Graph Engine from Nx
 

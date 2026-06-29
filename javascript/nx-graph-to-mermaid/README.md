@@ -320,6 +320,8 @@ Add a target:
 **This mode:**  
 Combines generation and injection in a single deterministic operation. It regenerates the Mermaid diagram from `project.json`, injects it into the specified Markdown file between NX_GRAPH markers, and optionally writes the generated artifact to disk.
 
+> **`generatedMermaidPath` is optional in update mode.** Omit it to regenerate and inject in one step without writing a separate Mermaid file to disk.
+
 Run:
 
 ```bash
