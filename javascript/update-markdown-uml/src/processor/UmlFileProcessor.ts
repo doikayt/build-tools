@@ -27,8 +27,12 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
         ? rawPatterns
         : DEFAULT_SKIP_TEST_PATTERNS;
 
+    const onWarn = config.quiet
+      ? undefined
+      : (msg: string) => console.warn(msg);
+
     // 1. Discover leaf components
-    const leafDirs = discoverLeafComponents(sourceRoot, skipPatterns);
+    const leafDirs = discoverLeafComponents(sourceRoot, skipPatterns, onWarn);
     debugLog(config, `UmlFileProcessor: leafDirs=${JSON.stringify(leafDirs)}`);
 
     const leafNames = leafDirs.map((d) => path.basename(d));
@@ -50,9 +54,6 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
     const activeLeafNames = activeLeafDirs.map((d) => path.basename(d));
 
     // 2. Read component descriptions
-    const onWarn = config.quiet
-      ? undefined
-      : (msg: string) => console.warn(msg);
 
     const descriptions = new Map<string, string | undefined>();
     for (const leafDir of activeLeafDirs) {

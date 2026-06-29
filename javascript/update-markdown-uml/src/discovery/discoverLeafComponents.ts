@@ -14,10 +14,11 @@ import micromatch from "micromatch";
  */
 export function discoverLeafComponents(
   sourceRoot: string,
-  skipTestPatterns: string[]
+  skipTestPatterns: string[],
+  onWarn?: (message: string) => void
 ): string[] {
   const results: string[] = [];
-  walk(sourceRoot, sourceRoot, skipTestPatterns, results);
+  walk(sourceRoot, sourceRoot, skipTestPatterns, results, onWarn);
   return results.sort((a, b) => a.localeCompare(b));
 }
 
@@ -42,7 +43,8 @@ function walk(
   currentDir: string,
   sourceRoot: string,
   skipTestPatterns: string[],
-  results: string[]
+  results: string[],
+  onWarn?: (message: string) => void
 ): void {
   const entries = fs.readdirSync(currentDir, { withFileTypes: true });
 
@@ -61,7 +63,8 @@ function walk(
   const hasQualifyingChildren = qualifyingSubdirs.length > 0;
 
   if (selfQualifies && hasQualifyingChildren) {
-    console.warn(
+    const warn = onWarn ?? ((msg) => console.warn(msg));
+    warn(
       `Warning: "${path.relative(
         sourceRoot,
         currentDir
@@ -74,7 +77,7 @@ function walk(
   }
 
   for (const sub of subdirs) {
-    walk(sub, sourceRoot, skipTestPatterns, results);
+    walk(sub, sourceRoot, skipTestPatterns, results, onWarn);
   }
 }
 
