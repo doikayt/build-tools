@@ -1,6 +1,24 @@
+
+*.class
+*.log
+*.iml
+
+## no idea crap allowed
+.idea/
+.idea/*
+
+*.ipr
+*.iml
+*.iws
+
+
+# Node / JS / Typescript 
 node_modules
 dist
 test/**/dist
-
 .nx/
 .lights-out-logs/
+
+
+# Local claude stuff
+**/.claude/settings.local.json
