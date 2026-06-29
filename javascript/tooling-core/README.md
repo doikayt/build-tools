@@ -32,7 +32,7 @@ conventions.
 - [`RunConfig`](src/repository/types.ts) — base configuration passed to every file processor;
   carries mode, verbosity, debug, exclude list, and run mode (`update` vs `check`)
 - [`ProcessingStatus`](src/repository/types.ts) — return value from a `FileProcessor`;
-  one of `"updated"`, `"unchanged"`, `"needs update"`, or `"skipped"`
+  one of `"updated"`, `"unchanged"`, `"needsUpdate"`, or `"skipped"`
 - [`FileProcessor`](src/repository/types.ts) — interface a plugin implements;
   single `process(filePath, config)` method
 - [`PluginDescriptor`](src/cli/types.ts) — declarative plugin metadata;
