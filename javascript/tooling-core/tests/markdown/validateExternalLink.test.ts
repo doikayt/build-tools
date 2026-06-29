@@ -168,7 +168,7 @@ describe("validateExternalLink()", () => {
     );
   });
 
-  test("calls onVerbose for request", async () => {
+  test("calls onVerbose after successful response", async () => {
     mockFetch(200);
     const messages: string[] = [];
     await validateExternalLink(
