@@ -184,7 +184,15 @@ flowchart TB
 
 **Components table** — names link to the class diagram section below.
 Descriptions are read from an optional `_COMPONENT_INFO.md` file in each
-component directory; `TBD` appears when the file is absent.
+component directory; `TBD` appears when the file is absent. The description
+is the first sentence of the file — text up to and including the first
+period (`.`); everything after that period is ignored.
+
+**Note:** if the file exists but contains no period, the description is
+treated as missing (`TBD`) and a warning is printed identifying the file.
+To suppress `TBD` without providing a description, create
+`_COMPONENT_INFO.md` with a blank first line (no period needed for an
+empty file).
 
 | Component | Description |
 |-----------|-------------|
