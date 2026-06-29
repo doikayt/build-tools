@@ -120,7 +120,11 @@ describe("UmlFileProcessor exclusion warnings", () => {
       // internal/ has its own .ts file AND a qualifying child — triggers mixed-concern warn
       const internal = path.join(mixedDir, "src", "internal");
       fs.mkdirSync(path.join(internal, "parsing"), { recursive: true });
-      fs.writeFileSync(path.join(internal, "index.ts"), "export {};\n", "utf-8");
+      fs.writeFileSync(
+        path.join(internal, "index.ts"),
+        "export {};\n",
+        "utf-8"
+      );
       fs.writeFileSync(
         path.join(internal, "parsing", "parser.ts"),
         "export {};\n",
