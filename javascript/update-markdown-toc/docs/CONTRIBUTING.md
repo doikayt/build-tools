@@ -57,9 +57,6 @@ flowchart TB
 ```mermaid
 classDiagram
   direction TB
-  class TocRunConfig {
-    <<type>>
-  }
 ```
 
 #### engine

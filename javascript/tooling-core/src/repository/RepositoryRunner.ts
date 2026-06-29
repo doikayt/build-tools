@@ -84,7 +84,10 @@ export class RepositoryRunner<TConfig extends RunConfig> {
 
     this.printSummary(stats);
 
-    if (hadErrors || (this.config.runMode === "check" && stats.needsUpdate > 0)) {
+    if (
+      hadErrors ||
+      (this.config.runMode === "check" && stats.needsUpdate > 0)
+    ) {
       process.exitCode = 1;
     }
 

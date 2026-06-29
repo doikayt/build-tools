@@ -192,9 +192,9 @@ classDiagram
     +name string
     +description string
     +options PluginOption[]
-    +parseOptions(this, standard, passthrough)? TConfig
-    +validate(this, config)? void
-    +afterRun(this, files, config)? Promise<void>
+    +parseOptions(this, standard, passthrough) TConfig
+    +validate(this, config) void
+    +afterRun(this, files, config) Promise<void>
   }
   class ParsedCliResult {
     <<interface>>
@@ -330,7 +330,7 @@ classDiagram
     +runMode RunMode
     +mode "single" | "recursive"
     +recursivePath? string
-    +exclude string[]
+    +exclude? string[]
     +verbose boolean
     +quiet boolean
     +debug boolean

@@ -53,7 +53,9 @@ export function listFilesToProcess(
 
   if (positionals.length > 0) {
     throw new Error(
-      `Cannot use positional file arguments with --recursive: ${positionals.join(", ")}`
+      `Cannot use positional file arguments with --recursive: ${positionals.join(
+        ", "
+      )}`
     );
   }
 

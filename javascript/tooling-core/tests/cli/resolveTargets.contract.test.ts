@@ -76,7 +76,7 @@ describe("listFilesToProcess — resolution behavior", () => {
     cleanup(dir);
   });
 
-  test("recursive mode with --exclude \"\" traverses node_modules", () => {
+  test('recursive mode with --exclude "" traverses node_modules', () => {
     const dir = tmpDir();
     const nm = path.join(dir, "node_modules");
     fs.mkdirSync(nm);
