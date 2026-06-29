@@ -16,9 +16,9 @@ export function createRunnerPolicy(config: RunConfig): RunnerPolicy {
         debugLog(config, `policy.shouldPrint: true status=${status}`);
         return true;
       }
-      const result = config.verbose;
-      debugLog(config, `policy.shouldPrint: ${result} status=${status}`);
-      return result;
+      const shouldPrint = config.verbose;
+      debugLog(config, `policy.shouldPrint: ${shouldPrint} status=${status}`);
+      return shouldPrint;
     },
 
     shouldPrintSummary(): boolean {
@@ -26,9 +26,9 @@ export function createRunnerPolicy(config: RunConfig): RunnerPolicy {
         debugLog(config, `policy.shouldPrintSummary: false (quiet)`);
         return false;
       }
-      const result = isRecursiveRun && config.verbose;
-      debugLog(config, `policy.shouldPrintSummary: ${result}`);
-      return result;
+      const shouldPrint = isRecursiveRun && config.verbose;
+      debugLog(config, `policy.shouldPrintSummary: ${shouldPrint}`);
+      return shouldPrint;
     },
 
     handleProcessorError(_file: string, error: unknown): RunnerDecision {
