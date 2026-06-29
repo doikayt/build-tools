@@ -67,19 +67,22 @@ function handleGenerate(
   return { success: true };
 }
 
+function readAndInject(
+  markdownPath: string,
+  mermaid: string
+): { original: string; updated: string } {
+  const original = fs.readFileSync(markdownPath, "utf-8");
+  const updated = injectBetweenMarkers(original, mermaid, NX_GRAPH_START, NX_GRAPH_END);
+  return { original, updated };
+}
+
 function handleCheck(
   options: NormalizedOptions,
   mermaid: string
 ): { success: boolean } {
-  const markdownContent = fs.readFileSync(options.markdownPath!, "utf-8");
   try {
-    const expected = injectBetweenMarkers(
-      markdownContent,
-      mermaid,
-      NX_GRAPH_START,
-      NX_GRAPH_END
-    );
-    if (markdownContent !== expected) {
+    const { original, updated } = readAndInject(options.markdownPath!, mermaid);
+    if (original !== updated) {
       return fail("Mermaid output drift detected.");
     }
   } catch (error) {
@@ -119,14 +122,7 @@ function handleUpdate(
       fs.writeFileSync(options.generatedMermaidPath, mermaid, "utf-8");
     }
 
-    const markdownContent = fs.readFileSync(options.markdownPath!, "utf-8");
-    const updated = injectBetweenMarkers(
-      markdownContent,
-      mermaid,
-      NX_GRAPH_START,
-      NX_GRAPH_END
-    );
-
+    const { updated } = readAndInject(options.markdownPath!, mermaid);
     fs.writeFileSync(options.markdownPath!, updated, "utf-8");
 
     return { success: true };
