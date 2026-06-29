@@ -2,7 +2,7 @@
 
 A simple two-package TypeScript project demonstrating UML generation.
 
-## Package Diagram
+## Component Diagram
 
 <!-- UML:components:START -->
 <!-- UML:components:END -->

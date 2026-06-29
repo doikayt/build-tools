@@ -1,18 +1,9 @@
-## Planned Tooling Core Contributions
+## Tooling Core Contributions (completed)
 
 ### `findMarker` and `findMarkers`
 
-The current `injectBetweenMarkers` utility operates on a single marker pair
-and returns a full updated string. It has no facility for reporting where
-markers are located, and does not support multiple distinct marker pairs in
-one file.
-
-This plugin requires both capabilities — three separate marker pairs are
-injected into a single target file, and check mode must be able to report
-which specific region is stale.
-
-The following utilities should be contributed to `tooling-core` prior to or
-during implementation of this plugin:
+Both utilities are implemented and exported from `tooling-core`
+(`src/markdown/findMarker.ts`). The original motivation:
 ```typescript
 export interface MarkerLocation {
   startMarker: string
@@ -94,8 +85,7 @@ Benefits of consolidation:
 
 | Package | Role |
 |---------|------|
-| `tsuml2` | Generates `classDiagram` Mermaid DSL from TypeScript source |
-| `ts-morph` | TypeScript compiler API — discovers types, resolves imports for package-level dependency analysis |
+| `ts-morph` | TypeScript compiler API — discovers types, resolves imports, generates Mermaid DSL |
 | `@datalackey/tooling-core` | CLI framework, file processing, injection utilities |
 
 ---
@@ -111,8 +101,7 @@ Benefits of consolidation:
 
 ---
 
-## Open Questions
+## Resolved Questions
 
-1. tsuml2 vs ts-morph for leaf diagram generation — tsuml2 is simpler to
-   integrate but ts-morph gives more control over output. Revisit after
-   evaluating tsuml2 output quality against a real package.
+1. **tsuml2 vs ts-morph** — resolved: `ts-morph` is used for all diagram
+   generation. `tsuml2` was removed from dependencies.

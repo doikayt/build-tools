@@ -1,7 +1,7 @@
 {
   "name": "@datalackey/update-markdown-uml",
-  "version": "1.4.3",
-  "description": "Generates and validates UML class and package diagrams for TypeScript source trees, injecting them into Markdown documentation files",
+  "version": "1.4.2",
+  "description": "Generates and validates UML class and component diagrams for TypeScript source trees, injecting them into Markdown documentation files",
   "license": "MIT",
   "type": "module",
   "private": false,
@@ -22,7 +22,7 @@
     "mermaid",
     "documentation",
     "class-diagram",
-    "package-diagram",
+    "component-diagram",
     "ci",
     "automation"
   ],
@@ -42,9 +42,8 @@
     "prepack": "npx nx build @datalackey/update-markdown-uml 1>&2"
   },
   "dependencies": {
-    "@datalackey/tooling-core": "*",
+    "@datalackey/tooling-core": "^1.0.0",
     "ts-morph": "^24.0.0",
-    "tsuml2": "^0.17.0",
     "micromatch": "^4.0.0",
     "github-slugger": "^2.0.0"
   },
