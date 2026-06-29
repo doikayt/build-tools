@@ -28,7 +28,7 @@ export function validateUmlConfig(config: UmlRunConfig): void {
   for (const excluded of config.excludeComponents) {
     if (!leafDirs.has(excluded)) {
       if (!config.quiet) {
-        console.log(
+        console.warn(
           `Warning: excluded component "${excluded}" not found under source root "${resolvedSourceRoot}"`
         );
       }

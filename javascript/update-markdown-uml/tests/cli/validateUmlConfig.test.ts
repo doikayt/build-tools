@@ -36,7 +36,7 @@ afterEach(() => {
 
 describe("validateUmlConfig()", () => {
   test("no warning when excludeComponents list is empty", () => {
-    const spy = vi.spyOn(console, "log").mockImplementation(() => {});
+    const spy = vi.spyOn(console, "warn").mockImplementation(() => {});
     const tmpRoot = makeTmpSourceRoot(["cli", "repository"]);
 
     validateUmlConfig(
@@ -51,7 +51,7 @@ describe("validateUmlConfig()", () => {
   });
 
   test("no warning when all excluded components exist in source root", () => {
-    const spy = vi.spyOn(console, "log").mockImplementation(() => {});
+    const spy = vi.spyOn(console, "warn").mockImplementation(() => {});
     const tmpRoot = makeTmpSourceRoot(["cli", "repository", "policy"]);
 
     validateUmlConfig(
@@ -66,7 +66,7 @@ describe("validateUmlConfig()", () => {
   });
 
   test("warns when excluded component not found in source root", () => {
-    const spy = vi.spyOn(console, "log").mockImplementation(() => {});
+    const spy = vi.spyOn(console, "warn").mockImplementation(() => {});
     const tmpRoot = makeTmpSourceRoot(["cli", "repository"]);
 
     validateUmlConfig(
@@ -82,7 +82,7 @@ describe("validateUmlConfig()", () => {
   });
 
   test("warns once per missing component", () => {
-    const spy = vi.spyOn(console, "log").mockImplementation(() => {});
+    const spy = vi.spyOn(console, "warn").mockImplementation(() => {});
     const tmpRoot = makeTmpSourceRoot(["cli"]);
 
     validateUmlConfig(
@@ -97,7 +97,7 @@ describe("validateUmlConfig()", () => {
   });
 
   test("suppresses warning when quiet is true", () => {
-    const spy = vi.spyOn(console, "log").mockImplementation(() => {});
+    const spy = vi.spyOn(console, "warn").mockImplementation(() => {});
     const tmpRoot = makeTmpSourceRoot(["cli"]);
 
     validateUmlConfig(
@@ -113,7 +113,7 @@ describe("validateUmlConfig()", () => {
   });
 
   test("no warning when source root does not exist", () => {
-    const spy = vi.spyOn(console, "log").mockImplementation(() => {});
+    const spy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
     validateUmlConfig(
       makeConfig({
@@ -126,7 +126,7 @@ describe("validateUmlConfig()", () => {
   });
 
   test("warning message includes source root path", () => {
-    const spy = vi.spyOn(console, "log").mockImplementation(() => {});
+    const spy = vi.spyOn(console, "warn").mockImplementation(() => {});
     const tmpRoot = makeTmpSourceRoot(["cli"]);
 
     validateUmlConfig(
