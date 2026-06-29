@@ -35,6 +35,12 @@ afterEach(() => {
 });
 
 describe("validateUmlConfig()", () => {
+  test("throws when --recursive mode is passed", () => {
+    expect(() =>
+      validateUmlConfig(makeConfig({ mode: "recursive" }))
+    ).toThrow("--recursive is not supported");
+  });
+
   test("no warning when excludeComponents list is empty", () => {
     const spy = vi.spyOn(console, "warn").mockImplementation(() => {});
     const tmpRoot = makeTmpSourceRoot(["cli", "repository"]);
