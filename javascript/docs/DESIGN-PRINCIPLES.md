@@ -110,8 +110,7 @@ at the root of a multi-module Gradle build rather than one per submodule.
 > **NX executor exception:** `nx-graph-to-mermaid` is an NX executor, not a
 > standalone CLI tool. It does not use `runCli`, `PluginDescriptor`, or
 > `FileProcessor` — NX controls orchestration and invokes `runExecutor()`
-> directly via `executor-bridge.cjs`. This is correct by design and is not a
-> conformance gap.
+> directly via `executor-bridge.cjs`. 
 
 All other CLI plugins are built on a common framework provided by
 `@datalackey/tooling-core`. The key concepts are:
@@ -237,6 +236,6 @@ The tools in this workspace are not only documentation generators — they are
 architectural feedback mechanisms. When generated output is difficult to read,
 that difficulty is usually a property of the source structure, not the tool.
 
-See [ARCHITECTURAL-SIGNALS.md](./DOCS_AS_ARCHITECTURE_REVIEW.md) for a full
+See [DOCS_AS_ACTIVE_INFRASTRUCTURE.md](./DOCS_AS_ACTIVE_INFRASTRUCTURE.md) for a full
 treatment of this principle and the specific signals each tool surfaces.
 
