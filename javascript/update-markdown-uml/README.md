@@ -95,13 +95,16 @@ npx update-markdown-uml --check README.md
 update-markdown-uml [options] <file>
 
 Options:
-  --source <path>                   Override source root discovery (default: src/)
-  --exclude-components <cmp1,cmp2>  Leaf directory names to exclude from all output
-  --check                           Do not write; exit non-zero if content is stale
-  --verbose                         Print per-component type counts
-  --quiet                           Suppress all non-error output
-  --debug                           Print debug diagnostics to stderr
-  --help                            Show this help message and exit
+  --source <path>                       Override source root discovery (default: src/)
+  --exclude-components <cmp1,cmp2>      Leaf directory names to exclude from all output
+  --test-patterns-to-skip <pat1,pat2>   Glob patterns for test files to skip during discovery
+  -t <pat1,pat2>                        Short form of --test-patterns-to-skip
+  --check                               Do not write; exit non-zero if content is stale
+  --verbose                             Print per-component type counts
+  --quiet                               Suppress all non-error output
+  --debug                               Print debug diagnostics to stderr
+  --help                                Show this help message and exit
+  --version                             Print version and exit
 ```
 
 This tool processes a single Markdown file per invocation. Recursive folder

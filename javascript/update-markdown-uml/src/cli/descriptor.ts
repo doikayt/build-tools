@@ -21,6 +21,19 @@ export const descriptor: PluginDescriptor<UmlRunConfig> = {
       requiresValue: true,
       valueName: "path",
     },
+    {
+      flag: "--test-patterns-to-skip",
+      description:
+        "Glob patterns (comma-separated) for test files to exclude from component discovery",
+      requiresValue: true,
+      valueName: "pat1,pat2,...",
+    },
+    {
+      flag: "-t",
+      description: "Short form of --test-patterns-to-skip",
+      requiresValue: true,
+      valueName: "pat1,pat2,...",
+    },
   ],
   parseOptions: parseUmlOptions,
   validate: validateUmlConfig,
