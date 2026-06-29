@@ -208,7 +208,7 @@ for  the orchestrating workspace.
 All modes use the same executor:
 
 ```json
-"executor": "@datalackey/nx-graph-to-mermaid"
+"executor": "@datalackey/nx-graph-to-mermaid:run"
 ```
 
 Behavior is controlled exclusively by `options.mode`.
@@ -233,7 +233,7 @@ Add a target:
 ```json
 {
   "task-graph:generate": {
-    "executor": "@datalackey/nx-graph-to-mermaid",
+    "executor": "@datalackey/nx-graph-to-mermaid:run",
     "options": {
       "mode": "generate",
       "projectJsonPath": "project.json",
@@ -259,7 +259,7 @@ What it does:
 Run:
 
 ```bash
-npx NX run my-project:task-graph:generate
+npx nx run my-project:task-graph:generate
 ```
 
 ---
@@ -271,7 +271,7 @@ Add a target:
 ```json
 {
   "task-graph:inject": {
-    "executor": "@datalackey/nx-graph-to-mermaid",
+    "executor": "@datalackey/nx-graph-to-mermaid:run",
     "options": {
       "mode": "inject",
       "projectJsonPath": "project.json",
@@ -294,7 +294,7 @@ It requires:
 Run:
 
 ```bash
-npx NX run my-project:task-graph:inject
+npx nx run my-project:task-graph:inject
 ```
 
 ---
@@ -306,7 +306,7 @@ Add a target:
 ```json
 {
   "task-graph:update": {
-    "executor": "@datalackey/nx-graph-to-mermaid",
+    "executor": "@datalackey/nx-graph-to-mermaid:run",
     "options": {
       "mode": "update",
       "projectJsonPath": "project.json",
@@ -323,7 +323,7 @@ Combines generation and injection in a single deterministic operation. It regene
 Run:
 
 ```bash
-npx NX run my-project:task-graph:update
+npx nx run my-project:task-graph:update
 ```
 
 ---
@@ -335,7 +335,7 @@ Add a target:
 ```json
 {
   "task-graph:check": {
-    "executor": "@datalackey/nx-graph-to-mermaid",
+    "executor": "@datalackey/nx-graph-to-mermaid:run",
     "options": {
       "mode": "check",
       "projectJsonPath": "project.json",
@@ -351,7 +351,7 @@ Regenerates the diagram in memory and compares it against the content currently 
 Run:
 
 ```bash
-npx NX run my-project:task-graph:check
+npx nx run my-project:task-graph:check
 ```
 
 If drift is detected:
@@ -373,7 +373,7 @@ normal stdout output and safe to ignore in CI logs.
 ```json
 {
   "task-graph:update": {
-    "executor": "@datalackey/nx-graph-to-mermaid",
+    "executor": "@datalackey/nx-graph-to-mermaid:run",
     "options": {
       "mode": "update",
       "projectJsonPath": "project.json",

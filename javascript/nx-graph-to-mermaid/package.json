@@ -42,6 +42,7 @@
     "access": "public"
   },
   "scripts": {
+    "prepack": "npm run build",
     "build": "tsc && npm run copy-schemas",
     "test": "vitest run",
     "copy-schemas": "mkdir -p dist/executors/generate && cp src/executors/generate/schema.json dist/executors/generate/schema.json"
