@@ -160,6 +160,64 @@ a full-text search: the structure is meaningful by construction, not inferred by
 control the granularity. Naive RAG chunks documents at arbitrary boundaries (often badly);
 `_COMPONENT_INFO.md` files are curated at the boundary that already matters — the module.
 
+### The TOC as a Retrieval Index
+
+The generated TOC has a second use beyond human navigation and architectural signalling. Because
+every section boundary is explicitly named and anchored, the TOC also serves as a pre-computed
+chunk manifest for agent retrieval.
+
+The pattern:
+
+1. **Read the TOC only** — the first ~2KB of a markdown file with TOC markers reveals what
+   sections exist without loading the full document into context
+2. **Decide relevance** — based on section headings alone, determine which sections are likely
+   to answer the query
+3. **Retrieve on demand** — read only the relevant sections; the rest of the document never
+   enters the context window
+
+This is lazy document retrieval: the full markdown is never loaded speculatively.
+
+A pre-computed index per document formalises this:
+
+```json
+{
+  "path": "javascript/tooling-core/README.md",
+  "summary": "Framework for building markdown documentation plugins",
+  "sections": [
+    {
+      "heading": "Plugin Authoring API",
+      "anchor": "#plugin-authoring-api",
+      "preview": "The core interface for building plugins...",
+      "vector": [0.12, 0.45, "..."]
+    }
+  ]
+}
+```
+
+With vectors pre-computed at documentation generation time, an agent can embed a query once,
+compare against stored section vectors using cosine similarity, and retrieve only the top-k
+sections — rather than scanning entire documents for relevant content.
+
+**Why TOC-anchored chunks outperform token-count chunks:** naive RAG pipelines frequently split
+a heading from the paragraph that follows it, destroying the context signal the heading provides.
+TOC-anchored chunks are always complete sections — the heading and its body stay together,
+preserving the semantic unit the author intended.
+
+This extends the navigation layer to four tiers:
+
+| Tier | Artifact | Answers |
+|------|----------|---------|
+| 0 | `_COMPONENT_INFO.md` | "what does this module do?" |
+| 1 | Document TOC (first 2KB) | "what sections exist in this document?" |
+| 2 | Section content | "what does this section say?" (retrieved on demand) |
+| 3 | Pre-computed vectors | "which section is semantically closest to my query?" |
+
+Tiers 0 and 1 are generated automatically and cost nothing at query time. An agent can route
+most questions from those two tiers alone, descending to Tier 2 only when it has identified the
+right target — and optionally using Tier 3 to make that descent semantic rather than
+keyword-based. Tier 3 requires an embedding API call per section at generation time and is
+optional; the retrieval pattern is useful even without it.
+
 ### The Navigation Layer as Contributor Discipline
 
 There is a secondary benefit that has nothing to do with tools or agents. Writing a
