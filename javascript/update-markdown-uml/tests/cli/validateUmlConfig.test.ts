@@ -23,7 +23,7 @@ describe("validateUmlConfig()", () => {
   test("throws when --recursive mode is passed", () => {
     expect(() =>
       validateUmlConfig(makeConfig({ mode: "recursive" }))
-    ).toThrow("--recursive is not supported");
+    ).toThrow("--recursive is not supported by update-markdown-uml");
   });
 
   test("does not throw for valid single-mode config", () => {
