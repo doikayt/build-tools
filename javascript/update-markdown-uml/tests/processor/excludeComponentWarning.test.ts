@@ -111,4 +111,30 @@ describe("UmlFileProcessor exclusion warnings", () => {
 
     expect(spy).not.toHaveBeenCalled();
   }, 10_000);
+
+  test("suppresses mixed-concern discovery warning when quiet=true", () => {
+    const mixedDir = fs.mkdtempSync(path.join(os.tmpdir(), "uml-mixed-warn-"));
+    try {
+      const mixedMd = path.join(mixedDir, "README.md");
+      fs.writeFileSync(mixedMd, `# Test\n\n${UML_MARKERS}\n`, "utf-8");
+      // internal/ has its own .ts file AND a qualifying child — triggers mixed-concern warn
+      const internal = path.join(mixedDir, "src", "internal");
+      fs.mkdirSync(path.join(internal, "parsing"), { recursive: true });
+      fs.writeFileSync(path.join(internal, "index.ts"), "export {};\n", "utf-8");
+      fs.writeFileSync(
+        path.join(internal, "parsing", "parser.ts"),
+        "export {};\n",
+        "utf-8"
+      );
+
+      const spy = vi.spyOn(console, "warn").mockImplementation(() => {});
+      new UmlFileProcessor().process(
+        mixedMd,
+        makeConfig({ sourceRoot: path.join(mixedDir, "src"), quiet: true })
+      );
+      expect(spy).not.toHaveBeenCalled();
+    } finally {
+      fs.rmSync(mixedDir, { recursive: true, force: true });
+    }
+  }, 10_000);
 });

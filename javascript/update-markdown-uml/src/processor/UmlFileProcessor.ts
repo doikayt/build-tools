@@ -28,7 +28,7 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
         : DEFAULT_SKIP_TEST_PATTERNS;
 
     const onWarn = config.quiet
-      ? undefined
+      ? (): void => {}
       : (msg: string) => console.warn(msg);
 
     // 1. Discover leaf components
