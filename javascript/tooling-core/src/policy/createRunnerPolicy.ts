@@ -26,8 +26,9 @@ export function createRunnerPolicy(config: RunConfig): RunnerPolicy {
         debugLog(config, `policy.shouldPrintSummary: false (quiet)`);
         return false;
       }
-      debugLog(config, `policy.shouldPrintSummary: ${isRecursiveRun}`);
-      return isRecursiveRun;
+      const result = isRecursiveRun && config.verbose;
+      debugLog(config, `policy.shouldPrintSummary: ${result}`);
+      return result;
     },
 
     handleProcessorError(_file: string, error: unknown): RunnerDecision {

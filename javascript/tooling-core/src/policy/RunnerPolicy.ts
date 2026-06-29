@@ -84,7 +84,7 @@ Output messages are controlled by the policy and CLI switches.
 | Up-to-date file            | Hide    | Print     | Hide    |
 | Skipped file               | Hide    | Print     | Hide    |
 | Needs update (--check)     | Print   | Print     | Hide    |
-| Summary line               | Print   | Print     | Hide    |
+| Summary line               | Hide    | Print     | Hide    |
 
 Errors are always printed regardless of verbosity level.
 
