@@ -1,4 +1,18 @@
 <!-- TOC:START -->
+- [Documentation as Active Infrastructure: Architectural Mirror, Navigation Layer, and Quality Gate](#documentation-as-active-infrastructure-architectural-mirror-navigation-layer-and-quality-gate)
+  - [Role 1 — The Architectural Mirror](#role-1--the-architectural-mirror)
+    - [Signal 1 — The Busy UML Diagram](#signal-1--the-busy-uml-diagram)
+    - [Signal 2 — The Verbose Component Summary](#signal-2--the-verbose-component-summary)
+    - [Signal 3 — The Deep TOC](#signal-3--the-deep-toc)
+    - [Signal 4 — The Complex Build Graph](#signal-4--the-complex-build-graph)
+    - [The Mirror Principle](#the-mirror-principle)
+  - [Role 2 — The Navigation Layer](#role-2--the-navigation-layer)
+    - [Why This Is Better Than Naive RAG](#why-this-is-better-than-naive-rag)
+    - [The TOC as a Retrieval Index](#the-toc-as-a-retrieval-index)
+    - [The Navigation Layer as Contributor Discipline](#the-navigation-layer-as-contributor-discipline)
+  - [Role 3 — The Quality Gate](#role-3--the-quality-gate)
+    - [The Check Invariant](#the-check-invariant)
+  - [The Unified View](#the-unified-view)
 <!-- TOC:END -->
 
 # Documentation as Active Infrastructure: Architectural Mirror, Navigation Layer, and Quality Gate

@@ -20,7 +20,7 @@ managed as a single npm workspace.
 - [`@datalackey/update-markdown-toc`](./javascript/update-markdown-toc/docs/CONTRIBUTING.md)
 - [`@datalackey/nx-graph-to-mermaid`](javascript/nx-graph-to-mermaid/docs/CONTRIBUTING.md)
 - [`@datalackey/autogen-markdown-doc`](./javascript/autogen-markdown-doc/docs/CONTRIBUTING.md)
-- [`@datalackey/tooling-core`](./javascript/tooling-core/docs/CONTRIBUTING.md) *(private)*
+- [`@datalackey/tooling-core`](./javascript/tooling-core/docs/CONTRIBUTING.md) 
 
 ---
 

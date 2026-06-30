@@ -425,7 +425,7 @@ cd javascript/nx-graph-to-mermaid
   cd javascript && npx nx run build-tools-workspace:update-all
   git add . && git commit -m "fix(scope): ..."
   npx nx run build-tools-workspace:check-all
-  git pull --rebase && git push
+  git pull --rebase && git push               # why pull? The CI job commits new changeset when it publishes
 ```
 
 RELEASE FLOW

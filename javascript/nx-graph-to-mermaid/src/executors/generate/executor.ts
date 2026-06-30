@@ -31,13 +31,22 @@ function runExecutor(rawOptions: RawOptions): { success: boolean } {
       result = handleInject(options);
       break;
     case "check":
-      result = handleCheck(options, buildMermaid(project as NxProjectJson, options));
+      result = handleCheck(
+        options,
+        buildMermaid(project as NxProjectJson, options)
+      );
       break;
     case "generate":
-      result = handleGenerate(options, buildMermaid(project as NxProjectJson, options));
+      result = handleGenerate(
+        options,
+        buildMermaid(project as NxProjectJson, options)
+      );
       break;
     case "update":
-      result = handleUpdate(options, buildMermaid(project as NxProjectJson, options));
+      result = handleUpdate(
+        options,
+        buildMermaid(project as NxProjectJson, options)
+      );
       break;
     default: {
       const _exhaustive: never = options.mode;
@@ -62,7 +71,12 @@ function readAndInject(
   mermaid: string
 ): { original: string; updated: string } {
   const original = fs.readFileSync(markdownPath, "utf-8");
-  const updated = injectBetweenMarkers(original, mermaid, NX_GRAPH_START, NX_GRAPH_END);
+  const updated = injectBetweenMarkers(
+    original,
+    mermaid,
+    NX_GRAPH_START,
+    NX_GRAPH_END
+  );
   return { original, updated };
 }
 
