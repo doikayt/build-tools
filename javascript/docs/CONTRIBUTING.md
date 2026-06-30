@@ -93,6 +93,25 @@ npx nx run-many -t build,test --skip-nx-cache
 
 Dependency ordering is declared in each package's `project.json` via `dependsOn`.
 
+
+### In-IDE Build Target Execution and Visualization
+
+- Intellij
+  - Install the Nx Console plugin to obtain a graphical overview of this mono-repo as well as a hierarchical
+    navivation tree that lets you select and execute build targets in IDEA.
+  <p align="center">
+  <img
+    src="nx-console-plugin-view.png"
+    width="720"
+    alt="nx-graph-to-mermaid demo">
+</p>
+
+
+- Other IDEs 
+  - This is an excercise for the reader (but please contribut a documentation PR if you find something good!)
+
+
+
 ---
 
 ## Package Naming Policy
