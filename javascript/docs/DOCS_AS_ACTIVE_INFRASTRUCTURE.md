@@ -136,9 +136,9 @@ generated components table in the README:
 
 | Component | Description |
 |-----------|-------------|
-| [cli](#cli) | Handles CLI argument parsing and validation |
-| [repository](#repository) | Manages file discovery and processing lifecycle |
-| [util](#util) | Shared utility functions |
+| [cli] | Handles CLI argument parsing and validation |
+| [repository] | Manages file discovery and processing lifecycle |
+| [util] | Shared utility functions |
 
 This creates a two-tier index of the codebase:
 
