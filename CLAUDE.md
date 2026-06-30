@@ -87,6 +87,11 @@ runs — the uber plugin converges in a single pass (no second update needed).
 
 ---
 
+## Before Committing
+
+Run 'npx nx run build-tools-workspace:update-all' in workspace route to avoid formatting failures in CI.
+
+
 ## Current work
 
 State the current task in your first message — no need to maintain this section between sessions.

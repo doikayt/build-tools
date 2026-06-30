@@ -110,15 +110,17 @@ function checkMalformedMarkers(content, filePath) {
   }
 }
 
-function spawnPlugin(bin, args) {
-  const result = spawnSync("node", [bin, ...args], { stdio: "inherit" });
+// Fail-fast: used in update mode where plugins chain writes (NX → UML → TOC).
+function spawnPlugin(scriptPath, args) {
+  const result = spawnSync("node", [scriptPath, ...args], { stdio: "inherit" });
   if (result.status !== 0) {
     process.exit(result.status ?? 1);
   }
 }
 
-function trySpawnPlugin(bin, args) {
-  const result = spawnSync("node", [bin, ...args], { stdio: "inherit" });
+// Non-terminating: used in check mode so all plugins run and all drift is reported.
+function trySpawnPlugin(scriptPath, args) {
+  const result = spawnSync("node", [scriptPath, ...args], { stdio: "inherit" });
   return (result.status ?? 1) === 0;
 }
 
@@ -185,9 +187,14 @@ function main() {
       );
       process.exit(1);
     }
-    debugLog({ debug }, "NX_GRAPH markers detected — activating nx-graph-to-mermaid");
+    debugLog(
+      { debug },
+      "NX_GRAPH markers detected — activating nx-graph-to-mermaid"
+    );
     plugins.push({
-      bin: require.resolve("@datalackey/nx-graph-to-mermaid/bin/nx-graph-to-mermaid.js"),
+      scriptPath: require.resolve(
+        "@datalackey/nx-graph-to-mermaid/bin/nx-graph-to-mermaid.js"
+      ),
       args: [...commonFlags, resolvedFilePath],
     });
   } else {
@@ -197,12 +204,17 @@ function main() {
   // UML runs before TOC so that component headings it injects are present
   // by the time TOC scans the file — convergence in a single update pass.
   if (hasUmlMarkers) {
-    debugLog({ debug }, "UML markers detected — activating update-markdown-uml");
+    debugLog(
+      { debug },
+      "UML markers detected — activating update-markdown-uml"
+    );
     const excludeArgs = excludeComponents
       ? ["--exclude-components", excludeComponents]
       : [];
     plugins.push({
-      bin: require.resolve("@datalackey/update-markdown-uml/bin/update-markdown-uml.js"),
+      scriptPath: require.resolve(
+        "@datalackey/update-markdown-uml/bin/update-markdown-uml.js"
+      ),
       args: [...commonFlags, ...excludeArgs, resolvedFilePath],
     });
   } else {
@@ -210,9 +222,14 @@ function main() {
   }
 
   if (hasTocMarkers) {
-    debugLog({ debug }, "TOC markers detected — activating update-markdown-toc");
+    debugLog(
+      { debug },
+      "TOC markers detected — activating update-markdown-toc"
+    );
     plugins.push({
-      bin: require.resolve("@datalackey/update-markdown-toc/bin/update-markdown-toc.js"),
+      scriptPath: require.resolve(
+        "@datalackey/update-markdown-toc/bin/update-markdown-toc.js"
+      ),
       args: [...commonFlags, resolvedFilePath],
     });
   } else {
@@ -223,15 +240,15 @@ function main() {
     // Check mode: run every active plugin so the user sees all drift in one
     // pass rather than having to re-run after fixing each plugin in turn.
     let allPassed = true;
-    for (const { bin, args } of plugins) {
-      if (!trySpawnPlugin(bin, args)) allPassed = false;
+    for (const { scriptPath, args } of plugins) {
+      if (!trySpawnPlugin(scriptPath, args)) allPassed = false;
     }
     if (!allPassed) process.exit(1);
   } else {
     // Update mode: fail-fast. Plugins chain their writes (NX → UML → TOC),
     // so each must succeed before the next reads the updated file.
-    for (const { bin, args } of plugins) {
-      spawnPlugin(bin, args);
+    for (const { scriptPath, args } of plugins) {
+      spawnPlugin(scriptPath, args);
     }
   }
 }
