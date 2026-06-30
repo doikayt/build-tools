@@ -28,8 +28,9 @@ The Markdown file may contain any combination of auto-generated Table of Content
 NX build task-graph diagrams (where each auto-generated block has corresponding [injection markers](#tag-families).) 
 
 Place the relevant injection markers where you want them in your Markdown file, then run the tool. 
-Each bundled plugin activates only when its markers are present; 
-sections without markers are left untouched. 
+UML and NX graph plugins activate only when their markers are present;
+TOC is always invoked when any markers are found at all.
+Sections without recognized markers are left untouched.
 
 For CI, check mode detects drift: any generated section that has fallen out of sync 
 with its source causes a non-zero exit, making it straightforward to gate a 
@@ -93,7 +94,8 @@ npx autogen-markdown-doc update --exclude-components legacy,deprecated
 
 ### Check Mode (CI Drift Detection)
 
-Validates all tags without writing any files. Exits non-zero if any drift is detected:
+Validates tags without writing any files. Plugins run in sequence (NX → UML → TOC)
+and exit immediately on the first drift detected:
 
 ```bash
 # Check README.md in current directory
@@ -134,9 +136,9 @@ the underlying packages directly (see [Using Bundled Plugins Independently](#usi
 | Option | Description |
 |---|---|
 | `--exclude-components <pkg1,pkg2>` | Forwarded to UML generation only; leaf directory names under `src/` to skip |
-| `--quiet` | Suppress all non-error output, including the "no markers" warning |
-| `--debug` | Print debug diagnostics to stderr |
-| `--help` | Show this help message and exit (exit 0) |
+| `-q`, `--quiet` | Suppress all non-error output, including the "no markers" warning |
+| `-d`, `--debug` | Print debug diagnostics to stderr |
+| `-h`, `--help` | Show this help message and exit (exit 0) |
 
 ---
 
@@ -184,9 +186,11 @@ Conceptually:
 check(update(file)) === TRUE     # check should always pass after one update cycle
 ```
 
-Pro Tip: UML runs before TOC in the orchestrator, so component headings it injects
-(e.g. `#### cli`, `#### math-engine`) are already present by the time TOC scans
-the file — convergence happens in a single `update` pass. 
+Pro Tip: Plugins run in order **NX → UML → TOC**. UML runs before TOC so that
+component headings it injects (e.g. `#### cli`, `#### math-engine`) are already
+present by the time TOC scans the file — convergence happens in a single `update`
+pass. NX runs first because its output does not inject headings that TOC picks up,
+so its position relative to UML does not affect convergence.
 (Don't worry if this doesn't make sense yet!)
 
 ---

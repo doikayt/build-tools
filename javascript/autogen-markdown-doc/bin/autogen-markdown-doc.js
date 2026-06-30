@@ -12,7 +12,7 @@ const HELP = `Usage: autogen-markdown-doc [subcommand] [file] [options]
 
 Subcommands:
   update   (default)  Apply all tag transformations in-place
-  check               Validate all tags; exit non-zero on any drift (no writes)
+  check               Validate tags in sequence (NX → UML → TOC); exit non-zero on first drift (no writes)
 
 Positional:
   file                Target Markdown file  (default: README.md in cwd)
@@ -20,10 +20,10 @@ Positional:
 Options:
   --exclude-components <pkg1,pkg2>  Forwarded to UML generation only
                                   (leaf directory names under src/ to skip)
-  --quiet                         Suppress all non-error output,
+  -q, --quiet                     Suppress all non-error output,
                                   including the "no markers" warning
-  --debug                         Print debug diagnostics to stderr
-  --help                          Show this help message and exit (exit 0)
+  -d, --debug                     Print debug diagnostics to stderr
+  -h, --help                      Show this help message and exit (exit 0)
 `;
 
 const SUBCOMMANDS = new Set(["update", "check"]);
@@ -177,7 +177,10 @@ function main() {
       );
       process.exit(1);
     }
-    debugLog({ debug }, "NX_GRAPH markers detected — activating nx-graph-to-mermaid");
+    debugLog(
+      { debug },
+      "NX_GRAPH markers detected — activating nx-graph-to-mermaid"
+    );
     const nxBin = require.resolve(
       "@datalackey/nx-graph-to-mermaid/bin/nx-graph-to-mermaid.js"
     );
@@ -190,7 +193,10 @@ function main() {
   // headings UML injects (e.g. component names) are present in the file
   // by the time TOC scans for headings, avoiding a second convergence pass.
   if (hasUmlMarkers) {
-    debugLog({ debug }, "UML markers detected — activating update-markdown-uml");
+    debugLog(
+      { debug },
+      "UML markers detected — activating update-markdown-uml"
+    );
     const umlBin = require.resolve(
       "@datalackey/update-markdown-uml/bin/update-markdown-uml.js"
     );
@@ -208,10 +214,6 @@ function main() {
     "@datalackey/update-markdown-toc/bin/update-markdown-toc.js"
   );
   spawnPlugin(tocBin, [...commonFlags, resolvedFilePath]);
-
-  if (!quiet && !isCheck) {
-    console.log("autogen-markdown-doc: update complete");
-  }
 }
 
 main();
