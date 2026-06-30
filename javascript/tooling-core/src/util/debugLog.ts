@@ -3,7 +3,7 @@
  * Output is prefixed with [debug] to distinguish it from normal stdout output.
  */
 export function debugLog(config: { debug?: boolean }, message: string): void {
-  if (config.debug) {
+  if (config.debug === true) {
     process.stderr.write(`[debug] ${message}\n`);
   }
 }
