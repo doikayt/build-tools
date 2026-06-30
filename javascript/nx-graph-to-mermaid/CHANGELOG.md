@@ -1,5 +1,42 @@
 # @datalackey/nx-graph-to-mermaid
 
+## 1.4.7
+
+### Patch Changes
+
+- - fix(tooling-core): satisfy strict-boolean-expressions in debugLog
+  - fix(tooling-core): widen debugLog config param to accept debug?: boolean
+  - fix(nx-graph-to-mermaid): XS housekeeping — pin dep, fix doc, document optional field
+  - fix(nx-graph-to-mermaid): correct README executor refs, CLI casing, and project.json copy-schemas
+  - fix(update-markdown-uml): pass no-op onWarn when quiet to suppress discoverLeafComponents warnings
+  - fix(update-markdown-uml): clarify --recursive error message — target is a file, not a source root
+  - fix(update-markdown-uml): remove duplicate exclusion warning from validateUmlConfig
+  - fix(update-markdown-uml): throw on --recursive (not supported by design)
+  - fix(update-markdown-uml): restore version 1.4.3 reverted by uml-1-5 commit; regenerate lock file
+  - fix(update-markdown-uml): gate discoverLeafComponents warn on quiet flag
+  - feat(update-markdown-uml): surface --test-patterns-to-skip in plugin descriptor and help
+  - fix(update-markdown-uml): add missing vi import in discoverLeafComponents.test.ts
+  - fix(update-markdown-uml): route exclusion warning to stderr via console.warn
+  - fix(tooling-core): summary line now prints only in verbose recursive runs
+  - fix(update-markdown-toc): fix and wire recursive-error-contracts.test.sh (#17)
+  - fix(tooling-core): --exclude "" now disables all exclusions as documented
+  - fix(tooling-core): flag empty anchor fragment in relative links as an error
+  - fix(update-markdown-toc): resolve 6 review findings (toc-3,4,7,9,10,12)
+  - feat(autogen-markdown-doc): add post-publish smoke test against npm registry
+  - fix(ci): auto-changeset always generates patch bumps
+  - fix(ci): add .github/workflows/\*\* to path triggers
+  - fix(ci): move permissions to workflow level to fix checkout auth failure
+  - fix(ci): remove explicit token from checkout — actions/checkout handles it
+  - fix(ci): use GITHUB_TOKEN for checkout, not NPM token
+  - fix(update-markdown-toc): heading after HTML block no longer missing from TOC
+  - fix: ignore inline code spans when parsing periods and TOC markers
+  - fix: add dependsOn build to test targetDefaults in nx.json
+  - fix: strip org scope from cross-project hex node labels to prevent truncation
+  - feat: render cross-project deps as synthetic hexagon nodes in mermaid diagram
+  - fix: render same-project qualified dep refs as edges in mermaid diagram
+- Updated dependencies
+  - @datalackey/tooling-core@1.4.7
+
 ## 1.4.6
 
 ### Patch Changes
