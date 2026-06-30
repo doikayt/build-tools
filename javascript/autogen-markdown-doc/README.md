@@ -94,8 +94,8 @@ npx autogen-markdown-doc update --exclude-components legacy,deprecated
 
 ### Check Mode (CI Drift Detection)
 
-Validates tags without writing any files. Plugins run in sequence (NX → UML → TOC)
-and exit immediately on the first drift detected:
+Validates tags without writing any files. All active plugins run regardless of
+individual failures, so a single check reveals all drift at once:
 
 ```bash
 # Check README.md in current directory

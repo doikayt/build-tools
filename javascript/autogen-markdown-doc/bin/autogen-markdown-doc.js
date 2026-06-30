@@ -12,7 +12,7 @@ const HELP = `Usage: autogen-markdown-doc [subcommand] [file] [options]
 
 Subcommands:
   update   (default)  Apply all tag transformations in-place
-  check               Validate tags in sequence (NX → UML → TOC); exit non-zero on first drift (no writes)
+  check               Validate all active plugins (NX → UML → TOC); reports all drift in one pass (no writes)
 
 Positional:
   file                Target Markdown file  (default: README.md in cwd)
@@ -117,6 +117,11 @@ function spawnPlugin(bin, args) {
   }
 }
 
+function trySpawnPlugin(bin, args) {
+  const result = spawnSync("node", [bin, ...args], { stdio: "inherit" });
+  return (result.status ?? 1) === 0;
+}
+
 function main() {
   const {
     subcommand,
@@ -168,7 +173,10 @@ function main() {
     ...(debug ? ["--debug"] : []),
   ];
 
-  // Mermaid — only when NX_GRAPH markers present
+  // Build the ordered list of active plugins (NX → UML → TOC).
+  // Each plugin is only included when its markers are present in the file.
+  const plugins = [];
+
   if (hasNxMarkers) {
     const projectJsonPath = path.join(fileDir, "project.json");
     if (!fs.existsSync(projectJsonPath)) {
@@ -177,43 +185,55 @@ function main() {
       );
       process.exit(1);
     }
-    debugLog(
-      { debug },
-      "NX_GRAPH markers detected — activating nx-graph-to-mermaid"
-    );
-    const nxBin = require.resolve(
-      "@datalackey/nx-graph-to-mermaid/bin/nx-graph-to-mermaid.js"
-    );
-    spawnPlugin(nxBin, [...commonFlags, resolvedFilePath]);
+    debugLog({ debug }, "NX_GRAPH markers detected — activating nx-graph-to-mermaid");
+    plugins.push({
+      bin: require.resolve("@datalackey/nx-graph-to-mermaid/bin/nx-graph-to-mermaid.js"),
+      args: [...commonFlags, resolvedFilePath],
+    });
   } else {
     debugLog({ debug }, "no NX_GRAPH markers — skipping nx-graph-to-mermaid");
   }
 
-  // UML — only when UML markers present. Runs before TOC so that any
-  // headings UML injects (e.g. component names) are present in the file
-  // by the time TOC scans for headings, avoiding a second convergence pass.
+  // UML runs before TOC so that component headings it injects are present
+  // by the time TOC scans the file — convergence in a single update pass.
   if (hasUmlMarkers) {
-    debugLog(
-      { debug },
-      "UML markers detected — activating update-markdown-uml"
-    );
-    const umlBin = require.resolve(
-      "@datalackey/update-markdown-uml/bin/update-markdown-uml.js"
-    );
+    debugLog({ debug }, "UML markers detected — activating update-markdown-uml");
     const excludeArgs = excludeComponents
       ? ["--exclude-components", excludeComponents]
       : [];
-    spawnPlugin(umlBin, [...commonFlags, ...excludeArgs, resolvedFilePath]);
+    plugins.push({
+      bin: require.resolve("@datalackey/update-markdown-uml/bin/update-markdown-uml.js"),
+      args: [...commonFlags, ...excludeArgs, resolvedFilePath],
+    });
   } else {
     debugLog({ debug }, "no UML markers — skipping update-markdown-uml");
   }
 
-  // TOC — always invoked
-  debugLog({ debug }, "activating update-markdown-toc");
-  const tocBin = require.resolve(
-    "@datalackey/update-markdown-toc/bin/update-markdown-toc.js"
-  );
-  spawnPlugin(tocBin, [...commonFlags, resolvedFilePath]);
+  if (hasTocMarkers) {
+    debugLog({ debug }, "TOC markers detected — activating update-markdown-toc");
+    plugins.push({
+      bin: require.resolve("@datalackey/update-markdown-toc/bin/update-markdown-toc.js"),
+      args: [...commonFlags, resolvedFilePath],
+    });
+  } else {
+    debugLog({ debug }, "no TOC markers — skipping update-markdown-toc");
+  }
+
+  if (isCheck) {
+    // Check mode: run every active plugin so the user sees all drift in one
+    // pass rather than having to re-run after fixing each plugin in turn.
+    let allPassed = true;
+    for (const { bin, args } of plugins) {
+      if (!trySpawnPlugin(bin, args)) allPassed = false;
+    }
+    if (!allPassed) process.exit(1);
+  } else {
+    // Update mode: fail-fast. Plugins chain their writes (NX → UML → TOC),
+    // so each must succeed before the next reads the updated file.
+    for (const { bin, args } of plugins) {
+      spawnPlugin(bin, args);
+    }
+  }
 }
 
 main();
