@@ -25,15 +25,14 @@
     - [How to resolve](#how-to-resolve)
       - [Option A — This change SHOULD trigger a release](#option-a--this-change-should-trigger-a-release)
       - [Option B — This change should NOT trigger a release](#option-b--this-change-should-not-trigger-a-release)
-    - [rules](#rules)
     - [Maintainer rules](#maintainer-rules)
-  - [Activity Diagram](#activity-diagram)
+  - [Development Flow](#development-flow)
   - [How the Automated Release Pipeline Works](#how-the-automated-release-pipeline-works)
     - [1. Auto-changeset (`scripts/auto-changeset.sh`)](#1-auto-changeset-scriptsauto-changesetsh)
     - [2. Version bump + publish](#2-version-bump--publish)
     - [3. Post-publish smoke test](#3-post-publish-smoke-test)
   - [Verifying a Release](#verifying-a-release)
-  - [Rules](#rules-1)
+  - [Rules](#rules)
   - [Publishing as NPM Packages](#publishing-as-npm-packages)
   - [Sideways Version Bump Policy](#sideways-version-bump-policy)
   - [Design Principles](#design-principles)
@@ -402,7 +401,6 @@ git commit -m "chore: add empty changeset"
 
 ---
 
-### rules
 ### Maintainer rules
 
 - Never ignore this error.
@@ -414,9 +412,9 @@ If this error appears in CI, it indicates the PR is missing required release met
 
 ---
 
-## Activity Diagram
 
-DEVELOPMENT FLOW
+## Development Flow
+
 ```
 cd javascript/nx-graph-to-mermaid
 
