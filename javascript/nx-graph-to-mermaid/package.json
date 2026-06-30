@@ -6,6 +6,9 @@
   "description": "Auto-generates a Mermaid task flow diagram from an NX `project.json` file — with optional CI drift detection and Markdown injection support.",
   "main": "dist/index.js",
   "type": "module",
+  "bin": {
+    "nx-graph-to-mermaid": "./bin/nx-graph-to-mermaid.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/datalackey/build-tools.git",
@@ -15,6 +18,7 @@
     "url": "https://github.com/datalackey/build-tools/issues"
   },
   "files": [
+    "bin",
     "dist",
     "README.md",
     "executors.json",

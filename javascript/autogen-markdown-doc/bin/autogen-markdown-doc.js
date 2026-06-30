@@ -4,7 +4,7 @@ import path from "node:path";
 import process from "node:process";
 import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
-import { generate as runExecutor } from "@datalackey/nx-graph-to-mermaid";
+import { debugLog } from "@datalackey/tooling-core";
 
 const require = createRequire(import.meta.url);
 
@@ -93,10 +93,6 @@ function parseArgs(argv) {
   return { subcommand, filePath, excludeComponents, quiet, debug, help };
 }
 
-function dbg(enabled, message) {
-  if (enabled) process.stderr.write(`[autogen] ${message}\n`);
-}
-
 function checkMalformedMarkers(content, filePath) {
   const pairs = [
     { start: TOC_START, end: TOC_END },
@@ -121,7 +117,7 @@ function spawnPlugin(bin, args) {
   }
 }
 
-async function main() {
+function main() {
   const {
     subcommand,
     filePath: rawFilePath,
@@ -181,27 +177,20 @@ async function main() {
       );
       process.exit(1);
     }
-    dbg(debug, "NX_GRAPH markers detected — activating nx-graph-to-mermaid");
-
-    const result = await runExecutor({
-      projectJsonPath,
-      mode: isCheck ? "check" : "update",
-      markdownPath: resolvedFilePath,
-      debug,
-    });
-
-    if (!result.success) {
-      process.exit(1);
-    }
+    debugLog({ debug }, "NX_GRAPH markers detected — activating nx-graph-to-mermaid");
+    const nxBin = require.resolve(
+      "@datalackey/nx-graph-to-mermaid/bin/nx-graph-to-mermaid.js"
+    );
+    spawnPlugin(nxBin, [...commonFlags, resolvedFilePath]);
   } else {
-    dbg(debug, "no NX_GRAPH markers — skipping nx-graph-to-mermaid");
+    debugLog({ debug }, "no NX_GRAPH markers — skipping nx-graph-to-mermaid");
   }
 
   // UML — only when UML markers present. Runs before TOC so that any
   // headings UML injects (e.g. component names) are present in the file
   // by the time TOC scans for headings, avoiding a second convergence pass.
   if (hasUmlMarkers) {
-    dbg(debug, "UML markers detected — activating update-markdown-uml");
+    debugLog({ debug }, "UML markers detected — activating update-markdown-uml");
     const umlBin = require.resolve(
       "@datalackey/update-markdown-uml/bin/update-markdown-uml.js"
     );
@@ -210,11 +199,11 @@ async function main() {
       : [];
     spawnPlugin(umlBin, [...commonFlags, ...excludeArgs, resolvedFilePath]);
   } else {
-    dbg(debug, "no UML markers — skipping update-markdown-uml");
+    debugLog({ debug }, "no UML markers — skipping update-markdown-uml");
   }
 
   // TOC — always invoked
-  dbg(debug, "activating update-markdown-toc");
+  debugLog({ debug }, "activating update-markdown-toc");
   const tocBin = require.resolve(
     "@datalackey/update-markdown-toc/bin/update-markdown-toc.js"
   );
