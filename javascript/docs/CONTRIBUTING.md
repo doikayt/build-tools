@@ -3,6 +3,7 @@
   - [First-Time Setup](#first-time-setup)
   - [Overall Repo Structure Model](#overall-repo-structure-model)
   - [Build Pipeline](#build-pipeline)
+    - [In-IDE Build Target Execution and Visualization](#in-ide-build-target-execution-and-visualization)
   - [Package Naming Policy](#package-naming-policy)
   - [Development and Release Engineering Workflows](#development-and-release-engineering-workflows)
     - [Day to Day Development (Package Level) Overview](#day-to-day-development-package-level-overview)
