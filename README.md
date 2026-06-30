@@ -7,7 +7,6 @@
   - [For Project Maintainers](#for-project-maintainers)
 <!-- TOC:END -->
 
-
 # build-tools
 
 This repository contains tooling designed to assist in building and maintaining software projects —
