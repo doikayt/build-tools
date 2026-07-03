@@ -208,7 +208,6 @@ function buildFunctionTable(
   return tableLines.join("\n");
 }
 
-
 function visibilitySymbol(scope: string | undefined): string {
   if (scope === "private") return "-";
   if (scope === "protected") return "#";
