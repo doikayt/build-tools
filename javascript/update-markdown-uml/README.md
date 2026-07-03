@@ -4,6 +4,7 @@
 - [@datalackey/update-markdown-uml](#datalackeyupdate-markdown-uml)
   - [Terminology](#terminology)
   - [What It Does](#what-it-does)
+    - [Function-only components](#function-only-components)
   - [Installation](#installation)
   - [Usage](#usage)
   - [Options](#options)
@@ -47,6 +48,38 @@ component under `src/`), this tool:
 All three sections are injected into a single Markdown file between
 fixed marker pairs. Running the tool again is a no-op if nothing has
 changed — output is fully deterministic.
+
+### Function-only components
+
+When a component directory contains no classes, interfaces, or type aliases,
+the class diagram falls back to a four-column Markdown table of exported
+functions:
+
+| Function | Parameters | Returns | Description |
+|----------|------------|---------|-------------|
+| `matchFields` | `template: Template`<br>`fields: FormField[]` | `MatchResult` | Partitions discovered fields into three buckets. |
+| `isReactForm` | — | `boolean` | Returns `true` if any React signal is present. |
+
+Details of the fallback format:
+
+- **Parameters cell** — each parameter is formatted as `name: Type`; multiple
+  parameters are stacked within the same cell using `<br>`. Zero-argument
+  functions show `—`.
+- **Description cell** — the first sentence of the function's JSDoc block
+  (text up to and including the first `.`, or up to the first newline,
+  whichever comes first). When no JSDoc description is present, `—` appears in
+  the cell and a warning is emitted to stderr:
+  ```
+  warn: [ComponentName] function `functionName` has no JSDoc description
+  ```
+- **Empty component** — if a component has no exported functions, classes,
+  interfaces, or types at all, the output is the single line
+  `_No exported types or functions._` and a warning is emitted:
+  ```
+  warn: [ComponentName] has no exported functions, classes, interfaces, or types
+  ```
+
+Both warnings are suppressed when the CLI is run with `--quiet`.
 
 ---
 

@@ -54,10 +54,7 @@ flowchart TB
 
 <!-- UML:component-details:START -->
 #### cli
-```mermaid
-classDiagram
-  direction TB
-```
+_No exported types or functions._
 
 #### engine
 ```mermaid

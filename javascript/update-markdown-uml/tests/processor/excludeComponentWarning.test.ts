@@ -44,7 +44,13 @@ beforeEach(() => {
   for (const name of ["cli", "math-engine"]) {
     const dir = path.join(tmpDir, "src", name);
     fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(path.join(dir, "index.ts"), "export {};\n", "utf-8");
+    // Use an exported type so buildComponentClassDiagram emits a mermaid block
+    // rather than the function-table fallback (which would emit extra warnings).
+    fs.writeFileSync(
+      path.join(dir, "index.ts"),
+      'export type Placeholder = "placeholder";\n',
+      "utf-8"
+    );
   }
 });
 

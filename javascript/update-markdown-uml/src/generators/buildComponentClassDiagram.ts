@@ -1,12 +1,12 @@
-import { Project } from "ts-morph";
+import { Project, type FunctionDeclaration } from "ts-morph";
 import path from "node:path";
+import { extractFirstSentence } from "@datalackey/tooling-core";
 
 /**
  * Builds a Mermaid classDiagram block for a single leaf component directory.
  * Uses ts-morph to extract classes, interfaces (exported and non-exported),
- * and type aliases. Standalone functions are excluded by design — their
- * presence in a component is surfaced via the placeholder node in the
- * flowchart overview diagram.
+ * and type aliases. When none of those are found (function-only component),
+ * falls back to a Markdown table of exported functions instead.
  *
  * Arrow styles:
  *   --|>  class extends class
@@ -18,8 +18,15 @@ import path from "node:path";
  *
  * Non-exported declarations are included — a non-exported base type is
  * often the most architecturally significant abstraction in a component.
+ *
+ * @param warn  Optional callback for diagnostic messages. Pass a no-op to
+ *              suppress output (equivalent to --quiet). When omitted, no
+ *              warnings are emitted.
  */
-export function buildComponentClassDiagram(leafDir: string): string {
+export function buildComponentClassDiagram(
+  leafDir: string,
+  warn?: (msg: string) => void
+): string {
   const project = new Project({
     skipAddingFilesFromTsConfig: true,
     compilerOptions: {
@@ -122,6 +129,13 @@ export function buildComponentClassDiagram(leafDir: string): string {
     }
   }
 
+  // If nothing was added beyond the three header lines, this is a function-only
+  // component (no classes, interfaces, or type aliases). Discard the partial
+  // mermaid block and render a Markdown function table instead.
+  if (lines.length === 3) {
+    return buildFunctionTable(project, path.basename(leafDir), warn);
+  }
+
   if (relationshipLines.length > 0) {
     lines.push("");
     for (const rel of relationshipLines) {
@@ -133,6 +147,67 @@ export function buildComponentClassDiagram(leafDir: string): string {
 
   return lines.join("\n");
 }
+
+function buildFunctionTable(
+  project: Project,
+  componentName: string,
+  warn?: (msg: string) => void
+): string {
+  const exportedFunctions: FunctionDeclaration[] = [];
+
+  for (const sf of project.getSourceFiles()) {
+    for (const func of sf.getFunctions()) {
+      if (func.isExported()) {
+        exportedFunctions.push(func);
+      }
+    }
+  }
+
+  if (exportedFunctions.length === 0) {
+    warn?.(
+      `warn: [${componentName}] has no exported functions, classes, interfaces, or types`
+    );
+    return "_No exported types or functions._";
+  }
+
+  const tableLines: string[] = [
+    "| Function | Parameters | Returns | Description |",
+    "|----------|------------|---------|-------------|",
+  ];
+
+  for (const func of exportedFunctions) {
+    const params = func.getParameters();
+    const paramsCell =
+      params.length === 0
+        ? "—"
+        : params
+            .map(
+              (p) =>
+                `${p.getName()}: ${p.getTypeNode()?.getText() ?? "unknown"}`
+            )
+            .join("<br>");
+
+    const returnsCell = func.getReturnTypeNode()?.getText() ?? "unknown";
+
+    const rawDesc = func.getJsDocs()[0]?.getDescription()?.trim() ?? "";
+    let descCell: string;
+    if (!rawDesc) {
+      warn?.(
+        `warn: [${componentName}] function \`${func.getName()}\` has no JSDoc description`
+      );
+      descCell = "—";
+    } else {
+      descCell = extractFirstSentence(rawDesc);
+    }
+
+    tableLines.push(
+      `| \`${func.getName()}\` | ${paramsCell} | ${returnsCell} | ${descCell} |`
+    );
+  }
+
+  return tableLines.join("\n");
+}
+
 
 function visibilitySymbol(scope: string | undefined): string {
   if (scope === "private") return "-";

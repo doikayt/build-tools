@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach, afterEach } from "vitest";
+import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
@@ -19,11 +19,9 @@ function write(name: string, content: string): void {
 }
 
 describe("buildComponentClassDiagram()", () => {
-  test("empty directory produces minimal diagram", () => {
+  test("empty directory returns empty-component sentinel", () => {
     const result = buildComponentClassDiagram(tmpDir);
-    expect(result).toContain("```mermaid");
-    expect(result).toContain("classDiagram");
-    expect(result).toContain("```");
+    expect(result).toBe("_No exported types or functions._");
   });
 
   test("exported interface renders with <<interface>> stereotype", () => {
@@ -152,4 +150,105 @@ describe("buildComponentClassDiagram()", () => {
     expect(result).not.toContain("class walkFiles");
     expect(result).not.toContain("class debugLog");
   });
+});
+
+describe("buildComponentClassDiagram() — function-only fallback", () => {
+  test("happy path: two exported functions with JSDoc and multiple params render full table", () => {
+    write(
+      "utils.ts",
+      [
+        "/**",
+        " * Partitions discovered fields into three buckets.",
+        " */",
+        "export function matchFields(template: Template, fields: FormField[]): MatchResult { return {} as MatchResult; }",
+        "/**",
+        " * Returns true if any React signal is present.",
+        " */",
+        "export function isReactForm(): boolean { return false; }",
+      ].join("\n")
+    );
+
+    const result = buildComponentClassDiagram(tmpDir);
+
+    expect(result).toContain(
+      "| Function | Parameters | Returns | Description |"
+    );
+    expect(result).toContain("`matchFields`");
+    expect(result).toContain("template: Template<br>fields: FormField[]");
+    expect(result).toContain("MatchResult");
+    expect(result).toContain(
+      "Partitions discovered fields into three buckets."
+    );
+    expect(result).toContain("`isReactForm`");
+    expect(result).toContain("| — |");
+    expect(result).toContain("Returns true if any React signal is present.");
+    expect(result).not.toContain("```mermaid");
+  }, 20_000);
+
+  test("no description (without quiet): — in Description cell and warn emitted", () => {
+    write(
+      "utils.ts",
+      ["export function compute(x: number): number { return x; }"].join("\n")
+    );
+
+    const warn = vi.fn();
+    const result = buildComponentClassDiagram(tmpDir, warn);
+
+    expect(result).toContain("| — |");
+    expect(warn).toHaveBeenCalledOnce();
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining("function `compute` has no JSDoc description")
+    );
+  }, 20_000);
+
+  test("no description (with quiet): — in Description cell and no warning", () => {
+    write(
+      "utils.ts",
+      ["export function compute(x: number): number { return x; }"].join("\n")
+    );
+
+    const result = buildComponentClassDiagram(tmpDir);
+
+    expect(result).toContain("| — |");
+  }, 20_000);
+
+  test("zero-argument function: — in Parameters cell", () => {
+    write(
+      "utils.ts",
+      [
+        "/** Returns the current timestamp. */",
+        "export function now(): number { return Date.now(); }",
+      ].join("\n")
+    );
+
+    const result = buildComponentClassDiagram(tmpDir);
+
+    const rows = result.split("\n").filter((l) => l.startsWith("| `"));
+    expect(rows).toHaveLength(1);
+    // Parameters cell should be — (dash)
+    expect(rows[0]).toMatch(/\| — \|/);
+  }, 20_000);
+
+  test("no exports (without quiet): returns sentinel and warn emitted", () => {
+    write("utils.ts", ["function internal(): void {}"].join("\n"));
+
+    const warn = vi.fn();
+    const result = buildComponentClassDiagram(tmpDir, warn);
+
+    expect(result).toBe("_No exported types or functions._");
+    expect(warn).toHaveBeenCalledOnce();
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining(
+        "has no exported functions, classes, interfaces, or types"
+      )
+    );
+  }, 20_000);
+
+  test("no exports (with quiet): returns sentinel and no warning", () => {
+    write("utils.ts", ["function internal(): void {}"].join("\n"));
+
+    const result = buildComponentClassDiagram(tmpDir);
+
+    expect(result).toBe("_No exported types or functions._");
+  }, 20_000);
 });

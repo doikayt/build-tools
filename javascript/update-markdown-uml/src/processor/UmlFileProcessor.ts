@@ -77,7 +77,7 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
     // 6. Build per-component class diagrams
     const detailSections = activeLeafDirs.map((leafDir) => {
       const name = path.basename(leafDir);
-      const diagram = buildComponentClassDiagram(leafDir);
+      const diagram = buildComponentClassDiagram(leafDir, onWarn);
       return `#### ${name}\n${diagram}`;
     });
     const componentDetailsContent = detailSections.join("\n\n");

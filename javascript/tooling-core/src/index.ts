@@ -54,6 +54,7 @@ export { validateExternalLink } from "./markdown/validateExternalLink.js";
 export { validateMarkdownLinks } from "./markdown/validateMarkdownLinks.js";
 export { debugLog } from "./util/debugLog.js";
 export { toErrorMessage } from "./util/toErrorMessage.js";
+export { extractFirstSentence } from "./util/extractFirstSentence.js";
 export { runLinkValidation } from "./cli/runLinkValidation.js";
 export type { RepositoryStats } from "./repository/RepositoryRunner.js";
 export { runWithConcurrency } from "./util/concurrency.js";
