@@ -39,7 +39,7 @@ which would create ambiguity.
 Given a TypeScript project organised into components (one directory per
 component under `src/`), this tool:
 
-- generates a **component overview flowchart** showing cross-component
+- generates a **component relationship graph** showing cross-component
   import dependencies
 - generates a **components table** with one row per component
 - generates **per-component class diagrams** showing classes, interfaces,
