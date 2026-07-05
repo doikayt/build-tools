@@ -183,7 +183,9 @@ function buildFunctionTable(
         : params
             .map(
               (p) =>
-                `${p.getName()}: ${escapeCell(p.getTypeNode()?.getText() ?? "unknown")}`
+                `${p.getName()}: ${escapeCell(
+                  p.getTypeNode()?.getText() ?? "unknown"
+                )}`
             )
             .join("<br>");
 

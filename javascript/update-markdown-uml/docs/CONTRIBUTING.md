@@ -82,14 +82,14 @@ classDiagram
 | Function | Parameters | Returns | Description |
 |----------|------------|---------|-------------|
 | `discoverLeafComponents` | sourceRoot: string<br>skipTestPatterns: string[]<br>onWarn: (message: string) => void | string[] | Discovers leaf component directories under sourceRoot. |
-| `readComponentDescription` | leafDir: string<br>onWarn: (message: string) => void | string | undefined | Reads the first sentence (ending with '. |
+| `readComponentDescription` | leafDir: string<br>onWarn: (message: string) => void | string \| undefined | Reads the first sentence (ending with '. |
 
 #### generators
 | Function | Parameters | Returns | Description |
 |----------|------------|---------|-------------|
 | `buildComponentClassDiagram` | leafDir: string<br>warn: (msg: string) => void | string | Builds a Mermaid classDiagram block for a single leaf component directory. |
-| `buildComponentsFlowchart` | components: string[]<br>edges: ImportEdge[] | string | Builds a Mermaid flowchart TB diagram showing leaf components as compact |
-| `buildComponentsTable` | components: string[]<br>descriptions: Map<string, string | undefined> | string | Builds a Markdown table listing leaf components and their descriptions. |
+| `buildComponentsFlowchart` | components: string[]<br>edges: ImportEdge[] | string | Builds a Mermaid flowchart TB diagram showing leaf components as compact subgraphs with inter-component import dependency arrows. |
+| `buildComponentsTable` | components: string[]<br>descriptions: Map<string, string \| undefined> | string | Builds a Markdown table listing leaf components and their descriptions. |
 
 #### markdown
 ```mermaid
