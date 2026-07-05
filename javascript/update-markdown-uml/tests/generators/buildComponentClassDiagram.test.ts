@@ -251,4 +251,51 @@ describe("buildComponentClassDiagram() — function-only fallback", () => {
 
     expect(result).toBe("_No exported types or functions._");
   }, 20_000);
+
+  test("union return type: pipe is escaped as \\| in the Returns cell", () => {
+    write(
+      "utils.ts",
+      [
+        "/** Finds the matching record. */",
+        "export function find(id: number): string | null { return null; }",
+      ].join("\n")
+    );
+
+    const result = buildComponentClassDiagram(tmpDir);
+    const row = result.split("\n").find((l) => l.includes("`find`"))!;
+
+    expect(row).toContain("string \\| null");
+    expect(row).not.toMatch(/string \| null(?!.*\\)/);
+  }, 20_000);
+
+  test("union parameter type: pipe is escaped as \\| in the Parameters cell", () => {
+    write(
+      "utils.ts",
+      [
+        "/** Normalises the input. */",
+        "export function normalise(value: string | number): string { return ''; }",
+      ].join("\n")
+    );
+
+    const result = buildComponentClassDiagram(tmpDir);
+    const row = result.split("\n").find((l) => l.includes("`normalise`"))!;
+
+    expect(row).toContain("value: string \\| number");
+  }, 20_000);
+
+  test("plain (non-union) type: no spurious escaping", () => {
+    write(
+      "utils.ts",
+      [
+        "/** Returns the length of the array. */",
+        "export function len(items: string[]): number { return items.length; }",
+      ].join("\n")
+    );
+
+    const result = buildComponentClassDiagram(tmpDir);
+    const row = result.split("\n").find((l) => l.includes("`len`"))!;
+
+    expect(row).toContain("items: string[]");
+    expect(row).toContain("| number |");
+  }, 20_000);
 });

@@ -183,11 +183,13 @@ function buildFunctionTable(
         : params
             .map(
               (p) =>
-                `${p.getName()}: ${p.getTypeNode()?.getText() ?? "unknown"}`
+                `${p.getName()}: ${escapeCell(p.getTypeNode()?.getText() ?? "unknown")}`
             )
             .join("<br>");
 
-    const returnsCell = func.getReturnTypeNode()?.getText() ?? "unknown";
+    const returnsCell = escapeCell(
+      func.getReturnTypeNode()?.getText() ?? "unknown"
+    );
 
     const rawDesc = func.getJsDocs()[0]?.getDescription()?.trim() ?? "";
     let descCell: string;
@@ -197,7 +199,7 @@ function buildFunctionTable(
       );
       descCell = "—";
     } else {
-      descCell = extractFirstSentence(rawDesc);
+      descCell = escapeCell(extractFirstSentence(rawDesc));
     }
 
     tableLines.push(
@@ -206,6 +208,10 @@ function buildFunctionTable(
   }
 
   return tableLines.join("\n");
+}
+
+function escapeCell(value: string): string {
+  return value.replace(/\|/g, "\\|");
 }
 
 function visibilitySymbol(scope: string | undefined): string {
