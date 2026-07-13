@@ -95,6 +95,10 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM }}
 
+      - name: Push release tags
+        if: steps.publish.outcome == 'success'
+        run: git push --tags
+
       - name: Wait for npm registry propagation
         if: steps.publish.outcome == 'success'
         run: sleep 30
