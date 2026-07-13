@@ -1,5 +1,13 @@
 # @datalackey/update-markdown-toc
 
+## 1.4.13
+
+### Patch Changes
+
+- - fix: push release tags, upgrade Node to 22 and actions to v5
+- Updated dependencies
+  - @datalackey/tooling-core@1.4.13
+
 ## 1.4.12
 
 ### Patch Changes
