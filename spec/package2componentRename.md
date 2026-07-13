@@ -30,7 +30,7 @@ DETAILS:
 
 UPDATE FORMATTING BEFORE VALIDATION:
   cd ~/build-tools/javascript
-  npx nx run build-tools-workspace:update-all
+  npx nx run build-tools-workspace:update-all-format
 
 VALIDATION:
   cd ~/build-tools/javascript

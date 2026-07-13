@@ -146,7 +146,7 @@ npx nx run-many -t build,test --skip-nx-cache
 
 # 2. Regenerate docs and reformat code before committing
 cd javascript   # must run from workspace root
-npx nx run build-tools-workspace:update-all
+npx nx run build-tools-workspace:update-all-format
 
 # 3. Stage and commit
 git add .
@@ -166,8 +166,8 @@ git push
 > If a release ran since your last pull, your local branch is behind and git will reject
 > the push. `--rebase` keeps history linear and avoids noisy merge commits.
 
-> **`update-all` vs `check-all`:**
-> `update-all` auto-fixes docs and formatting — run it before committing.
+> **`update-all-format` vs `check-all`:**
+> `update-all-format` auto-fixes docs and formatting — run it before committing.
 > `check-all` validates everything including lint (which cannot be auto-fixed) — run it
 > before pushing. Lint errors must be fixed manually.
 
@@ -313,7 +313,7 @@ cd javascript/nx-graph-to-mermaid
 
   edit files
   npx nx run-many -t build,test
-  cd javascript && npx nx run build-tools-workspace:update-all
+  cd javascript && npx nx run build-tools-workspace:update-all-format
   git add . && git commit -m "fix(scope): ..."
   npx nx run build-tools-workspace:check-all
   git pull --rebase && git push               # why pull? The CI job commits new changeset when it publishes

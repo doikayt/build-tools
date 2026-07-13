@@ -7,9 +7,9 @@
           {
             "type": "command",
             "if": "Bash(git commit*)",
-            "command": "cd /workspace/javascript && npx nx run build-tools-workspace:update-all && git -C /workspace add -u",
+            "command": "cd /workspace/javascript && npx nx run build-tools-workspace:update-all-format && git -C /workspace add -u",
             "timeout": 120,
-            "statusMessage": "Running update-all before commit..."
+            "statusMessage": "Running update-all-format before commit..."
           }
         ]
       }

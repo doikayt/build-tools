@@ -54,7 +54,7 @@ graph TD
   check_types
   check_uml
   ci
-  update_all
+  update_all_format
   update_docs
   update_format
   update_mermaid
@@ -99,8 +99,8 @@ graph TD
   ci --> _caret_build
   ci --> _caret_test
   ci --> check_all
-  update_all --> update_docs
-  update_all --> update_format
+  update_all_format --> update_docs
+  update_all_format --> update_format
   update_docs --> update_mermaid
   update_docs --> update_toc
   update_docs --> update_uml

@@ -8,7 +8,7 @@
     "code layout and other conventions.",
     "",
     "Developer workflow:",
-    "  update-all  — run locally before committing to bring all generated content up to date",
+    "  update-all-format  — run locally before committing to bring all generated content up to date",
     "  check-all   — run locally to verify everything is correct (same as CI)",
     "",
     "CI calls check-all, so 'check-all locally' and 'push to CI' are equivalent.",
@@ -67,7 +67,7 @@
       "command": "npx prettier --write .",
       "cwd": "{workspaceRoot}"
     },
-    "update-all": {
+    "update-all-format": {
       "//": [
         "Run locally before committing.",
         "Updates all generated documentation and reformats all code.",
