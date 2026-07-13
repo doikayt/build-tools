@@ -2,6 +2,7 @@
 - [Tooling for JavaScript/TypeScript/Node Projects](#tooling-for-javascripttypescriptnode-projects)
   - [Overview](#overview)
   - [Packages](#packages)
+  - [Local Development](#local-development)
   - [Build Targets](#build-targets)
   - [Consistent CLI Behavior Across Tools](#consistent-cli-behavior-across-tools)
 <!-- TOC:END -->
@@ -37,7 +38,22 @@ For maintainer and contributor documentation see: [here](./docs/CONTRIBUTING.md)
 These packages are:
 
 - ESM-only (not dual-published for CommonJS)
-- Node >= 18
+- Node >= 22
+
+## Local Development
+
+```bash
+# Simulate what CI checks — run before pushing
+npx nx run build-tools-workspace:check-all
+
+# Regenerate all docs and formatting — run before committing
+npx nx run build-tools-workspace:update-all-format
+```
+
+If `check-all` passes locally, CI will pass. See [CONTRIBUTING.md](./docs/CONTRIBUTING.md)
+for the full day-to-day workflow.
+
+---
 
 ## Build Targets
 The visualization below is based on [this](./project.json) NX build configuration.
