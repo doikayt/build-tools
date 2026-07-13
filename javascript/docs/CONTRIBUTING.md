@@ -16,22 +16,11 @@
     - [4. Push — CI does the rest](#4-push--ci-does-the-rest)
     - [5. Verify Release](#5-verify-release)
   - [Versioning Tiers](#versioning-tiers)
-    - [Bump levels](#bump-levels)
-    - [Commit prefix → bump mapping](#commit-prefix--bump-mapping)
     - [Forcing a specific bump level](#forcing-a-specific-bump-level)
     - [Suppressing a release](#suppressing-a-release)
   - [Handling `changeset status` Errors](#handling-changeset-status-errors)
-    - [What this means](#what-this-means)
-    - [When you will see this](#when-you-will-see-this)
-    - [How to resolve](#how-to-resolve)
-      - [Option A — This change SHOULD trigger a release](#option-a--this-change-should-trigger-a-release)
-      - [Option B — This change should NOT trigger a release](#option-b--this-change-should-not-trigger-a-release)
-    - [Maintainer rules](#maintainer-rules)
   - [Development Flow](#development-flow)
   - [How the Automated Release Pipeline Works](#how-the-automated-release-pipeline-works)
-    - [1. Auto-changeset (`scripts/auto-changeset.sh`)](#1-auto-changeset-scriptsauto-changesetsh)
-    - [2. Version bump + publish](#2-version-bump--publish)
-    - [3. Post-publish smoke test](#3-post-publish-smoke-test)
   - [Verifying a Release](#verifying-a-release)
   - [Rules](#rules)
   - [Publishing as NPM Packages](#publishing-as-npm-packages)
@@ -291,144 +280,28 @@ After the workflow completes, confirm:
 
 ## Versioning Tiers
 
-All packages in this workspace are versioned together as a single unit (see [Sideways Version Bump Policy](#sideways-version-bump-policy)).
-The semver bump level is derived automatically from your commit message prefixes via `scripts/auto-changeset.sh`.
-
-### Bump levels
-
-Semver version numbers follow the format **MAJOR.MINOR.PATCH** (e.g. `1.4.2`):
-
-| Tier | Version change | When to use |
-|---|---|---|
-| **PATCH** | `1.4.0 → 1.4.1` | Bug fixes, performance improvements — no new API surface |
-| **MINOR** | `1.4.0 → 1.5.0` | New features that are backwards-compatible |
-| **MAJOR** | `1.4.0 → 2.0.0` | Breaking changes — existing callers must update their code |
-
-### Commit prefix → bump mapping
-
-| Commit prefix | Bump | Example |
-|---|---|---|
-| `fix:` or `fix(scope):` | patch | `fix(toc): handle headings after HTML blocks` |
-| `perf:` or `perf(scope):` | patch | `perf: cache slugger across files` |
-| `feat:` or `feat(scope):` | patch | `feat: add --quiet flag to all plugins` |
-| `feat!:` or `feat(scope)!:` | **major** | `feat!: remove deprecated --output flag` |
-| `BREAKING CHANGE` in commit body | **major** | any prefix + `BREAKING CHANGE: ...` in body |
-| `chore:`, `ci:`, `docs:`, `refactor:`, `style:`, `test:` | none | no release triggered |
-
-> **Note:** Automated releases are intentionally conservative — `feat:` maps to patch, not minor.
-> Use `npx changeset` before pushing to explicitly declare a minor or major bump.
-
-The highest bump level found across all commits since the last release tag wins.
+All packages in this workspace version together in lockstep (see
+[Sideways Version Bump Policy](#sideways-version-bump-policy)); the bump level is derived from
+conventional commit prefixes by `scripts/auto-changeset.sh`. The tier definitions and the
+commit-prefix → bump mapping are canonical policy — see [Versioning Tiers][rp-tiers].
 
 ### Forcing a specific bump level
 
-If the commit prefix convention doesn't reflect the true impact of a change — for example,
-a `refactor:` that silently breaks a public API — run `npx changeset` manually before pushing:
-
-```sh
-cd javascript
-npx changeset
-# select bump level and write a description at the prompt
-git add .changeset
-git commit -m "chore: add changeset"
-git push origin main
-```
-
-The auto-generation script skips when a handwritten changeset file already exists, so
-the manual changeset takes full precedence.
+Run `npx changeset` from `javascript/` before pushing — the auto-generation script defers to a
+handwritten changeset. Details: [Forcing a Specific Bump Level][rp-forcing].
 
 ### Suppressing a release
 
-If your commits touch publishable package files but should not trigger a release
-(e.g. a documentation-only change committed with `docs:` that somehow needs no version bump):
-
-```sh
-cd javascript
-npx changeset add --empty
-git add .changeset
-git commit -m "chore: skip release"
-git push origin main
-```
-
-The empty changeset satisfies the pipeline without bumping any version.
+Run `npx changeset add --empty` from `javascript/` and commit the empty changeset.
+Details: [Suppressing a Release][rp-suppressing].
 
 ---
 
 ## Handling `changeset status` Errors
 
-When running:
-```
-npx changeset status
-```
-
-you may see:
-```
-🦋  error Some packages have been changed but no changesets were found.
-🦋  error Run `changeset add` to resolve this error.
-🦋  error If this change doesn't need a release, run `changeset add --empty`.
-```
-
-### What this means
-
-Changesets has detected that:
-
-- Files affecting publishable packages have changed, and
-- No corresponding `.changeset/*.md` file exists describing release intent.
-
-Changesets refuses to proceed because releases in this repository must always be **explicit and deterministic**.
-
-This safeguard prevents:
-
-- accidental releases
-- ambiguous version bumps
-- silent drift between code and published packages
-
----
-
-### When you will see this
-
-You will typically encounter this message after:
-
-- modifying code in a publishable package
-- merging a PR without adding a changeset
-- running local experiments that touched package files
-
----
-
-### How to resolve
-
-#### Option A — This change SHOULD trigger a release
-```
-npx changeset
-```
-
-Follow the prompts, then commit:
-```
-git add .changeset
-git commit -m "chore: add changeset"
-```
-
-#### Option B — This change should NOT trigger a release
-```
-npx changeset add --empty
-```
-
-Then commit:
-```
-git add .changeset
-git commit -m "chore: add empty changeset"
-```
-
----
-
-### Maintainer rules
-
-- Never ignore this error.
-- Never manually edit package versions.
-- Every change affecting publishable packages must have a changeset (real or empty).
-- This rule is required for deterministic, auditable releases.
-
-If this error appears in CI, it indicates the PR is missing required release metadata.
+The error, what it means, and both resolution paths (real vs empty changeset) are canonical
+policy — see [Handling `changeset status` Errors][rp-status]. In build-tools, run all
+changeset commands from `javascript/` (the Changesets control plane).
 
 ---
 
@@ -463,60 +336,28 @@ cd javascript
 
 ## How the Automated Release Pipeline Works
 
-On every push to `main` that passes the build, the release job runs three steps:
-
-### 1. Auto-changeset (`scripts/auto-changeset.sh`)
-
-If no handwritten `.changeset/*.md` file exists, the script scans `git log` since
-the last release tag and derives a semver bump from conventional commit prefixes
-(see [Versioning Tiers](#versioning-tiers)). It writes a changeset file that
-`changeset version` then consumes. If no releasable commits are found (`fix:`,
-`feat:`, `perf:`), the script exits cleanly and no release is produced.
-
-### 2. Version bump + publish
-
-`changeset version` reads the changeset file, bumps all package versions in
-lockstep (see [Sideways Version Bump Policy](#sideways-version-bump-policy)),
-updates each package's `CHANGELOG.md`, and deletes the changeset file. The
-version bump is committed back to `main` with `[skip ci]` to prevent a recursive
-CI trigger. `changeset publish` then publishes all packages to npm and creates
-a `v<x.y.z>` git tag.
-
-### 3. Post-publish smoke test
-
-After a 30-second registry propagation wait, the smoke test installs
-`@datalackey/autogen-markdown-doc` at the just-published version **from the npm
-registry** (not local tarballs) and verifies the binary runs end-to-end against
-the `math-cli-nx` fixture. This proves the published artifact is correct, not
-just the local build.
+The pipeline (auto-changeset → `changeset version` + `[skip ci]` commit-back →
+`changeset publish` + tag) is canonical policy — see
+[How the Automated Release Pipeline Works][rp-pipeline]. One build-tools addition: after
+publish, a smoke test installs `@datalackey/autogen-markdown-doc` at the just-published
+version from the npm registry and runs it end-to-end against the `math-cli-nx` fixture.
 
 ---
 
 ## Verifying a Release
 
-After a release completes, evidence appears in several places:
-
-| Where | What to look for |
-|---|---|
-| **GitHub Actions** | Release job green; `Publishing "@datalackey/*" at "x.y.z"` in the publish step log |
-| **`git log`** | A `chore: release [skip ci]` commit with bumped versions, followed by your original commit |
-| **`git tag`** | New `v<x.y.z>` tag created by `changeset publish` — run `git pull --tags` to fetch it locally |
-| **Each package's `CHANGELOG.md`** | e.g. `javascript/autogen-markdown-doc/CHANGELOG.md` — one entry per release with the commit summaries that drove it |
-| **npm registry** | `npm view @datalackey/autogen-markdown-doc versions` — the new version appears in the list |
-
-The `CHANGELOG.md` files are the canonical human-readable record of what changed in each
-release and why. They are generated automatically from the conventional commit subjects
-that drove the bump.
+Where release evidence appears (Actions log, `git log`/`git tag`, changelogs, npm registry)
+is canonical policy — see [Verifying a Release][rp-verifying]. For build-tools, check
+`npm view @datalackey/autogen-markdown-doc versions` and each package's `CHANGELOG.md`.
 
 ---
 
 ## Rules
 
-- Version numbers of packages must never be edited manually.
-- Version numbers of depended-on packages must never be manually adjusted.
-- `npm publish` must never be run from individual package directories (leave that to CI).
-- All releases must originate from committed Changesets.
-- Workspace root (second level folder) orchestrates — it does not contain product logic.
+Maintainer rules (never hand-edit versions, all releases from committed changesets, no
+`npm publish` from package directories) are canonical — see [Rules][rp-rules].
+Build-tools-specific: the workspace root (`javascript/`) orchestrates only — it contains
+no product logic.
 
 ---
 
@@ -534,23 +375,10 @@ changelog entries across packages.
 
 ## Sideways Version Bump Policy
 
-This workspace follows a coordinated release alignment policy, enforced by the use of `fixed` in
-our [Changesets configuration](../.changeset/config.json).
-
-The rule is: when any publishable package in this workspace is version bumped
-(patch, minor, or major), all other publishable packages will be bumped to that same exact
-version number — even if there were no source changes within those packages,
-and even if they have no direct dependency relationship with the changed package.
-
-The purpose of this policy is to ensure release coherence: ruling out
-any ambiguity about compatibility between sibling packages.
-
-Implications:
-
-- Maintainers must never manually edit version numbers.
-- Maintainers must never manually adjust internal dependency ranges.
-- Always use Changesets to produce coordinated releases.
-- After successful publishing, all packages in the workspace will be at the same version number.
+The five publishable packages are pinned to a single version via the `fixed` group in our
+[Changesets configuration](../.changeset/config.json): any bump moves every package to the
+same version, even without source changes or dependency relationships between them. For the
+rationale, see [Coordinated (Sideways) Version Bumps][rp-sideways].
 
 
 ## Design Principles 
@@ -558,4 +386,12 @@ Implications:
 For the reasoning behind structural and architectural decisions that shaped the implementation of all 
 current plug-ins (and which should be followed going forward), refer to  [this document](DESIGN-PRINCIPLES.md)
 
+[rp-tiers]: https://github.com/doikayt/typescript-build-config/blob/main/docs/RELEASE-PROCESS.md#versioning-tiers
+[rp-forcing]: https://github.com/doikayt/typescript-build-config/blob/main/docs/RELEASE-PROCESS.md#forcing-a-specific-bump-level
+[rp-suppressing]: https://github.com/doikayt/typescript-build-config/blob/main/docs/RELEASE-PROCESS.md#suppressing-a-release
+[rp-status]: https://github.com/doikayt/typescript-build-config/blob/main/docs/RELEASE-PROCESS.md#handling-changeset-status-errors
+[rp-pipeline]: https://github.com/doikayt/typescript-build-config/blob/main/docs/RELEASE-PROCESS.md#how-the-automated-release-pipeline-works
+[rp-verifying]: https://github.com/doikayt/typescript-build-config/blob/main/docs/RELEASE-PROCESS.md#verifying-a-release
+[rp-rules]: https://github.com/doikayt/typescript-build-config/blob/main/docs/RELEASE-PROCESS.md#rules
+[rp-sideways]: https://github.com/doikayt/typescript-build-config/blob/main/docs/RELEASE-PROCESS.md#coordinated-sideways-version-bumps
 
