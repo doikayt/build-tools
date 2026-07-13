@@ -69,9 +69,6 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Build all packages
-        run: npx nx run-many -t build --skip-nx-cache
-
       - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
