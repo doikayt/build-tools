@@ -1,6 +1,6 @@
 {
   "name": "@datalackey/update-markdown-toc",
-  "version": "1.4.13",
+  "version": "1.4.14",
   "description": "Auto-generate Table of Contents for a Markdown file (or files, recursively from a top level folder)",
   "license": "MIT",
   "type": "module",
@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/update-markdown-toc",
   "dependencies": {
-    "@datalackey/tooling-core": "^1.4.13",
+    "@datalackey/tooling-core": "^1.4.14",
     "github-slugger": "^2.0.0",
     "ts-dedent": "^2.2.0"
   },
