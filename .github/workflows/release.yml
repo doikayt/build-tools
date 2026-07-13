@@ -1,4 +1,4 @@
-name: CI - JavaScript/Typescript/Node Projects
+name: CI / Release
 
 permissions:
   contents: write
@@ -6,7 +6,7 @@ permissions:
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - 'javascript/**'
       - '.github/workflows/**'
@@ -16,35 +16,30 @@ on:
       - '.github/workflows/**'
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: javascript
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-
-      - name: Setup Node
-        uses: actions/setup-node@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: javascript/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: CI
-        run: npx nx run build-tools-workspace:ci --skip-nx-cache
-
+      - run: npm ci
+      - run: npm run ci
       - name: Check Changesets (PR only)
         if: github.event_name == 'pull_request'
         run: npx changeset status
 
   release:
-    needs: build
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    needs: ci
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: write
+      id-token: write
     concurrency:
       group: release
       cancel-in-progress: false
@@ -53,56 +48,39 @@ jobs:
       run:
         working-directory: javascript
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-
-      - name: Setup Node
-        uses: actions/setup-node@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
           cache: npm
           cache-dependency-path: javascript/package-lock.json
-
-      - name: Install deps
-        run: npm ci
-
+      - run: npm ci
       - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
       - name: Auto-generate changeset from commits
         run: bash scripts/auto-changeset.sh
-
       - name: Apply version bumps
         run: npx changeset version
-
       - name: Commit and push version bumps
         run: |
           git add .
           git diff --staged --quiet && echo "No changesets to release" || \
             (git commit -m "chore: release [skip ci]" && git push)
-
-      - name: Publish with Changesets
+      - name: Publish
         id: publish
         run: npx changeset publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM }}
-
       - name: Push release tags
-        if: steps.publish.outcome == 'success'
         run: git push --tags
-
-      - name: Wait for npm registry propagation
-        if: steps.publish.outcome == 'success'
-        run: sleep 30
-
-      - name: Post-publish smoke test
+      - name: Post-publish hook (optional)
         if: steps.publish.outcome == 'success'
         run: |
-          VERSION=$(node -p "require('./autogen-markdown-doc/package.json').version")
-          cd autogen-markdown-doc && PUBLISHED_VERSION=$VERSION npx vitest run --config vitest.integration.config.ts
-
+          node -e "process.exit(require('./package.json').scripts?.['post-publish'] ? 0 : 1)" \
+            && npm run post-publish \
+            || echo "No post-publish script — skipping"
