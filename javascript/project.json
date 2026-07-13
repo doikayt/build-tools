@@ -142,6 +142,8 @@
       ]
     },
     "ci": {
+      "command": "echo 'CI pipeline complete'",
+      "cwd": "{workspaceRoot}",
       "dependsOn": ["^build", "^test", "build-tools-workspace:check-all"]
     }
   }
