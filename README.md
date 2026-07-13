@@ -20,7 +20,6 @@ Generated content is deterministic, injected into Markdown files at precise loca
 Running in `update` mode writes correct documentation, 
 running in `check` mode verifies it, and the two are guaranteed to agree.
 
-
 ---
 
 ## Design Principles
