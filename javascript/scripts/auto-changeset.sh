@@ -4,10 +4,12 @@
 #
 # Bump mapping (intentionally conservative — automated releases are always patch):
 #   fix:, feat:, perf:    → patch
-#   feat!: / BREAKING CHANGE → major
+#   feat!: / BREAKING CHANGE → FAIL: majors require a handwritten changeset
 #   chore:, ci:, docs:, refactor:, style:, test:, build: → no release
 #
-# Minor bumps must be declared explicitly via `npx changeset` before pushing.
+# Minor and major bumps must be declared explicitly via `npx changeset` before
+# pushing. A breaking-change marker with no handwritten changeset fails the
+# release job until a changeset (real or empty) is committed.
 # If no releasable commits are found, exits cleanly — changeset version
 # then has nothing to consume and publish is a no-op.
 set -euo pipefail
@@ -51,9 +53,14 @@ SUMMARY_LINES=()
 while IFS= read -r line; do
   [ -z "$line" ] && continue
 
-  # Breaking change wins regardless of prefix
   if echo "$line" | grep -qE "^[a-z]+(\([^)]+\))?!:" || echo "$line" | grep -qE "^BREAKING CHANGE"; then
-    BUMP="major"
+    echo "ERROR: breaking-change commit found with no handwritten changeset:" >&2
+    echo "  $line" >&2
+    echo "Major releases require explicit human declaration. Either:" >&2
+    echo "  npx changeset              # declare the bump, write migration notes" >&2
+    echo "  npx changeset add --empty  # or suppress the release entirely" >&2
+    echo "Commit the .changeset/*.md file and push again." >&2
+    exit 1
   fi
 
   if echo "$line" | grep -qE "^(fix|feat|perf)(\([^)]+\))?:" && [ -z "$BUMP" ]; then
