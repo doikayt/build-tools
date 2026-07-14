@@ -1,5 +1,16 @@
 # @datalackey/autogen-markdown-doc
 
+## 1.4.17
+
+### Patch Changes
+
+- - fix: post-publish step no longer masks test failures; bump propagation sleep to 60s
+- Updated dependencies
+  - @doikayt/tooling-core@1.4.17
+  - @doikayt/update-markdown-toc@1.4.17
+  - @doikayt/nx-graph-to-mermaid@1.4.17
+  - @doikayt/update-markdown-uml@1.4.17
+
 ## 1.4.16
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @datalackey/tooling-core
 
+## 1.4.17
+
+### Patch Changes
+
+- - fix: post-publish step no longer masks test failures; bump propagation sleep to 60s
+
 ## 1.4.16
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@doikayt/update-markdown-uml",
-  "version": "1.4.16",
+  "version": "1.4.17",
   "description": "Generates and validates UML class and component diagrams for TypeScript source trees, injecting them into Markdown documentation files",
   "license": "MIT",
   "type": "module",
@@ -42,7 +42,7 @@
     "prepack": "npx nx build @doikayt/update-markdown-uml 1>&2"
   },
   "dependencies": {
-    "@doikayt/tooling-core": "^1.4.16",
+    "@doikayt/tooling-core": "^1.4.17",
     "ts-morph": "^24.0.0",
     "micromatch": "^4.0.0",
     "github-slugger": "^2.0.0"
