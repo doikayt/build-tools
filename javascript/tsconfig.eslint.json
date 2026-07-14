@@ -4,10 +4,10 @@
     "baseUrl": ".",
     "moduleResolution": "node",
     "paths": {
-      "@datalackey/tooling-core": ["./tooling-core/src/index.ts"],
-      "@datalackey/update-markdown-toc": ["./update-markdown-toc/src/index.ts"],
-      "@datalackey/nx-graph-to-mermaid": ["./nx-graph-to-mermaid/src/index.ts"],
-      "@datalackey/update-markdown-uml": ["./update-markdown-uml/src/index.ts"]
+      "@doikayt/tooling-core": ["./tooling-core/src/index.ts"],
+      "@doikayt/update-markdown-toc": ["./update-markdown-toc/src/index.ts"],
+      "@doikayt/nx-graph-to-mermaid": ["./nx-graph-to-mermaid/src/index.ts"],
+      "@doikayt/update-markdown-uml": ["./update-markdown-uml/src/index.ts"]
     }
   },
   "include": [

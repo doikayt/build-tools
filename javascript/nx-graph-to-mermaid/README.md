@@ -2,7 +2,7 @@
 
 
 <!-- TOC:START -->
-- [@datalackey/NX-graph-to-mermaid](#datalackeynx-graph-to-mermaid)
+- [@doikayt/NX-graph-to-mermaid](#doikaytnx-graph-to-mermaid)
   - [Overview](#overview)
   - [Adding Documentation To NX Configuration](#adding-documentation-to-nx-configuration)
   - [Installation](#installation)
@@ -25,7 +25,7 @@
 <!-- TOC:END -->
 
 
-# @datalackey/NX-graph-to-mermaid
+# @doikayt/NX-graph-to-mermaid
 
 > Deterministically generates Mermaid task flow diagrams from NX `project.json` config files.
 
@@ -81,7 +81,7 @@ with contents like this:
       }
     },
     "task-graph:inject": {
-      "executor": "@datalackey/nx-graph-to-mermaid:run",
+      "executor": "@doikayt/nx-graph-to-mermaid:run",
       "options": {
         "mode": "update",
         "projectJsonPath": "apps/sample/project.json",
@@ -146,7 +146,7 @@ your documentation will co-reside with configuration metadata.
 ## Installation
 
 ```bash
-npm install --save-dev @datalackey/nx-graph-to-mermaid
+npm install --save-dev @doikayt/nx-graph-to-mermaid
 ```
 
 ---
@@ -193,7 +193,7 @@ all point to the same synthetic node.
 
 **Cross-project refs** (e.g. `@scope/pkg:build`) are rendered as **hexagon** nodes. The org 
 scope (`@scope/`) is stripped from the display label for readability — so 
-`@datalackey/tooling-core:lint` appears as `tooling-core:lint` inside the hex. 
+`@doikayt/tooling-core:lint` appears as `tooling-core:lint` inside the hex. 
 The full dep string is still encoded in the node ID in the Mermaid source. The 
 ref is named but not expanded — the internal dependency graph of the referenced project is not followed.
 
@@ -208,7 +208,7 @@ for  the orchestrating workspace.
 All modes use the same executor:
 
 ```json
-"executor": "@datalackey/nx-graph-to-mermaid:run"
+"executor": "@doikayt/nx-graph-to-mermaid:run"
 ```
 
 Behavior is controlled exclusively by `options.mode`.
@@ -233,7 +233,7 @@ Add a target:
 ```json
 {
   "task-graph:generate": {
-    "executor": "@datalackey/nx-graph-to-mermaid:run",
+    "executor": "@doikayt/nx-graph-to-mermaid:run",
     "options": {
       "mode": "generate",
       "projectJsonPath": "project.json",
@@ -271,7 +271,7 @@ Add a target:
 ```json
 {
   "task-graph:inject": {
-    "executor": "@datalackey/nx-graph-to-mermaid:run",
+    "executor": "@doikayt/nx-graph-to-mermaid:run",
     "options": {
       "mode": "inject",
       "projectJsonPath": "project.json",
@@ -306,7 +306,7 @@ Add a target:
 ```json
 {
   "task-graph:update": {
-    "executor": "@datalackey/nx-graph-to-mermaid:run",
+    "executor": "@doikayt/nx-graph-to-mermaid:run",
     "options": {
       "mode": "update",
       "projectJsonPath": "project.json",
@@ -337,7 +337,7 @@ Add a target:
 ```json
 {
   "task-graph:check": {
-    "executor": "@datalackey/nx-graph-to-mermaid:run",
+    "executor": "@doikayt/nx-graph-to-mermaid:run",
     "options": {
       "mode": "check",
       "projectJsonPath": "project.json",
@@ -377,7 +377,7 @@ normal stdout output and safe to ignore in CI logs.
 ```json
 {
   "task-graph:update": {
-    "executor": "@datalackey/nx-graph-to-mermaid:run",
+    "executor": "@doikayt/nx-graph-to-mermaid:run",
     "options": {
       "mode": "update",
       "projectJsonPath": "project.json",
@@ -434,7 +434,7 @@ The golden file is the CI assertion — `check` mode regenerates the diagram and
 ---
 # Built With
 
-- [`@datalackey/tooling-core`](../tooling-core/README.md) — shared internal utilities
+- [`@doikayt/tooling-core`](../tooling-core/README.md) — shared internal utilities
 
 For the full workspace tech stack see: [TECH-STACK.md](../TECH-STACK.md)
 

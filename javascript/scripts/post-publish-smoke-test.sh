@@ -4,7 +4,7 @@ set -euo pipefail
 
 VERSION="${1:?ERROR: version argument required. Usage: bash scripts/post-publish-smoke-test.sh <version>}"
 
-echo "→ Running post-publish smoke test against @datalackey/autogen-markdown-doc@${VERSION}"
+echo "→ Running post-publish smoke test against @doikayt/autogen-markdown-doc@${VERSION}"
 echo
 
 PUBLISHED_VERSION="$VERSION" npx jest --rootDir=autogen-markdown-doc autogen-markdown-doc/tests/integration.test.js --no-coverage

@@ -40,7 +40,7 @@ For the top-level contributor entry point see: [CONTRIBUTING.md](../../CONTRIBUT
 ## First-Time Setup
 ```bash
 mkdir -p ~/workspace && cd ~/workspace
-git clone git@github.com:datalackey/build-tools.git
+git clone git@github.com:doikayt/build-tools.git
 cd build-tools/javascript
 npm ci
 npx nx run-many -t build,test --skip-nx-cache
@@ -106,9 +106,9 @@ Dependency ordering is declared in each package's `project.json` via `dependsOn`
 
 ## Package Naming Policy
 
-Every publishable package under `javascript/` must use the `@datalackey/` scope as its name —
+Every publishable package under `javascript/` must use the `@doikayt/` scope as its name —
 consistently in **both** `package.json` (`name`) and `project.json` (`name`). For example:
-`@datalackey/update-markdown-toc`.
+`@doikayt/update-markdown-toc`.
 
 **Exception:** the top-level orchestrating workspace (`javascript/` itself) is unscoped:
 - `package.json` name: `build-tools`
@@ -116,7 +116,7 @@ consistently in **both** `package.json` (`name`) and `project.json` (`name`). Fo
 
 Rationale:
 
-- The `@datalackey/` scope identifies packages that are actually published to npm. The workspace
+- The `@doikayt/` scope identifies packages that are actually published to npm. The workspace
   root is never published — it only orchestrates builds, tests, and releases for the packages
   beneath it — so giving it a scoped name would misleadingly imply it's a consumable artifact.
 - Keeping `package.json` and `project.json` names identical for each package avoids ambiguity
@@ -264,7 +264,7 @@ CI will automatically:
 - Run `npx changeset publish` to publish all packages to npm
 
 You can follow progress in
-[GitHub Actions](https://github.com/datalackey/build-tools/actions/workflows/release.yml).
+[GitHub Actions](https://github.com/doikayt/build-tools/actions/workflows/release.yml).
 
 ---
 
@@ -323,7 +323,7 @@ RELEASE FLOW
 ```
 cd javascript
 
-  DEVELOPER                              CI  (https://github.com/datalackey/build-tools/actions)
+  DEVELOPER                              CI  (https://github.com/doikayt/build-tools/actions)
 
   npx changeset
   git commit .
@@ -339,7 +339,7 @@ cd javascript
 The pipeline (auto-changeset → `changeset version` + `[skip ci]` commit-back →
 `changeset publish` + tag) is canonical policy — see
 [How the Automated Release Pipeline Works][rp-pipeline]. One build-tools addition: after
-publish, a smoke test installs `@datalackey/autogen-markdown-doc` at the just-published
+publish, a smoke test installs `@doikayt/autogen-markdown-doc` at the just-published
 version from the npm registry and runs it end-to-end against the `math-cli-nx` fixture.
 
 ---
@@ -348,7 +348,7 @@ version from the npm registry and runs it end-to-end against the `math-cli-nx` f
 
 Where release evidence appears (Actions log, `git log`/`git tag`, changelogs, npm registry)
 is canonical policy — see [Verifying a Release][rp-verifying]. For build-tools, check
-`npm view @datalackey/autogen-markdown-doc versions` and each package's `CHANGELOG.md`.
+`npm view @doikayt/autogen-markdown-doc versions` and each package's `CHANGELOG.md`.
 
 ---
 

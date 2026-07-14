@@ -31,7 +31,7 @@
 A CLI plugin that generates and validates UML-style class and component diagrams
 for TypeScript source trees, injecting them into Markdown documentation files.
 
-Built on the `@datalackey/tooling-core` CLI framework, following the same
+Built on the `@doikayt/tooling-core` CLI framework, following the same
 conventions as `update-markdown-toc` and `nx-graph-to-mermaid`.
 
 ---

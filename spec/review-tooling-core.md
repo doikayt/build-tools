@@ -1,7 +1,7 @@
 # Code Review: tooling-core
 
 You are performing a structured code review of the `tooling-core` package in the
-`build-tools` monorepo under the `@datalackey` npm scope.
+`build-tools` monorepo under the `@doikayt` npm scope.
 
 ## Prerequisites
 

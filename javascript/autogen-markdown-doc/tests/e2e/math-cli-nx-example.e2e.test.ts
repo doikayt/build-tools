@@ -24,7 +24,7 @@ const UPDATE_MARKDOWN_UML_DIR = path.resolve(
 
 const AUTOGEN_BIN_REL = path.join(
   "node_modules",
-  "@datalackey",
+  "@doikayt",
   "autogen-markdown-doc",
   "bin",
   "autogen-markdown-doc.js"
@@ -201,7 +201,7 @@ function pluginBin(packageName: string, binName: string): string {
   return path.join(
     workDir,
     "node_modules",
-    "@datalackey",
+    "@doikayt",
     packageName,
     "bin",
     binName

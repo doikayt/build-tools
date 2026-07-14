@@ -1,4 +1,4 @@
-import { parseHeadings } from "@datalackey/tooling-core";
+import { parseHeadings } from "@doikayt/tooling-core";
 
 const START = "<!-- TOC:START -->";
 const END = "<!-- TOC:END -->";

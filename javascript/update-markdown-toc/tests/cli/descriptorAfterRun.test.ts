@@ -1,8 +1,8 @@
 import { describe, test, expect, vi, afterEach } from "vitest";
 
-vi.mock("@datalackey/tooling-core", async (importOriginal) => {
+vi.mock("@doikayt/tooling-core", async (importOriginal) => {
   const actual = await importOriginal<
-    typeof import("@datalackey/tooling-core")
+    typeof import("@doikayt/tooling-core")
   >();
   return {
     ...actual,
@@ -10,8 +10,8 @@ vi.mock("@datalackey/tooling-core", async (importOriginal) => {
   };
 });
 
-import { runLinkValidation } from "@datalackey/tooling-core";
-import type { RunConfig } from "@datalackey/tooling-core";
+import { runLinkValidation } from "@doikayt/tooling-core";
+import type { RunConfig } from "@doikayt/tooling-core";
 import { descriptor } from "../../src/cli/descriptor.js";
 
 function makeCheckConfig(overrides: Partial<RunConfig> = {}): RunConfig {

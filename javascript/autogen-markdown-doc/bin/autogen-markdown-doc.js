@@ -4,7 +4,7 @@ import path from "node:path";
 import process from "node:process";
 import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
-import { debugLog } from "@datalackey/tooling-core";
+import { debugLog } from "@doikayt/tooling-core";
 
 const require = createRequire(import.meta.url);
 
@@ -193,7 +193,7 @@ function main() {
     );
     plugins.push({
       scriptPath: require.resolve(
-        "@datalackey/nx-graph-to-mermaid/bin/nx-graph-to-mermaid.js"
+        "@doikayt/nx-graph-to-mermaid/bin/nx-graph-to-mermaid.js"
       ),
       args: [...commonFlags, resolvedFilePath],
     });
@@ -213,7 +213,7 @@ function main() {
       : [];
     plugins.push({
       scriptPath: require.resolve(
-        "@datalackey/update-markdown-uml/bin/update-markdown-uml.js"
+        "@doikayt/update-markdown-uml/bin/update-markdown-uml.js"
       ),
       args: [...commonFlags, ...excludeArgs, resolvedFilePath],
     });
@@ -228,7 +228,7 @@ function main() {
     );
     plugins.push({
       scriptPath: require.resolve(
-        "@datalackey/update-markdown-toc/bin/update-markdown-toc.js"
+        "@doikayt/update-markdown-toc/bin/update-markdown-toc.js"
       ),
       args: [...commonFlags, resolvedFilePath],
     });

@@ -1,5 +1,5 @@
 {
-  "name": "@datalackey/update-markdown-uml",
+  "name": "@doikayt/update-markdown-uml",
   "version": "1.4.14",
   "description": "Generates and validates UML class and component diagrams for TypeScript source trees, injecting them into Markdown documentation files",
   "license": "MIT",
@@ -31,18 +31,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/datalackey/build-tools.git",
+    "url": "https://github.com/doikayt/build-tools.git",
     "directory": "javascript/update-markdown-uml"
   },
   "bugs": {
-    "url": "https://github.com/datalackey/build-tools/issues"
+    "url": "https://github.com/doikayt/build-tools/issues"
   },
-  "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/update-markdown-uml",
+  "homepage": "https://github.com/doikayt/build-tools/tree/main/javascript/update-markdown-uml",
   "scripts": {
-    "prepack": "npx nx build @datalackey/update-markdown-uml 1>&2"
+    "prepack": "npx nx build @doikayt/update-markdown-uml 1>&2"
   },
   "dependencies": {
-    "@datalackey/tooling-core": "^1.4.14",
+    "@doikayt/tooling-core": "^1.4.14",
     "ts-morph": "^24.0.0",
     "micromatch": "^4.0.0",
     "github-slugger": "^2.0.0"

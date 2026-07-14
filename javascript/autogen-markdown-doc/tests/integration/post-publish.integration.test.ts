@@ -12,7 +12,7 @@ const PUBLISHED_VERSION = process.env.PUBLISHED_VERSION;
 
 const AUTOGEN_BIN_REL = path.join(
   "node_modules",
-  "@datalackey",
+  "@doikayt",
   "autogen-markdown-doc",
   "bin",
   "autogen-markdown-doc.js"
@@ -33,12 +33,12 @@ beforeAll(() => {
 
   const install = spawnSync(
     "npm",
-    ["install", `@datalackey/autogen-markdown-doc@${PUBLISHED_VERSION}`],
+    ["install", `@doikayt/autogen-markdown-doc@${PUBLISHED_VERSION}`],
     { cwd: workDir, encoding: "utf-8" }
   );
   if (install.status !== 0) {
     throw new Error(
-      `npm install @datalackey/autogen-markdown-doc@${PUBLISHED_VERSION} failed:\n${install.stderr}`
+      `npm install @doikayt/autogen-markdown-doc@${PUBLISHED_VERSION} failed:\n${install.stderr}`
     );
   }
 
@@ -66,7 +66,7 @@ afterAll(() => {
   if (workDir) fs.rmSync(workDir, { recursive: true, force: true });
 });
 
-describe(`Post-publish smoke test — @datalackey/autogen-markdown-doc`, () => {
+describe(`Post-publish smoke test — @doikayt/autogen-markdown-doc`, () => {
   test("skip if PUBLISHED_VERSION env var is not set", () => {
     if (!PUBLISHED_VERSION) {
       console.log(

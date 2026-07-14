@@ -6,7 +6,7 @@ import {
   NormalizedOptions,
   resolveExecutionContext,
 } from "./normalizeOptions.js";
-import { injectBetweenMarkers, debugLog } from "@datalackey/tooling-core";
+import { injectBetweenMarkers, debugLog } from "@doikayt/tooling-core";
 
 const NX_GRAPH_START = "<!-- NX_GRAPH:START -->";
 const NX_GRAPH_END = "<!-- NX_GRAPH:END -->";

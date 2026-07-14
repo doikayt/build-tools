@@ -1,11 +1,11 @@
 {
   "//": [
     "paths is explicitly cleared (overrides the inherited alias from tsconfig.json).",
-    "The parent tsconfig.json maps @datalackey/tooling-core to ../tooling-core/src/index.ts",
+    "The parent tsconfig.json maps @doikayt/tooling-core to ../tooling-core/src/index.ts",
     "for fast local builds. When that alias is active here, TypeScript pulls in all of",
     "tooling-core's source files transitively, violating the rootDir constraint since",
     "those files live outside this package's directory.",
-    "With paths:{} cleared, @datalackey/tooling-core resolves through node_modules to",
+    "With paths:{} cleared, @doikayt/tooling-core resolves through node_modules to",
     "the built dist/ instead — an external package not subject to rootDir.",
     "Requires tooling-core to be built first (guaranteed by dependsOn: ^build)."
   ],

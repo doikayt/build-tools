@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { debugLog } from "@datalackey/tooling-core";
+import { debugLog } from "@doikayt/tooling-core";
 
 export type Mode = "generate" | "check" | "inject" | "update";
 

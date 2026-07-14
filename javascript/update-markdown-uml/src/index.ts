@@ -1,2 +1,2 @@
-// @datalackey/update-markdown-uml
+// @doikayt/update-markdown-uml
 // implementation pending

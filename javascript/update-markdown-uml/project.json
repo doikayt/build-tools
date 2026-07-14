@@ -1,12 +1,12 @@
 {
-  "name": "@datalackey/update-markdown-uml",
+  "name": "@doikayt/update-markdown-uml",
   "sourceRoot": "update-markdown-uml/src",
   "projectType": "library",
   "targets": {
     "build": {
       "command": "cd update-markdown-uml && rm -rf dist && tsc -p tsconfig.json",
       "outputs": ["{projectRoot}/dist"],
-      "dependsOn": ["@datalackey/tooling-core:build"]
+      "dependsOn": ["@doikayt/tooling-core:build"]
     },
     "test": {
       "command": "npx vitest run --config {projectRoot}/vitest.config.ts",
@@ -23,7 +23,7 @@
         "{workspaceRoot}/eslint.config*"
       ],
       "outputs": [],
-      "dependsOn": ["@datalackey/tooling-core:build"]
+      "dependsOn": ["@doikayt/tooling-core:build"]
     },
     "check-prod-types": {
       "//": [
@@ -47,7 +47,7 @@
     },
     "e2e": {
       "command": "npx vitest run --config {projectRoot}/vitest.e2e.config.ts",
-      "dependsOn": ["build", "@datalackey/tooling-core:build"]
+      "dependsOn": ["build", "@doikayt/tooling-core:build"]
     },
     "check-types": {
       "//": [

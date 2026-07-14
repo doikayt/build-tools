@@ -1,4 +1,4 @@
-# Contributing to @datalackey/nx-graph-to-mermaid
+# Contributing to @doikayt/nx-graph-to-mermaid
 
 
 

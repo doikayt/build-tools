@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { FileProcessor, ProcessingStatus } from "@datalackey/tooling-core";
-import { debugLog } from "@datalackey/tooling-core";
+import type { FileProcessor, ProcessingStatus } from "@doikayt/tooling-core";
+import { debugLog } from "@doikayt/tooling-core";
 import type { UmlRunConfig } from "../cli/UmlRunConfig.js";
 import { discoverLeafComponents } from "../discovery/discoverLeafComponents.js";
 import { readComponentDescription } from "../discovery/readComponentDescription.js";

@@ -1,5 +1,5 @@
 {
-  "name": "@datalackey/nx-graph-to-mermaid",
+  "name": "@doikayt/nx-graph-to-mermaid",
   "executors": "./executors.json",
   "version": "1.4.14",
   "private": false,
@@ -11,11 +11,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/datalackey/build-tools.git",
+    "url": "https://github.com/doikayt/build-tools.git",
     "directory": "javascript/nx-graph-to-mermaid"
   },
   "bugs": {
-    "url": "https://github.com/datalackey/build-tools/issues"
+    "url": "https://github.com/doikayt/build-tools/issues"
   },
   "files": [
     "bin",
@@ -28,7 +28,7 @@
   "engines": {
     "node": ">=22"
   },
-  "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/nx-graph-to-mermaid",
+  "homepage": "https://github.com/doikayt/build-tools/tree/main/javascript/nx-graph-to-mermaid",
   "keywords": [
     "nx",
     "javascript",
@@ -57,6 +57,6 @@
     "vitest": "^1.0.0"
   },
   "dependencies": {
-    "@datalackey/tooling-core": "^1.4.14"
+    "@doikayt/tooling-core": "^1.4.14"
   }
 }

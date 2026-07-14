@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "npmScope": "datalackey",
+  "npmScope": "doikayt",
   "//": [
     "nx.json vs project.json — what goes where:",
     "",

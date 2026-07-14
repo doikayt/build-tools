@@ -1,5 +1,5 @@
 {
-  "name": "@datalackey/tooling-core",
+  "name": "@doikayt/tooling-core",
   "version": "1.4.14",
   "type": "module",
   "engines": {
@@ -21,15 +21,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/datalackey/build-tools.git",
+    "url": "https://github.com/doikayt/build-tools.git",
     "directory": "javascript/tooling-core"
   },
   "bugs": {
-    "url": "https://github.com/datalackey/build-tools/issues"
+    "url": "https://github.com/doikayt/build-tools/issues"
   },
-  "homepage": "https://github.com/datalackey/build-tools/tree/main/javascript/tooling-core",
+  "homepage": "https://github.com/doikayt/build-tools/tree/main/javascript/tooling-core",
   "scripts": {
-    "prepack": "npx nx build @datalackey/tooling-core 1>&2"
+    "prepack": "npx nx build @doikayt/tooling-core 1>&2"
   },
   "devDependencies": {
     "@types/mdast": "^4.0.4",

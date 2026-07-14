@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { parseStandardCli, generateHelp } from "@datalackey/tooling-core";
+import { parseStandardCli, generateHelp } from "@doikayt/tooling-core";
 import { descriptor } from "../../src/cli/descriptor.js";
 
 describe("--help flag", () => {

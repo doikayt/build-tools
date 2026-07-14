@@ -11,7 +11,7 @@ const UML_PACKAGE_DIR = path.resolve(__dirname, "../../");
 const TOOLING_CORE_DIR = path.resolve(__dirname, "../../../tooling-core");
 const UML_BIN_REL = path.join(
   "node_modules",
-  "@datalackey",
+  "@doikayt",
   "update-markdown-uml",
   "bin",
   "update-markdown-uml.js"

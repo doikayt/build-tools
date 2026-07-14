@@ -1,4 +1,4 @@
-# @datalackey/tooling-core
+# @doikayt/tooling-core
 
 Shared logic and CLI framework for the JavaScript tooling ecosystem in this repository.
 
@@ -52,7 +52,7 @@ conventions.
 
 ## Installation
 ```bash
-npm install @datalackey/tooling-core
+npm install @doikayt/tooling-core
 ```
 
 > Node.js ≥ 18 required. ESM only.
@@ -63,13 +63,13 @@ npm install @datalackey/tooling-core
 
 The primary entry point for plugin authors is `runCli`. A minimal plugin looks like this:
 ```typescript
-import { runCli } from "@datalackey/tooling-core";
+import { runCli } from "@doikayt/tooling-core";
 import type {
   PluginDescriptor,
   FileProcessor,
   RunConfig,
   ProcessingStatus,
-} from "@datalackey/tooling-core";
+} from "@doikayt/tooling-core";
 
 // 1. Extend RunConfig to carry your plugin-specific options.
 interface MyPluginConfig extends RunConfig {

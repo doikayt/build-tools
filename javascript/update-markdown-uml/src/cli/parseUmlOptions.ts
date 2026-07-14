@@ -1,4 +1,4 @@
-import type { RunConfig } from "@datalackey/tooling-core";
+import type { RunConfig } from "@doikayt/tooling-core";
 import type { UmlRunConfig } from "./UmlRunConfig.js";
 
 export function parseUmlOptions(

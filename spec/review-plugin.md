@@ -3,7 +3,7 @@
      update-markdown-toc | nx-graph-to-mermaid | update-markdown-uml -->
 
 You are performing a structured code review of the `$PLUGIN_NAME` package in the
-`build-tools` monorepo under the `@datalackey` npm scope.
+`build-tools` monorepo under the `@doikayt` npm scope.
 
 ## Prerequisites
 

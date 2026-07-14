@@ -61,20 +61,20 @@ This document describes the tools and technologies used across all packages in t
 
 ## Internal Packages
 
-- **[`@datalackey/tooling-core`](./tooling-core/README.md)**
+- **[`@doikayt/tooling-core`](./tooling-core/README.md)**
   Contains shared core (framework) logic used by other packages in this workspace. 
 
 ---
 
 ## Package Relationships
 ```
-@datalackey/autogen-markdown-doc
-  ├── @datalackey/update-markdown-toc
-  │     └── @datalackey/tooling-core
-  ├── @datalackey/nx-graph-to-mermaid
-  │     └── @datalackey/tooling-core
-  └── @datalackey/update-markdown-uml
-        └── @datalackey/tooling-core
+@doikayt/autogen-markdown-doc
+  ├── @doikayt/update-markdown-toc
+  │     └── @doikayt/tooling-core
+  ├── @doikayt/nx-graph-to-mermaid
+  │     └── @doikayt/tooling-core
+  └── @doikayt/update-markdown-uml
+        └── @doikayt/tooling-core
 ```
 
 ### Type Resolution and the Lint Target
@@ -84,12 +84,12 @@ ESLint is configured for type-aware linting via
 `@typescript-eslint/parser`. That parser performs type-aware linting, which
 means it needs fully resolved types for all imports.
 
-Each package resolves `@datalackey/tooling-core` via a `paths` alias in its own
+Each package resolves `@doikayt/tooling-core` via a `paths` alias in its own
 [`tsconfig.json`](nx-graph-to-mermaid/tsconfig.json), pointing directly at
 the source:
 ```json
 "paths": {
-  "@datalackey/tooling-core": ["../tooling-core/src/index.ts"]
+  "@doikayt/tooling-core": ["../tooling-core/src/index.ts"]
 }
 ```
 
@@ -99,9 +99,9 @@ globs, but it does not inherit from or compose the per-package `tsconfig.json`
 files, and therefore does not see their `paths` declarations.
 
 Without `paths` aliases in `tsconfig.eslint.json`, when ESLint's parser
-encounters `import ... from '@datalackey/tooling-core'` it falls back to
+encounters `import ... from '@doikayt/tooling-core'` it falls back to
 standard Node module resolution — looking in
-`node_modules/@datalackey/tooling-core/package.json` and following the
+`node_modules/@doikayt/tooling-core/package.json` and following the
 `exports` field's `"types"` condition:
 ```json
 "exports": {
@@ -112,7 +112,7 @@ standard Node module resolution — looking in
 }
 ```
 
-This points to `node_modules/@datalackey/tooling-core/dist/index.d.ts` — a
+This points to `node_modules/@doikayt/tooling-core/dist/index.d.ts` — a
 **static snapshot of the last published version**, installed by npm. This is
 not the same as `tooling-core/dist/` in the workspace. It is a self-contained
 copy inside `node_modules/` that reflects the last version that was published to npm, not 
@@ -126,14 +126,14 @@ access to it cascades into `no-unsafe-assignment`, `no-unsafe-member-access`,
 and `no-unsafe-argument` errors — even though the code is perfectly correct. 
 
 The fix is to declare `paths` aliases directly in `tsconfig.eslint.json`,
-pointing all `@datalackey/*` imports at their local TypeScript source:
+pointing all `@doikayt/*` imports at their local TypeScript source:
 ```json
 "compilerOptions": {
   "paths": {
-    "@datalackey/tooling-core": ["./tooling-core/src/index.ts"],
-    "@datalackey/update-markdown-toc": ["./update-markdown-toc/src/index.ts"],
-    "@datalackey/nx-graph-to-mermaid": ["./nx-graph-to-mermaid/src/index.ts"],
-    "@datalackey/update-markdown-uml": ["./update-markdown-uml/src/index.ts"]
+    "@doikayt/tooling-core": ["./tooling-core/src/index.ts"],
+    "@doikayt/update-markdown-toc": ["./update-markdown-toc/src/index.ts"],
+    "@doikayt/nx-graph-to-mermaid": ["./nx-graph-to-mermaid/src/index.ts"],
+    "@doikayt/update-markdown-uml": ["./update-markdown-uml/src/index.ts"]
   }
 }
 ```
@@ -154,7 +154,7 @@ The lint target in [`project.json`](project.json) declares:
 "dependsOn": ["^build"]
 ```
 
-With `paths` aliases declared in `tsconfig.eslint.json`, all `@datalackey/*`
+With `paths` aliases declared in `tsconfig.eslint.json`, all `@doikayt/*`
 imports resolve directly to TypeScript source at lint time — no `dist/`
 required. The `dependsOn` on the workspace-level lint aggregator is therefore
 redundant and could be removed. It is retained for now to avoid an unforced

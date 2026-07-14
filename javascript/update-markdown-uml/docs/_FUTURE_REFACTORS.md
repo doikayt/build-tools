@@ -86,7 +86,7 @@ Benefits of consolidation:
 | Package | Role |
 |---------|------|
 | `ts-morph` | TypeScript compiler API — discovers types, resolves imports, generates Mermaid DSL |
-| `@datalackey/tooling-core` | CLI framework, file processing, injection utilities |
+| `@doikayt/tooling-core` | CLI framework, file processing, injection utilities |
 
 ---
 

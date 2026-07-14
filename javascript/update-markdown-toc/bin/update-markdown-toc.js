@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { runCli } from "@datalackey/tooling-core";
+import { runCli } from "@doikayt/tooling-core";
 import { TocFileProcessor } from "../dist/engine/TocFileProcessor.js";
 import { descriptor } from "../dist/cli/descriptor.js";
 

@@ -1,5 +1,5 @@
 {
-  "name": "@datalackey/autogen-markdown-doc",
+  "name": "@doikayt/autogen-markdown-doc",
   "sourceRoot": "autogen-markdown-doc",
   "projectType": "library",
   "targets": {
@@ -10,10 +10,10 @@
     "test": {
       "command": "cd autogen-markdown-doc && npx vitest run --config vitest.e2e.config.ts",
       "dependsOn": [
-        "@datalackey/tooling-core:build",
-        "@datalackey/update-markdown-toc:build",
-        "@datalackey/nx-graph-to-mermaid:build",
-        "@datalackey/update-markdown-uml:build"
+        "@doikayt/tooling-core:build",
+        "@doikayt/update-markdown-toc:build",
+        "@doikayt/nx-graph-to-mermaid:build",
+        "@doikayt/update-markdown-uml:build"
       ]
     },
     "check-test-types": {

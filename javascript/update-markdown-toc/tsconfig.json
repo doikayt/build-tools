@@ -4,7 +4,7 @@
     "rootDir": "src",
     "outDir": "dist",
     "paths": {
-      "@datalackey/tooling-core": ["../tooling-core/src/index.ts"]
+      "@doikayt/tooling-core": ["../tooling-core/src/index.ts"]
     }
   },
   "include": ["src"],

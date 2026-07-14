@@ -12,7 +12,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@datalackey/tooling-core": resolve(
+      "@doikayt/tooling-core": resolve(
         __dirname,
         "../tooling-core/src/index.ts"
       ),

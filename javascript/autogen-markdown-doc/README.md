@@ -1,5 +1,5 @@
 <!-- TOC:START -->
-- [@datalackey/autogen-markdown-doc](#datalackeyautogen-markdown-doc)
+- [@doikayt/autogen-markdown-doc](#doikaytautogen-markdown-doc)
   - [Bundled Plugins](#bundled-plugins)
   - [Installation](#installation)
   - [Usage](#usage)
@@ -19,7 +19,7 @@
   - [License](#license)
 <!-- TOC:END -->
 
-# @datalackey/autogen-markdown-doc
+# @doikayt/autogen-markdown-doc
 
 This plugin keeps documentation in sync with code. It is an 
 uber-plugin that serves as a minimal-config orchestrator of the [plugins](#bundled-plugins) that it bundles.
@@ -46,9 +46,9 @@ your repo, custom source paths, or per-plugin flags — invoke the bundled plugi
 
 This package orchestrates three focused plugins:
 
-- [`@datalackey/update-markdown-toc`](../update-markdown-toc/README.md) — generates Tables of Contents
-- [`@datalackey/update-markdown-uml`](../update-markdown-uml/README.md) — generates UML component diagrams from TypeScript source
-- [`@datalackey/nx-graph-to-mermaid`](../nx-graph-to-mermaid/README.md) — generates Mermaid task-graph diagrams from `project.json`
+- [`@doikayt/update-markdown-toc`](../update-markdown-toc/README.md) — generates Tables of Contents
+- [`@doikayt/update-markdown-uml`](../update-markdown-uml/README.md) — generates UML component diagrams from TypeScript source
+- [`@doikayt/nx-graph-to-mermaid`](../nx-graph-to-mermaid/README.md) — generates Mermaid task-graph diagrams from `project.json`
 
 Each plugin is activated only when its tag family is present in the target file:
 
@@ -65,7 +65,7 @@ If the target file contains none of the three tag families, the tool warns and e
 ## Installation
 
 ```bash
-npm i -D @datalackey/autogen-markdown-doc
+npm i -D @doikayt/autogen-markdown-doc
 ```
 
 ---
@@ -170,7 +170,7 @@ npx autogen-markdown-doc check
 
 > **Note:** `nx-graph-to-mermaid` is an NX executor and has no standalone CLI.
 > To invoke it independently, configure a target in your `project.json` using the
-> `@datalackey/nx-graph-to-mermaid:run` executor. See the
+> `@doikayt/nx-graph-to-mermaid:run` executor. See the
 > [nx-graph-to-mermaid README](../nx-graph-to-mermaid/README.md) for details.
 
 ---

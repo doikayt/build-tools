@@ -1,4 +1,4 @@
-import { debugLog } from "@datalackey/tooling-core";
+import { debugLog } from "@doikayt/tooling-core";
 
 interface NxTarget {
   dependsOn?: string[];

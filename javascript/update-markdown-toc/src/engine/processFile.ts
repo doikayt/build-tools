@@ -2,8 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { generateTOC } from "./generateToc.js";
-import type { RunConfig, ProcessingStatus } from "@datalackey/tooling-core";
-import { debugLog, toErrorMessage } from "@datalackey/tooling-core";
+import type { RunConfig, ProcessingStatus } from "@doikayt/tooling-core";
+import { debugLog, toErrorMessage } from "@doikayt/tooling-core";
 
 export function processFile(
   filePath: string,

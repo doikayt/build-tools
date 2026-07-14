@@ -1,7 +1,7 @@
 # Code Review: autogen-markdown-doc
 
 You are performing a structured code review of the `autogen-markdown-doc` package
-in the `build-tools` monorepo under the `@datalackey` npm scope.
+in the `build-tools` monorepo under the `@doikayt` npm scope.
 
 This is the uber-plugin that orchestrates the sibling plugins. Its review is
 informed by the full review chain output from all dependencies.

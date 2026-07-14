@@ -1,4 +1,4 @@
-import type { RunConfig } from "@datalackey/tooling-core";
+import type { RunConfig } from "@doikayt/tooling-core";
 
 export interface UmlRunConfig extends RunConfig {
   excludeComponents: string[];

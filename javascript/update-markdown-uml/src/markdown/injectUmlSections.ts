@@ -1,4 +1,4 @@
-import { findMarkers, parseHeadings } from "@datalackey/tooling-core";
+import { findMarkers, parseHeadings } from "@doikayt/tooling-core";
 import GithubSlugger from "github-slugger";
 
 const MARKER_COMPONENTS_START = "<!-- UML:components:START -->";

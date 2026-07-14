@@ -1,4 +1,4 @@
-# Contributing to @datalackey/update-markdown-uml
+# Contributing to @doikayt/update-markdown-uml
 
 For workspace-level setup, build pipeline, and release workflow see:
 [javascript/docs/CONTRIBUTING.md](../../docs/CONTRIBUTING.md)

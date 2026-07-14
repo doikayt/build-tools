@@ -1,4 +1,4 @@
-# Contributing to @datalackey/tooling-core
+# Contributing to @doikayt/tooling-core
 
 
 

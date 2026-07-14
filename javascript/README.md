@@ -23,16 +23,16 @@ For maintainer and contributor documentation see: [here](./docs/CONTRIBUTING.md)
 
 ## Packages
 
-- [`@datalackey/update-markdown-toc`](./update-markdown-toc/README.md)
+- [`@doikayt/update-markdown-toc`](./update-markdown-toc/README.md)
   - CLI tool that auto-generates and validates Tables of Contents (TOCs) in Markdown files and checks other types of links.
-- [`@datalackey/nx-graph-to-mermaid`](./nx-graph-to-mermaid/README.md)
+- [`@doikayt/nx-graph-to-mermaid`](./nx-graph-to-mermaid/README.md)
   - NX executor plugin that generates deterministic Mermaid task-flow diagrams from `project.json` target definitions
-- [`@datalackey/update-markdown-uml`](./update-markdown-uml/README.md)
+- [`@doikayt/update-markdown-uml`](./update-markdown-uml/README.md)
   - CLI tool that generates and validates UML class and component diagrams for TypeScript source trees, injecting them into Markdown documentation files
-- [`@datalackey/autogen-markdown-doc`](./autogen-markdown-doc/README.md)
+- [`@doikayt/autogen-markdown-doc`](./autogen-markdown-doc/README.md)
   - CLI tool that bundles the above referenced packages with opinionated defaults -- enabling 
     repository-wide gen/update of TOCs, and supported diagrams (build dependencies, and UML), all via a single command. 
-- [`@datalackey/tooling-core`](./tooling-core/README.md)
+- [`@doikayt/tooling-core`](./tooling-core/README.md)
   - private, unpublished package containing shared logic and utilities used by the other packages in this workspace
 
 These packages are:
@@ -80,18 +80,18 @@ graph TD
   _caret_build(["^build"])
   _caret_test(["^test"])
 
-  _xref_datalackey_autogen_markdown_doc_check_test_types{{"autogen-markdown-doc:check-test-types"}}
-  _xref_datalackey_nx_graph_to_mermaid_build{{"nx-graph-to-mermaid:build"}}
-  _xref_datalackey_nx_graph_to_mermaid_check_types{{"nx-graph-to-mermaid:check-types"}}
-  _xref_datalackey_nx_graph_to_mermaid_lint{{"nx-graph-to-mermaid:lint"}}
-  _xref_datalackey_tooling_core_check_types{{"tooling-core:check-types"}}
-  _xref_datalackey_tooling_core_lint{{"tooling-core:lint"}}
-  _xref_datalackey_update_markdown_toc_build{{"update-markdown-toc:build"}}
-  _xref_datalackey_update_markdown_toc_check_types{{"update-markdown-toc:check-types"}}
-  _xref_datalackey_update_markdown_toc_lint{{"update-markdown-toc:lint"}}
-  _xref_datalackey_update_markdown_uml_build{{"update-markdown-uml:build"}}
-  _xref_datalackey_update_markdown_uml_check_types{{"update-markdown-uml:check-types"}}
-  _xref_datalackey_update_markdown_uml_lint{{"update-markdown-uml:lint"}}
+  _xref_doikayt_autogen_markdown_doc_check_test_types{{"autogen-markdown-doc:check-test-types"}}
+  _xref_doikayt_nx_graph_to_mermaid_build{{"nx-graph-to-mermaid:build"}}
+  _xref_doikayt_nx_graph_to_mermaid_check_types{{"nx-graph-to-mermaid:check-types"}}
+  _xref_doikayt_nx_graph_to_mermaid_lint{{"nx-graph-to-mermaid:lint"}}
+  _xref_doikayt_tooling_core_check_types{{"tooling-core:check-types"}}
+  _xref_doikayt_tooling_core_lint{{"tooling-core:lint"}}
+  _xref_doikayt_update_markdown_toc_build{{"update-markdown-toc:build"}}
+  _xref_doikayt_update_markdown_toc_check_types{{"update-markdown-toc:check-types"}}
+  _xref_doikayt_update_markdown_toc_lint{{"update-markdown-toc:lint"}}
+  _xref_doikayt_update_markdown_uml_build{{"update-markdown-uml:build"}}
+  _xref_doikayt_update_markdown_uml_check_types{{"update-markdown-uml:check-types"}}
+  _xref_doikayt_update_markdown_uml_lint{{"update-markdown-uml:lint"}}
 
   check_all --> check_docs
   check_all --> check_format
@@ -100,18 +100,18 @@ graph TD
   check_docs --> check_mermaid
   check_docs --> check_toc
   check_docs --> check_uml
-  check_lint --> _xref_datalackey_nx_graph_to_mermaid_lint
-  check_lint --> _xref_datalackey_tooling_core_lint
-  check_lint --> _xref_datalackey_update_markdown_toc_lint
-  check_lint --> _xref_datalackey_update_markdown_uml_lint
-  check_mermaid --> _xref_datalackey_nx_graph_to_mermaid_build
+  check_lint --> _xref_doikayt_nx_graph_to_mermaid_lint
+  check_lint --> _xref_doikayt_tooling_core_lint
+  check_lint --> _xref_doikayt_update_markdown_toc_lint
+  check_lint --> _xref_doikayt_update_markdown_uml_lint
+  check_mermaid --> _xref_doikayt_nx_graph_to_mermaid_build
   check_toc --> _caret_build
-  check_types --> _xref_datalackey_autogen_markdown_doc_check_test_types
-  check_types --> _xref_datalackey_nx_graph_to_mermaid_check_types
-  check_types --> _xref_datalackey_tooling_core_check_types
-  check_types --> _xref_datalackey_update_markdown_toc_check_types
-  check_types --> _xref_datalackey_update_markdown_uml_check_types
-  check_uml --> _xref_datalackey_update_markdown_uml_build
+  check_types --> _xref_doikayt_autogen_markdown_doc_check_test_types
+  check_types --> _xref_doikayt_nx_graph_to_mermaid_check_types
+  check_types --> _xref_doikayt_tooling_core_check_types
+  check_types --> _xref_doikayt_update_markdown_toc_check_types
+  check_types --> _xref_doikayt_update_markdown_uml_check_types
+  check_uml --> _xref_doikayt_update_markdown_uml_build
   ci --> _caret_build
   ci --> _caret_test
   ci --> check_all
@@ -120,9 +120,9 @@ graph TD
   update_docs --> update_mermaid
   update_docs --> update_toc
   update_docs --> update_uml
-  update_mermaid --> _xref_datalackey_nx_graph_to_mermaid_build
-  update_toc --> _xref_datalackey_update_markdown_toc_build
-  update_uml --> _xref_datalackey_update_markdown_uml_build
+  update_mermaid --> _xref_doikayt_nx_graph_to_mermaid_build
+  update_toc --> _xref_doikayt_update_markdown_toc_build
+  update_uml --> _xref_doikayt_update_markdown_uml_build
 ```
 <!-- NX_GRAPH:END -->
 

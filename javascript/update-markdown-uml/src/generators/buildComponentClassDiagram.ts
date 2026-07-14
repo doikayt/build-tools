@@ -1,6 +1,6 @@
 import { Project, type FunctionDeclaration } from "ts-morph";
 import path from "node:path";
-import { extractFirstSentence } from "@datalackey/tooling-core";
+import { extractFirstSentence } from "@doikayt/tooling-core";
 
 /**
  * Builds a Mermaid classDiagram block for a single leaf component directory.

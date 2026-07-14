@@ -1,4 +1,4 @@
-import type { PluginDescriptor } from "@datalackey/tooling-core";
+import type { PluginDescriptor } from "@doikayt/tooling-core";
 import type { UmlRunConfig } from "./UmlRunConfig.js";
 import { parseUmlOptions } from "./parseUmlOptions.js";
 import { validateUmlConfig } from "./validateUmlConfig.js";

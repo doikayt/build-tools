@@ -1,5 +1,5 @@
 {
-  "name": "@datalackey/tooling-core",
+  "name": "@doikayt/tooling-core",
   "sourceRoot": "tooling-core/src",
   "projectType": "library",
   "targets": {
@@ -27,7 +27,7 @@
         "{workspaceRoot}/eslint.config*"
       ],
       "outputs": [],
-      "dependsOn": ["@datalackey/tooling-core:build"]
+      "dependsOn": ["@doikayt/tooling-core:build"]
     },
     "check-prod-types": {
       "//": [

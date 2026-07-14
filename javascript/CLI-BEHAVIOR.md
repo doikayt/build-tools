@@ -30,7 +30,7 @@ This document describes the shared command-line behavior used by repository-proc
 For example, the following commands use:
 
 ```
-npx @datalackey/update-markdown-toc
+npx @doikayt/update-markdown-toc
 ```
 
 Other tools follow the same behavior patterns. The one exception is 
@@ -53,7 +53,7 @@ A single file is specified.
 Example:
 
 ```
-npx @datalackey/update-markdown-toc README.md
+npx @doikayt/update-markdown-toc README.md
 ```
 
 In this mode:
@@ -70,7 +70,7 @@ A directory is specified using `--recursive`.
 Example:
 
 ```
-npx @datalackey/update-markdown-toc --recursive docs/
+npx @doikayt/update-markdown-toc --recursive docs/
 ```
 
 In this mode:

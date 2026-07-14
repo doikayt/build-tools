@@ -17,11 +17,11 @@ set -euo pipefail
 CHANGESET_DIR=".changeset"
 
 PACKAGES=(
-  "@datalackey/tooling-core"
-  "@datalackey/update-markdown-toc"
-  "@datalackey/nx-graph-to-mermaid"
-  "@datalackey/update-markdown-uml"
-  "@datalackey/autogen-markdown-doc"
+  "@doikayt/tooling-core"
+  "@doikayt/update-markdown-toc"
+  "@doikayt/nx-graph-to-mermaid"
+  "@doikayt/update-markdown-uml"
+  "@doikayt/autogen-markdown-doc"
 )
 
 # Skip if a manually-authored changeset already exists

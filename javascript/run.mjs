@@ -62,8 +62,8 @@ export function buildPackagesFlowchart(
 
   "update-markdown-uml/src/processor/UmlFileProcessor.ts": `import fs from "node:fs";
 import path from "node:path";
-import type { FileProcessor, ProcessingStatus } from "@datalackey/tooling-core";
-import { debugLog } from "@datalackey/tooling-core";
+import type { FileProcessor, ProcessingStatus } from "@doikayt/tooling-core";
+import { debugLog } from "@doikayt/tooling-core";
 import type { UmlRunConfig } from "../cli/UmlRunConfig.js";
 import { discoverLeafPackages } from "../discovery/discoverLeafPackages.js";
 import { readPackageDescription } from "../discovery/readPackageDescription.js";
@@ -180,7 +180,7 @@ export class UmlFileProcessor implements FileProcessor<UmlRunConfig> {
   // generated package-details headings
   // -------------------------------------------------------
 
-  "update-markdown-uml/src/markdown/injectUmlSections.ts": `import { findMarkers, parseHeadings } from "@datalackey/tooling-core";
+  "update-markdown-uml/src/markdown/injectUmlSections.ts": `import { findMarkers, parseHeadings } from "@doikayt/tooling-core";
 import GithubSlugger from "github-slugger";
 
 const MARKER_PACKAGES_START = "<!-- UML:packages:START -->";
@@ -367,4 +367,4 @@ for (const [relPath, content] of Object.entries(files)) {
 }
 
 console.log("\ndone. run:");
-console.log("  npx nx run @datalackey/update-markdown-uml:test");
+console.log("  npx nx run @doikayt/update-markdown-uml:test");

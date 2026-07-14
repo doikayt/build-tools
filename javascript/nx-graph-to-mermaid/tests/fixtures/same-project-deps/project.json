@@ -10,7 +10,7 @@
       "dependsOn": [
         "my-workspace:check-docs",
         "^build",
-        "@datalackey/some-package:build"
+        "@doikayt/some-package:build"
       ]
     }
   }

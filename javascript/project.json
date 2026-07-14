@@ -17,40 +17,40 @@
   ],
   "projectType": "library",
   "implicitDependencies": [
-    "@datalackey/tooling-core",
-    "@datalackey/update-markdown-toc",
-    "@datalackey/nx-graph-to-mermaid",
-    "@datalackey/update-markdown-uml"
+    "@doikayt/tooling-core",
+    "@doikayt/update-markdown-toc",
+    "@doikayt/nx-graph-to-mermaid",
+    "@doikayt/update-markdown-uml"
   ],
   "targets": {
     "update-toc": {
       "command": "node update-markdown-toc/bin/update-markdown-toc.js --recursive . -e node_modules,test,test-fixtures,tests",
       "cwd": "{workspaceRoot}",
-      "dependsOn": ["@datalackey/update-markdown-toc:build"]
+      "dependsOn": ["@doikayt/update-markdown-toc:build"]
     },
     "update-uml": {
       "command": "sh -c 'node update-markdown-uml/bin/update-markdown-uml.js --source tooling-core/src tooling-core/README.md && node update-markdown-uml/bin/update-markdown-uml.js --source nx-graph-to-mermaid/src nx-graph-to-mermaid/docs/CONTRIBUTING.md && node update-markdown-uml/bin/update-markdown-uml.js --source update-markdown-toc/src update-markdown-toc/docs/CONTRIBUTING.md  && node update-markdown-uml/bin/update-markdown-uml.js --source update-markdown-uml/src update-markdown-uml/docs/CONTRIBUTING.md'",
 
       "cwd": "{workspaceRoot}",
-      "dependsOn": ["@datalackey/update-markdown-uml:build"]
+      "dependsOn": ["@doikayt/update-markdown-uml:build"]
     },
     "update-mermaid": {
-      "executor": "@datalackey/nx-graph-to-mermaid:run",
+      "executor": "@doikayt/nx-graph-to-mermaid:run",
       "options": {
         "mode": "update",
         "projectJsonPath": "project.json",
         "markdownPath": "README.md"
       },
-      "dependsOn": ["@datalackey/nx-graph-to-mermaid:build"]
+      "dependsOn": ["@doikayt/nx-graph-to-mermaid:build"]
     },
     "check-mermaid": {
-      "executor": "@datalackey/nx-graph-to-mermaid:run",
+      "executor": "@doikayt/nx-graph-to-mermaid:run",
       "options": {
         "mode": "check",
         "projectJsonPath": "project.json",
         "markdownPath": "README.md"
       },
-      "dependsOn": ["@datalackey/nx-graph-to-mermaid:build"]
+      "dependsOn": ["@doikayt/nx-graph-to-mermaid:build"]
     },
     "update-docs": {
       "//": [
@@ -87,7 +87,7 @@
     "check-uml": {
       "command": "sh -c 'node update-markdown-uml/bin/update-markdown-uml.js --check --source tooling-core/src tooling-core/README.md && node update-markdown-uml/bin/update-markdown-uml.js --check --source nx-graph-to-mermaid/src nx-graph-to-mermaid/docs/CONTRIBUTING.md && node update-markdown-uml/bin/update-markdown-uml.js --check --source update-markdown-toc/src update-markdown-toc/docs/CONTRIBUTING.md && node update-markdown-uml/bin/update-markdown-uml.js --check --source update-markdown-uml/src update-markdown-uml/docs/CONTRIBUTING.md'",
       "cwd": "{workspaceRoot}",
-      "dependsOn": ["@datalackey/update-markdown-uml:build"]
+      "dependsOn": ["@doikayt/update-markdown-uml:build"]
     },
     "check-docs": {
       "//": [
@@ -103,10 +103,10 @@
     "check-lint": {
       "cwd": "{workspaceRoot}",
       "dependsOn": [
-        "@datalackey/tooling-core:lint",
-        "@datalackey/update-markdown-toc:lint",
-        "@datalackey/nx-graph-to-mermaid:lint",
-        "@datalackey/update-markdown-uml:lint"
+        "@doikayt/tooling-core:lint",
+        "@doikayt/update-markdown-toc:lint",
+        "@doikayt/nx-graph-to-mermaid:lint",
+        "@doikayt/update-markdown-uml:lint"
       ]
     },
     "check-format": {
@@ -122,11 +122,11 @@
         "This target exists to catch the lazy commit."
       ],
       "dependsOn": [
-        "@datalackey/tooling-core:check-types",
-        "@datalackey/nx-graph-to-mermaid:check-types",
-        "@datalackey/update-markdown-uml:check-types",
-        "@datalackey/update-markdown-toc:check-types",
-        "@datalackey/autogen-markdown-doc:check-test-types"
+        "@doikayt/tooling-core:check-types",
+        "@doikayt/nx-graph-to-mermaid:check-types",
+        "@doikayt/update-markdown-uml:check-types",
+        "@doikayt/update-markdown-toc:check-types",
+        "@doikayt/autogen-markdown-doc:check-test-types"
       ]
     },
     "check-all": {

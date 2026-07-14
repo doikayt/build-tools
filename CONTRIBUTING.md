@@ -17,10 +17,10 @@ managed as a single npm workspace.
 
 ### Maintainer Guides For Individual Packages
 
-- [`@datalackey/update-markdown-toc`](./javascript/update-markdown-toc/docs/CONTRIBUTING.md)
-- [`@datalackey/nx-graph-to-mermaid`](javascript/nx-graph-to-mermaid/docs/CONTRIBUTING.md)
-- [`@datalackey/autogen-markdown-doc`](./javascript/autogen-markdown-doc/docs/CONTRIBUTING.md)
-- [`@datalackey/tooling-core`](./javascript/tooling-core/docs/CONTRIBUTING.md) 
+- [`@doikayt/update-markdown-toc`](./javascript/update-markdown-toc/docs/CONTRIBUTING.md)
+- [`@doikayt/nx-graph-to-mermaid`](javascript/nx-graph-to-mermaid/docs/CONTRIBUTING.md)
+- [`@doikayt/autogen-markdown-doc`](./javascript/autogen-markdown-doc/docs/CONTRIBUTING.md)
+- [`@doikayt/tooling-core`](./javascript/tooling-core/docs/CONTRIBUTING.md) 
 
 ---
 

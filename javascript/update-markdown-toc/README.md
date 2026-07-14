@@ -1,4 +1,4 @@
-# @datalackey/update-markdown-toc
+# @doikayt/update-markdown-toc
 
 <p align="center">
   <img
@@ -10,7 +10,7 @@
 
 
 <!-- TOC:START -->
-- [@datalackey/update-markdown-toc](#datalackeyupdate-markdown-toc)
+- [@doikayt/update-markdown-toc](#doikaytupdate-markdown-toc)
   - [Introduction](#introduction)
   - [Why not Some Other Markdown TOC Generator ?](#why-not-some-other-markdown-toc-generator-)
   - [Installation](#installation)
@@ -70,7 +70,7 @@ Install as a development dependency (recommended):
 
 
 ```bash
-npm install --save-dev @datalackey/update-markdown-toc
+npm install --save-dev @doikayt/update-markdown-toc
 ```
 
 This installs the update-markdown-toc command into your project’s

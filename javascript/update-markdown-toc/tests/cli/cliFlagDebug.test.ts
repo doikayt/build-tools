@@ -1,6 +1,6 @@
 import { describe, test, expect, vi, afterEach } from "vitest";
-import { parseStandardCli, debugLog } from "@datalackey/tooling-core";
-import type { RunConfig } from "@datalackey/tooling-core";
+import { parseStandardCli, debugLog } from "@doikayt/tooling-core";
+import type { RunConfig } from "@doikayt/tooling-core";
 
 function makeConfig(overrides: Partial<RunConfig> = {}): RunConfig {
   return {

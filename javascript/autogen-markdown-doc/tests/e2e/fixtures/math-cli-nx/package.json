@@ -4,6 +4,6 @@
   "description": "Sample TypeScript project for autogen-markdown-doc demo",
   "private": true,
   "devDependencies": {
-    "@datalackey/autogen-markdown-doc": "latest"
+    "@doikayt/autogen-markdown-doc": "latest"
   }
 }

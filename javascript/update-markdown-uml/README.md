@@ -1,7 +1,7 @@
 
 
 <!-- TOC:START -->
-- [@datalackey/update-markdown-uml](#datalackeyupdate-markdown-uml)
+- [@doikayt/update-markdown-uml](#doikaytupdate-markdown-uml)
   - [Terminology](#terminology)
   - [What It Does](#what-it-does)
     - [Function-only components](#function-only-components)
@@ -18,7 +18,7 @@
   - [Contributing and Releasing](#contributing-and-releasing)
 <!-- TOC:END -->
 
-# @datalackey/update-markdown-uml
+# @doikayt/update-markdown-uml
 
 Generates and validates UML class and component diagrams for TypeScript source
 trees, injecting them into Markdown documentation files.
@@ -86,7 +86,7 @@ Both warnings are suppressed when the CLI is run with `--quiet`.
 ## Installation
 
 ```bash
-npm install --save-dev @datalackey/update-markdown-uml
+npm install --save-dev @doikayt/update-markdown-uml
 ```
 
 ---
@@ -327,7 +327,7 @@ full type resolution. Adding an explicit annotation
 
 ## Built With
 
-- [`@datalackey/tooling-core`](../tooling-core/README.md) — shared CLI framework and utilities
+- [`@doikayt/tooling-core`](../tooling-core/README.md) — shared CLI framework and utilities
 - [`ts-morph`](https://ts-morph.com/) — TypeScript compiler API for class and import analysis
 
 For the full workspace tech stack see: [TECH-STACK.md](../TECH-STACK.md)

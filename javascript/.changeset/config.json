@@ -4,11 +4,11 @@
   "commit": false,
   "fixed": [
     [
-      "@datalackey/update-markdown-toc",
-      "@datalackey/nx-graph-to-mermaid",
-      "@datalackey/autogen-markdown-doc",
-      "@datalackey/tooling-core",
-      "@datalackey/update-markdown-uml"
+      "@doikayt/update-markdown-toc",
+      "@doikayt/nx-graph-to-mermaid",
+      "@doikayt/autogen-markdown-doc",
+      "@doikayt/tooling-core",
+      "@doikayt/update-markdown-uml"
     ]
   ],
   "linked": [],

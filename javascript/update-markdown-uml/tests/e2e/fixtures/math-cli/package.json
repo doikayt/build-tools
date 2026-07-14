@@ -4,6 +4,6 @@
   "description": "Sample TypeScript project for update-markdown-uml demo",
   "private": true,
   "devDependencies": {
-    "@datalackey/update-markdown-uml": "latest"
+    "@doikayt/update-markdown-uml": "latest"
   }
 }

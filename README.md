@@ -38,7 +38,7 @@ In practice this means:
   with no flags or configuration required.
 - Advanced options (custom exclusion lists, recursive depth, check-only mode, etc.)
   are available but never forced on the user.
-- The `@datalackey/autogen-markdown-doc` package is the clearest expression of
+- The `@doikayt/autogen-markdown-doc` package is the clearest expression of
   this principle: it bundles `update-markdown-toc` and `nx-graph-to-mermaid`
   into a single command with opinionated defaults that cover the 80% case:
   single invocation update of all Markdown tables-of-contents and Mermaid build graph anchor points across a repository 

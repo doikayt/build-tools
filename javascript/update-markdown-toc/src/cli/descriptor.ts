@@ -1,5 +1,5 @@
-import type { RunConfig, PluginDescriptor } from "@datalackey/tooling-core";
-import { runLinkValidation } from "@datalackey/tooling-core";
+import type { RunConfig, PluginDescriptor } from "@doikayt/tooling-core";
+import { runLinkValidation } from "@doikayt/tooling-core";
 
 export const descriptor: PluginDescriptor = {
   name: "update-markdown-toc",

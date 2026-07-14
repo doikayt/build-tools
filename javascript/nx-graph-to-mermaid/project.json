@@ -1,5 +1,5 @@
 {
-  "name": "@datalackey/nx-graph-to-mermaid",
+  "name": "@doikayt/nx-graph-to-mermaid",
   "sourceRoot": "nx-graph-to-mermaid/src",
   "projectType": "library",
   "targets": {
@@ -35,7 +35,7 @@
         "{workspaceRoot}/eslint.config*"
       ],
       "outputs": [],
-      "dependsOn": ["@datalackey/tooling-core:build"]
+      "dependsOn": ["@doikayt/tooling-core:build"]
     },
     "check-prod-types": {
       "//": [

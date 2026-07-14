@@ -13,8 +13,8 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
-    "@datalackey/typescript-build-config": "^0.1.7",
-    "@datalackey/update-markdown-toc": "^1.1.5",
+    "@doikayt/typescript-build-config": "^0.1.7",
+    "@doikayt/update-markdown-toc": "^1.1.5",
     "@typescript-eslint/eslint-plugin": "^8.57.1",
     "@typescript-eslint/parser": "^8.57.1",
     "eslint": "^9.39.4",

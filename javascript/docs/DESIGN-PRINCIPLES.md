@@ -113,7 +113,7 @@ at the root of a multi-module Gradle build rather than one per submodule.
 > directly via `executor-bridge.cjs`. 
 
 All other CLI plugins are built on a common framework provided by
-`@datalackey/tooling-core`. The key concepts are:
+`@doikayt/tooling-core`. The key concepts are:
 
 - **`PluginDescriptor`** — declarative metadata describing the plugin's name,
   description, and custom CLI options. Drives help generation and option
@@ -183,7 +183,7 @@ gitignored — compiled artifacts are never committed. But `dist/` IS included
 in the npm published artifact via the `files` field in `package.json`.
 
 Packages lower in the dependency tree (e.g. `autogen-markdown-doc`) import
-compiled JavaScript from `dist/` of their `@datalackey/*` dependencies —
+compiled JavaScript from `dist/` of their `@doikayt/*` dependencies —
 never TypeScript source. This is the standard npm model.
 
 The dependency tree is:
@@ -195,7 +195,7 @@ autogen-markdown-doc
         └── tooling-core   → dist/
 ```
 
-`tooling-core` sits at the base and has no `@datalackey/*` dependencies of
+`tooling-core` sits at the base and has no `@doikayt/*` dependencies of
 its own.
 
 ### The `prepack` contract
