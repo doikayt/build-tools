@@ -1,5 +1,18 @@
 # @datalackey/autogen-markdown-doc
 
+## 1.4.15
+
+### Patch Changes
+
+- - fix: format descriptorAfterRun.test.ts with prettier
+  - fix: break ci target recursion caused by package.json script shadowing
+  - fix: push release tags, upgrade Node to 22 and actions to v5
+- Updated dependencies
+  - @doikayt/tooling-core@1.4.15
+  - @doikayt/update-markdown-toc@1.4.15
+  - @doikayt/nx-graph-to-mermaid@1.4.15
+  - @doikayt/update-markdown-uml@1.4.15
+
 ## 1.4.14
 
 ### Patch Changes
