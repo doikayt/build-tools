@@ -65,7 +65,7 @@ describe("toc descriptor afterRun", () => {
 
     expect(vi.mocked(runLinkValidation)).toHaveBeenCalledWith(
       files,
-      expect.objectContaining({ validateExternalLinks: false }),
+      expect.objectContaining({ validateExternalLinks: false })
     );
   });
 
@@ -77,7 +77,7 @@ describe("toc descriptor afterRun", () => {
 
     expect(vi.mocked(runLinkValidation)).toHaveBeenCalledWith(
       files,
-      expect.objectContaining({ linkTimeoutMs: 9999 }),
+      expect.objectContaining({ linkTimeoutMs: 9999 })
     );
   });
 
