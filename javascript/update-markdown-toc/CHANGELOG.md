@@ -1,5 +1,16 @@
 # @datalackey/update-markdown-toc
 
+## 1.4.16
+
+### Patch Changes
+
+- - fix: delegate nx-graph-to-mermaid prepack to NX build to avoid tsc race condition
+  - fix: format descriptorAfterRun.test.ts with prettier
+  - fix: break ci target recursion caused by package.json script shadowing
+  - fix: push release tags, upgrade Node to 22 and actions to v5
+- Updated dependencies
+  - @doikayt/tooling-core@1.4.16
+
 ## 1.4.15
 
 ### Patch Changes

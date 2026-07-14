@@ -1,6 +1,6 @@
 {
   "name": "@doikayt/tooling-core",
-  "version": "1.4.15",
+  "version": "1.4.16",
   "type": "module",
   "engines": {
     "node": ">=22"
