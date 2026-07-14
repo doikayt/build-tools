@@ -9,7 +9,7 @@
   },
   "scripts": {
     "ci": "npx nx run build-tools-workspace:ci --skip-nx-cache",
-    "post-publish": "sleep 30 && VERSION=$(node -p \"require('./autogen-markdown-doc/package.json').version\") && cd autogen-markdown-doc && PUBLISHED_VERSION=$VERSION npx vitest run --config vitest.integration.config.ts"
+    "post-publish": "sleep 60 && VERSION=$(node -p \"require('./autogen-markdown-doc/package.json').version\") && cd autogen-markdown-doc && PUBLISHED_VERSION=$VERSION npx vitest run --config vitest.integration.config.ts"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",

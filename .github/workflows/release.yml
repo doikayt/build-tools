@@ -81,6 +81,8 @@ jobs:
       - name: Post-publish hook (optional)
         if: steps.publish.outcome == 'success'
         run: |
-          node -e "process.exit(require('./package.json').scripts?.['post-publish'] ? 0 : 1)" \
-            && npm run post-publish \
-            || echo "No post-publish script — skipping"
+          if node -e "process.exit(require('./package.json').scripts?.['post-publish'] ? 0 : 1)"; then
+            npm run post-publish
+          else
+            echo "No post-publish script — skipping"
+          fi
