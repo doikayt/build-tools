@@ -1,9 +1,7 @@
 import { describe, test, expect, vi, afterEach } from "vitest";
 
 vi.mock("@doikayt/tooling-core", async (importOriginal) => {
-  const actual = await importOriginal<
-    typeof import("@doikayt/tooling-core")
-  >();
+  const actual = await importOriginal<typeof import("@doikayt/tooling-core")>();
   return {
     ...actual,
     runLinkValidation: vi.fn().mockResolvedValue(undefined),
@@ -67,7 +65,7 @@ describe("toc descriptor afterRun", () => {
 
     expect(vi.mocked(runLinkValidation)).toHaveBeenCalledWith(
       files,
-      expect.objectContaining({ validateExternalLinks: false })
+      expect.objectContaining({ validateExternalLinks: false }),
     );
   });
 
@@ -79,7 +77,7 @@ describe("toc descriptor afterRun", () => {
 
     expect(vi.mocked(runLinkValidation)).toHaveBeenCalledWith(
       files,
-      expect.objectContaining({ linkTimeoutMs: 9999 })
+      expect.objectContaining({ linkTimeoutMs: 9999 }),
     );
   });
 
