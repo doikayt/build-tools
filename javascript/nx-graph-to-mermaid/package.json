@@ -46,10 +46,8 @@
     "access": "public"
   },
   "scripts": {
-    "prepack": "npm run build",
-    "build": "tsc && npm run copy-schemas",
-    "test": "vitest run",
-    "copy-schemas": "mkdir -p dist/executors/generate && cp src/executors/generate/schema.json dist/executors/generate/schema.json"
+    "prepack": "npx nx build @doikayt/nx-graph-to-mermaid 1>&2",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@types/node": "^18.16.0",
