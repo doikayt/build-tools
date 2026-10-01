@@ -1,5 +1,13 @@
 # @datalackey/nx-graph-to-mermaid
 
+## 1.4.19
+
+### Patch Changes
+
+- - fix: sleep longer during publish
+- Updated dependencies
+  - @doikayt/tooling-core@1.4.19
+
 ## 1.4.18
 
 ### Patch Changes
