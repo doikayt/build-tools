@@ -1,5 +1,13 @@
 # @datalackey/update-markdown-toc
 
+## 1.4.20
+
+### Patch Changes
+
+- - fix: bump sleep time again
+- Updated dependencies
+  - @doikayt/tooling-core@1.4.20
+
 ## 1.4.19
 
 ### Patch Changes
