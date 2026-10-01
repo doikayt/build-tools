@@ -85,5 +85,3 @@ Please see [this document](CONTRIBUTING.md) for more information.
 [![No US Tax$ 4 genocide](https://badge.techforpalestine.org/ceasefire-now)](https://techforpalestine.org/learn-more)
 
 
-
-
