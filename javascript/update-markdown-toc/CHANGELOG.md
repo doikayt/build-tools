@@ -1,5 +1,14 @@
 # @datalackey/update-markdown-toc
 
+## 1.4.18
+
+### Patch Changes
+
+- - fix: no-op to force build
+  - fix: some fix to force the build
+- Updated dependencies
+  - @doikayt/tooling-core@1.4.18
+
 ## 1.4.17
 
 ### Patch Changes

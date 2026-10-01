@@ -1,5 +1,17 @@
 # @datalackey/autogen-markdown-doc
 
+## 1.4.18
+
+### Patch Changes
+
+- - fix: no-op to force build
+  - fix: some fix to force the build
+- Updated dependencies
+  - @doikayt/tooling-core@1.4.18
+  - @doikayt/update-markdown-toc@1.4.18
+  - @doikayt/nx-graph-to-mermaid@1.4.18
+  - @doikayt/update-markdown-uml@1.4.18
+
 ## 1.4.17
 
 ### Patch Changes
